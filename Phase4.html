@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Accountability Development Map – Phase 4</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #111;
+      padding-top: 80px;
+    }
+
+    /* Top navigation bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .nav-button {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+      background: #13508c;
+    }
+
+    .nav-button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      background: #072744;
+    }
+
+    .print-button {
+      background: #d9822b;
+    }
+    .print-button:hover {
+      background: #b86822;
+    }
+    .print-button:active {
+      background: #8b4e18;
+    }
+
+    .pdf-button {
+      background: #1b998b;
+    }
+    .pdf-button:hover {
+      background: #157a6d;
+    }
+    .pdf-button:active {
+      background: #0f5a4f;
+    }
+
+    .page {
+      width: 100%;
+      padding: 40px;
+      box-sizing: border-box;
+    }
+
+    h1, h2, h3, h4 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    h1 { color: #0a355e; }
+    h2 { color: #d9822b; }
+    h3 { color: #1b4965; }
+    h4 { color: #0a355e; margin-top: 0; }
+
+    .section {
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: #f0f4f8;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .card:hover { transform: translateY(-3px); }
+
+    /* COLOR CODING FOR PILLARS, CONTINUUM, DDIER */
+    .pillar {
+      border-left: 6px solid #8b5cf6;
+    }
+    .pillartxt {
+      color: #6d28d9;
+      font-weight: 600;
+    }
+
+    .continuum {
+      border-left: 6px solid #16a34a;
+    }
+    .continuumtxt {
+      color: #15803d;
+      font-weight: 600;
+    }
+
+    .ddier {
+      border-left: 6px solid #eab308;
+    }
+    .ddiertxt {
+      color: #b45309;
+      font-weight: 700;
+    }
+
+    .bestpractice {
+      border-left: 6px solid #7A4EC4;
+      background: #f3edfa;
+    }
+    .bestpracticetxt {
+      color: #7A4EC4;
+      font-weight: 700;
+    }
+
+    .highlight {
+      background: #d9e6f2;
+      border-left: 5px solid #d9822b;
+      padding: 12px 14px;
+      margin: 12px 0;
+      font-size: 0.95rem;
+    }
+
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .step-list li {
+      counter-increment: step;
+      margin-bottom: 10px;
+      padding-left: 28px;
+      position: relative;
+      font-size: 0.96rem;
+    }
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #fff;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .tag {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef2f7;
+      border: 1px solid #c7d2e3;
+    }
+
+    .logic-columns {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      font-size: 0.9rem;
+    }
+
+    .logic-box {
+      background: #f7f7fb;
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid #dde3f0;
+    }
+    .logic-box h4 {
+      text-align: left;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+    .logic-box ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .logic-box li {
+      margin-bottom: 4px;
+    }
+
+    /* LEGEND STYLES */
+    .legend-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 14px 0 26px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      background: #ffffff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+    }
+    .pillar-swatch {
+      background: #8b5cf6;
+    }
+    .continuum-swatch {
+      background: #16a34a;
+    }
+    .ddier-swatch {
+      background: #eab308;
+    }
+
+    @media (max-width: 1100px) {
+      .navbar {
+        justify-content: flex-start;
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .logic-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .logic-columns {
+        grid-template-columns: 1fr;
+      }
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @page {
+      size: 8.5in 11in;
+      margin: 0.5in;
+    }
+
+    @media print {
+      body {
+        padding-top: 0;
+        background: #ffffff;
+      }
+      .navbar {
+        display: none;
+      }
+      .page {
+        box-shadow: none;
+        padding: 20px;
+        page-break-after: always;
+      }
+      .page:last-of-type {
+        page-break-after: auto;
+      }
+    }
+  </style>
+
+  <!-- html2pdf.js for PDF download button -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-YcsIPX3v0nKCF3P3HwMOkqVn4Q7F8G+V+vP+3l4lvuq3nI4dbd409UQghr35Lx1+xHnIpoZ4EvsC0KZzIrp3KQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+<!-- FLOATING MENU -->
+<div class="navbar">
+  <a href="#phase4-overview" class="nav-button">Phase 4 Overview</a>
+  <a href="#current-conditions-4" class="nav-button">Current Conditions</a>
+  <a href="#guiding-principles-4" class="nav-button">Guiding Principles</a>
+  <a href="#preconditions-readiness-4" class="nav-button">Preconditions &amp; Readiness</a>
+  <a href="#systems-architecture-4" class="nav-button">Systems &amp; Architecture</a>
+  <a href="#evaluation-workstreams-4" class="nav-button">Evaluation Workstreams</a>
+  <a href="#measures-impact-4" class="nav-button">Measures &amp; Impact</a>
+  <a href="#evidence-learning-4" class="nav-button">Evidence &amp; Learning Loop</a>
+  <a href="#stakeholder-roles-4" class="nav-button">Stakeholder Roles</a>
+  <a href="#risks-mitigation-4" class="nav-button">Risks &amp; Mitigation</a>
+  <a href="#phase4-key-outcome" class="nav-button">Phase 4 Key Outcome</a>
+  <a href="#practice-action-4" class="nav-button">Practice in Action</a>
+  <a href="#implementation-supports-4" class="nav-button">Implementation Supports</a>
+  <a href="#research-base-4" class="nav-button">Research Base</a>
+  <button
+    type="button"
+    class="nav-button print-button"
+    onclick="window.print()">
+    Print
+  </button>
+  <button
+    type="button"
+    class="nav-button pdf-button"
+    onclick="downloadPDF()">
+    PDF
+  </button>
+</div>
+
+<!-- PAGE 1: Overview, Context, Principles, Preconditions -->
+<div class="page" id="phase4-overview">
+  <h1>Local Accountability Development Map</h1>
+  <h2>Phase 4: Evaluation, Learning, and Refinement of Local Accountability</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Phase 4 Overview</h3>
+    <p>
+      Phase 4: Evaluation, Learning, and Refinement is where the local accountability system is examined with a critical but constructive lens.
+      The central question is,
+      <strong>Is the system working as intended to improve learning, equity, and community trust, and where must it be adjusted.</strong>
+      The focus shifts from implementing tools to learning from their effects.
+    </p>
+    <p>
+      On the Local Accountability Continuum, Phase 4 corresponds to
+      <span class="continuumtxt">Evaluate and Strengthen the Local Accountability System</span>.
+      In the DDIER cycle, it aligns with the
+      <span class="ddiertxt">Evaluation</span>
+      phase, where districts study patterns in implementation, outcomes, and stakeholder experience to refine the system.
+    </p>
+    <p>
+      Phase 4 is deeply anchored in
+      <span class="pillartxt">Pillar 4: Data Validation, Analysis, and Utilization</span>
+      and
+      <span class="pillartxt">Pillar 5: Evaluating Progress, Impact, and Reporting</span>.
+      It also calls on
+      <span class="pillartxt">Pillar 3: Community Engagement, Ownership, and Advocacy</span>
+      to ensure that evaluation is done with the community, not only to the community.
+    </p>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Without a structured evaluation phase, local accountability can stall after implementation.
+      Phase 4 keeps the system honest, responsive, and grounded in continuous learning.
+    </div>
+  </div>
+
+  <div class="section" id="current-conditions-4">
+    <h3>Current On the Ground Conditions and Self Assessment of Context</h3>
+    <p>
+      Entering Phase 4, districts pause to describe how the system is actually functioning now, not just how it was designed on paper.
+      Self assessment profiles help teams understand their evaluation capacity and readiness.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Profiles of Evaluation Practice</h4>
+        <ul class="step-list">
+          <li><strong>Reactive Evaluation:</strong> Data reviews are episodic, mostly tied to state reporting or crisis moments.</li>
+          <li><strong>Emerging Inquiry Culture:</strong> Some teams regularly study local evidence, but norms and structures vary across schools.</li>
+          <li><strong>Systemic Learning Culture:</strong> Cross level routines exist for studying evidence, identifying patterns, and acting on what is learned.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Using Context to Shape Phase 4</h4>
+        <ul class="step-list">
+          <li>Identify where strong inquiry and reflection habits already exist and where they are thin or absent.</li>
+          <li>Surface existing evaluation practices, such as walkthroughs or PLC reviews, that can be aligned to local accountability.</li>
+          <li>Clarify how much time and capacity teams currently have to engage in deep evaluation work.</li>
+          <li>Share a short narrative of the current evaluation culture with advisory groups and the board to align expectations.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Honest diagnosis of the current learning culture helps districts design a Phase 4 that is ambitious but realistic.
+    </div>
+  </div>
+
+  <div class="section" id="guiding-principles-4">
+    <h3>Guiding Principles for Phase 4 Evaluation and Learning</h3>
+    <p>
+      Guiding principles keep Phase 4 from becoming a compliance audit.
+      They focus the work on learning, equity, and system improvement.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Principles for Evidence and Equity</h4>
+        <ul class="step-list">
+          <li>Evaluation should illuminate where students have real opportunities for vibrant learning, not only where performance is low.</li>
+          <li>Local evidence should be disaggregated by student groups to reveal both strengths and inequities in experience and outcomes.</li>
+          <li>Student voice and artifacts should be treated as core evidence, not just supporting examples.</li>
+          <li>Data are used to diagnose system conditions, not to blame individual students or educators.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Principles for Learning and Action</h4>
+        <ul class="step-list">
+          <li>Evaluation is a tool for improvement and learning, not for punishment.</li>
+          <li>Findings must lead to clear decisions, supports, and changes that staff and students can see.</li>
+          <li>Success is understood in terms of growth, mastery, readiness, and conditions, not a single index.</li>
+          <li>Insights from evaluation are shared transparently with internal and external stakeholders in accessible language.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Without clear principles, Phase 4 can drift into deficit narratives and lose the trust that local accountability is meant to build.
+    </div>
+  </div>
+
+  <div class="section" id="preconditions-readiness-4">
+    <h3>Preconditions and Readiness Indicators for Phase 4</h3>
+    <p>
+      Certain conditions should be in place before districts fully enter Phase 4.
+      These preconditions ensure that evaluation will be meaningful and usable.
+    </p>
+    <div class="mini-grid">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Minimum Criteria for Productive Entry</h4>
+        <ul class="step-list">
+          <li>Phase 3 implementation has been in place long enough to generate stable patterns in local evidence across at least one school year.</li>
+          <li>Basic implementation data are available about where tools are used and to what extent.</li>
+          <li>Leadership and advisory groups understand the core components of the local accountability system.</li>
+          <li>There is agreement on the key questions Phase 4 should answer about impact, equity, and quality.</li>
+        </ul>
+      </div>
+      <div class="card pillar">
+        <h4>Readiness Indicators to Check</h4>
+        <ul class="step-list">
+          <li>Schools and leaders are willing to examine local evidence honestly, including bright spots and gaps.</li>
+          <li>Data systems and dashboards can provide disaggregated views of local evidence by school, grade, and student group.</li>
+          <li>Existing meeting structures can support periodic deep dives into evidence and implications.</li>
+          <li>There is capacity to document and communicate findings to staff, students, families, and the community.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Entering Phase 4 without these conditions risks generating reports that are interesting but not actionable.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: Systems & Architecture, Evaluation Workstreams, Measures & Impact -->
+<div class="page" id="systems-architecture-4">
+  <h2>Systems and Architecture for Phase 4 Evaluation</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Designing the Evaluation Architecture</h3>
+    <p>
+      Phase 4 requires a clear architecture that describes how evidence from across the system will be brought together, studied, and used.
+      The blueprint should be simple enough for stakeholders to understand and strong enough to support serious inquiry.
+    </p>
+    <div class="logic-columns">
+      <div class="logic-box">
+        <h4>Cross Level Evidence Map</h4>
+        <ul>
+          <li>Student level data, such as NxGRAs, BPI artifacts, portfolios, and reflection evidence.</li>
+          <li>Classroom and course level patterns in performance, engagement, and growth.</li>
+          <li>School level Measures of Quality, survey results, and improvement actions.</li>
+          <li>District and community level trends across schools and student groups.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Evaluation Structures</h4>
+        <ul>
+          <li>Annual and mid year evaluation cycles aligned to the broader accountability calendar.</li>
+          <li>Cross functional evaluation teams that include educators, leaders, and community members.</li>
+          <li>Protocols for reviewing evidence, identifying themes, and prioritizing findings.</li>
+          <li>Structures for documenting insights and proposed changes.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Reporting and Sensemaking</h4>
+        <ul>
+          <li>Synthesis reports that integrate multiple measures into clear narratives and visuals.</li>
+          <li>Board and community sessions dedicated to discussing findings and implications.</li>
+          <li>Feedback loops from schools and stakeholders about the accuracy and usefulness of findings.</li>
+          <li>Public facing summaries that explain what was learned and what will change next.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Connection to Improvement</h4>
+        <ul>
+          <li>Guidance for incorporating evaluation findings into district and school improvement plans.</li>
+          <li>Alignment with professional learning priorities and resource allocation decisions.</li>
+          <li>Monitoring structures to track follow through on decisions informed by evaluation.</li>
+          <li>Documentation of lessons learned to inform future cycles of design and implementation.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Evaluation anchor:</strong>
+      A strong Phase 4 architecture ensures that evidence from the local accountability system is synthesized, interpreted, and connected to real decisions, not just displayed.
+    </div>
+  </div>
+
+  <div class="section" id="evaluation-workstreams-4">
+    <h3>Core Evaluation Workstreams</h3>
+    <p>
+      Evaluation workstreams keep Phase 4 organized and manageable.
+      They mirror the core components of the local accountability system.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Workstream 1: Student Learning and Performance Evidence</h4>
+        <ul class="step-list">
+          <li>Analyze NxGRA results, portfolios, and BPI artifacts across schools, grade spans, and student groups.</li>
+          <li>Identify patterns in Growth, Mastery, and Readiness that cut across subjects and levels.</li>
+          <li>Study examples of high quality student work to understand what vibrant learning looks like in practice.</li>
+          <li>Examine where opportunities for deep, real world performance are limited or uneven.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Workstream 2: Measures of Quality and School Conditions</h4>
+        <ul class="step-list">
+          <li>Review Measures of Quality results across schools and over time.</li>
+          <li>Look for patterns in Vibrant Learning, Outcomes, Culture, Community, and Ecosystem.</li>
+          <li>Connect Measures of Quality to student performance and engagement evidence.</li>
+          <li>Identify schools or groups of schools that model certain Measures as exemplars.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Workstream 3: Surveys, Voice, and Experience</h4>
+        <ul class="step-list">
+          <li>Examine student, staff, and family survey results with attention to trends and disparities.</li>
+          <li>Integrate qualitative evidence from focus groups, interviews, and open responses.</li>
+          <li>Connect perception data to Measures of Quality and student performance.</li>
+          <li>Identify where trust, belonging, and clarity are strongest and weakest.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Workstream 4: System Use and Coherence</h4>
+        <ul class="step-list">
+          <li>Study implementation data to see where the system is being used consistently and where it is not.</li>
+          <li>Analyze how often local evidence appears in leadership, board, and community conversations.</li>
+          <li>Identify redundancies, gaps, and misalignments across tools and processes.</li>
+          <li>Propose refinements to make the system more coherent, usable, and focused.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Practical tip:</strong>
+      Districts can sequence these workstreams across the year, rather than trying to do everything at once.
+      The same core evaluation team can rotate focus while keeping the big picture in view.
+    </div>
+  </div>
+
+  <div class="section" id="measures-impact-4">
+    <h3>Measures of Progress and Impact in Phase 4</h3>
+    <p>
+      Phase 4 is not only about whether the system is implemented.
+      It is about whether the system is making a difference.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Progress Indicators for the System</h4>
+        <ul class="step-list">
+          <li>Increased use of local evidence in school and district decision making routines.</li>
+          <li>Improved alignment between student artifacts, Measures of Quality, and reported outcomes.</li>
+          <li>More consistent implementation patterns across schools and grade levels.</li>
+          <li>Increased clarity among staff and students about what Growth, Mastery, and Readiness mean in practice.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Impact Indicators for Learners and Communities</h4>
+        <ul class="step-list">
+          <li>Evidence of deeper student engagement and agency in learning, as reflected in surveys and artifacts.</li>
+          <li>Stronger connections between school learning and real world applications in student work.</li>
+          <li>Improvements in key student outcomes, such as persistence, course completion, and postsecondary readiness indicators.</li>
+          <li>Stronger community trust and understanding of how the local accountability system defines success.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      These indicators help districts see whether local accountability is changing the story of learning, not just the structure of reporting.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: Evidence & Learning Loop, Stakeholders, Risks -->
+<div class="page" id="evidence-learning-4">
+  <h2>Evidence, Key Questions, and the Learning Loop in Phase 4</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Evidence and Key Questions</h3>
+    <p>
+      Phase 4 invites districts to ask sharper questions of their own system.
+      Evidence is only useful if it helps answer those questions in ways that lead to action.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Evidence to Examine</h4>
+        <ul class="step-list">
+          <li>Aggregated and disaggregated NxGRA results and student artifacts across multiple years.</li>
+          <li>Patterns in Measures of Quality by school, student group, and time.</li>
+          <li>Survey trends for students, staff, and families, including subgroup differences.</li>
+          <li>Implementation data showing where each component of the system is being used and how.</li>
+          <li>Examples of decisions driven by local evidence and their outcomes.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Key Questions</h4>
+        <ul class="step-list">
+          <li>Where is the local accountability system strengthening student learning and opportunity, and how do we know.</li>
+          <li>Where do disparities persist in access to vibrant learning experiences or in outcomes.</li>
+          <li>Which tools, measures, or routines are most powerful for changing practice, and which add complexity without enough value.</li>
+          <li>How do students and families experience the system, and do they see it as fair, relevant, and understandable.</li>
+          <li>What has the system taught us about our schools, our community, and our next steps as a district.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card ddier" style="margin-top:16px;">
+      <h4 class="ddiertxt">Learning Loop: Reflection and Next Steps</h4>
+      <ul class="step-list">
+        <li>What surprised us most when we looked across all the evidence in Phase 4.</li>
+        <li>Where did we see the most powerful examples of student Growth, Mastery, and Readiness that would not have been visible in a test only system.</li>
+        <li>Where did the system fall short of our hopes, either in design or implementation, and what is that telling us.</li>
+        <li>What specific refinements should we make to tools, expectations, supports, or timelines before the next cycle.</li>
+        <li>How will we carry forward what we have learned into the next iteration of design, development, implementation, and evaluation.</li>
+      </ul>
+      <div class="highlight">
+        <strong>Use in practice:</strong>
+        Build these questions into end of year retreats, leadership institutes, and advisory council sessions so evaluation leads directly into the next round of improvement.
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="stakeholder-roles-4">
+    <h3>Stakeholder Roles in Phase 4 Evaluation and Learning</h3>
+    <p>
+      Evaluation is most powerful when it is a shared enterprise.
+      Phase 4 clarifies how each stakeholder group participates in making meaning and deciding what comes next.
+    </p>
+    <div class="grid">
+      <div class="card pillar">
+        <h4>Superintendent and Cabinet</h4>
+        <ul class="step-list">
+          <li>Frame the purpose of Phase 4 as learning and refinement, not blame.</li>
+          <li>Convene cross role teams to review findings and propose system level changes.</li>
+          <li>Connect evaluation insights to strategic planning, budgeting, and staffing decisions.</li>
+          <li>Communicate clearly with the board and community about what was learned and what will change.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Board of Education</h4>
+        <ul class="step-list">
+          <li>Engage with local evidence as a primary lens for understanding district performance.</li>
+          <li>Ask questions about equity, opportunity, and conditions, not only outcomes.</li>
+          <li>Use findings to inform policy decisions and resource allocation.</li>
+          <li>Support the long term commitment required to sustain and refine local accountability.</li>
+        </ul>
+      </div>
+
+      <div class="card ddier">
+        <h4 class="ddiertxt">Principals and School Leaders</h4>
+        <ul class="step-list">
+          <li>Lead school based reviews of local evidence and guide staff in interpreting findings.</li>
+          <li>Facilitate conversations about what the data mean for instruction, culture, and student supports.</li>
+          <li>Integrate evaluation insights into school improvement plans and daily practice.</li>
+          <li>Communicate with students and families about findings and planned next steps.</li>
+        </ul>
+      </div>
+
+      <div class="card pillar">
+        <h4>Teachers</h4>
+        <ul class="step-list">
+          <li>Review patterns in student work, NxGRA results, and survey feedback with colleagues.</li>
+          <li>Share classroom perspectives on what contributed to the observed patterns.</li>
+          <li>Help identify instructional and assessment shifts that could address gaps or build on strengths.</li>
+          <li>Involve students in reflecting on class level evidence and setting goals for future learning.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Students, Families, and Community Partners</h4>
+        <ul class="step-list">
+          <li>Participate in feedback and sensemaking sessions that review findings in accessible formats.</li>
+          <li>Share lived experiences that help explain patterns in the data.</li>
+          <li>Help identify priorities for improvement that matter most to students and the community.</li>
+          <li>Collaborate on designing or refining performance tasks and opportunities that respond to findings.</li>
+        </ul>
+      </div>
+
+      <div class="card bestpractice">
+        <h4 class="bestpracticetxt">Best Practices Across Stakeholders</h4>
+        <ul class="step-list">
+          <li>Use clear protocols that give everyone a voice in interpreting evidence.</li>
+          <li>Pair quantitative data with student work, stories, and community perspectives.</li>
+          <li>Document input and show how it shapes decisions and refinements.</li>
+          <li>Celebrate examples where the system has clearly benefited students and communities.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      When evaluation is shared and participatory, it strengthens trust and produces insights that technical analyses alone would miss.
+    </div>
+  </div>
+
+  <div class="section" id="risks-mitigation-4">
+    <h3>Risks and Mitigation Strategies in Phase 4</h3>
+    <p>
+      Evaluation work brings its own risks.
+      Anticipating and planning for them helps districts stay focused on learning and improvement.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Risk: Evaluation as Judgment</h4>
+        <ul class="step-list">
+          <li>Staff or schools experience Phase 4 as a ranking exercise rather than a learning cycle.</li>
+          <li><strong>Mitigation:</strong> Emphasize growth and opportunity narratives and use comparative data carefully and contextually.</li>
+          <li><strong>Mitigation:</strong> Highlight powerful practices in all schools, not only in a small group of exemplars.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Risk: Data Overload</h4>
+        <ul class="step-list">
+          <li>Teams are overwhelmed by the volume of evidence and struggle to identify what matters most.</li>
+          <li><strong>Mitigation:</strong> Focus evaluation on a manageable set of key questions and priority indicators.</li>
+          <li><strong>Mitigation:</strong> Use visualizations and summaries that help people see patterns without drowning in detail.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Risk: Findings Without Follow Through</h4>
+        <ul class="step-list">
+          <li>Reports are produced but do not lead to concrete changes in practice or policy.</li>
+          <li><strong>Mitigation:</strong> Build explicit next step planning into every evaluation conversation.</li>
+          <li><strong>Mitigation:</strong> Track and publicly share actions taken in response to findings.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Risk: Narrowing the Vision</h4>
+        <ul class="step-list">
+          <li>Pressure to show quick gains leads to narrowing the system back toward a small set of outcomes.</li>
+          <li><strong>Mitigation:</strong> Reaffirm the broader vision of Growth, Mastery, Readiness, and conditions as the core of success.</li>
+          <li><strong>Mitigation:</strong> Balance short term indicators with long term outcomes and qualitative evidence.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Thoughtful mitigation keeps Phase 4 aligned with the original purpose of local accountability, even when pressures mount.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: Key Outcome, Practice in Action, Supports, Research -->
+<div class="page" id="phase4-key-outcome">
+  <h2>Phase 4: Key Outcome, Practice in Action, and Supports</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Phase 4: Key Outcome</h3>
+    <p>
+      By the end of Phase 4, the district should have a
+      <strong>coherent, evidence informed understanding of how the local accountability system is performing</strong>
+      and a concrete plan for refinement and next cycle design.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>System Level Outcome</h4>
+        <ul class="step-list">
+          <li>A synthesized set of findings about impact, equity, implementation quality, and stakeholder experience.</li>
+          <li>Clear identification of strengths to preserve and expand.</li>
+          <li>Clear identification of gaps, inequities, and design flaws that need attention.</li>
+          <li>A set of prioritized recommendations for refining tools, supports, and structures.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Readiness for the Next Cycle</h4>
+        <ul class="step-list">
+          <li>A decision about which elements of the system will move forward as stable, which will be adapted, and which should be retired.</li>
+          <li>Clarity about the focus of the next design and development cycle in Phase 1 and Phase 2.</li>
+          <li>Shared understanding among leaders, staff, and community members of what has been learned.</li>
+          <li>Commitment to local accountability as a long term improvement strategy, not a one time initiative.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      When Phase 4 ends with clear findings and next steps, the entire local accountability journey becomes cyclical and adaptive instead of linear and finite.
+    </div>
+  </div>
+
+  <div class="section" id="practice-action-4">
+    <h3>Practice in Action: Phase 4 in Fleming County Schools</h3>
+    <p>
+      In Fleming County Schools, Phase 4 means stepping back to study how Vibrant Learning, Measures of Quality, NxGRAs, and BPI websites are reshaping the story of student success.
+      The focus is on learning from evidence, not searching for a perfect score.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Studying Patterns in Vibrant Learning</h4>
+        <ul class="step-list">
+          <li>Teams review BPI artifacts and NxGRA results across schools to see where students experience deep, real world learning.</li>
+          <li>Measures of Quality 4.1 results are used to identify schools that are modeling strong practices in Vibrant Learning and Vibrant Outcomes.</li>
+          <li>Student and teacher voices are gathered to explain why certain patterns appear in the data.</li>
+          <li>Findings inform refinements to task design, supports, and expectations in the next cycle.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Engaging the Community in Reflection</h4>
+        <ul class="step-list">
+          <li>Local Accountability Advisory Council and community partners review synthesized findings and student artifacts.</li>
+          <li>Board sessions focus on how local evidence changes the picture of student success beyond state test reports.</li>
+          <li>Public communications explain what the district has learned and what will change as a result.</li>
+          <li>Feedback from families and community members shapes the next iteration of reporting and measures.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Field insight:</strong>
+      Treating Phase 4 as a shared reflection space has helped Fleming County deepen trust and sharpen its vision for the next round of vibrant accountability work.
+    </div>
+  </div>
+
+  <div class="section" id="implementation-supports-4">
+    <h3>Implementation Supports and Tools for Phase 4</h3>
+    <p>
+      Evaluation and learning require tools just as implementation does.
+      These supports help teams move from raw data to shared insight.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Core Evaluation Tools</h4>
+        <ul class="step-list">
+          <li>Phase 4 evaluation guides that outline key questions, evidence sources, and timelines.</li>
+          <li>Facilitation protocols for cross role evidence reviews, such as gallery walks of student work or data dialogue protocols.</li>
+          <li>Templates for synthesis reports that integrate multiple measures into coherent narratives.</li>
+          <li>Reflection tools for students and staff that connect local evidence to personal and collective goals.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Supports for Communication and Action</h4>
+        <ul class="step-list">
+          <li>Slide decks and communication templates for sharing findings with the board, staff, and community.</li>
+          <li>Planning tools that help schools incorporate evaluation findings into improvement plans.</li>
+          <li>Tracking tools that monitor follow through on commitments made in response to findings.</li>
+          <li>References to toolkits such as “See Toolkit: Phase 4 Evaluation and Learning Guide” or “See Template: Local Evidence Synthesis Summary.”</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Evaluation without tools can quickly become abstract.
+      Practical supports keep the work grounded and actionable for busy educators and leaders.
+    </div>
+  </div>
+
+  <div class="section" id="research-base-4">
+    <h3>Research Base and References for Phase 4 Evaluation</h3>
+    <p>
+      Phase 4 is informed by research on continuous improvement, organizational learning, and data informed decision making.
+      These fields emphasize learning from evidence in systematic ways.
+    </p>
+    <ul class="step-list">
+      <li>
+        <strong>Bryk, A. S., Gomez, L. M., Grunow, A., &amp; LeMahieu, P. G. (2015).</strong>
+        <em>Learning to Improve: How America's Schools Can Get Better at Getting Better.</em>
+        Provides a framework for using disciplined inquiry cycles to learn from practice and refine systems over time.
+      </li>
+      <li>
+        <strong>Fullan, M., &amp; Quinn, J. (2016).</strong>
+        <em>Coherence: The Right Drivers in Action for Schools, Districts, and Systems.</em>
+        Highlights the importance of focused direction, collaborative cultures, and using evidence for capacity building and accountability.</li>
+      <li>
+        <strong>Senge, P. M. (2006).</strong>
+        <em>The Fifth Discipline: The Art and Practice of the Learning Organization.</em>
+        Emphasizes the value of systems thinking, shared vision, and collective reflection in creating learning organizations.</li>
+    </ul>
+    <div class="highlight">
+      <strong>How to use this section:</strong>
+      These references can anchor the evaluation phase in a broader research base and support conversations with boards, advisory councils, and staff about why Phase 4 focuses on learning and refinement rather than judgment alone.
+    </div>
+  </div>
+</div>
+
+<script>
+  function downloadPDF() {
+    const element = document.body;
+
+    const opt = {
+      margin:       0.5,
+      filename:     'phase4-local-accountability.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
+  }
+</script>
+
+</body>
+</html>
