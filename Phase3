@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Accountability Development Map – Phase 3</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #111;
+      padding-top: 80px;
+    }
+
+    /* Top navigation bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .nav-button {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+      background: #13508c;
+    }
+
+    .nav-button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      background: #072744;
+    }
+
+    .print-button {
+      background: #d9822b;
+    }
+    .print-button:hover {
+      background: #b86822;
+    }
+    .print-button:active {
+      background: #8b4e18;
+    }
+
+    .pdf-button {
+      background: #1b998b;
+    }
+    .pdf-button:hover {
+      background: #157a6d;
+    }
+    .pdf-button:active {
+      background: #0f5a4f;
+    }
+
+    .page {
+      width: 100%;
+      padding: 40px;
+      box-sizing: border-box;
+    }
+
+    h1, h2, h3, h4 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    h1 { color: #0a355e; }
+    h2 { color: #d9822b; }
+    h3 { color: #1b4965; }
+    h4 { color: #0a355e; margin-top: 0; }
+
+    .section {
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: #f0f4f8;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .card:hover { transform: translateY(-3px); }
+
+    /* COLOR CODING FOR PILLARS, CONTINUUM, DDIER */
+    .pillar {
+      border-left: 6px solid #8b5cf6;
+    }
+    .pillartxt {
+      color: #6d28d9;
+      font-weight: 600;
+    }
+
+    .continuum {
+      border-left: 6px solid #16a34a;
+    }
+    .continuumtxt {
+      color: #15803d;
+      font-weight: 600;
+    }
+
+    .ddier {
+      border-left: 6px solid #eab308;
+    }
+    .ddiertxt {
+      color: #b45309;
+      font-weight: 700;
+    }
+
+    .bestpractice {
+      border-left: 6px solid #7A4EC4;
+      background: #f3edfa;
+    }
+    .bestpracticetxt {
+      color: #7A4EC4;
+      font-weight: 700;
+    }
+
+    .highlight {
+      background: #d9e6f2;
+      border-left: 5px solid #d9822b;
+      padding: 12px 14px;
+      margin: 12px 0;
+      font-size: 0.95rem;
+    }
+
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .step-list li {
+      counter-increment: step;
+      margin-bottom: 10px;
+      padding-left: 28px;
+      position: relative;
+      font-size: 0.96rem;
+    }
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #fff;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .tag {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef2f7;
+      border: 1px solid #c7d2e3;
+    }
+
+    .logic-columns {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      font-size: 0.9rem;
+    }
+
+    .logic-box {
+      background: #f7f7fb;
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid #dde3f0;
+    }
+    .logic-box h4 {
+      text-align: left;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+    .logic-box ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .logic-box li {
+      margin-bottom: 4px;
+    }
+
+    /* LEGEND STYLES */
+    .legend-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 14px 0 26px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      background: #ffffff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+    }
+    .pillar-swatch {
+      background: #8b5cf6;
+    }
+    .continuum-swatch {
+      background: #16a34a;
+    }
+    .ddier-swatch {
+      background: #eab308;
+    }
+
+    @media (max-width: 1100px) {
+      .navbar {
+        justify-content: flex-start;
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .logic-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .logic-columns {
+        grid-template-columns: 1fr;
+      }
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @page {
+      size: 8.5in 11in;
+      margin: 0.5in;
+    }
+
+    @media print {
+      body {
+        padding-top: 0;
+        background: #ffffff;
+      }
+      .navbar {
+        display: none;
+      }
+      .page {
+        box-shadow: none;
+        padding: 20px;
+        page-break-after: always;
+      }
+      .page:last-of-type {
+        page-break-after: auto;
+      }
+    }
+  </style>
+
+  <!-- html2pdf.js for PDF download button -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-YcsIPX3v0nKCF3P3HwMOkqVn4Q7F8G+V+vP+3l4lvuq3nI4dbd409UQghr35Lx1+xHnIpoZ4EvsC0KZzIrp3KQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+<!-- FLOATING MENU -->
+<div class="navbar">
+  <a href="#phase3-overview" class="nav-button">Phase 3 Overview</a>
+  <a href="#current-conditions-3" class="nav-button">Current Conditions</a>
+  <a href="#guiding-principles-3" class="nav-button">Guiding Principles</a>
+  <a href="#preconditions-readiness-3" class="nav-button">Preconditions &amp; Readiness</a>
+  <a href="#systems-architecture-3" class="nav-button">Systems &amp; Architecture</a>
+  <a href="#implementation-workstreams-3" class="nav-button">Implementation Workstreams</a>
+  <a href="#milestones-progress-3" class="nav-button">Milestones &amp; Progress</a>
+  <a href="#evidence-learning-3" class="nav-button">Evidence &amp; Learning Loop</a>
+  <a href="#stakeholder-roles-3" class="nav-button">Stakeholder Roles</a>
+  <a href="#risks-mitigation-3" class="nav-button">Risks &amp; Mitigation</a>
+  <a href="#phase3-key-outcome" class="nav-button">Phase 3 Key Outcome</a>
+  <a href="#practice-action-3" class="nav-button">Practice in Action</a>
+  <a href="#implementation-supports-3" class="nav-button">Implementation Supports</a>
+  <a href="#research-base-3" class="nav-button">Research Base</a>
+  <button
+    type="button"
+    class="nav-button print-button"
+    onclick="window.print()">
+    Print
+  </button>
+  <button
+    type="button"
+    class="nav-button pdf-button"
+    onclick="downloadPDF()">
+    PDF
+  </button>
+</div>
+
+<!-- PAGE 1: Overview, Context, Principles, Preconditions -->
+<div class="page" id="phase3-overview">
+  <h1>Local Accountability Development Map</h1>
+  <h2>Phase 3: Implementation and Early Scaling of Local Accountability</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Phase 3 Overview</h3>
+    <p>
+      Phase 3: Implementation is where the local accountability system moves from design and pilots to everyday practice.
+      The core question becomes,
+      <strong>Are we using the tools we built in ways that improve teaching, learning, and decision making across the system.</strong>
+      The work shifts from building tools to building
+      <strong>habits, routines, and culture</strong>
+      around those tools.
+    </p>
+    <p>
+      On the Local Accountability Continuum, Phase 3 corresponds to
+      <span class="continuumtxt">Implement the Local Accountability System</span>.
+      In the DDIER cycle, it aligns with the
+      <span class="ddiertxt">Implementation</span>
+      phase, where the system blueprint from Phase 2 is put into motion across more schools, grade levels, and teams.
+      The focus is on consistent use, not perfection.
+    </p>
+    <p>
+      Phase 3 is especially anchored in
+      <span class="pillartxt">Pillar 2: Governance, Leadership, and Systematic Support</span>
+      and
+      <span class="pillartxt">Pillar 4: Data Validation, Analysis, and Utilization</span>,
+      with growing attention to how progress is reported, communicated, and sustained over time.
+    </p>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      A local accountability system only becomes real when teachers, leaders, students, and communities use it in daily decisions.
+      Phase 3 tests whether the system can stand on its own, beyond the design team and early pilots.
+    </div>
+  </div>
+
+  <div class="section" id="current-conditions-3">
+    <h3>Current On the Ground Conditions and Self Assessment of Context</h3>
+    <p>
+      Before fully engaging in Phase 3, districts take an honest look at what implementation actually looks like now.
+      The goal is to describe lived reality, not the implementation plan.
+      Self assessment profiles help teams locate themselves and tailor the pace and supports for this phase.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Profiles of Current Practice</h4>
+        <ul class="step-list">
+          <li><strong>Patchy Implementation:</strong> A few strong pilot sites are using local tools, but most schools still rely primarily on traditional tests and grades.</li>
+          <li><strong>Expanding but Fragile:</strong> Multiple schools use NxGRAs, portfolios, Measures of Quality, and surveys, but routines are inconsistent and dependent on a few key people.</li>
+          <li><strong>Emerging System:</strong> Local accountability tools appear in school improvement plans, leadership meetings, and board conversations, but calibration and coherence still need work.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Using Context to Shape Phase 3</h4>
+        <ul class="step-list">
+          <li>Align early scaling to the schools and teams most ready to lead by example.</li>
+          <li>Identify schools or grade levels where legacy practices may slow or distort implementation.</li>
+          <li>Surface differences in capacity and trust so supports can be differentiated, not one size fits all.</li>
+          <li>Share a short narrative of “how things really work now” with advisory groups and the board to ground expectations.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      When Phase 3 starts with a clear picture of current conditions, districts can scale what is working, support what is struggling, and avoid pushing a fragile system beyond its capacity.
+    </div>
+  </div>
+
+  <div class="section" id="guiding-principles-3">
+    <h3>Guiding Principles for Phase 3 Implementation</h3>
+    <p>
+      Guiding principles keep Phase 3 anchored to the district’s beliefs about learning, evidence, and equity.
+      They offer a compass when leaders face tradeoffs between speed, depth, and sustainability.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Principles for Learning and Evidence</h4>
+        <ul class="step-list">
+          <li>Implementation must protect instructional quality, not simply add compliance tasks to teacher workload.</li>
+          <li>Evidence routines should make Growth, Mastery, and Readiness more visible, not add more noise to a crowded system.</li>
+          <li>Students should understand how NxGRAs, portfolios, and Measures of Quality help them see and tell the story of their learning.</li>
+          <li>Local evidence should elevate student voice and real world performance, not only reinforce existing test score patterns.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Principles for Pace and Support</h4>
+        <ul class="step-list">
+          <li>Prioritize depth before breadth, scaling a few high leverage tools well instead of many tools superficially.</li>
+          <li>Successful implementation is measured by the typical school, not only by early adopter sites.</li>
+          <li>Every new expectation must be paired with time, examples, coaching, and chances to practice in community.</li>
+          <li>Feedback from schools and stakeholders is treated as fuel for improvement, not resistance to be dismissed.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Without clear principles, Phase 3 can slide into “initiative push” instead of thoughtful implementation, putting the entire local accountability vision at risk.
+    </div>
+  </div>
+
+  <div class="section" id="preconditions-readiness-3">
+    <h3>Preconditions and Readiness Indicators for Phase Entry</h3>
+    <p>
+      Phase 3 should not begin until certain conditions are in place.
+      These preconditions ensure that implementation will be meaningful and sustainable, not rushed and fragile.
+    </p>
+    <div class="mini-grid">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Minimum Criteria for Productive Entry</h4>
+        <ul class="step-list">
+          <li>Phase 2 tools (NxGRAs, portfolio expectations, Measures of Quality, surveys, dashboards) exist in version 1.0 and have been piloted and revised at least once.</li>
+          <li>A written implementation plan identifies which tools will scale first, in which schools or grades, and on what timeline.</li>
+          <li>Principals and teacher leaders can explain the purpose of local accountability and how Phase 3 connects to Phase 1 and Phase 2 decisions.</li>
+          <li>The board and advisory councils have been briefed on what will look different in practice as Phase 3 unfolds.</li>
+        </ul>
+      </div>
+      <div class="card pillar">
+        <h4>Readiness Indicators to Check</h4>
+        <ul class="step-list">
+          <li>Pilot teachers are willing to recommend the new tools to colleagues and support early implementation at their sites.</li>
+          <li>At least some school improvement plans already reference local evidence such as BPI websites, NxGRAs, and Measures of Quality.</li>
+          <li>Professional learning calendars include explicit time for calibration, scoring, and reflection on local evidence.</li>
+          <li>Communication routines exist for sharing updates with staff, students, families, and community partners.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      When districts enter Phase 3 with clear preconditions and readiness indicators, they reduce the risk of implementation being experienced as one more disconnected initiative.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: Systems & Architecture, Implementation Workstreams, Milestones -->
+<div class="page" id="systems-architecture-3">
+  <h2>Systems and Architecture for Phase 3 Implementation</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Putting the Blueprint in Motion</h3>
+    <p>
+      In Phase 2, districts built a system blueprint that connected classroom assessments, school level measures, district indicators, and public reporting.
+      In Phase 3, the question becomes,
+      <strong>Can this blueprint be lived without the design team in the room.</strong>
+    </p>
+    <div class="logic-columns">
+      <div class="logic-box">
+        <h4>Annual Accountability Calendar</h4>
+        <ul>
+          <li>Schedules for NxGRAs and key performance assessments across grades and subjects.</li>
+          <li>Regular checkpoints for BPI curation and portfolio reflection.</li>
+          <li>Windows for Measures of Quality evidence collection and scoring.</li>
+          <li>Survey administration periods and dashboard update cycles.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Decision Routines</h4>
+        <ul>
+          <li>Principal and leadership team meetings that use local evidence alongside state data.</li>
+          <li>School improvement cycles that include NxGRAs, BPI artifacts, and Measures of Quality ratings.</li>
+          <li>Cabinet and board discussions that reference Growth, Mastery, Readiness, and Measures of Quality.</li>
+          <li>Student and family conferences that use portfolio evidence to discuss progress and goals.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Feedback and Support Structures</h4>
+        <ul>
+          <li>PLC time dedicated to reviewing student work and calibrating scoring.</li>
+          <li>Coaching cycles focused on performance assessment, portfolio use, and data conversations.</li>
+          <li>Advisory councils that periodically review implementation evidence and recommend adjustments.</li>
+          <li>Communication routines that keep staff, students, and families informed about what is being implemented and why.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Monitoring and Adjustment</h4>
+        <ul>
+          <li>Simple dashboards that track where tools are being used and where support is needed.</li>
+          <li>Implementation check-ins at leadership meetings tied to specific milestones.</li>
+          <li>Processes to retire or refine tools that are not adding value.</li>
+          <li>Clear documentation of lessons learned to inform future phases of work.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Implementation anchor:</strong>
+      A strong Phase 3 architecture makes it easy to see when tools are in use, how they are being used, and where the system needs more support, not more initiatives.
+    </div>
+  </div>
+
+  <div class="section" id="implementation-workstreams-3">
+    <h3>Core Implementation Workstreams</h3>
+    <p>
+      Implementation workstreams in Phase 3 mirror the design workstreams from Phase 2, but the emphasis shifts from building tools to using them well and consistently.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Workstream 1: NxGRAs and Portfolios in Use</h4>
+        <ul class="step-list">
+          <li>Scale Next Generation Readiness Assessments into additional grades and subjects according to the implementation plan.</li>
+          <li>Establish minimum expectations for BPI and portfolio updates, such as curated artifacts and reflections each term.</li>
+          <li>Host calibration sessions where teachers score student work together and refine interpretations of rubrics.</li>
+          <li>Support students in understanding how artifacts show their Growth, Mastery, and Readiness.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Workstream 2: Measures of Quality in School Improvement</h4>
+        <ul class="step-list">
+          <li>Require each school to complete Measures of Quality ratings with documented evidence on a predictable schedule.</li>
+          <li>Integrate results into school improvement plans, principal supervision, and leadership coaching.</li>
+          <li>Look for cross school patterns to identify bright spots and common areas for growth.</li>
+          <li>Use Measures of Quality to connect Vibrant Learning, Outcomes, Culture, Community, and Ecosystem in one narrative.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Workstream 3: Surveys, Culture, and Climate</h4>
+        <ul class="step-list">
+          <li>Implement student, staff, and family surveys on a predictable, transparent schedule.</li>
+          <li>Share results in plain language visuals, along with short summaries of key insights.</li>
+          <li>Co design follow up actions with school teams so survey data leads to visible change.</li>
+          <li>Track culture and climate trends over time and connect them to instructional and leadership practices.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Workstream 4: Dashboards and Public Reporting</h4>
+        <ul class="step-list">
+          <li>Move from prototype dashboards to usable leader dashboards that integrate multiple measures.</li>
+          <li>Develop public facing reports that highlight student artifacts, stories, and indicators in accessible formats.</li>
+          <li>Train principals and district leaders to use dashboards in conversations with staff, students, families, and the board.</li>
+          <li>Refine dashboards based on feedback about clarity, usefulness, and alignment to community priorities.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Practical tip:</strong>
+      Districts do not need a different team for every workstream.
+      The same core coalition can rotate focus across the year, as long as priorities are clear and timelines are realistic.
+    </div>
+  </div>
+
+  <div class="section" id="milestones-progress-3">
+    <h3>Milestones and Progress Indicators for Phase 3</h3>
+    <p>
+      Milestones in Phase 3 are about implementation quality and early impact, not perfection.
+      They help districts ask, “Are we on track to build stable patterns of practice.”
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Implementation Milestones</h4>
+        <ul class="step-list">
+          <li>A defined percentage of schools administer NxGRAs and capture resulting artifacts in student BPI websites.</li>
+          <li>All schools complete Measures of Quality ratings with documented evidence by agreed upon deadlines.</li>
+          <li>Survey response rates reach minimum thresholds for students, staff, and families.</li>
+          <li>Dashboards and reports are updated and used according to the annual accountability calendar.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Behavioral and Cultural Indicators</h4>
+        <ul class="step-list">
+          <li>Leadership teams reference local evidence, not just state test data, in recurring meetings.</li>
+          <li>Teachers use portfolio evidence in student and family conferences to discuss progress and next steps.</li>
+          <li>Board members ask questions about Growth, Mastery, Readiness, and Measures of Quality when reviewing district progress.</li>
+          <li>Students can explain how their BPI websites and performance assessments show who they are as learners.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      These milestones help districts see Phase 3 as more than a rollout checklist.
+      They signal whether the system is beginning to change daily conversations and decisions about learning.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: Evidence, Learning Loop, Stakeholders, Risks -->
+<div class="page" id="evidence-learning-3">
+  <h2>Evidence, Key Questions, and the Learning Loop in Phase 3</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Evidence and Key Questions in Implementation</h3>
+    <p>
+      In Phase 2, evidence focused on tool quality and usability.
+      In Phase 3, evidence shifts toward implementation quality and early effects on practice and culture.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Evidence to Monitor</h4>
+        <ul class="step-list">
+          <li>Implementation logs that track which schools are using which tools, and to what extent.</li>
+          <li>Samples of scored student work and portfolios from multiple schools and grade levels.</li>
+          <li>Measures of Quality results by school, with accompanying narrative explanations.</li>
+          <li>Survey trends over time for students, staff, and families.</li>
+          <li>Examples of decisions (schedules, PD, resource allocation) that explicitly reference local evidence.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Key Questions for Sensemaking</h4>
+        <ul class="step-list">
+          <li>Are tools being used as they were designed, or have they drifted in ways that reduce their impact.</li>
+          <li>Where is implementation deepest, and what conditions make that possible in those schools or teams.</li>
+          <li>Where is implementation most fragile, and what barriers are appearing repeatedly across sites.</li>
+          <li>Are teachers and leaders reporting that the system helps them see students more clearly and make better decisions.</li>
+          <li>Are conversations with families and the board showing a richer story of learning than before Phase 3.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card ddier" style="margin-top:16px;">
+      <h4 class="ddiertxt">Learning Loop: Reflection and Next Steps</h4>
+      <ul class="step-list">
+        <li>Where did we see the most meaningful improvements in clarity, coherence, and student evidence during Phase 3.</li>
+        <li>Which tools proved most powerful for changing practice and which added complexity with limited value.</li>
+        <li>How are students and families describing the system, and what language are they using to talk about Growth, Mastery, and Readiness.</li>
+        <li>What do we need to refine, simplify, or strengthen before scaling to all schools or all grade levels.</li>
+        <li>How will our learning from Phase 3 shape the focus of the next phase of local accountability work.</li>
+      </ul>
+      <div class="highlight">
+        <strong>Use in practice:</strong>
+        Embed these reflection questions into end of year reviews, leadership retreats, and advisory council meetings so Phase 3 becomes a learning cycle, not only an implementation cycle.
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="stakeholder-roles-3">
+    <h3>Stakeholder Roles in Phase 3 Implementation</h3>
+    <p>
+      In Phase 3, roles shift from design and pilot work to ownership and refinement.
+      Each group contributes to making the system real in everyday practice.
+    </p>
+    <div class="grid">
+      <div class="card pillar">
+        <h4>Superintendent and Cabinet</h4>
+        <ul class="step-list">
+          <li>Use local evidence in internal and public messaging to signal its importance and legitimacy.</li>
+          <li>Protect time for schools to engage in calibration, reflection, and portfolio curation.</li>
+          <li>Align district initiatives and PD priorities with the local accountability vision.</li>
+          <li>Hold the line when pressures arise to revert to test only narratives about school performance.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Principals and School Leaders</h4>
+        <ul class="step-list">
+          <li>Integrate local accountability tools into faculty meetings, PLCs, and school improvement processes.</li>
+          <li>Support teachers in embedding NxGRAs and portfolio work into instruction, not as add ons.</li>
+          <li>Use Measures of Quality, survey results, and student artifacts to guide school decisions.</li>
+          <li>Communicate regularly with students and families about how local evidence is being used.</li>
+        </ul>
+      </div>
+
+      <div class="card ddier">
+        <h4 class="ddiertxt">Teachers</h4>
+        <ul class="step-list">
+          <li>Administer NxGRAs and performance tasks in ways that feel integrated with daily teaching.</li>
+          <li>Support students in curating BPI websites and reflecting on their learning across time.</li>
+          <li>Engage in calibration sessions and use insights to refine instruction and assessment.</li>
+          <li>Provide feedback on what works, what does not, and what needs adjustment in the tools or expectations.</li>
+        </ul>
+      </div>
+
+      <div class="card pillar">
+        <h4>Students</h4>
+        <ul class="step-list">
+          <li>Curate artifacts and reflections in BPI websites that show Growth, Mastery, and Readiness.</li>
+          <li>Participate in NxGRAs, portfolios, and surveys and offer feedback on relevance and challenge.</li>
+          <li>Use local evidence to set goals, track progress, and communicate their learning story.</li>
+          <li>Serve as ambassadors who can explain the local accountability system in student language.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Families and Community Partners</h4>
+        <ul class="step-list">
+          <li>Review dashboards, artifacts, and reports and respond with questions, priorities, and ideas.</li>
+          <li>Participate in conferences, showcases, and community events that highlight student work.</li>
+          <li>Serve on advisory councils or focus groups that review local evidence and suggest refinements.</li>
+          <li>Help identify real world contexts and opportunities that deepen performance assessment tasks.</li>
+        </ul>
+      </div>
+
+      <div class="card bestpractice">
+        <h4 class="bestpracticetxt">Best Practices Across Stakeholders</h4>
+        <ul class="step-list">
+          <li>Use structured protocols for reviewing evidence together so discussions stay focused and productive.</li>
+          <li>Share clear “you said, we did” examples so stakeholders see how their input shapes implementation.</li>
+          <li>Recognize and celebrate schools, teams, and students who model the spirit of local accountability.</li>
+          <li>Keep returning to the core question, how does this system help more students experience real learning and real accomplishment.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      When stakeholders see themselves as co owners of the local accountability system, not just participants, trust and sustainability grow.
+    </div>
+  </div>
+
+  <div class="section" id="risks-mitigation-3">
+    <h3>Risks and Mitigation Strategies in Phase 3</h3>
+    <p>
+      Implementation brings real world constraints into view.
+      Naming risks and planning mitigation strategies helps districts navigate complexity with intention rather than surprise.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Risk: Reversion to Old Habits</h4>
+        <ul class="step-list">
+          <li>Schools default to traditional tests and grades when time pressures or anxiety spike.</li>
+          <li><strong>Mitigation:</strong> Continually elevate concrete stories where local evidence improved outcomes or decisions.</li>
+          <li><strong>Mitigation:</strong> Integrate local accountability tools into required processes, not only optional practices.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Risk: Implementation Fatigue</h4>
+        <ul class="step-list">
+          <li>Staff experience the work as one more initiative layered on top of many others.</li>
+          <li><strong>Mitigation:</strong> Tighten focus to the “critical few” tools and intentionally sunset lower value initiatives.</li>
+          <li><strong>Mitigation:</strong> Use staff feedback to simplify processes and reduce duplication.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Risk: Inconsistent Use Across Schools</h4>
+        <ul class="step-list">
+          <li>Some schools implement deeply while others barely adopt the tools, leading to uneven experiences for students.</li>
+          <li><strong>Mitigation:</strong> Use implementation data to identify bright spots and create cross school learning structures.</li>
+          <li><strong>Mitigation:</strong> Pair schools or teams so those further along can coach and support those just starting.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Risk: Data Without Action</h4>
+        <ul class="step-list">
+          <li>Dashboards, Measures of Quality, and surveys are completed but do not lead to visible change.</li>
+          <li><strong>Mitigation:</strong> Build simple “Now what” protocols into every data conversation.</li>
+          <li><strong>Mitigation:</strong> Track and share examples of actions taken based on local evidence to reinforce expectations.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Planning for risks keeps Phase 3 from becoming reactive and helps leaders stay focused on building a resilient, learning oriented system.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: Key Outcome, Practice in Action, Supports, Research -->
+<div class="page" id="phase3-key-outcome">
+  <h2>Phase 3: Key Outcome, Practice in Action, and Supports</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Phase 3: Key Outcome</h3>
+    <p>
+      By the end of Phase 3, the district should have a
+      <strong>functional local accountability system in use</strong>
+      across schools, with consistent routines for collecting, scoring, and using multiple forms of evidence to inform decisions at classroom, school, and district levels.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>System in Use</h4>
+        <ul class="step-list">
+          <li>NxGRAs, portfolios/BPI websites, Measures of Quality, surveys, and dashboards are in regular use in defined grades and schools.</li>
+          <li>Teachers, leaders, students, and families can describe how these tools show learning beyond test scores.</li>
+          <li>Local evidence is visible in school improvement plans, leadership conversations, and board materials.</li>
+          <li>Implementation patterns are stable enough that they can be studied and improved, not rebuilt from scratch.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Readiness for the Next Phase</h4>
+        <ul class="step-list">
+          <li>Districts have identified where the system is strongest and where it needs targeted refinement.</li>
+          <li>There is agreement about which tools and routines will move to full scale and which remain in refinement.</li>
+          <li>Leaders have a clear picture of the supports needed to sustain and deepen implementation.</li>
+          <li>The system is ready to enter a phase focused on validation, refinement, and long term sustainability.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      When these outcomes are present, Phase 4 can focus on improving and sustaining a real system, not on building one from scratch again.
+    </div>
+  </div>
+
+  <div class="section" id="practice-action-3">
+    <h3>Practice in Action: Phase 3 in Fleming County Schools</h3>
+    <p>
+      In Fleming County Schools, Phase 3 represents the move from pilot projects to a lived local accountability system woven into everyday practice.
+      The emphasis is on making Growth, Mastery, and Readiness visible for every student, in every school, through multiple forms of evidence.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>NxGRAs and BPI Websites at Scale</h4>
+        <ul class="step-list">
+          <li>Students in grades 4–12 complete at least one Next Generation Readiness Assessment each term, with artifacts curated in their BPI websites.</li>
+          <li>Teachers use common rubrics that connect standards, durable skills, and real world application to guide scoring and feedback.</li>
+          <li>Student led conferences and celebrations of learning feature BPI artifacts and reflections as primary evidence.</li>
+          <li>Leaders reference BPI websites as key sources of insight when discussing student readiness.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Measures of Quality and Community Conversation</h4>
+        <ul class="step-list">
+          <li>All schools complete Measures of Quality 4.1 with documented evidence in Vibrant Learning, Outcomes, Culture, Community, and Ecosystem.</li>
+          <li>Results inform leadership coaching and school improvement strategies, not only annual reports.</li>
+          <li>Community and advisory groups review Measures of Quality alongside student work and surveys.</li>
+          <li>Board updates increasingly highlight local measures as a core part of how success is defined and communicated.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Field insight:</strong>
+      Treating Phase 3 as a learning laboratory, not a compliance exercise, allows Fleming County to refine tools in real use and build a system that is both rigorous and human.
+    </div>
+  </div>
+
+  <div class="section" id="implementation-supports-3">
+    <h3>Implementation Supports and Tools for Phase 3</h3>
+    <p>
+      Implementation supports make the work executable for busy educators and leaders.
+      They translate strategy into daily practice.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Core Implementation Tools</h4>
+        <ul class="step-list">
+          <li>Annual local accountability calendar templates that integrate NxGRAs, portfolios, Measures of Quality, surveys, and reporting.</li>
+          <li>PLC and staff meeting protocols for reviewing student work, Measures of Quality evidence, and survey data.</li>
+          <li>Scoring and calibration guides for NxGRAs and portfolio artifacts.</li>
+          <li>Communication templates for explaining Phase 3 implementation to staff, students, families, and community partners.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Supports for Leaders and Teams</h4>
+        <ul class="step-list">
+          <li>Implementation dashboards or trackers that show where tools are in use and where support is needed.</li>
+          <li>Facilitation guides for leadership retreats, advisory councils, and board workshops focused on local accountability.</li>
+          <li>Sample board and community reports that integrate quantitative indicators with student artifacts and narratives.</li>
+          <li>References to toolkits (for example, “See Toolkit: Phase 3 Implementation Planning Guide” or “See Template: Local Evidence Conversation Protocol”).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Without practical supports, even a well designed system will stall.
+      Implementation tools help districts move beyond vision to sustained, everyday use.
+    </div>
+  </div>
+
+  <div class="section" id="research-base-3">
+    <h3>Research Base and References for Phase 3 Implementation</h3>
+    <p>
+      Phase 3 Implementation draws on research in implementation science, continuous improvement, data informed decision making, and professional learning.
+      These fields emphasize that sustainable change depends on clear structures, iterative testing, and authentic engagement of the people who use new tools.
+    </p>
+    <ul class="step-list">
+      <li>
+        <strong>Bryk, A. S., Gomez, L. M., Grunow, A., &amp; LeMahieu, P. G. (2015).</strong>
+        <em>Learning to Improve: How America's Schools Can Get Better at Getting Better.</em>
+        Supports the use of disciplined inquiry cycles and networked learning to strengthen implementation over time.
+      </li>
+      <li>
+        <strong>Fullan, M., &amp; Quinn, J. (2016).</strong>
+        <em>Coherence: The Right Drivers in Action for Schools, Districts, and Systems.</em>
+        Highlights the importance of focused direction, collaborative cultures, deep learning, and accountability built on capacity building.
+      </li>
+      <li>
+        <strong>Hargreaves, A., &amp; O’Connor, M. T. (2018).</strong>
+        <em>Collaborative Professionalism: When Teaching Together Means Learning for All.</em>
+        Emphasizes the role of collaborative structures and professional learning communities in sustaining new practices.
+      </li>
+    </ul>
+    <div class="highlight">
+      <strong>How to use this section:</strong>
+      These references can support conversations with boards, advisory councils, and staff about why Phase 3 emphasizes implementation quality, collaboration, and continuous learning rather than one time rollout.
+    </div>
+  </div>
+</div>
+
+<script>
+  function downloadPDF() {
+    // Use the entire body content as the PDF source
+    const element = document.body;
+
+    const opt = {
+      margin:       0.5,                      // inches
+      filename:     'phase3-local-accountability.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
+  }
+</script>
+
+</body>
+</html>
