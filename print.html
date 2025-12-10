@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Print Test</title>
+</head>
+<body>
+  <button id="printButton">Print This Page</button>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var btn = document.getElementById('printButton');
+      if (btn) {
+        btn.addEventListener('click', function (e) {
+          e.preventDefault();
+          window.print();
+        });
+      }
+    });
+  </script>
+</body>
+</html>
