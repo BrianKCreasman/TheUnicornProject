@@ -107,7 +107,7 @@
       position: relative;
       overflow: hidden;
       border-radius: var(--card-radius);
-      padding: 22px 20px;
+      padding: 20px 20px 18px 20px;
       color: #ffffff;
       cursor: pointer;
       box-shadow: var(--shadow-light);
@@ -122,7 +122,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 150px;
+      min-height: 160px;
     }
 
     .card::before {
@@ -139,7 +139,18 @@
       z-index: 1;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      height: 100%;
+    }
+
+    .card-top {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .card-text {
+      flex: 1;
+      min-width: 0;
     }
 
     .card-footer-band {
@@ -166,23 +177,19 @@
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
     }
 
-    /* Icon + title */
+    /* Icon in circle, upper left */
     .card-icon {
       width: 46px;
       height: 46px;
-      border-radius: 16px;
+      border-radius: 999px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.6rem;
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(255, 255, 255, 0.16);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
-    }
-
-    .card-title {
-      font-size: 1.02rem;
-      font-weight: 600;
-      line-height: 1.3;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
     .card-tag {
@@ -190,6 +197,60 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       opacity: 0.9;
+      margin-bottom: 4px;
+    }
+
+    .card-title {
+      font-size: 1.02rem;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    /* Hover description area for phases */
+    .card-hover {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      opacity: 0;
+      transform: translateY(6px);
+      max-height: 0;
+      overflow: hidden;
+      transition:
+        opacity 0.22s ease,
+        transform 0.22s ease,
+        max-height 0.22s ease;
+    }
+
+    .card-phase:hover .card-hover {
+      opacity: 1;
+      transform: translateY(0);
+      max-height: 220px;
+    }
+
+    .card-hover p {
+      margin-bottom: 10px;
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .pill-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background-color: rgba(255, 255, 255, 0.9);
+      color: var(--navy-soft);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      white-space: nowrap;
+    }
+
+    .pill-link:hover {
+      background-color: #ffffff;
+      transform: translateY(-1px);
     }
 
     /* Color variants aligned to framework palette */
@@ -253,10 +314,14 @@
       <!-- Row 1 -->
       <div class="card card-intro">
         <div class="card-inner">
-          <div class="card-icon" aria-hidden="true">📘</div>
-          <div class="card-tag">Overview</div>
-          <div class="card-title">
-            Kentucky's Local Accountability Framework: Introduction and Background
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">📘</div>
+            <div class="card-text">
+              <div class="card-tag">Overview</div>
+              <div class="card-title">
+                Kentucky's Local Accountability Framework: Introduction and Background
+              </div>
+            </div>
           </div>
         </div>
         <div class="card-footer-band"></div>
@@ -264,10 +329,14 @@
 
       <div class="card card-fusion">
         <div class="card-inner">
-          <div class="card-icon" aria-hidden="true">⚡</div>
-          <div class="card-tag">Fusion</div>
-          <div class="card-title">
-            Fusion
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">⚡</div>
+            <div class="card-text">
+              <div class="card-tag">Fusion</div>
+              <div class="card-title">
+                Fusion
+              </div>
+            </div>
           </div>
         </div>
         <div class="card-footer-band"></div>
@@ -275,78 +344,148 @@
 
       <div class="card card-alignment">
         <div class="card-inner">
-          <div class="card-icon" aria-hidden="true">🧭</div>
-          <div class="card-tag">Alignment</div>
-          <div class="card-title">
-            Alignment
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">🧭</div>
+            <div class="card-text">
+              <div class="card-tag">Alignment</div>
+              <div class="card-title">
+                Alignment
+              </div>
+            </div>
           </div>
         </div>
         <div class="card-footer-band"></div>
       </div>
 
       <!-- Row 2 -->
-      <div class="card card-phase1">
+      <div class="card card-phase card-phase1">
         <div class="card-inner">
-          <div class="card-icon" aria-hidden="true">①</div>
-          <div class="card-tag">Phase</div>
-          <div class="card-title">
-            Phase 1
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">🧩</div>
+            <div class="card-text">
+              <div class="card-tag">Phase 1</div>
+              <div class="card-title">
+                Laying the Groundwork: Understanding Current Conditions and Readiness
+              </div>
+            </div>
+          </div>
+          <div class="card-hover">
+            <p>
+              Get clear on where you are today. Identify current conditions, strengths, gaps,
+              and readiness so the work begins with shared understanding.
+            </p>
+            <a href="#phase1" class="pill-link">Phase Deep-Dive</a>
           </div>
         </div>
         <div class="card-footer-band"></div>
       </div>
 
-      <div class="card card-phase2">
+      <div class="card card-phase card-phase2">
         <div class="card-inner">
-          <div class="card-icon" aria-hidden="true">②</div>
-          <div class="card-tag">Phase</div>
-          <div class="card-title">
-            Phase 2
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">📐</div>
+            <div class="card-text">
+              <div class="card-tag">Phase 2</div>
+              <div class="card-title">
+                Designing the Vision: Crafting the Architecture of a Local Accountability System
+              </div>
+            </div>
+          </div>
+          <div class="card-hover">
+            <p>
+              Build the blueprint. Define principles, architecture, and early system design
+              that will guide a coherent local accountability model.
+            </p>
+            <a href="#phase2" class="pill-link">Phase Deep-Dive</a>
           </div>
         </div>
         <div class="card-footer-band"></div>
       </div>
 
-      <div class="card card-phase3">
+      <div class="card card-phase card-phase3">
         <div class="card-inner">
-          <div class="card-icon" aria-hidden="true">③</div>
-          <div class="card-tag">Phase</div>
-          <div class="card-title">
-            Phase 3
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">🔗</div>
+            <div class="card-text">
+              <div class="card-tag">Phase 3</div>
+              <div class="card-title">
+                Building Coherence: Connecting Principles, Pillars, and Processes Into a Unified Model
+              </div>
+            </div>
+          </div>
+          <div class="card-hover">
+            <p>
+              Connect the pieces. Align principles, pillars, processes, and workstreams
+              so the system operates as one unified model.
+            </p>
+            <a href="#phase3" class="pill-link">Phase Deep-Dive</a>
           </div>
         </div>
         <div class="card-footer-band"></div>
       </div>
 
       <!-- Row 3 -->
-      <div class="card card-phase4">
+      <div class="card card-phase card-phase4">
         <div class="card-inner">
-          <div class="card-icon" aria-hidden="true">④</div>
-          <div class="card-tag">Phase</div>
-          <div class="card-title">
-            Phase 4
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">🚀</div>
+            <div class="card-text">
+              <div class="card-tag">Phase 4</div>
+              <div class="card-title">
+                Implementing the Work: Turning Design Into Practice Across Classrooms and Schools
+              </div>
+            </div>
+          </div>
+          <div class="card-hover">
+            <p>
+              Center the operational moment when the system becomes real in daily work,
+              routines, instruction, assessment, communication, and leadership.
+            </p>
+            <a href="#phase4" class="pill-link">Phase Deep-Dive</a>
           </div>
         </div>
         <div class="card-footer-band"></div>
       </div>
 
-      <div class="card card-phase5">
+      <div class="card card-phase card-phase5">
         <div class="card-inner">
-          <div class="card-icon" aria-hidden="true">⑤</div>
-          <div class="card-tag">Phase</div>
-          <div class="card-title">
-            Phase 5
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">📊</div>
+            <div class="card-text">
+              <div class="card-tag">Phase 5</div>
+              <div class="card-title">
+                Strengthen Through Feedback: Using Evidence, Data, and Reflection to Improve Practice
+              </div>
+            </div>
+          </div>
+          <div class="card-hover">
+            <p>
+              Strengthen through feedback. Use evidence, data, and reflection to refine the system
+              and improve practice across the district.
+            </p>
+            <a href="#phase5" class="pill-link">Phase Deep-Dive</a>
           </div>
         </div>
         <div class="card-footer-band"></div>
       </div>
 
-      <div class="card card-phase6">
+      <div class="card card-phase card-phase6">
         <div class="card-inner">
-          <div class="card-icon" aria-hidden="true">⑥</div>
-          <div class="card-tag">Phase</div>
-          <div class="card-title">
-            Phase 6
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">📣</div>
+            <div class="card-text">
+              <div class="card-tag">Phase 6</div>
+              <div class="card-title">
+                Demonstrating Success: Communicating Impact and Sustaining Long-Term Accountability
+              </div>
+            </div>
+          </div>
+          <div class="card-hover">
+            <p>
+              Show impact and sustain the work. Communicate results, share real evidence of learning,
+              and build long-term stability for the system.
+            </p>
+            <a href="#phase6" class="pill-link">Phase Deep-Dive</a>
           </div>
         </div>
         <div class="card-footer-band"></div>
