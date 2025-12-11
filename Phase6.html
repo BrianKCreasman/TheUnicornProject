@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Accountability Development Map - Phase 6</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #111;
+      padding-top: 80px;
+    }
+
+    /* Top navigation bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .nav-button {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+      background: #13508c;
+    }
+
+    .nav-button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      background: #072744;
+    }
+
+    .print-button {
+      background: #d9822b;
+    }
+    .print-button:hover {
+      background: #b86822;
+    }
+    .print-button:active {
+      background: #8b4e18;
+    }
+
+    .pdf-button {
+      background: #1b998b;
+    }
+    .pdf-button:hover {
+      background: #157a6d;
+    }
+    .pdf-button:active {
+      background: #0f5a4f;
+    }
+
+    .page {
+      width: 100%;
+      padding: 40px;
+      box-sizing: border-box;
+    }
+
+    h1, h2, h3, h4 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    h1 { color: #0a355e; }
+    h2 { color: #d9822b; }
+    h3 { color: #1b4965; }
+    h4 { color: #0a355e; margin-top: 0; }
+
+    .section {
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: #f0f4f8;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .card:hover { transform: translateY(-3px); }
+
+    /* COLOR CODING FOR PILLARS, CONTINUUM, DDIER */
+    .pillar {
+      border-left: 6px solid #8b5cf6;
+    }
+    .pillartxt {
+      color: #6d28d9;
+      font-weight: 600;
+    }
+
+    .continuum {
+      border-left: 6px solid #16a34a;
+    }
+    .continuumtxt {
+      color: #15803d;
+      font-weight: 600;
+    }
+
+    .ddier {
+      border-left: 6px solid #eab308;
+    }
+    .ddiertxt {
+      color: #b45309;
+      font-weight: 700;
+    }
+
+    .bestpractice {
+      border-left: 6px solid #7A4EC4;
+      background: #f3edfa;
+    }
+    .bestpracticetxt {
+      color: #7A4EC4;
+      font-weight: 700;
+    }
+
+    .highlight {
+      background: #d9e6f2;
+      border-left: 5px solid #d9822b;
+      padding: 12px 14px;
+      margin: 12px 0;
+      font-size: 0.95rem;
+    }
+
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .step-list li {
+      counter-increment: step;
+      margin-bottom: 10px;
+      padding-left: 28px;
+      position: relative;
+      font-size: 0.96rem;
+    }
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #fff;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .tag {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef2f7;
+      border: 1px solid #c7d2e3;
+    }
+
+    .logic-columns {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      font-size: 0.9rem;
+    }
+
+    .logic-box {
+      background: #f7f7fb;
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid #dde3f0;
+    }
+    .logic-box h4 {
+      text-align: left;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+    .logic-box ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .logic-box li {
+      margin-bottom: 4px;
+    }
+
+    /* LEGEND STYLES */
+    .legend-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 14px 0 26px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      background: #ffffff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+    }
+    .pillar-swatch {
+      background: #8b5cf6;
+    }
+    .continuum-swatch {
+      background: #16a34a;
+    }
+    .ddier-swatch {
+      background: #eab308;
+    }
+
+    @media (max-width: 1100px) {
+      .navbar {
+        justify-content: flex-start;
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .logic-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .logic-columns {
+        grid-template-columns: 1fr;
+      }
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @page {
+      size: 8.5in 11in;
+      margin: 0.5in;
+    }
+
+    @media print {
+      body {
+        padding-top: 0;
+        background: #ffffff;
+      }
+      .navbar {
+        display: none;
+      }
+      .page {
+        box-shadow: none;
+        padding: 20px;
+        page-break-after: always;
+      }
+      .page:last-of-type {
+        page-break-after: auto;
+      }
+    }
+  </style>
+
+  <!-- html2pdf.js for PDF download button -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-YcsIPX3v0nKCF3P3HwMOkqVn4Q7F8G+V+vP+3l4lvuq3nI4dbd409UQghr35Lx1+xHnIpoZ4EvsC0KZzIrp3KQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+<!-- FLOATING MENU -->
+<div class="navbar">
+  <a href="#phase6-overview" class="nav-button">Phase 6 Overview</a>
+  <a href="#current-conditions-6" class="nav-button">Current Conditions</a>
+  <a href="#guiding-principles-6" class="nav-button">Guiding Principles</a>
+  <a href="#preconditions-readiness-6" class="nav-button">Preconditions &amp; Readiness</a>
+  <a href="#systems-architecture-6" class="nav-button">Systems &amp; Architecture</a>
+  <a href="#improvement-workstreams-6" class="nav-button">Improvement Workstreams</a>
+  <a href="#progress-impact-6" class="nav-button">Progress &amp; Impact</a>
+  <a href="#evidence-learning-6" class="nav-button">Evidence &amp; Learning Loop</a>
+  <a href="#stakeholder-roles-6" class="nav-button">Stakeholder Roles</a>
+  <a href="#risks-mitigation-6" class="nav-button">Risks &amp; Mitigation</a>
+  <a href="#phase6-key-outcome" class="nav-button">Phase 6 Key Outcome</a>
+  <a href="#practice-action-6" class="nav-button">Practice in Action</a>
+  <a href="#implementation-supports-6" class="nav-button">Implementation Supports</a>
+  <a href="#research-base-6" class="nav-button">Research Base</a>
+  <button
+    type="button"
+    class="nav-button print-button"
+    onclick="window.print()">
+    Print
+  </button>
+  <button
+    type="button"
+    class="nav-button pdf-button"
+    onclick="downloadPDF()">
+    PDF
+  </button>
+</div>
+
+<!-- PAGE 1: Overview, Context, Principles, Preconditions -->
+<div class="page" id="phase6-overview">
+  <h1>Local Accountability Development Map</h1>
+  <h2>Phase 6: Continuous Improvement and Networked Learning</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Phase 6 Overview</h3>
+    <p>
+      Phase 6: Continuous Improvement and Networked Learning focuses on turning the local accountability system into a living learning engine.
+      The central question becomes,
+      <strong>How do we use what we are learning to keep improving practice, strengthening equity, and influencing the wider educational ecosystem.</strong>
+    </p>
+    <p>
+      On the Local Accountability Continuum, Phase 6 corresponds to
+      <span class="continuumtxt">Deepen, Learn, and Share</span>.
+      In the DDIER cycle, Phase 6 is where
+      <span class="ddiertxt">Evaluation</span>
+      and
+      <span class="ddiertxt">Revision</span>
+      connect directly back to a new round of
+      <span class="ddiertxt">Design and Development</span>.
+      The system does not reset.
+      It loops forward.
+    </p>
+    <p>
+      Phase 6 draws strongly on
+      <span class="pillartxt">Pillar 4: Data Validation, Analysis, and Utilization</span>,
+      <span class="pillartxt">Pillar 5: Evaluating Progress, Impact, and Reporting</span>,
+      and
+      <span class="pillartxt">Pillar 6: Sustainability, Partnerships, and Innovation</span>.
+      These pillars help the district move from proving to improving, and from improving to influencing.
+    </p>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Without a deliberate continuous improvement phase, local accountability can become a static structure.
+      Phase 6 keeps it dynamic, responsive, and connected to broader learning networks.
+    </div>
+  </div>
+
+  <div class="section" id="current-conditions-6">
+    <h3>Current On the Ground Conditions and Self Assessment of Context</h3>
+    <p>
+      Phase 6 begins with a clear-eyed look at how the system is learning now.
+      Districts consider where continuous improvement is already part of daily practice, and where it needs to be strengthened.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Profiles of Improvement Culture</h4>
+        <ul class="step-list">
+          <li><strong>Compliance Focused:</strong> Data is collected mainly to satisfy external requirements.</li>
+          <li><strong>Mixed Practice:</strong> Some teams use evidence for improvement, while others focus on reporting only.</li>
+          <li><strong>Learning Centered:</strong> The system routinely uses evidence to ask questions, test changes, and improve practice.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Context Questions for Phase 6</h4>
+        <ul class="step-list">
+          <li>Where are improvement cycles already happening, and how formal or informal are they.</li>
+          <li>How do teams currently respond when local accountability evidence reveals gaps or inequities.</li>
+          <li>What routines support reflection and adjustment across classrooms, schools, and the district.</li>
+          <li>How connected is the district to external learning networks that can deepen and extend its work.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Continuous improvement strategies land best in systems that already treat evidence as a tool for learning rather than judgment.
+    </div>
+  </div>
+
+  <div class="section" id="guiding-principles-6">
+    <h3>Guiding Principles for Continuous Improvement and Networked Learning</h3>
+    <p>
+      Guiding principles keep Phase 6 grounded in equity, learning, and coherence.
+      They help districts resist the pull toward quick fixes and one time responses.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Principles for Continuous Improvement</h4>
+        <ul class="step-list">
+          <li>Center students, especially those furthest from opportunity, in all improvement questions.</li>
+          <li>Use evidence to learn and adjust rather than to sort or blame.</li>
+          <li>Focus on small, disciplined tests of change that build toward larger shifts.</li>
+          <li>Make improvement work visible so it can be understood, supported, and refined.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Principles for Networked Learning</h4>
+        <ul class="step-list">
+          <li>Share tools, findings, and stories so others can learn from local accountability work.</li>
+          <li>Learn from other districts, organizations, and networks that are pursuing similar aims.</li>
+          <li>Adapt ideas thoughtfully rather than copying them wholesale.</li>
+          <li>Use networks to strengthen, not dilute, the district's vision for Growth, Mastery, and Readiness.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Clear principles ensure that continuous improvement does not become a scatter of unrelated projects, but a coherent way of working together.
+    </div>
+  </div>
+
+  <div class="section" id="preconditions-readiness-6">
+    <h3>Preconditions and Readiness Indicators for Phase 6</h3>
+    <p>
+      Certain conditions help Phase 6 succeed.
+      These preconditions signal that the system is ready to deepen its learning posture and share its work more broadly.
+    </p>
+    <div class="mini-grid">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Minimum Criteria for Productive Entry</h4>
+        <ul class="step-list">
+          <li>Phases 3 through 5 have generated multiple cycles of implementation, evaluation, and revision.</li>
+          <li>Core components of local accountability are in place and functioning across the system.</li>
+          <li>There is a basic culture of reflection, feedback, and adaptation within leadership and staff teams.</li>
+          <li>District leaders are ready to invest time in structured improvement cycles and network participation.</li>
+        </ul>
+      </div>
+      <div class="card pillar">
+        <h4>Readiness Indicators to Check</h4>
+        <ul class="step-list">
+          <li>Teachers and leaders have experience reviewing local evidence in PLCs and leadership teams.</li>
+          <li>There are existing examples of improvements that grew out of local accountability findings.</li>
+          <li>Staff show interest in learning from and contributing to broader networks.</li>
+          <li>Board and community partners recognize the value of improvement oriented conversations.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      These indicators help districts avoid treating continuous improvement as a slogan, and instead build on real, existing strengths.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: Systems & Architecture, Improvement Workstreams, Progress & Impact -->
+<div class="page" id="systems-architecture-6">
+  <h2>Systems and Architecture for Continuous Improvement and Networked Learning</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Designing the Improvement Architecture</h3>
+    <p>
+      Continuous improvement is easier to sustain when there is an architecture that supports it.
+      Phase 6 clarifies how teams, data, time, and networks connect.
+    </p>
+    <div class="logic-columns">
+      <div class="logic-box">
+        <h4>Improvement Teams</h4>
+        <ul>
+          <li>Cross-functional teams that include teachers, leaders, and support staff.</li>
+          <li>Standing teams that meet regularly to review evidence and test changes.</li>
+          <li>Clear roles for facilitation, data analysis, and documentation.</li>
+          <li>Student and family participation where appropriate and feasible.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Data and Learning Routines</h4>
+        <ul>
+          <li>Standard routines for examining NxGRA results, BPI artifacts, Measures of Quality, and survey data.</li>
+          <li>Protocols for asking why patterns exist, not only what the numbers show.</li>
+          <li>Use of simple visual tools that make trends and gaps visible.</li>
+          <li>Shared agreements about how to discuss data in a way that promotes trust and learning.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Time and Structures</h4>
+        <ul>
+          <li>Protected time in PLCs and leadership meetings for improvement cycles.</li>
+          <li>Annual calendars that map when evidence is collected, studied, and used to inform changes.</li>
+          <li>Alignment between improvement work and other required planning processes.</li>
+          <li>Flexible space for design labs or cross-school improvement efforts.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Networks and Partnerships</h4>
+        <ul>
+          <li>Connections to regional, state, or national networks focused on local accountability and assessment.</li>
+          <li>Partnerships with universities and research centers that support improvement work.</li>
+          <li>Collaborative learning communities with other districts sharing tools and lessons.</li>
+          <li>Agreements that support joint inquiry, not only compliance or external evaluation.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Improvement anchor:</strong>
+      When teams, routines, time, and networks are aligned, continuous improvement becomes a habit rather than an exception.
+    </div>
+  </div>
+
+  <div class="section" id="improvement-workstreams-6">
+    <h3>Core Continuous Improvement Workstreams</h3>
+    <p>
+      Workstreams in Phase 6 give structure to improvement efforts.
+      They help the district focus on a small set of big questions each year.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Workstream 1: Improving Vibrant Learning Experiences</h4>
+        <ul class="step-list">
+          <li>Use local evidence to identify gaps in access to vibrant learning across classrooms and schools.</li>
+          <li>Design and test changes in instruction, assessment, and student supports to close those gaps.</li>
+          <li>Examine student artifacts and feedback to see whether changes are improving relevance and challenge.</li>
+          <li>Scale successful practices while refining or removing those that do not add value.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Workstream 2: Strengthening Measures and Reporting</h4>
+        <ul class="step-list">
+          <li>Review Measures of Quality, dashboards, and reports for clarity, fairness, and usefulness.</li>
+          <li>Test new visualizations or narratives that better communicate student growth and readiness.</li>
+          <li>Gather feedback from students, families, and staff about what is most helpful for decision making.</li>
+          <li>Revise measures and reporting formats based on what the evidence and feedback reveal.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Workstream 3: Equity and Access</h4>
+        <ul class="step-list">
+          <li>Use disaggregated local evidence to understand who is and is not benefiting from the system.</li>
+          <li>Co design strategies with students and communities to address identified inequities.</li>
+          <li>Monitor whether changes are closing gaps in opportunity, participation, and outcomes.</li>
+          <li>Feed findings directly into the next DDIER design and development cycle.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Workstream 4: Networked Learning and Influence</h4>
+        <ul class="step-list">
+          <li>Participate in networks that are also building local accountability and performance assessment systems.</li>
+          <li>Share tools, examples, and lessons from the district's work.</li>
+          <li>Learn from other districts and adapt promising ideas in ways that fit local context.</li>
+          <li>Use network findings to refine the system and advocate for supportive policy conditions.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Practical tip:</strong>
+      Districts can select one or two workstreams per year to keep the scope manageable while still driving meaningful system learning.
+    </div>
+  </div>
+
+  <div class="section" id="progress-impact-6">
+    <h3>Progress and Impact Indicators in Phase 6</h3>
+    <p>
+      Phase 6 focuses on whether the system is becoming more effective at learning from itself and from others.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Progress Indicators for Continuous Improvement</h4>
+        <ul class="step-list">
+          <li>Regular use of structured inquiry protocols in PLCs and leadership teams.</li>
+          <li>Documented examples of small tests of change and what was learned from them.</li>
+          <li>Increasing comfort and skill among staff in discussing data and evidence.</li>
+          <li>Visible adjustments to practice, tools, or supports based on local evidence.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Impact Indicators for Networked Learning</h4>
+        <ul class="step-list">
+          <li>Participation in networks results in concrete changes to local tools and practices.</li>
+          <li>The district contributes resources, case studies, or tools that others find useful.</li>
+          <li>Evidence that students' experiences are improving as a result of shared learning.</li>
+          <li>Growing recognition of the district as a leader in local accountability and vibrant learning.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      These indicators help districts see whether Phase 6 is creating a virtuous cycle of learning rather than a one time improvement push.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: Evidence & Learning Loop, Stakeholders, Risks -->
+<div class="page" id="evidence-learning-6">
+  <h2>Evidence, Key Questions, and the Learning Loop in Phase 6</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Evidence and Key Questions for Continuous Improvement</h3>
+    <p>
+      Phase 6 uses evidence to understand not only what is happening, but how the system is learning over time.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Evidence to Monitor</h4>
+        <ul class="step-list">
+          <li>Documentation of improvement cycles, including change ideas, tests, and outcomes.</li>
+          <li>Patterns in how often and how deeply teams engage with local accountability evidence.</li>
+          <li>Longitudinal data on student growth, mastery, readiness, and engagement.</li>
+          <li>Shifts in educator beliefs and practices related to assessment, instruction, and accountability.</li>
+          <li>Participation levels and feedback from network partners and collaborative efforts.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Key Questions</h4>
+        <ul class="step-list">
+          <li>Where are improvement cycles leading to real changes in student experience.</li>
+          <li>Where do we see repeated challenges that are not yet improving, and why.</li>
+          <li>What have we learned about equity that should shape the next design cycle.</li>
+          <li>How are we capturing and sharing learning so it does not live in isolated pockets.</li>
+          <li>What network experiences have most influenced our thinking and practice, and how.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card ddier" style="margin-top:16px;">
+      <h4 class="ddiertxt">Learning Loop: Closing One Cycle and Opening the Next</h4>
+      <ul class="step-list">
+        <li>What three to five key lessons from this cycle must shape our next round of design and development.</li>
+        <li>Which components of the local accountability system should remain stable, and which should be redesigned.</li>
+        <li>How will we involve students, staff, families, and partners in co designing the next cycle.</li>
+        <li>What capacity building is needed so more people can participate in improvement work.</li>
+        <li>How will we tell the story of this cycle in a way that honors both progress and unfinished work.</li>
+      </ul>
+      <div class="highlight">
+        <strong>Use in practice:</strong>
+        These questions can guide an annual reflection that formally closes one DDIER cycle and launches the next.
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="stakeholder-roles-6">
+    <h3>Stakeholder Roles in Phase 6 Continuous Improvement and Networked Learning</h3>
+    <p>
+      Phase 6 clarifies how each stakeholder group contributes to a culture of ongoing learning.
+    </p>
+    <div class="grid">
+      <div class="card pillar">
+        <h4>Superintendent and Cabinet</h4>
+        <ul class="step-list">
+          <li>Set expectations that local evidence will be used to drive improvement, not only to report results.</li>
+          <li>Allocate time and resources for structured improvement cycles.</li>
+          <li>Engage in networked learning with peers and bring insights back to the district.</li>
+          <li>Model openness about what is working well and what still needs to improve.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Board of Education</h4>
+        <ul class="step-list">
+          <li>Ask improvement focused questions when reviewing local accountability evidence.</li>
+          <li>Support strategic investments in capacity building and network participation.</li>
+          <li>Celebrate both accomplishments and honest reflection about challenges.</li>
+          <li>Collaborate with district leaders to communicate the learning journey to the community.</li>
+        </ul>
+      </div>
+
+      <div class="card ddier">
+        <h4 class="ddiertxt">District and School Leaders</h4>
+        <ul class="step-list">
+          <li>Facilitate improvement teams and ensure routines are followed consistently.</li>
+          <li>Use Phase 6 findings to adjust supports, schedules, and expectations.</li>
+          <li>Encourage staff to bring forward ideas for change and test them in manageable ways.</li>
+          <li>Share learning across schools to avoid isolated pockets of improvement.</li>
+        </ul>
+      </div>
+
+      <div class="card pillar">
+        <h4>Teachers and Staff</h4>
+        <ul class="step-list">
+          <li>Participate actively in improvement cycles and networked learning opportunities.</li>
+          <li>Use local evidence to reflect on and refine classroom practice.</li>
+          <li>Share examples of student work and experiences that illustrate progress and need.</li>
+          <li>Co design and test change ideas that are grounded in student voice and data.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Students, Families, and Community Partners</h4>
+        <ul class="step-list">
+          <li>Provide feedback about how local accountability is shaping student experience.</li>
+          <li>Participate in co design conversations about improvements and new ideas.</li>
+          <li>Share community perspectives that deepen understanding of local context and needs.</li>
+          <li>Support and advocate for changes that improve learning and readiness for all students.</li>
+        </ul>
+      </div>
+
+      <div class="card bestpractice">
+        <h4 class="bestpracticetxt">Best Practices Across Stakeholders</h4>
+        <ul class="step-list">
+          <li>Create regular opportunities to share learning across roles and levels.</li>
+          <li>Use inclusive processes that invite diverse voices into improvement work.</li>
+          <li>Document and celebrate small wins to sustain momentum.</li>
+          <li>Keep the focus on students and learning as the reason for every change idea.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      When all stakeholders see themselves as co learners, continuous improvement becomes a shared culture rather than a technical exercise.
+    </div>
+  </div>
+
+  <div class="section" id="risks-mitigation-6">
+    <h3>Risks and Mitigation Strategies in Phase 6</h3>
+    <p>
+      Continuous improvement work carries its own risks.
+      Anticipating them helps keep the work focused and sustaining.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Risk: Improvement Overload</h4>
+        <ul class="step-list">
+          <li>Staff feel overwhelmed by too many improvement projects at once.</li>
+          <li><strong>Mitigation:</strong> Limit the number of active workstreams and focus on a few high leverage questions per year.</li>
+          <li><strong>Mitigation:</strong> Retire or merge initiatives that are no longer needed.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Risk: Surface Level Changes</h4>
+        <ul class="step-list">
+          <li>Improvement efforts focus on easy adjustments rather than root causes.</li>
+          <li><strong>Mitigation:</strong> Use structured inquiry tools that prompt deeper analysis.</li>
+          <li><strong>Mitigation:</strong> Include diverse perspectives, especially from students and families, in problem framing.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Risk: Network Drift</h4>
+        <ul class="step-list">
+          <li>Participation in networks leads to adopting ideas that do not fit local context.</li>
+          <li><strong>Mitigation:</strong> Use the Portrait of a Learner and core principles as filters for what to adopt.</li>
+          <li><strong>Mitigation:</strong> Test borrowed ideas in small pilots before scaling.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Risk: Data Fatigue</h4>
+        <ul class="step-list">
+          <li>Teams become exhausted by constant data collection and analysis.</li>
+          <li><strong>Mitigation:</strong> Streamline data sources and focus on a manageable set of indicators.</li>
+          <li><strong>Mitigation:</strong> Emphasize meaning making and action over volume.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Addressing these risks directly helps the district keep Phase 6 grounded, humane, and sustainable.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: Key Outcome, Practice in Action, Supports, Research -->
+<div class="page" id="phase6-key-outcome">
+  <h2>Phase 6: Key Outcome, Practice in Action, and Supports</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Phase 6: Key Outcome</h3>
+    <p>
+      By the end of Phase 6, the district should have a
+      <strong>coherent, documented continuous improvement and networked learning practice</strong>
+      that is fully integrated into its local accountability system and ready to inform the next DDIER cycle.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>System Level Outcome</h4>
+        <ul class="step-list">
+          <li>Improvement routines are embedded in PLCs, leadership meetings, and district planning processes.</li>
+          <li>There is a clear record of what has been learned from local accountability evidence over multiple years.</li>
+          <li>Staff at all levels can describe how the system learns and adjusts over time.</li>
+          <li>Network participation is purposeful and aligned to district priorities.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Readiness for the Next Cycle</h4>
+        <ul class="step-list">
+          <li>A concise set of improvement priorities for the next DDIER cycle, grounded in Phase 6 learning.</li>
+          <li>Agreements about which practices and tools will remain stable while new designs are tested.</li>
+          <li>Plans for capacity building to support deeper involvement in improvement work.</li>
+          <li>A shared understanding that local accountability is a continuous learning journey, not a static framework.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      When Phase 6 concludes with a living improvement practice and clear next steps, the system can keep evolving without losing its identity.
+    </div>
+  </div>
+
+  <div class="section" id="practice-action-6">
+    <h3>Practice in Action: Phase 6 in Fleming County Schools</h3>
+    <p>
+      In Fleming County Schools, Phase 6 means treating Vibrant Accountability as a learning lab, not a finished product.
+      The district uses what it is learning to refine tools, strengthen equity, and share its work with others.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Continuous Improvement in Daily Practice</h4>
+        <ul class="step-list">
+          <li>PLC and leadership agendas regularly include time for studying local evidence and testing changes.</li>
+          <li>Teachers and leaders use student artifacts, NxGRA results, and Measures of Quality to identify specific improvement ideas.</li>
+          <li>Small tests of change are documented and shared across schools.</li>
+          <li>Successes and challenges from improvement efforts shape the next round of design and development.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Networked Learning and Influence</h4>
+        <ul class="step-list">
+          <li>Fleming County contributes tools, stories, and findings to state and national networks.</li>
+          <li>District teams learn from other local accountability efforts and adapt ideas to fit the FCS context.</li>
+          <li>Partnerships with organizations such as universities and research centers support deeper inquiry.</li>
+          <li>Vibrant Accountability is recognized as both a local system and a contribution to the broader field.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Field insight:</strong>
+      Treating Phase 6 as a standing practice, not a one time stage, helps Fleming County keep its local accountability system vibrant and evolving.
+    </div>
+  </div>
+
+  <div class="section" id="implementation-supports-6">
+    <h3>Implementation Supports and Tools for Phase 6</h3>
+    <p>
+      Continuous improvement and networked learning require practical tools that help teams work in disciplined, efficient ways.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Core Improvement Tools</h4>
+        <ul class="step-list">
+          <li>Inquiry protocols for PLCs and leadership teams that structure evidence review and change ideas.</li>
+          <li>Templates for documenting small tests of change and their results.</li>
+          <li>Annual improvement maps that align local accountability evidence with key questions and workstreams.</li>
+          <li>Guidebooks such as "See Toolkit: Local Accountability Improvement Cycles in Practice."</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Supports for Networked Learning</h4>
+        <ul class="step-list">
+          <li>Tools for capturing and sharing learning from conferences, visits, and network meetings.</li>
+          <li>Resources for presenting district work to external audiences in clear and accessible ways.</li>
+          <li>Planning templates for reciprocal visits and joint inquiry with other districts.</li>
+          <li>References to resources such as "See Guide: Joining and Leading Local Accountability Networks."</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Tools and supports make it possible for improvement and networked learning to be part of the regular work of educators, not an extra burden.
+    </div>
+  </div>
+
+  <div class="section" id="research-base-6">
+    <h3>Research Base and References for Phase 6 Continuous Improvement and Networked Learning</h3>
+    <p>
+      Phase 6 draws on research in improvement science, professional learning communities, and networked learning.
+    </p>
+    <ul class="step-list">
+      <li>
+        <strong>Bryk, A. S., Gomez, L. M., Grunow, A., &amp; LeMahieu, P. G. (2015).</strong>
+        <em>Learning to Improve: How America's Schools Can Get Better at Getting Better.</em>
+        Provides a framework for disciplined inquiry cycles and networked improvement communities.
+      </li>
+      <li>
+        <strong>Hord, S. M. (2004).</strong>
+        <em>Learning Together, Leading Together: Changing Schools Through Professional Learning Communities.</em>
+        Highlights how collaborative structures support ongoing school improvement.
+      </li>
+      <li>
+        <strong>Park, S., Hironaka, S., Carver, P., &amp; Nordstrum, L. (2013).</strong>
+        <em>Continuous Improvement in Education.</em>
+        Describes how improvement principles can be applied systemically to drive better outcomes over time.
+      </li>
+    </ul>
+    <div class="highlight">
+      <strong>How to use this section:</strong>
+      These references can help district leaders explain why Phase 6 treats local accountability as a long term learning journey that benefits both the district and the broader field.
+    </div>
+  </div>
+</div>
+
+<script>
+  function downloadPDF() {
+    const element = document.body;
+
+    const opt = {
+      margin:       0.5,
+      filename:     'phase6-local-accountability.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
+  }
+</script>
+
+</body>
+</html>
