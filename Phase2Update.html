@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Local Accountability Development Map</title>
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #111;
+    padding-top: 80px;
+  }
+
+  /* Top navigation bar */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    padding: 10px 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .nav-button {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #0a355e;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+  }
+
+  .nav-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+    background: #13508c;
+  }
+
+  .nav-button:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    background: #072744;
+  }
+
+  .print-button {
+    background: #d9822b;
+  }
+  .print-button:hover {
+    background: #b86822;
+  }
+  .print-button:active {
+    background: #8b4e18;
+  }
+
+  .page {
+    width: 100%;
+    padding: 40px;
+    box-sizing: border-box;
+  }
+
+  h1, h2, h3, h4 {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  h1 { color: #0a355e; }
+  h2 { color: #d9822b; }
+  h3 { color: #1b4965; }
+  h4 { color: #0a355e; margin-top: 0; }
+
+  .section {
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .card {
+    background: #f0f4f8;
+    border-radius: 14px;
+    padding: 18px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+  .card:hover { transform: translateY(-3px); }
+
+  .pillar { border-left: 6px solid #0a355e; }
+  .continuum { border-left: 6px solid #d9822b; }
+  .ddier { border-left: 6px solid #1b4965; }
+
+  .pillartxt { color: #0a355e; font-weight: 600; }
+  .continuumtxt { color: #d9822b; font-weight: 600; }
+  .ddiertxt { color: #1b4965; font-weight: 700; }
+
+  .bestpractice {
+    border-left: 6px solid #7A4EC4;
+    background: #f3edfa;
+  }
+  .bestpracticetxt {
+    color: #7A4EC4;
+    font-weight: 700;
+  }
+
+  .highlight {
+    background: #d9e6f2;
+    border-left: 5px solid #d9822b;
+    padding: 12px 14px;
+    margin: 12px 0;
+    font-size: 0.95rem;
+  }
+
+  .step-list {
+    counter-reset: step;
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+  .step-list li {
+    counter-increment: step;
+    margin-bottom: 10px;
+    padding-left: 28px;
+    position: relative;
+    font-size: 0.96rem;
+  }
+  .step-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: #0a355e;
+    color: #fff;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mini-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .tag {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #eef2f7;
+    border: 1px solid #c7d2e3;
+  }
+
+  .logic-columns {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    font-size: 0.9rem;
+  }
+
+  .logic-box {
+    background: #f7f7fb;
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #dde3f0;
+  }
+  .logic-box h4 {
+    text-align: left;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+  }
+  .logic-box ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .logic-box li {
+    margin-bottom: 4px;
+  }
+
+  @media (max-width: 1100px) {
+    .navbar {
+      justify-content: flex-start;
+      overflow-x: auto;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .logic-columns {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .logic-columns {
+      grid-template-columns: 1fr;
+    }
+    .mini-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @page {
+    size: 8.5in 11in;
+    margin: 0.5in;
+  }
+
+  @media print {
+    body {
+      padding-top: 0;
+      background: #ffffff;
+    }
+    .navbar {
+      display: none;
+    }
+    .page {
+      box-shadow: none;
+      padding: 20px;
+      page-break-after: always;
+    }
+    .page:last-of-type {
+      page-break-after: auto;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- FLOATING MENU -->
+<div class="navbar">
+  <a href="#stage2-overview" class="nav-button">Phase 2 Overview</a>
+  <a href="#dev-architecture" class="nav-button">Systems &amp; Architecture</a>
+  <a href="#dev-workstreams" class="nav-button">Development Workstreams</a>
+  <a href="#evidence-questions-reflection-2" class="nav-button">Evidence &amp; Learning Loop</a>
+  <a href="#stakeholder-roles-2" class="nav-button">Stakeholder Roles</a>
+  <a href="#phase2-key-outcome" class="nav-button">Phase 2: Key Outcome</a>
+  <a href="#practice-field-fcs-2" class="nav-button">Practice in Action</a>
+  <a href="#research-base-2" class="nav-button">Research Base</a>
+  <button type="button" class="nav-button print-button" onclick="triggerPrint()">Print</button>
+</div>
+
+<!-- PAGE 1: Big Picture -->
+<div class="page" id="stage2-overview">
+  <h1>Local Accountability Development Map</h1>
+  <h2>Designing the Vision: Crafting the Architecture of a Local Accountability System</h2>
+
+  <div class="section">
+    <h3>Big Idea</h3>
+    <p>
+      Phase 2 is the design studio of the framework. Districts take what they learned in Phase 1 and begin shaping the actual structure. 
+      This includes defining core principles, drafting the local theory of action, mapping out system components, aligning to the Six Pillars, 
+      and crafting the early version of the Local Accountability Continuum. Choices about student learning, evidence, transparency, and reporting 
+      begin to take visual form. Districts create the architecture that will support vibrant learning, clear measures of quality, and the routines 
+      needed for long term implementation. By the end of Phase 2, the district has a blueprint that feels both aspirational and achievable.
+    </p>
+    <p>
+      Phase 1 clarified current conditions and defined success for students. <strong>Phase 2 designs the architecture that can carry that definition.</strong> 
+      Phase 3 will focus on bringing that architecture to life in daily practice, coaching, and continuous improvement. At this stage, leaders use
+      <strong>backward design</strong>: they clarify the outcomes and evidence that matter most, then design systems and routines that make those outcomes visible and actionable.
+      The work in Phase 2 connects directly to Pillars 2–4, the Local Accountability Continuum, and the Development step in the DDIER cycle.
+    </p>
+    <p>
+      To keep the work manageable, Phase 2 goals can be read as a simple hierarchy:
+    </p>
+    <ul class="step-list">
+      <li><strong>System goal:</strong> Build a coherent local accountability architecture that aligns the Six Pillars, Continuum, and DDIER.</li>
+      <li><strong>School leader goal:</strong> Understand and help shape how school level measures, routines, and dashboards will work inside that architecture.</li>
+      <li><strong>Teacher / PLC goal:</strong> See how performance tasks, portfolios, and evidence routines connect to district expectations and reporting.</li>
+      <li><strong>Student experience goal:</strong> Ensure that emerging tools help students see, own, and tell the story of their learning, not just produce scores.</li>
+    </ul>
+    <div class="highlight">
+      <strong>Key Insight:</strong>
+      Phase 2 is not about building everything at once. It is about using backward design to name the most important outcomes, decide what evidence will show them,
+      and then draft a <strong>one page architecture</strong> that any stakeholder can understand. That blueprint becomes the reference point for all future tools,
+      dashboards, and routines.
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>How Phase 2, the Pillars, and the Continuum Connect</h3>
+    <div class="grid">
+      <div class="card ddier">
+        <h4 class="ddiertxt">DDIER: Development and Design Decisions</h4>
+        <p>
+          In the DDIER cycle, Phase 2 sits in the <strong>Development</strong> step, where design decisions move from ideas to concrete structures.
+          District teams draft the theory of action, outline system components, and decide how evidence will flow from classrooms to board decisions.
+          These development moves are tested, refined, and documented so that later implementation and evaluation can build on a clear, shared design.
+        </p>
+      </div>
+      <div class="card pillar">
+        <h4 class="pillartxt">Six Pillars in Phase 2</h4>
+        <p>
+          Phase 2 aligns most directly with <strong>Pillar 2 (Governance, Leadership, and Systematic Support)</strong>, 
+          <strong>Pillar 3 (Community Engagement, Ownership, and Advocacy)</strong>, and 
+          <strong>Pillar 4 (Data Validation, Analysis, and Utilization)</strong>. The architecture must also honor 
+          <strong>Pillar 1 (Purpose and Logic Model)</strong> established in Phase 1. Together, these pillars ensure that the system design
+          has clear leadership structures, genuine community voice, and reliable data practices. The remaining pillars, focused on impact and reporting,
+          will rely on the decisions made here.
+        </p>
+      </div>
+      <div class="card continuum">
+        <h4 class="continuumtxt">The Continuum: Building the Local Accountability System</h4>
+        <p>
+          On the Local Accountability Continuum, Phase 2 advances the work from <strong>Define Success for Students</strong> toward
+          <strong>Design an Interactive Local Accountability System</strong>. This is where districts map how they will
+          define, collect, and use evidence for Growth, Mastery, and Readiness at classroom, school, and district levels.
+          The emerging architecture ensures that future phases can <strong>Demonstrate Student Success</strong> and 
+          <strong>Demonstrate Success of the Local School District</strong> without losing sight of the original purpose.
+        </p>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Core and Adaptable Elements:</strong> Some parts of the architecture should remain consistent across districts
+      (alignment to the Six Pillars, use of the Continuum, a clear theory of action). Others are deliberately adaptable
+      (specific dashboards, local indicators, survey instruments). Phase 2 names what is <strong>core and non negotiable</strong>
+      and what can be <strong>adapted to local context</strong>, which makes the framework scalable across different sizes and types of districts.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: System Architecture and Workstreams -->
+<div class="page" id="dev-architecture">
+  <h2>Designing the Architecture of Local Accountability</h2>
+
+  <div class="section">
+    <h3>From Logic Model to System Blueprint</h3>
+    <p>
+      A strong Phase 2 begins with a clear system blueprint that grows directly out of the logic model in Phase 1.
+      Using backward design, teams first clarify what the system must make visible: Growth, Mastery, and Readiness across the Portrait of a Learner,
+      culture and climate conditions, and Measures of Quality. Then they design structures, tools, and routines that will regularly capture,
+      analyze, and communicate that evidence in ways people can understand and use.
+    </p>
+    <p>
+      This architecture must connect <strong>four levels of practice and decision making</strong>. It should show how classroom assessments,
+      school measures, district indicators, and public reporting all align to the Portrait, logic model, and Six Pillars.
+      It should also show who is responsible for each component, how often it is used, and how evidence moves between levels so that decisions
+      are consistent and transparent.
+    </p>
+
+    <div class="logic-columns">
+      <div class="logic-box">
+        <h4>Classroom Level</h4>
+        <ul>
+          <li>Next Generation Readiness Assessments aligned to priority standards and Portrait traits.</li>
+          <li>Student digital portfolios and BPI Websites that capture compelling evidence of learning.</li>
+          <li>Formative checks, reflection prompts, and student surveys that capture agency and engagement.</li>
+          <li>Teacher feedback routines tied to standards and durable skills.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>School Level</h4>
+        <ul>
+          <li>Measures of Quality indicators for Vibrant Learning, Vibrant Outcomes, and Vibrant Culture.</li>
+          <li>Common performance tasks or BRIDGE Performance Assessments in key grades and subjects.</li>
+          <li>Staff climate and culture surveys tied to Vibrant Ecosystem conditions.</li>
+          <li>School improvement plans that reference local accountability evidence, not just state metrics.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>District Level</h4>
+        <ul>
+          <li>District dashboards that combine Growth, Mastery, and Readiness indicators with culture and community measures.</li>
+          <li>Quarterly Measures of Quality reports that tell a balanced story of student learning and conditions.</li>
+          <li>Local Accountability Advisory Council reviews that examine data through community priorities.</li>
+          <li>Professional learning plans aligned to gaps identified in local evidence.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Public Reporting</h4>
+        <ul>
+          <li>Family facing reports that explain Growth, Mastery, and Readiness in plain language.</li>
+          <li>Community dashboards that highlight student work, local projects, and durable skills in action.</li>
+          <li>Board reports that connect measures to decisions about resources, policies, and supports.</li>
+          <li>Annual summaries that show progress on the Portrait of a Learner and Measures of Quality.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tag-row">
+      <span class="tag pillartxt">Pillars 1–4: Purpose, Governance, Engagement, Data</span>
+      <span class="tag continuumtxt">Design &amp; Demonstrate Success (Continuum)</span>
+      <span class="tag ddiertxt">DDIER: Development</span>
+    </div>
+
+    <div class="highlight">
+      <strong>Alignment Check:</strong>
+      The architecture should make explicit how learning expectations, performance evidence, reporting structures, and system level decisions connect.
+      A simple test is to trace a single Portrait trait or Measure of Quality from classroom tasks to board reports. If that path is not clear,
+      Phase 2 still has design work to do. Leaders can capture the architecture in a one page visual that becomes the anchor for future tools,
+      professional learning, and communication.
+    </div>
+  </div>
+
+  <div class="section" id="dev-workstreams">
+    <h3>Core Development Workstreams</h3>
+    <p>
+      To keep Phase 2 manageable, districts organize the work into a small number of focused <strong>development workstreams</strong>.
+      Each workstream has a clear purpose, a team with defined roles, realistic timelines, and agreed upon quality criteria.
+      Some workstreams are <strong>core</strong> for every district, while others are <strong>recommended extensions</strong> that can be added as capacity grows.
+    </p>
+
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Workstream 1 (Core): Performance Assessment &amp; Portfolios</h4>
+        <ul class="step-list">
+          <li>Design and refine Next Generation Readiness Assessments in priority content areas and grades.</li>
+          <li>Clarify expectations for student digital portfolios and BPI Websites, including curation cycles and reflection prompts.</li>
+          <li>Develop rubrics and proficiency scales that blend standards, Portrait traits, and durable skills.</li>
+          <li>Pilot tasks in classrooms and gather feedback from students and teachers on clarity, relevance, workload, and equity.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Workstream 2 (Core): Measures of Quality &amp; School Indicators</h4>
+        <ul class="step-list">
+          <li>Refine or develop Measures of Quality indicators for Vibrant Learning, Outcomes, Culture, Community, and Ecosystem.</li>
+          <li>Define scoring ranges, evidence sources, and documentation expectations for each indicator.</li>
+          <li>Align school improvement planning templates to Measures of Quality so schools can act on indicator results.</li>
+          <li>Prototype a scoring and reporting process that schools can complete in a reasonable, predictable rhythm.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Workstream 3 (Recommended): Surveys, Voice, and Culture</h4>
+        <ul class="step-list">
+          <li>Design or refine staff, student, and family surveys aligned to Vibrant Accountability and the Portrait of a Learner.</li>
+          <li>Decide how often surveys will be given, how results will be shared, and how feedback will be acted on.</li>
+          <li>Ensure survey items are clear, accessible, and available in needed languages.</li>
+          <li>Develop simple visualizations that highlight strengths, concerns, and trends over time.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>Workstream 4 (Extension): Dashboards, Reporting, and Storytelling</h4>
+        <ul class="step-list">
+          <li>Prototype internal dashboards for leaders that combine Growth, Mastery, Readiness, and culture indicators.</li>
+          <li>Design family and community facing views that emphasize clarity, balance, and plain language.</li>
+          <li>Align reporting cycles with Measures of Quality and board reporting schedules to reduce duplication.</li>
+          <li>Create templates that highlight student examples and artifacts alongside quantitative data.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Practical Moves for Leaders:</strong>
+      Start by fully resourcing the core workstreams, then phase in recommended and extension streams as capacity allows.
+      Use short design sprints (for example, 6–8 weeks) where cross role teams focus on one workstream at a time.
+      Document decisions, prototypes, and lessons learned in a shared design record so Phase 3 teams can see how and why the architecture was built.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: Evidence, Guiding Questions, Reflection, Stakeholders -->
+<div class="page" id="evidence-questions-reflection-2">
+  <h2>Evidence, Guiding Questions, and the Learning Loop for Phase 2</h2>
+
+  <div class="section">
+    <h3>Evidence of Efficacy in Phase 2 Design</h3>
+    <p>
+      Evidence in Phase 2 focuses on whether the <strong>design choices</strong> are creating a coherent, usable, and trustworthy architecture.
+      Districts look at both the quality of the products being drafted and the experience of the people who are piloting or reviewing them.
+      The goal is not perfection, but a clear sense of whether the system blueprint is workable, aligned to the Six Pillars, and ready to move into broader implementation.
+    </p>
+
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Evidence of Efficacy</h4>
+        <ul class="step-list">
+          <li>Pilot teachers report that Next Generation Readiness Assessments are understandable, aligned to standards and Portrait traits, and worth the instructional time they require.</li>
+          <li>Student work and BPI Websites from pilot classrooms show visible connections to Portrait traits and durable skills, not just content coverage or test preparation.</li>
+          <li>Measures of Quality rubrics and evidence guides are clear enough that different schools can apply them with consistent interpretations.</li>
+          <li>Survey pilots yield response patterns that make sense, with items that distinguish between trust, culture, workload, and leadership.</li>
+          <li>Early dashboard or reporting prototypes are readable, accurate, and connected to decisions that leaders actually make about support and resources.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Guiding Questions</h4>
+        <ul class="step-list">
+          <li>Where do teachers, students, and families find the emerging tools helpful, and where do they feel confusing, duplicative, or disconnected from daily work.</li>
+          <li>Do the tools we are designing make Growth, Mastery, and Readiness more visible, or are they adding more noise to an already crowded system.</li>
+          <li>How are we validating the quality and reliability of our measures, including inter rater consistency for rubrics and clarity in survey items and indicators.</li>
+          <li>What feedback from pilot sites, advisory groups, or councils has led us to adjust or simplify tools, and what did we learn from those changes.</li>
+          <li>Are we building enough space for professional learning and collaboration so that staff feel supported in using new tools, rather than overwhelmed by them.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card ddier" style="margin-top:16px;">
+      <h4 class="ddiertxt">The Phase 2 Learning Loop</h4>
+      <ul class="step-list">
+        <li><strong>Plan:</strong> Clarify design goals, success criteria, and alignment to Pillars, Continuum, and Portrait for a specific tool or component.</li>
+        <li><strong>Implement:</strong> Draft or prototype the tool, then use it in a limited number of classrooms, schools, or leadership settings.</li>
+        <li><strong>Gather Evidence:</strong> Collect student work, rating data, survey responses, and qualitative feedback from users and stakeholders.</li>
+        <li><strong>Reflect:</strong> Use guiding questions in leadership teams, PLCs, and advisory councils to make sense of what worked and what did not.</li>
+        <li><strong>Adjust:</strong> Refine the architecture and tools, document the changes and rationale, and decide what is ready to move into Phase 3 implementation.</li>
+      </ul>
+      <div class="highlight">
+        <strong>Use in Practice:</strong>
+        This learning loop can be built into design team agendas, principal meetings, and Local Accountability Advisory Council sessions.
+        It keeps Phase 2 reflexive and responsive instead of static, and it makes DDIER visible as a practical improvement cycle, not just a diagram.
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="stakeholder-roles-2">
+    <h3>Stakeholder Engagement, Empowerment, and Reciprocity in Phase 2</h3>
+    <p>
+      In Phase 2, stakeholder roles shift from defining success to <strong>building and testing the tools</strong> that will make that success visible.
+      Engagement, empowerment, and reciprocity remain essential. Each group needs a clear role in shaping, piloting, and refining the systems that will later be used
+      to evaluate schools and report results to the community.
+    </p>
+    <p>
+      The cards below describe what each stakeholder group is doing during Phase 2 when the work is inclusive and transparent.
+      Many of these roles also include explicit communication responsibilities so that the emerging architecture is understandable to people who were not in the design room.
+    </p>
+
+    <div class="grid">
+      <div class="card pillar">
+        <h4>School and District Leaders</h4>
+        <ul class="step-list">
+          <li>Identify pilot sites and teams for each workstream, ensuring a mix of grade levels, school contexts, and staff voices.</li>
+          <li>Protect time for pilots by adjusting expectations, calendars, or existing initiatives where possible.</li>
+          <li>Model transparency by sharing what is being piloted, what feedback is emerging, and what will change as a result, including regular updates to the board.</li>
+          <li>Clarify which tools are in draft, pilot, or finalized status so staff are not guessing about expectations or feeling blindsided by changes.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Teachers and School Staff</h4>
+        <ul class="step-list">
+          <li>Co design and pilot performance assessments, Measures of Quality evidence routines, and survey processes.</li>
+          <li>Provide concrete feedback on directions, time demands, scoring, student response, and equity implications.</li>
+          <li>Share student work and examples that illustrate how tools can be refined for clarity, relevance, and rigor.</li>
+          <li>Help communicate with families and students about what these new tools are, why they matter, and how they will support learning.</li>
+        </ul>
+      </div>
+
+      <div class="card ddier">
+        <h4 class="ddiertxt">Students</h4>
+        <ul class="step-list">
+          <li>Participate in pilots of performance assessments and provide feedback on relevance, challenge, and opportunity for voice and choice.</li>
+          <li>Use BPI Websites and portfolios to curate evidence and tell the story of their learning journey.</li>
+          <li>Respond to student surveys and focus groups about engagement, support, and clarity of expectations.</li>
+          <li>Serve as co designers of reflection prompts, portfolio structures, or presentation formats where appropriate.</li>
+        </ul>
+      </div>
+
+      <div class="card pillar">
+        <h4>Parents and Guardians</h4>
+        <ul class="step-list">
+          <li>Participate in feedback cycles on family facing reports, dashboards, and communication tools.</li>
+          <li>Offer input on what information is most helpful for understanding their child’s growth, mastery, and readiness.</li>
+          <li>Respond to pilot surveys and town halls to shape how local accountability information is shared and explained.</li>
+          <li>Partner with schools to support students as they engage in new performance tasks, portfolios, and celebrations of learning.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Community and Partners</h4>
+        <ul class="step-list">
+          <li>Co design or host real world performance tasks, exhibitions, and internships that generate authentic evidence.</li>
+          <li>Review dashboards and reports to ensure community priorities are visible, not hidden in technical details.</li>
+          <li>Serve on advisory groups that examine data, question assumptions, and suggest new indicators or evidence sources.</li>
+          <li>Champion the district’s local accountability work in public settings, highlighting why it matters for the community’s future.</li>
+        </ul>
+      </div>
+
+      <div class="card bestpractice">
+        <h4 class="bestpracticetxt">Best Practices Across Stakeholders</h4>
+        <ul class="step-list">
+          <li>Use rapid feedback cycles where pilots are short, feedback is captured quickly, and revisions are visible to participants.</li>
+          <li>Balance surveys and focus groups with hands on design sessions where people help build rubrics, dashboards, and reports.</li>
+          <li>Share back “you said, we did” summaries so stakeholders see how their input shaped final tools and architecture decisions.</li>
+          <li>Recognize and celebrate pilot sites and teams as early adopters who are helping the district learn, not as test subjects being judged.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Why This Matters:</strong>
+      When stakeholders are part of building the system, they are more likely to trust and use it.
+      Phase 2 is an ideal time to deepen that trust, long before high stakes reporting begins.
+      Clear roles and communication routines ensure that transparency and shared ownership are built into the architecture itself, not just into the final reports.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: Phase 2 Outcomes, Practice from the Field, Research -->
+<div class="page" id="phase2-key-outcome">
+  <h2>Phase 2: Key Outcome and Practice from the Field</h2>
+
+  <div class="section">
+    <h3>Phase 2: Key Outcome</h3>
+    <p>
+      By the end of Phase 2, the district should have more than ideas and pilots.
+      It should have a small set of <strong>field tested, coherent tools and routines</strong> and a clearly documented architecture that are ready to scale and refine in Phase 3.
+      These outcomes make it possible to move forward without constant reinvention or confusion about what the system is designed to do.
+    </p>
+
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Anchor Tools and Measures (Essential)</h4>
+        <ul class="step-list">
+          <li>A bank of Next Generation Readiness Assessments and BRIDGE Performance Assessments in key content areas and grade bands.</li>
+          <li>Clear expectations for BPI Websites and digital portfolios, including artifacts, reflections, and curation timelines.</li>
+          <li>Finalized Measures of Quality rubrics and guidance documents that schools can use with confidence.</li>
+          <li>Pilot tested survey instruments for students, staff, and families, aligned to Vibrant Accountability and culture priorities.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>System Processes and Supports (Essential)</h4>
+        <ul class="step-list">
+          <li>Documented workflows for how evidence is collected, scored, reviewed, and reported at classroom, school, and district levels.</li>
+          <li>Professional learning plans that build capacity for performance assessment, portfolio use, data informed reflection, and use of dashboards.</li>
+          <li>Calibration routines for scoring student work and Measures of Quality indicators across schools.</li>
+          <li>A schedule of local accountability cycles, including when evidence is gathered, reviewed, and shared publicly.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Governance, Engagement, and Communication (Essential)</h4>
+        <ul class="step-list">
+          <li>A clearly defined role for the Local Accountability Advisory Council in reviewing Phase 2 products and recommending refinements.</li>
+          <li>Board agreements about how local evidence will be used alongside state accountability results.</li>
+          <li>A communications plan that explains new tools and the architecture to families, staff, and the community in phases, not all at once.</li>
+          <li>Templates for board and community reports that foreground student work, stories, and clear visuals.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>Readiness for Phase 3 Implementation (Extension and Scaling)</h4>
+        <ul class="step-list">
+          <li>Clarity about which tools will move from pilot to scale in the next year, and which will stay in development for further refinement.</li>
+          <li>Identified early implementation indicators that show whether tools are being used as intended in schools.</li>
+          <li>Agreement on where to start small and where district wide consistency is essential from the beginning.</li>
+          <li>A shared understanding that Phase 3 will focus on practice, coaching, and continuous improvement, not on redesigning tools from scratch.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Documentation and Sustainability:</strong>
+      Districts should leave Phase 2 with a <strong>living design record</strong> that captures key architecture diagrams, decision rationales, sample tools, 
+      and lessons learned from pilots. This documentation supports onboarding, professional learning, future DDIER cycles, and transparent communication 
+      with boards and communities. It also prevents the system from depending solely on individual leaders’ memories or personal notes.
+    </div>
+  </div>
+
+  <div class="section" id="practice-field-fcs-2">
+    <h3>Practice in Action: Phase 2 in Fleming County Schools</h3>
+    <p>
+      In Fleming County Schools, Phase 2 has focused on turning the Portrait of a Learner, BRIDGE Performance Indicators, and Measures of Quality into a coherent local architecture.
+      The goal has been simple and ambitious. Build tools that help students show who they are and what they can do, while giving leaders and the community a clearer view of
+      Growth, Mastery, and Readiness. The work has included deliberate design choices about performance assessments, portfolios, surveys, dashboards, and Measures of Quality.
+    </p>
+
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Building the Performance Assessment System</h4>
+        <ul class="step-list">
+          <li>Teachers have co designed Next Generation Readiness Assessments across grades and subjects, using the Portrait and BRIDGE Indicators as anchors.</li>
+          <li>Rubrics connect standards, durable skills, and real world application so students can see why their work matters.</li>
+          <li>Student BPI Websites serve as the central place where artifacts from these performance tasks are curated and reflected on over time.</li>
+          <li>Pilot cycles have been used to refine task clarity, workload, scoring, and student experience before scaling to all classrooms.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Measures of Quality and Local Indicators</h4>
+        <ul class="step-list">
+          <li>Measures of Quality 4.1 has been developed as a practical framework that connects Vibrant Learning, Vibrant Outcomes, Vibrant Culture, Vibrant Community, and the Vibrant Ecosystem.</li>
+          <li>Schools gather evidence for each measure using student work, surveys, observations, and local data.</li>
+          <li>Rubrics and exemplars support consistent scoring and interpretation across buildings.</li>
+          <li>Quarterly reporting cycles are being built so families and the community can see progress throughout the year, not only at the end.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Surveys, Voice, and Culture</h4>
+        <ul class="step-list">
+          <li>Staff and student surveys are being aligned to Vibrant Accountability and the Measures of Quality, emphasizing trust, clarity, and support.</li>
+          <li>Results are shared back with schools and the community in simple visuals that invite conversation and action.</li>
+          <li>Feedback from survey pilots has led to revisions in item wording, response scales, and reporting formats.</li>
+          <li>Student and family voices are used to refine how culture and climate data are interpreted and acted upon.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>Dashboards and Storytelling</h4>
+        <ul class="step-list">
+          <li>Prototype dashboards are being designed to display Growth, Mastery, and Readiness alongside culture and community indicators.</li>
+          <li>Leaders are working to ensure these dashboards highlight student artifacts and stories, not just numbers.</li>
+          <li>The Local Accountability Advisory Council reviews draft visuals and helps identify what is most useful for the public.</li>
+          <li>These tools are steadily replacing one time, high stakes snapshots with a more complete story of learning and conditions.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Field Insight:</strong>
+      In Fleming County Schools, Phase 2 has been treated as a learning laboratory.
+      Tools are built with the end in mind but refined in real classrooms, with real students and staff, before they are scaled.
+      This approach keeps local accountability grounded in daily practice while building a system the community can trust and understand.
+    </div>
+  </div>
+
+  <div class="section" id="research-base-2">
+    <h3>Research Base and References for Phase 2 Design</h3>
+    <p>
+      Phase 2 draws on research in implementation science, continuous improvement, data informed decision making, and coherent system design.
+      These fields emphasize that sustainable change depends on clear structures, iterative testing, user centered design, and authentic engagement of the people
+      who will use new tools. They support the emphasis on piloting, feedback cycles, and a well documented architecture before full implementation.
+    </p>
+    <ul class="step-list">
+      <li>
+        <strong>Bryk, A. S., Gomez, L. M., Grunow, A., &amp; LeMahieu, P. G. (2015).</strong>
+        <em>Learning to Improve: How America’s Schools Can Get Better at Getting Better.</em>
+        Highlights the importance of disciplined inquiry cycles, user centered design, and networked improvement in building effective systems.
+      </li>
+      <li>
+        <strong>Fixsen, D. L., Naoom, S. F., Blase, K. A., Friedman, R. M., &amp; Wallace, F. (2005).</strong>
+        <em>Implementation Research: A Synthesis of the Literature.</em>
+        Identifies stages of implementation and core drivers such as training, coaching, and data systems that support high quality use of innovations in schools.
+      </li>
+      <li>
+        <strong>Fullan, M., &amp; Quinn, J. (2016).</strong>
+        <em>Coherence: The Right Drivers in Action for Schools, Districts, and Systems.</em>
+        Argues that coherence comes from clarity of purpose, collaborative cultures, deep learning, and shared accountability structures.
+      </li>
+      <li>
+        <strong>Park, S., Hironaka, S., Carver, P., &amp; Nordstrum, L. (2013).</strong>
+        <em>Continuous Improvement in Education.</em>
+        Describes how improvement science principles can guide the design, testing, and refinement of educational tools and systems.
+      </li>
+      <li>
+        <strong>Wayman, J. C., Cho, V., &amp; Shaw, S. (2009).</strong>
+        <em>Data Systems and School Improvement: A Guide for School Leaders.</em>
+        Emphasizes that data systems must be designed for usability and sensemaking, not just compliance reporting, if they are to change practice.
+      </li>
+    </ul>
+    <div class="highlight">
+      <strong>How to Use This Section:</strong>
+      These references can support conversations with boards, advisory councils, and staff about why Phase 2 emphasizes backward design, piloting, calibration,
+      and coherent system architecture instead of rushing to full scale implementation. They help position the local accountability framework as both innovative
+      and grounded in a strong research base.
+    </div>
+  </div>
+</div>
+
+<script>
+  function triggerPrint() {
+    window.print();
+  }
+</script>
+
+</body>
+</html>
