@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Accountability Development Map – Phase 5</title>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #111;
+      padding-top: 80px;
+    }
+
+    /* Top navigation bar */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .nav-button {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+      background: #13508c;
+    }
+
+    .nav-button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      background: #072744;
+    }
+
+    .print-button {
+      background: #d9822b;
+    }
+    .print-button:hover {
+      background: #b86822;
+    }
+    .print-button:active {
+      background: #8b4e18;
+    }
+
+    .pdf-button {
+      background: #1b998b;
+    }
+    .pdf-button:hover {
+      background: #157a6d;
+    }
+    .pdf-button:active {
+      background: #0f5a4f;
+    }
+
+    .page {
+      width: 100%;
+      padding: 40px;
+      box-sizing: border-box;
+    }
+
+    h1, h2, h3, h4 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    h1 { color: #0a355e; }
+    h2 { color: #d9822b; }
+    h3 { color: #1b4965; }
+    h4 { color: #0a355e; margin-top: 0; }
+
+    .section {
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: #f0f4f8;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .card:hover { transform: translateY(-3px); }
+
+    /* COLOR CODING FOR PILLARS, CONTINUUM, DDIER */
+    .pillar {
+      border-left: 6px solid #8b5cf6;
+    }
+    .pillartxt {
+      color: #6d28d9;
+      font-weight: 600;
+    }
+
+    .continuum {
+      border-left: 6px solid #16a34a;
+    }
+    .continuumtxt {
+      color: #15803d;
+      font-weight: 600;
+    }
+
+    .ddier {
+      border-left: 6px solid #eab308;
+    }
+    .ddiertxt {
+      color: #b45309;
+      font-weight: 700;
+    }
+
+    .bestpractice {
+      border-left: 6px solid #7A4EC4;
+      background: #f3edfa;
+    }
+    .bestpracticetxt {
+      color: #7A4EC4;
+      font-weight: 700;
+    }
+
+    .highlight {
+      background: #d9e6f2;
+      border-left: 5px solid #d9822b;
+      padding: 12px 14px;
+      margin: 12px 0;
+      font-size: 0.95rem;
+    }
+
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .step-list li {
+      counter-increment: step;
+      margin-bottom: 10px;
+      padding-left: 28px;
+      position: relative;
+      font-size: 0.96rem;
+    }
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #fff;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .tag {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef2f7;
+      border: 1px solid #c7d2e3;
+    }
+
+    .logic-columns {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      font-size: 0.9rem;
+    }
+
+    .logic-box {
+      background: #f7f7fb;
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid #dde3f0;
+    }
+    .logic-box h4 {
+      text-align: left;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+    .logic-box ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .logic-box li {
+      margin-bottom: 4px;
+    }
+
+    /* LEGEND STYLES */
+    .legend-bar {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 14px 0 26px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      background: #ffffff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .legend-swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+    }
+    .pillar-swatch {
+      background: #8b5cf6;
+    }
+    .continuum-swatch {
+      background: #16a34a;
+    }
+    .ddier-swatch {
+      background: #eab308;
+    }
+
+    @media (max-width: 1100px) {
+      .navbar {
+        justify-content: flex-start;
+        overflow-x: auto;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .logic-columns {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .logic-columns {
+        grid-template-columns: 1fr;
+      }
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @page {
+      size: 8.5in 11in;
+      margin: 0.5in;
+    }
+
+    @media print {
+      body {
+        padding-top: 0;
+        background: #ffffff;
+      }
+      .navbar {
+        display: none;
+      }
+      .page {
+        box-shadow: none;
+        padding: 20px;
+        page-break-after: always;
+      }
+      .page:last-of-type {
+        page-break-after: auto;
+      }
+    }
+  </style>
+
+  <!-- html2pdf.js for PDF download button -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    integrity="sha512-YcsIPX3v0nKCF3P3HwMOkqVn4Q7F8G+V+vP+3l4lvuq3nI4dbd409UQghr35Lx1+xHnIpoZ4EvsC0KZzIrp3KQ=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+</head>
+<body>
+
+<!-- FLOATING MENU -->
+<div class="navbar">
+  <a href="#phase5-overview" class="nav-button">Phase 5 Overview</a>
+  <a href="#current-conditions-5" class="nav-button">Current Conditions</a>
+  <a href="#guiding-principles-5" class="nav-button">Guiding Principles</a>
+  <a href="#preconditions-readiness-5" class="nav-button">Preconditions &amp; Readiness</a>
+  <a href="#systems-architecture-5" class="nav-button">Systems &amp; Architecture</a>
+  <a href="#scaling-workstreams-5" class="nav-button">Scaling Workstreams</a>
+  <a href="#progress-impact-5" class="nav-button">Progress &amp; Impact</a>
+  <a href="#evidence-learning-5" class="nav-button">Evidence &amp; Learning Loop</a>
+  <a href="#stakeholder-roles-5" class="nav-button">Stakeholder Roles</a>
+  <a href="#risks-mitigation-5" class="nav-button">Risks &amp; Mitigation</a>
+  <a href="#phase5-key-outcome" class="nav-button">Phase 5 Key Outcome</a>
+  <a href="#practice-action-5" class="nav-button">Practice in Action</a>
+  <a href="#implementation-supports-5" class="nav-button">Implementation Supports</a>
+  <a href="#research-base-5" class="nav-button">Research Base</a>
+  <button
+    type="button"
+    class="nav-button print-button"
+    onclick="window.print()">
+    Print
+  </button>
+  <button
+    type="button"
+    class="nav-button pdf-button"
+    onclick="downloadPDF()">
+    PDF
+  </button>
+</div>
+
+<!-- PAGE 1: Overview, Context, Principles, Preconditions -->
+<div class="page" id="phase5-overview">
+  <h1>Local Accountability Development Map</h1>
+  <h2>Phase 5: Sustainability, Scaling, and Innovation</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Phase 5 Overview</h3>
+    <p>
+      Phase 5: Sustainability, Scaling, and Innovation focuses on making the local accountability system durable, adaptable, and integrated into the long term life of the district.
+      The central question becomes,
+      <strong>How do we protect what we have built, scale what works, and keep innovating without losing coherence.</strong>
+    </p>
+    <p>
+      On the Local Accountability Continuum, Phase 5 corresponds to
+      <span class="continuumtxt">Sustain and Evolve the Local Accountability System</span>.
+      In the DDIER cycle, it aligns most closely with
+      <span class="ddiertxt">Revision</span>
+      and the initiation of the next cycle of
+      <span class="ddiertxt">Design and Development</span>
+      as learning from Phase 4 fuels fresh improvement.
+    </p>
+    <p>
+      Phase 5 is grounded in
+      <span class="pillartxt">Pillar 2: Governance, Leadership, and Systematic Support</span>,
+      <span class="pillartxt">Pillar 5: Evaluating Progress, Impact, and Reporting</span>,
+      and
+      <span class="pillartxt">Pillar 6: Sustainability, Partnerships, and Innovation</span>.
+      These pillars help districts move from a project mindset to a system identity.
+    </p>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Without an intentional sustainability and scaling phase, even strong local accountability systems can fade when leaders change or pressures rise.
+      Phase 5 keeps the work alive across time, people, and conditions.
+    </div>
+  </div>
+
+  <div class="section" id="current-conditions-5">
+    <h3>Current On the Ground Conditions and Self Assessment of Context</h3>
+    <p>
+      Before designing sustainability and scaling strategies, districts need a clear sense of their current capacity and context.
+      Phase 5 starts with an honest read of where the system stands in everyday practice.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Profiles of Sustainability Readiness</h4>
+        <ul class="step-list">
+          <li><strong>Fragile Innovation:</strong> Local accountability practices depend heavily on a few leaders or early adopters.</li>
+          <li><strong>Emerging Stability:</strong> Key components are used across schools, but depth and consistency vary.</li>
+          <li><strong>Embedded Practice:</strong> Local accountability structures and routines are part of the district’s identity and daily work.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Context Questions for Phase 5</h4>
+        <ul class="step-list">
+          <li>Where is the local accountability system most deeply embedded in culture and practice.</li>
+          <li>Where does the system still feel optional, fragile, or misunderstood.</li>
+          <li>How stable are leadership roles, staffing patterns, and funding streams that support the work.</li>
+          <li>What external pressures, such as policy shifts or accountability changes, might affect sustainability.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Sustainability strategies are most effective when they fit the district’s real conditions, not an idealized version of readiness.
+    </div>
+  </div>
+
+  <div class="section" id="guiding-principles-5">
+    <h3>Guiding Principles for Sustainability and Scaling</h3>
+    <p>
+      Guiding principles ensure that scaling and innovation reinforce the core vision rather than dilute it.
+      They serve as guardrails when districts adapt the system over time.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Principles for Sustainability</h4>
+        <ul class="step-list">
+          <li>Protect the integrity of the core vision for Growth, Mastery, and Readiness while staying open to refinement.</li>
+          <li>Build structures that outlast individual leaders and rely on teams, not single champions.</li>
+          <li>Align policies, budgeting, and staffing with local accountability priorities.</li>
+          <li>Maintain a balanced approach that honors both Vibrant Learning and transparency in reporting.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Principles for Scaling and Innovation</h4>
+        <ul class="step-list">
+          <li>Scale practices that have demonstrated positive impact and clear feasibility.</li>
+          <li>Use thoughtful piloting and iteration when introducing new components or extending to new contexts.</li>
+          <li>Ensure that innovation remains coherent with the Portrait of a Learner and Measures of Quality.</li>
+          <li>Engage students, staff, and community partners in co designing future phases of the work.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Clear principles keep Phase 5 focused on deepening and extending what matters most, rather than chasing every new idea.
+    </div>
+  </div>
+
+  <div class="section" id="preconditions-readiness-5">
+    <h3>Preconditions and Readiness Indicators for Phase 5</h3>
+    <p>
+      Certain conditions make Phase 5 more productive.
+      These preconditions signal that the district is ready to move from establishing the system to ensuring its long term life.
+    </p>
+    <div class="mini-grid">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Minimum Criteria for Productive Entry</h4>
+        <ul class="step-list">
+          <li>Phases 3 and 4 have been completed for at least one full cycle, producing evidence of impact and areas for refinement.</li>
+          <li>Core tools such as NxGRAs, BPI websites, Measures of Quality, and dashboards are implemented across multiple schools.</li>
+          <li>Leadership, staff, and community partners understand the basics of the local accountability system.</li>
+          <li>There is a shared commitment to continuing the work beyond short term initiatives or grants.</li>
+        </ul>
+      </div>
+      <div class="card pillar">
+        <h4>Readiness Indicators to Check</h4>
+        <ul class="step-list">
+          <li>Evidence that local accountability is referenced in key district documents, such as strategic plans or board policies.</li>
+          <li>Structures for ongoing professional learning and coaching tied to local accountability practices.</li>
+          <li>Operational routines that rely on local evidence for decision making at classroom, school, and district levels.</li>
+          <li>Emerging partnership networks that align with and reinforce the local accountability vision.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      These indicators help districts avoid trying to “scale” a system that has not yet reached sufficient maturity.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: Systems & Architecture, Scaling Workstreams, Progress & Impact -->
+<div class="page" id="systems-architecture-5">
+  <h2>Systems and Architecture for Sustainability and Scaling</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Designing the Sustainability Architecture</h3>
+    <p>
+      Sustainability is not only about funding.
+      It is about the architecture that makes local accountability simply how the district does its work.
+    </p>
+    <div class="logic-columns">
+      <div class="logic-box">
+        <h4>Governance and Policy</h4>
+        <ul>
+          <li>Board policies that recognize local accountability as part of the district’s accountability approach.</li>
+          <li>Formal roles and responsibilities for local accountability embedded in job descriptions.</li>
+          <li>Advisory councils with clear charters and ongoing responsibilities.</li>
+          <li>Alignment between local accountability and district strategic plans.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>People and Capacity</h4>
+        <ul>
+          <li>Leadership pipelines that prepare future leaders to carry the work forward.</li>
+          <li>Ongoing professional learning structures built around local accountability tools and practices.</li>
+          <li>Teacher leadership roles focused on performance assessment, portfolios, and Measures of Quality.</li>
+          <li>Coaching and support systems that help new staff enter the work smoothly.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Resources and Infrastructure</h4>
+        <ul>
+          <li>Dedicated budget lines or resource plans for key components like NxGRAs and BPI platforms.</li>
+          <li>Technology infrastructure that supports data collection, dashboards, and artifact curation.</li>
+          <li>Time structures, such as PLCs and leadership meetings, that center local evidence.</li>
+          <li>Flexible resource strategies that allow the district to adapt as needs evolve.</li>
+        </ul>
+      </div>
+      <div class="logic-box">
+        <h4>Partnerships and Networks</h4>
+        <ul>
+          <li>Relationships with universities, research centers, and organizations that support local accountability.</li>
+          <li>Regional or national networks for sharing models, tools, and lessons learned.</li>
+          <li>Community partnerships that provide authentic contexts for performance assessments.</li>
+          <li>Collaborative agreements that reinforce the long term nature of the work.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Sustainability anchor:</strong>
+      A strong Phase 5 architecture makes it difficult for the system to disappear quietly.
+      It is woven into people, policy, practice, and partnership.
+    </div>
+  </div>
+
+  <div class="section" id="scaling-workstreams-5">
+    <h3>Core Scaling and Sustainability Workstreams</h3>
+    <p>
+      Workstreams in Phase 5 help districts focus scaling efforts where they will matter most.
+      The goal is to deepen quality while expanding reach.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Workstream 1: Deepening Quality at Scale</h4>
+        <ul class="step-list">
+          <li>Identify core practices, such as NxGRAs and BPI curation, that should be consistently implemented across all schools.</li>
+          <li>Develop detailed guides, exemplars, and coaching supports to maintain quality as the work expands.</li>
+          <li>Use calibration processes to ensure consistency in scoring and expectations.</li>
+          <li>Monitor implementation patterns and provide targeted support where quality lags.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Workstream 2: Extending Reach and Access</h4>
+        <ul class="step-list">
+          <li>Expand local accountability practices to additional grade bands, programs, or student groups.</li>
+          <li>Ensure students in specialized programs, such as alternative education or career pathways, are fully included.</li>
+          <li>Address barriers that keep some students from accessing vibrant learning experiences.</li>
+          <li>Use Findings from Phase 4 to guide where expansion should be prioritized.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Workstream 3: Innovation and Continuous Improvement</h4>
+        <ul class="step-list">
+          <li>Identify areas where the system still needs new tools or approaches to fully honor the Portrait of a Learner.</li>
+          <li>Launch focused pilots that build on what has been learned in earlier phases.</li>
+          <li>Use the DDIER cycle explicitly to guide iterative innovation within a stable system.</li>
+          <li>Invite student and community co designers into new rounds of assessment and accountability design.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Workstream 4: Communication, Storytelling, and Advocacy</h4>
+        <ul class="step-list">
+          <li>Develop ongoing communication campaigns that keep local accountability visible and understood.</li>
+          <li>Highlight student stories and artifacts that show the value of the system.</li>
+          <li>Prepare materials that help staff and community members explain the system to new audiences.</li>
+          <li>Use these stories to advocate for supportive policies at district, regional, and state levels.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Practical tip:</strong>
+      These workstreams can be sequenced over multiple years, allowing districts to move from establishing, to stabilizing, to growing the system without losing focus.
+    </div>
+  </div>
+
+  <div class="section" id="progress-impact-5">
+    <h3>Progress and Impact Indicators in Phase 5</h3>
+    <p>
+      Phase 5 focuses on whether local accountability is becoming a durable part of the system and whether its impact is reaching more students and communities.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Progress Indicators for Sustainability</h4>
+        <ul class="step-list">
+          <li>Local accountability referenced routinely in board meetings, leadership sessions, and school improvement plans.</li>
+          <li>Stable or growing investment of time and resources dedicated to core components.</li>
+          <li>New leaders and staff are oriented to the system as part of standard induction.</li>
+          <li>Structures such as advisory councils and PLCs continue regardless of personnel changes.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Impact Indicators for Scaling and Innovation</h4>
+        <ul class="step-list">
+          <li>Increasing numbers of students engaging in performance assessments and BPI curation.</li>
+          <li>Broader representation of student groups in high quality vibrant learning experiences.</li>
+          <li>Clear examples of how innovations from pilots have improved the overall system.</li>
+          <li>Recognition from external partners or networks for the district’s local accountability work.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      These indicators help districts see whether the work is deepening, widening, and evolving rather than plateauing or shrinking.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: Evidence & Learning Loop, Stakeholders, Risks -->
+<div class="page" id="evidence-learning-5">
+  <h2>Evidence, Key Questions, and the Learning Loop in Phase 5</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Evidence and Key Questions for Sustainability and Scaling</h3>
+    <p>
+      Phase 5 uses evidence not only to understand impact, but to understand the health of the system over time.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Evidence to Monitor</h4>
+        <ul class="step-list">
+          <li>Implementation data showing participation in NxGRAs, BPI curation, and Measures of Quality across years.</li>
+          <li>Longitudinal patterns in student outcomes, engagement, and postsecondary readiness.</li>
+          <li>Trends in staff retention, especially among those deeply engaged in local accountability work.</li>
+          <li>Shifts in community perception and trust as reflected in surveys and public feedback.</li>
+          <li>Patterns in resource allocation aligned to local accountability priorities.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Key Questions</h4>
+        <ul class="step-list">
+          <li>Is local accountability still aligned to our evolving understanding of what students need to thrive.</li>
+          <li>Where is the system strongest and most resilient, and why.</li>
+          <li>Where is the system fragile or overly dependent on specific people or conditions.</li>
+          <li>How are new innovations affecting coherence, equity, and clarity.</li>
+          <li>What adjustments are needed to keep the system both stable and responsive in the next cycle.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card ddier" style="margin-top:16px;">
+      <h4 class="ddiertxt">Learning Loop: Reflection and Next Cycle Design</h4>
+      <ul class="step-list">
+        <li>What has Phase 5 revealed about which components of the system are core and which are flexible.</li>
+        <li>What new questions have emerged that should shape the next round of design and development.</li>
+        <li>How will leadership transitions and changing conditions be anticipated and planned for in the next cycle.</li>
+        <li>What commitments do we need to renew explicitly with staff, students, families, and partners.</li>
+        <li>How will we communicate the story of this cycle and the vision for the next one in clear, hopeful, and honest ways.</li>
+      </ul>
+      <div class="highlight">
+        <strong>Use in practice:</strong>
+        These questions can structure an annual “Local Accountability Summit” where the district closes one cycle and opens the next.
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="stakeholder-roles-5">
+    <h3>Stakeholder Roles in Phase 5 Sustainability and Scaling</h3>
+    <p>
+      Long term sustainability depends on broad ownership.
+      Phase 5 clarifies how each stakeholder group keeps the work moving and evolving.
+    </p>
+    <div class="grid">
+      <div class="card pillar">
+        <h4>Superintendent and Cabinet</h4>
+        <ul class="step-list">
+          <li>Ensure local accountability is reflected in district strategy, budgeting, and staffing decisions.</li>
+          <li>Model commitment to the work across leadership transitions and political cycles.</li>
+          <li>Develop succession plans that prepare future leaders to steward the system.</li>
+          <li>Build external partnerships that reinforce the vision and provide additional support.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Board of Education</h4>
+        <ul class="step-list">
+          <li>Adopt policies that recognize and support local accountability as part of district accountability.</li>
+          <li>Ask consistent questions about how local evidence informs decisions.</li>
+          <li>Support investments that protect core components and capacity building.</li>
+          <li>Champion the work publicly and with state and regional partners.</li>
+        </ul>
+      </div>
+
+      <div class="card ddier">
+        <h4 class="ddiertxt">District and School Leaders</h4>
+        <ul class="step-list">
+          <li>Integrate local accountability practices into daily leadership routines.</li>
+          <li>Develop leadership teams that share responsibility for sustaining the work.</li>
+          <li>Support new leaders and staff in understanding and enacting local accountability.</li>
+          <li>Use evidence from Phase 5 to adjust schedules, supports, and expectations.</li>
+        </ul>
+      </div>
+
+      <div class="card pillar">
+        <h4>Teachers and Staff</h4>
+        <ul class="step-list">
+          <li>Continue to refine and use local accountability tools as part of high quality instruction.</li>
+          <li>Serve as mentors and guides for colleagues new to the system.</li>
+          <li>Participate in improvement cycles that shape new iterations of tasks, rubrics, and routines.</li>
+          <li>Share classroom stories that demonstrate the long term value of the work.</li>
+        </ul>
+      </div>
+
+      <div class="card continuum">
+        <h4>Students, Families, and Community Partners</h4>
+        <ul class="step-list">
+          <li>Hold the district accountable for maintaining meaningful, relevant definitions of success.</li>
+          <li>Continue to contribute voice and partnership to new cycles of design and evaluation.</li>
+          <li>Celebrate and share examples of student growth, mastery, and readiness emerging from the system.</li>
+          <li>Support efforts to advocate for local accountability at regional and state levels.</li>
+        </ul>
+      </div>
+
+      <div class="card bestpractice">
+        <h4 class="bestpracticetxt">Best Practices Across Stakeholders</h4>
+        <ul class="step-list">
+          <li>Keep the language of local accountability visible and consistent across years.</li>
+          <li>Build routines that new people can step into without starting over.</li>
+          <li>Revisit and renew agreements about the vision and core components on a regular cadence.</li>
+          <li>Recognize and celebrate the people and teams who sustain the work year after year.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      When stakeholders see themselves as stewards of the system, sustainability becomes a shared responsibility, not a central office task.
+    </div>
+  </div>
+
+  <div class="section" id="risks-mitigation-5">
+    <h3>Risks and Mitigation Strategies in Phase 5</h3>
+    <p>
+      Sustainability work carries real risks.
+      Anticipating and planning for them helps maintain momentum.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Risk: Leadership Turnover</h4>
+        <ul class="step-list">
+          <li>Changes in leadership lead to loss of focus or abandonment of local accountability.</li>
+          <li><strong>Mitigation:</strong> Embed the work in policy, structures, and culture so it is not dependent on individuals.</li>
+          <li><strong>Mitigation:</strong> Build onboarding processes that orient new leaders to the system and its history.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Risk: Initiative Fatigue</h4>
+        <ul class="step-list">
+          <li>Staff perceive local accountability as one more initiative rather than how the district does its work.</li>
+          <li><strong>Mitigation:</strong> Streamline competing initiatives and show how local accountability integrates and focuses the work.</li>
+          <li><strong>Mitigation:</strong> Highlight ways the system reduces redundancy and clarifies priorities.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mini-grid" style="margin-top:16px;">
+      <div class="card ddier">
+        <h4 class="ddiertxt">Risk: Drift from Core Vision</h4>
+        <ul class="step-list">
+          <li>Over time, pressures or new ideas pull the system away from the original purpose.</li>
+          <li><strong>Mitigation:</strong> Revisit and reaffirm the Portrait of a Learner and core principles annually.</li>
+          <li><strong>Mitigation:</strong> Use the DDIER cycle to introduce innovation within a coherent frame.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Risk: Overreliance on External Support</h4>
+        <ul class="step-list">
+          <li>The system depends too heavily on outside organizations or grant funding.</li>
+          <li><strong>Mitigation:</strong> Build internal capacity and gradually shift key functions to district teams.</li>
+          <li><strong>Mitigation:</strong> Use partnerships strategically while planning for long term self sufficiency.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Proactive mitigation helps the district stay committed, coherent, and resilient through change.
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 4: Key Outcome, Practice in Action, Supports, Research -->
+<div class="page" id="phase5-key-outcome">
+  <h2>Phase 5: Key Outcome, Practice in Action, and Supports</h2>
+
+  <!-- LEGEND -->
+  <div class="legend-bar">
+    <div class="legend-item">
+      <span class="legend-swatch pillar-swatch"></span>
+      <span>Six Pillars</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch continuum-swatch"></span>
+      <span>Local Accountability Continuum</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-swatch ddier-swatch"></span>
+      <span>DDIER Phases</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Phase 5: Key Outcome</h3>
+    <p>
+      By the end of Phase 5, the district should have a
+      <strong>stable, evolving local accountability system that is embedded in culture, structures, and partnerships</strong>
+      and ready for the next intentional cycle of design, development, implementation, evaluation, and revision.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>System Level Outcome</h4>
+        <ul class="step-list">
+          <li>Local accountability is widely recognized as part of the district’s identity and daily practice.</li>
+          <li>Core components such as NxGRAs, BPI websites, and Measures of Quality are implemented with consistency and quality.</li>
+          <li>Leadership, staff, and community members understand their roles in sustaining the work.</li>
+          <li>Partnerships and networks reinforce rather than compete with the district’s vision.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Readiness for the Next Cycle</h4>
+        <ul class="step-list">
+          <li>A clear plan for the next DDIER cycle, informed by Phase 4 findings and Phase 5 learning.</li>
+          <li>Identified priorities for future design and development, such as new assessment types or reporting innovations.</li>
+          <li>Structures in place to bring new staff and leaders into the work without starting from scratch.</li>
+          <li>A shared understanding that local accountability is an ongoing journey, not a finished project.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      When Phase 5 concludes with a living system and a clear next cycle, local accountability becomes a durable engine for continuous improvement and vibrant learning.
+    </div>
+  </div>
+
+  <div class="section" id="practice-action-5">
+    <h3>Practice in Action: Phase 5 in Fleming County Schools</h3>
+    <p>
+      In Fleming County Schools, Phase 5 means ensuring that Vibrant Accountability is not a moment in time, but the way the district does its work, year after year.
+      Sustainability, scaling, and innovation are treated as part of the same journey.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Embedding Vibrant Accountability in Daily Practice</h4>
+        <ul class="step-list">
+          <li>Local accountability is integrated into strategic planning, leadership meetings, and school improvement routines.</li>
+          <li>Leadership transitions include intentional orientation to the Portrait of a Learner, BPI websites, NxGRAs, and Measures of Quality.</li>
+          <li>Teacher leaders and principals serve as ongoing champions and designers of the work.</li>
+          <li>Students and families recognize the language of Growth, Mastery, and Readiness as part of how success is defined.</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Growing and Innovating the System</h4>
+        <ul class="step-list">
+          <li>New NxGRAs and BRIDGE Performance Assessments are developed and refined each year based on student interests and emerging needs.</li>
+          <li>Partnerships with organizations and networks help bring fresh ideas and support into the work.</li>
+          <li>Lessons learned from implementation and evaluation cycles inform each new round of design.</li>
+          <li>Vibrant Accountability continues to evolve while staying grounded in the district’s values and community context.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Field insight:</strong>
+      Treating Phase 5 as an ongoing stance, not a one time step, helps Fleming County keep the work moving forward regardless of change.
+    </div>
+  </div>
+
+  <div class="section" id="implementation-supports-5">
+    <h3>Implementation Supports and Tools for Phase 5</h3>
+    <p>
+      Sustainability and scaling require practical supports that make it easier to keep the work going and growing.
+    </p>
+    <div class="mini-grid">
+      <div class="card pillar">
+        <h4>Core Sustainability Tools</h4>
+        <ul class="step-list">
+          <li>Role specific onboarding guides that explain the local accountability system to new leaders, teachers, and staff.</li>
+          <li>Annual cycle maps that show when design, implementation, evaluation, and revision activities occur.</li>
+          <li>Templates for updating strategic plans, improvement plans, and board reports with local evidence.</li>
+          <li>Toolkits such as “See Toolkit: Sustaining Local Accountability Year Over Year.”</li>
+        </ul>
+      </div>
+      <div class="card continuum">
+        <h4>Supports for Scaling and Innovation</h4>
+        <ul class="step-list">
+          <li>Design labs or innovation teams focused on new NxGRAs, reporting formats, or partnership models.</li>
+          <li>Networks or collaboratives that provide thought partnership and shared resources.</li>
+          <li>Professional learning modules that prepare staff to lead new components of the system.</li>
+          <li>References to resources such as “See Template: Multi Year Scaling Plan” and “See Guide: Partnering for Local Accountability Innovation.”</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight">
+      <strong>Why this matters:</strong>
+      Tools and supports make it possible for busy educators to sustain and grow a complex system without losing sight of students and learning.
+    </div>
+  </div>
+
+  <div class="section" id="research-base-5">
+    <h3>Research Base and References for Phase 5 Sustainability and Scaling</h3>
+    <p>
+      Phase 5 draws on research in organizational sustainability, scaling of educational innovations, and networked improvement.
+    </p>
+    <ul class="step-list">
+      <li>
+        <strong>Fullan, M. (2016).</strong>
+        <em>The New Meaning of Educational Change.</em>
+        Explores how educational change can be sustained over time through leadership, culture, and system alignment.
+      </li>
+      <li>
+        <strong>Penuel, W. R., Fishman, B. J., Cheng, B. H., &amp; Sabelli, N. (2011).</strong>
+        <em>Organizing Research and Development at the Intersection of Learning, Implementation, and Design.</em>
+        Highlights the importance of partnerships and co design in sustaining and scaling innovations.</li>
+      <li>
+        <strong>Bryk, A. S., Gomez, L. M., Grunow, A., &amp; LeMahieu, P. G. (2015).</strong>
+        <em>Learning to Improve: How America's Schools Can Get Better at Getting Better.</em>
+        Provides a framework for networked improvement and continuous refinement at scale.</li>
+    </ul>
+    <div class="highlight">
+      <strong>How to use this section:</strong>
+      These references can support conversations with boards, partners, and funders about why local accountability requires a long term, sustainable, and networked approach.
+    </div>
+  </div>
+</div>
+
+<script>
+  function downloadPDF() {
+    const element = document.body;
+
+    const opt = {
+      margin:       0.5,
+      filename:     'phase5-local-accountability.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
+  }
+</script>
+
+</body>
+</html>
