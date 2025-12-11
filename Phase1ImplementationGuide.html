@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phase 1 Implementation Guide – Local Accountability Framework</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --navy: #0a355e;
+      --teal: #0e8577;
+      --gold: #dbb550;
+      --bg: #f5f7fb;
+      --text: #111111;
+      --muted: #70747a;
+      --card-bg: #ffffff;
+      --accent-soft: #e6f3f1;
+      --border-soft: #dde3ee;
+      --danger: #b74b4b;
+      --success: #1e8a4b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* Layout */
+
+    .page {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    @media (max-width: 960px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--border-soft);
+      }
+    }
+
+    /* Sidebar */
+
+    .sidebar {
+      background: #ffffff;
+      border-right: 1px solid var(--border-soft);
+      padding: 24px 20px;
+      position: sticky;
+      top: 0;
+      align-self: start;
+      max-height: 100vh;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, var(--gold), var(--navy));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .brand-text-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .brand-text-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 16px 0 4px;
+    }
+
+    .nav-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .nav-list li {
+      margin: 2px 0;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 6px 8px;
+      border-radius: 999px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .nav-link:hover {
+      background: var(--accent-soft);
+      color: var(--navy);
+    }
+
+    .nav-link.active {
+      background: var(--navy);
+      color: #ffffff;
+    }
+
+    /* Main content */
+
+    .main {
+      padding: 24px 28px 40px;
+    }
+
+    .hero {
+      background: radial-gradient(circle at top left, #fef7e7, #f5f7fb);
+      border-radius: 24px;
+      padding: 24px 22px;
+      margin-bottom: 24px;
+      display: grid;
+      grid-template-columns: minmax(0, 2.2fr) minmax(0, 2fr);
+      gap: 20px;
+      border: 1px solid #f0e3c3;
+    }
+
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-title {
+      font-size: 24px;
+      font-weight: 750;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(10, 53, 94, 0.15);
+      background: rgba(255, 255, 255, 0.7);
+      color: var(--navy);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .hero-stat {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      padding: 8px 10px;
+      border: 1px solid rgba(219, 181, 80, 0.35);
+    }
+
+    .hero-stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .hero-stat-value {
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .hero-chart-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 12px 12px 14px;
+      border: 1px solid rgba(10, 53, 94, 0.14);
+    }
+
+    .hero-chart-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .phase-progress {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .phase-pill {
+      flex: 1;
+      height: 10px;
+      border-radius: 999px;
+      background: #e6ebf5;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phase-pill span {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(to right, var(--teal), var(--gold));
+    }
+
+    .phase-pill.inactive span {
+      background: #d1d7e5;
+    }
+
+    .phase-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .hero-legend {
+      display: flex;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      margin-right: 4px;
+    }
+
+    /* Sections */
+
+    section {
+      margin-bottom: 26px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 840px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      padding: 14px 14px 16px;
+      box-shadow: 0 6px 16px rgba(15, 35, 52, 0.04);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .chip {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(10, 53, 94, 0.22);
+      color: var(--muted);
+      background: #f7f8fc;
+      white-space: nowrap;
+    }
+
+    .card-body {
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pill-list {
+      margin: 6px 0 0;
+      padding: 0;
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .pill-item {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eef3fb;
+      color: var(--navy);
+    }
+
+    .example-callout {
+      border-left: 3px solid var(--teal);
+      background: var(--accent-soft);
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .example-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* Process map */
+
+    .process-diagram {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 12px;
+      border: 1px solid var(--border-soft);
+      margin-bottom: 14px;
+    }
+
+    .process-track {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .step-chip {
+      flex: 1 1 120px;
+      min-width: 120px;
+      background: #f7f8fc;
+      border-radius: 12px;
+      padding: 6px 8px;
+      font-size: 11px;
+      border: 1px solid #e0e5f1;
+    }
+
+    .step-chip span {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+
+    /* Steps detail */
+
+    .step-card {
+      margin-bottom: 14px;
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 650;
+      color: var(--navy);
+    }
+
+    .step-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .step-toggle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--muted);
+      background: #ffffff;
+    }
+
+    .step-content {
+      margin-top: 8px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .step-content.open {
+      display: block;
+    }
+
+    .bullet-list {
+      margin: 4px 0 8px;
+      padding-left: 18px;
+    }
+
+    .bullet-list li {
+      margin-bottom: 3px;
+    }
+
+    .subheading {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+
+    /* Tables and charts */
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    th, td {
+      border: 1px solid var(--border-soft);
+      padding: 6px 6px;
+      text-align: left;
+    }
+
+    th {
+      background: #f2f4fb;
+      font-weight: 600;
+      font-size: 11px;
+      color: var(--navy);
+    }
+
+    .badge-status {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--success);
+    }
+
+    .badge-risk {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--danger);
+    }
+
+    .readiness-bar {
+      position: relative;
+      height: 14px;
+      border-radius: 999px;
+      background: #e4e8f2;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+
+    .readiness-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 60%;
+      background: linear-gradient(to right, var(--teal), var(--gold));
+    }
+
+    .readiness-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Checklists */
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+      font-size: 12px;
+      margin: 4px 0 0;
+    }
+
+    .checklist li {
+      margin-bottom: 4px;
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+    }
+
+    .check-icon {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid var(--border-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--teal);
+      background: #ffffff;
+    }
+
+    /* Callouts */
+
+    .callout {
+      border-radius: 12px;
+      padding: 10px 10px;
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .callout.info {
+      border-left: 3px solid var(--navy);
+    }
+
+    .callout.warn {
+      border-left: 3px solid var(--danger);
+      background: #fef5f5;
+    }
+
+    .callout.success {
+      border-left: 3px solid var(--success);
+      background: #f3fbf7;
+    }
+
+    /* Footer */
+
+    .footer {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 24px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">LA</div>
+      <div>
+        <div class="brand-text-title">Local Accountability Framework</div>
+        <div class="brand-text-sub">Phase 1 Implementation Guide</div>
+      </div>
+    </div>
+
+    <div class="nav-section-title">Guide Map</div>
+    <ul class="nav-list">
+      <li><a href="#orientation" class="nav-link active">1. Orientation to Phase 1</a></li>
+      <li><a href="#preconditions" class="nav-link">2. Preconditions and Readiness</a></li>
+      <li><a href="#roles" class="nav-link">3. Roles and Responsibilities</a></li>
+      <li><a href="#process" class="nav-link">4. Phase 1 Process Map</a></li>
+      <li><a href="#steps" class="nav-link">5. Step by Step Guidance</a></li>
+      <li><a href="#fidelity" class="nav-link">6. Fidelity and Monitoring</a></li>
+      <li><a href="#pl" class="nav-link">7. Professional Learning</a></li>
+      <li><a href="#pitfalls" class="nav-link">8. Common Pitfalls</a></li>
+    </ul>
+
+    <div class="nav-section-title">Quick Views</div>
+    <ul class="nav-list">
+      <li><a href="#smith-snapshots" class="nav-link">Smith County Examples</a></li>
+      <li><a href="#rubric-visual" class="nav-link">Readiness Rubric Visual</a></li>
+      <li><a href="#checklists" class="nav-link">Checklists</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+    <!-- Hero -->
+    <div class="hero">
+      <div>
+        <div class="hero-title">Phase 1. Laying the Groundwork</div>
+        <div class="hero-subtitle">
+          Understanding current conditions and readiness so local accountability work in Smith County Schools, KY
+          begins with evidence, not assumptions.
+        </div>
+        <div class="hero-badges">
+          <span class="badge">Smith County Schools, KY</span>
+          <span class="badge">Phase 1. Current Conditions and Readiness</span>
+          <span class="badge">Audience. District, School, Classroom</span>
+        </div>
+
+        <div class="hero-grid">
+          <div class="hero-stat">
+            <div class="hero-stat-label">Phase 1 Primary Outcome</div>
+            <div class="hero-stat-value">
+              Shared picture of reality across all Smith County schools
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-label">Key Users</div>
+            <div class="hero-stat-value">
+              Superintendent, district leads, principals, teacher leaders
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-label">Core Question</div>
+            <div class="hero-stat-value">
+              Where are we today in learning, assessment, and readiness
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-label">Phase 2 Dependency</div>
+            <div class="hero-stat-value">
+              Design decisions flow directly from Phase 1 findings
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-chart-card">
+        <div class="hero-chart-title">Local Accountability Phase Progress</div>
+        <div class="phase-progress">
+          <div class="phase-pill"><span></span></div>
+          <div class="phase-pill inactive"><span></span></div>
+          <div class="phase-pill inactive"><span></span></div>
+          <div class="phase-pill inactive"><span></span></div>
+          <div class="phase-pill inactive"><span></span></div>
+          <div class="phase-pill inactive"><span></span></div>
+        </div>
+        <div class="phase-labels">
+          <span>Phase 1</span>
+          <span>Phase 6</span>
+        </div>
+        <div class="hero-legend">
+          <div style="display:flex;align-items:center;">
+            <span class="legend-dot" style="background: linear-gradient(to right, var(--teal), var(--gold));"></span>
+            <span>Active phase in Smith County</span>
+          </div>
+          <div style="display:flex;align-items:center;">
+            <span class="legend-dot" style="background:#d1d7e5;"></span>
+            <span>Future phases</span>
+          </div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--muted);">
+          In Smith County, the district team uses this simple phase bar in leadership meetings to remind everyone:
+          do not jump to Phase 4 implementation until Phase 1 reality is clear.
+        </div>
+      </div>
+    </div>
+
+    <!-- Orientation -->
+    <section id="orientation">
+      <div class="section-title">1. Orientation to Phase 1</div>
+      <div class="section-subtitle">
+        Why Phase 1 exists, what success looks like, and how Smith County Schools can use this guide as a working
+        roadmap rather than a static document.
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Purpose of Phase 1</div>
+            <div class="chip">Start with reality</div>
+          </div>
+          <div class="card-body">
+            The purpose of Phase 1 is to help Smith County Schools build an honest, evidence based picture of current
+            conditions and readiness across all schools. Phase 1 asks a simple but important question. What is the
+            actual learner and teacher experience right now. The answer shapes every design choice that follows in
+            Phases 2 through 6.
+            <ul class="bullet-list">
+              <li>Describe the current learner experience with real artifacts and data.</li>
+              <li>Identify strengths that can be leveraged in the local accountability design.</li>
+              <li>Surface gaps, inequities, and pain points that must be addressed.</li>
+              <li>Determine readiness levels at both school and district levels.</li>
+              <li>Agree on a small number of priorities that will guide Phase 2 design work.</li>
+            </ul>
+            <div class="example-callout">
+              <div class="example-label">Smith County Example</div>
+              <div>
+                At Smith County High School, the leadership team realized through Phase 1 that students had many
+                project based experiences, but very few of those projects ever became part of a formal record of
+                learning. That insight became a central design driver in Phase 2.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Who This Guide Is For</div>
+            <div class="chip">Primary users</div>
+          </div>
+          <div class="card-body">
+            This guide is written for people who will actually do the work of Phase 1 in Smith County Schools.
+            <ul class="bullet-list">
+              <li>Superintendent and central office leaders who frame the work and protect time for it.</li>
+              <li>District accountability, curriculum, and assessment leads who design tools and coach schools.</li>
+              <li>Principals and assistant principals who organize and lead Phase 1 in each building.</li>
+              <li>Teacher leaders and PLC facilitators who bring classroom evidence and insight.</li>
+              <li>Program directors for special education, multilingual learners, counseling, and other services.</li>
+              <li>Student leadership teams, family advisory councils, and community partners as informed voices.</li>
+            </ul>
+            <div class="callout info">
+              <div class="callout-title">How to use this guide</div>
+              Use this guide as a living playbook. Print key sections for leadership meetings, link it in your Smith
+              County Local Accountability site, and mark it up as you learn from practice.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preconditions -->
+    <section id="preconditions">
+      <div class="section-title">2. Preconditions and Readiness to Launch Phase 1</div>
+      <div class="section-subtitle">
+        A quick check for Smith County to confirm that minimum conditions are in place before asking schools to begin.
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Minimum District Readiness</div>
+            <div class="chip">Before launch</div>
+          </div>
+          <div class="card-body">
+            District leaders in Smith County should review these items before launching Phase 1.
+            <ul class="checklist">
+              <li><span class="check-icon">✓</span><span>
+                We can explain in two or three sentences why Smith County is moving toward a local accountability
+                model and how it connects to student experience.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We have introduced the Six Pillars, the Local Accountability Continuum, and the DDIER cycle to school
+                leaders at a basic level.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We have identified a Phase 1 district lead team and clarified roles for accountability, curriculum,
+                assessment, and school support.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We have created draft templates for the Current Conditions Scan, the Readiness Rubric, and the
+                School Phase 1 Summary Profile.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We have a clear plan for how schools will submit artifacts and how the district will organize and
+                access them.
+              </span></li>
+            </ul>
+            <div class="example-callout">
+              <div class="example-label">Smith County Example</div>
+              <div>
+                Smith County central office placed all Phase 1 tools and examples in a single shared folder named
+                "Smith County Local Accountability – Phase 1 Launch" and linked that folder from the district
+                leadership dashboard in Canvas.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="rubric-visual">
+          <div class="card-header">
+            <div class="card-title">Readiness Snapshot Visual</div>
+            <div class="chip">District overview</div>
+          </div>
+          <div class="card-body">
+            The simple chart below can help Smith County leaders visualize their starting point.
+            <table>
+              <thead>
+                <tr>
+                  <th>Domain</th>
+                  <th>Readiness Level</th>
+                  <th>Evidence Anchor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Instruction and Vibrant Learning</td>
+                  <td>Developing</td>
+                  <td>Classroom walkthrough notes from three schools</td>
+                </tr>
+                <tr>
+                  <td>Assessment and Grading</td>
+                  <td>Emerging</td>
+                  <td>Gradebook review and teacher survey results</td>
+                </tr>
+                <tr>
+                  <td>Student Voice and Agency</td>
+                  <td>Implementing</td>
+                  <td>Student panel notes from Smith County High and Middle</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="readiness-bar">
+              <div class="readiness-bar-fill"></div>
+            </div>
+            <div class="readiness-bar-labels">
+              <span>Emerging</span>
+              <span>Embedding</span>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">
+              As Phase 1 progresses, Smith County can update this bar to show movement from Emerging toward
+              Implementing and Embedding.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Roles -->
+    <section id="roles">
+      <div class="section-title">3. Roles and Responsibilities</div>
+      <div class="section-subtitle">
+        Clear lanes for who does what in Phase 1 so work in Smith County Schools is collaborative but not confusing.
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Superintendent and District Leadership</div>
+            <div class="chip">System level</div>
+          </div>
+          <div class="card-body">
+            <div class="subheading">Core responsibilities</div>
+            <ul class="bullet-list">
+              <li>Frame the purpose of Phase 1 publicly and consistently in Smith County.</li>
+              <li>Protect time for schools to do the work without feeling rushed or overloaded.</li>
+              <li>Provide tools, coaching, and feedback to principals and school teams.</li>
+              <li>Monitor fidelity and ensure that every school participates meaningfully.</li>
+            </ul>
+            <div class="subheading">Implementation actions</div>
+            <ul class="bullet-list">
+              <li>Open Phase 1 with a message at the Smith County principals meeting and follow up in writing.</li>
+              <li>Meet regularly with a small Phase 1 lead team to remove barriers and respond to questions.</li>
+              <li>Review School Phase 1 Summary Profiles and provide short, written feedback to each principal.</li>
+              <li>Use Phase 1 findings to inform board work sessions about local accountability.</li>
+            </ul>
+            <div class="example-callout">
+              <div class="example-label">Smith County Example</div>
+              <div>
+                The superintendent in Smith County recorded a five minute video that explained Phase 1 in plain
+                language and shared one honest example from their own experience as a principal. That video was
+                shown in every school staff meeting to reinforce a shared message.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Principals, Teacher Leaders, and Stakeholders</div>
+            <div class="chip">School and classroom level</div>
+          </div>
+          <div class="card-body">
+            <div class="subheading">Principals and leadership teams</div>
+            <ul class="bullet-list">
+              <li>Organize Phase 1 work at the school level and set clear expectations for staff.</li>
+              <li>Lead evidence review conversations and self assessment sessions.</li>
+              <li>Coordinate student, family, and community input at the school level.</li>
+              <li>Draft, refine, and finalize the School Phase 1 Summary Profile.</li>
+            </ul>
+
+            <div class="subheading">Teachers and staff</div>
+            <ul class="bullet-list">
+              <li>Provide classroom and program level evidence that shows what learning and assessment look like.</li>
+              <li>Participate honestly in surveys, focus groups, and self assessment conversations.</li>
+              <li>Suggest realistic priorities and changes based on daily experience.</li>
+            </ul>
+
+            <div class="subheading">Students, families, and community partners</div>
+            <ul class="bullet-list">
+              <li>Share experiences of learning, communication, and support in Smith County schools.</li>
+              <li>Lift up moments when the system works well and times when it does not.</li>
+              <li>Help confirm or challenge the way adults interpret the data.</li>
+            </ul>
+
+            <div class="callout success">
+              <div class="callout-title">Smith County practice</div>
+              Smith County Middle School invited its student leadership group to respond to three simple prompts
+              about learning and assessment. The principal printed student quotes and used them alongside assessment
+              charts in the leadership team meeting so student perspective was visible in the room.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Process map -->
+    <section id="process">
+      <div class="section-title">4. Phase 1 Process Map</div>
+      <div class="section-subtitle">
+        Seven steps that keep Phase 1 organized from launch through district synthesis in Smith County Schools.
+      </div>
+
+      <div class="process-diagram">
+        <div style="font-size:12px;color:var(--navy);font-weight:600;margin-bottom:4px;">
+          High level process overview
+        </div>
+        <div style="font-size:12px;color:var(--muted);">
+          Smith County can use this map as a visual agenda in leadership meetings so everyone knows where the work
+          sits and what comes next.
+        </div>
+        <div class="process-track">
+          <div class="step-chip">
+            <span>Step 1</span>
+            Launch and framing
+          </div>
+          <div class="step-chip">
+            <span>Step 2</span>
+            Current conditions evidence collection
+          </div>
+          <div class="step-chip">
+            <span>Step 3</span>
+            School self assessment and readiness rating
+          </div>
+          <div class="step-chip">
+            <span>Step 4</span>
+            Alignment to pillars, continuum, DDIER
+          </div>
+          <div class="step-chip">
+            <span>Step 5</span>
+            Stakeholder input and sensemaking
+          </div>
+          <div class="step-chip">
+            <span>Step 6</span>
+            School Phase 1 summary profile
+          </div>
+          <div class="step-chip">
+            <span>Step 7</span>
+            District synthesis and closure
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Steps detail -->
+    <section id="steps">
+      <div class="section-title">5. Step by Step Guidance with Smith County Examples</div>
+      <div class="section-subtitle">
+        Detailed guidance for each of the seven steps, including realistic scenes from Smith County Schools.
+      </div>
+
+      <!-- Step 1 -->
+      <div class="card step-card">
+        <div class="step-header" onclick="toggleStep('step1')">
+          <div>
+            <div class="step-title">Step 1. Launch and Framing</div>
+            <div class="step-meta">Create a shared understanding of Phase 1 across Smith County Schools.</div>
+          </div>
+          <div class="step-toggle" id="toggle-step1">+</div>
+        </div>
+        <div class="step-content" id="step1">
+          <div class="subheading">Intent</div>
+          Help every principal, teacher, and staff member in Smith County understand what Phase 1 is, why the
+          district is doing it, and what will be expected of them.
+
+          <div class="subheading">Implementation sequence</div>
+          <ol class="bullet-list" style="padding-left:18px;">
+            <li><strong>Develop a Phase 1 message set.</strong> District leaders draft a short narrative that connects
+              Phase 1 to student experience and to the long term vision for local accountability.</li>
+            <li><strong>District leadership launch.</strong> Superintendent and district team use the message set in
+              a principals meeting and provide time for questions and concerns.</li>
+            <li><strong>School level launch.</strong> Principals adapt the message for their staff and present it in a
+              faculty meeting, using local examples from their building.</li>
+          </ol>
+
+          <div class="subheading">Smith County example script for principals</div>
+          <div class="callout info">
+            <div class="callout-title">Sample talking points</div>
+            "In Smith County, we are beginning Phase 1 of our Local Accountability work. This is not a new test or a
+            new label. It is a chance to tell the truth about how learning and assessment feel in our classrooms
+            right now. We will collect real examples from our school, listen to students and families, and look at
+            our data together. Our goal is simple. We want a clear picture of where we are so we can design a better
+            system for our students."
+          </div>
+
+          <div class="subheading">Evidence of completion</div>
+          <ul class="checklist">
+            <li><span class="check-icon">✓</span><span>
+              Phase 1 overview shared with principals and staff in Smith County.
+            </span></li>
+            <li><span class="check-icon">✓</span><span>
+              Staff in each school can state in simple terms what Phase 1 is about and why it matters.
+            </span></li>
+            <li><span class="check-icon">✓</span><span>
+              Communication artifacts are stored in the Smith County Phase 1 shared folder.
+            </span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="card step-card">
+        <div class="step-header" onclick="toggleStep('step2')">
+          <div>
+            <div class="step-title">Step 2. Current Conditions Evidence Collection</div>
+            <div class="step-meta">Gather a well rounded picture of how the system is actually working.</div>
+          </div>
+          <div class="step-toggle" id="toggle-step2">+</div>
+        </div>
+        <div class="step-content" id="step2">
+          <div class="subheading">Intent</div>
+          Move beyond opinion and gather concrete evidence about learning, assessment, climate, and community
+          connection across Smith County Schools.
+
+          <div class="subheading">Domains to scan in Smith County</div>
+          <ul class="bullet-list">
+            <li>Instruction and Vibrant Learning experiences.</li>
+            <li>Assessment practices, grading, and feedback.</li>
+            <li>Use of data in PLCs and leadership decisions.</li>
+            <li>Student voice, agency, and engagement in classes.</li>
+            <li>School climate, belonging, and relationships.</li>
+            <li>Family communication and community partnership.</li>
+            <li>Operational conditions that support or hinder learning.</li>
+          </ul>
+
+          <div class="subheading">Implementation sequence</div>
+          <ol class="bullet-list" style="padding-left:18px;">
+            <li><strong>Create the Current Conditions Scan Tool.</strong> District team builds a simple template with
+              domains, guiding questions, and space for strengths, gaps, and questions.</li>
+            <li><strong>Identify existing evidence.</strong> Each Smith County school lists what data and artifacts
+              already exist for each domain and where there are gaps.</li>
+            <li><strong>Collect targeted evidence.</strong> Schools gather missing artifacts such as sample units,
+              student work, observation notes, and survey results.</li>
+            <li><strong>Build an evidence inventory.</strong> Each school logs each artifact with a title, date,
+              domain, and brief description.</li>
+          </ol>
+
+          <div class="example-callout">
+            <div class="example-label">Smith County Example</div>
+            <div>
+              At Maple Ridge Elementary in Smith County, the principal asked each grade level team to submit two
+              units and six pieces of student work that showed how students demonstrate understanding in reading and
+              math. Teachers also added short reflections about where the current units feel relevant and where they
+              feel disconnected from student interests.
+            </div>
+          </div>
+
+          <div class="subheading">Evidence of completion</div>
+          <ul class="checklist">
+            <li><span class="check-icon">✓</span><span>
+              Each Smith County school has a completed Current Conditions Scan Tool with notes for all domains.
+            </span></li>
+            <li><span class="check-icon">✓</span><span>
+              Each school has an organized inventory that lists artifacts in a shared folder.
+            </span></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="card step-card">
+        <div class="step-header" onclick="toggleStep('step3')">
+          <div>
+            <div class="step-title">Step 3. School Self Assessment and Readiness Rating</div>
+            <div class="step-meta">Turn evidence into clear readiness levels for each school.</div>
+          </div>
+          <div class="step-toggle" id="toggle-step3">+</div>
+        </div>
+        <div class="step-content" id="step3">
+          <div class="subheading">Intent</div>
+          Use a simple, shared rubric to help each Smith County school rate its readiness for local accountability
+          work in key domains.
+
+          <div class="subheading">Sample readiness rubric slice</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Domain</th>
+                <th>Emerging</th>
+                <th>Developing</th>
+                <th>Implementing</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Assessment and Multiple Measures</td>
+                <td>Most evidence of learning is test based and short term.</td>
+                <td>Some performance tasks and projects exist but they are not used consistently.</td>
+                <td>Performance tasks, projects, and portfolios are part of normal practice in many classrooms.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="subheading">Implementation sequence</div>
+          <ol class="bullet-list" style="padding-left:18px;">
+            <li><strong>Prepare the leadership team.</strong> Principal shares the rubric and evidence inventory with
+              a representative group of staff.</li>
+            <li><strong>Rate each domain.</strong> The team reviews evidence, proposes ratings, discusses differences,
+              and reaches consensus using rubric language.</li>
+            <li><strong>Capture justifications.</strong> For each domain, write a short paragraph that explains the
+              rating with specific examples from Smith County classrooms.</li>
+          </ol>
+
+          <div class="example-callout">
+            <div class="example-label">Smith County Example</div>
+            <div>
+              At Smith County High School, the leadership team rated "Student Voice and Agency" as Implementing
+              because student led conferences and senior capstone presentations are already in place. They rated
+              "Assessment and Multiple Measures" as Emerging because most courses still rely on tests and homework
+              averages with few performance tasks.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="card step-card">
+        <div class="step-header" onclick="toggleStep('step4')">
+          <div>
+            <div class="step-title">Step 4. Alignment to Pillars, Continuum, and DDIER</div>
+            <div class="step-meta">Connect Phase 1 work to the larger Local Accountability architecture.</div>
+          </div>
+          <div class="step-toggle" id="toggle-step4">+</div>
+        </div>
+        <div class="step-content" id="step4">
+          <div class="subheading">Intent</div>
+          Ensure that Phase 1 in Smith County is not a stand alone activity, but part of the Six Pillars, the Local
+          Accountability Continuum, and the DDIER improvement cycle.
+
+          <div class="subheading">Implementation sequence</div>
+          <ul class="bullet-list">
+            <li>Use a one page Pillar summary and ask schools to identify where evidence shows strength and need.</li>
+            <li>Place each school on the Local Accountability Continuum with a short written rationale.</li>
+            <li>Use the DDIER cycle to reflect. What did we design, develop, implement, evaluate, and what now must be
+              revised based on Phase 1.</li>
+          </ul>
+
+          <div class="callout info">
+            <div class="callout-title">Visual reminder</div>
+            Many Smith County leaders draw a simple triangle for Pillars, a horizontal line for the Continuum, and a
+            circle for DDIER on a whiteboard when discussing findings. This keeps the architecture in view while they
+            talk about the details.
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="card step-card">
+        <div class="step-header" onclick="toggleStep('step5')">
+          <div>
+            <div class="step-title">Step 5. Stakeholder Input and Sensemaking</div>
+            <div class="step-meta">Bring student, staff, and family voice into the picture of reality.</div>
+          </div>
+          <div class="step-toggle" id="toggle-step5">+</div>
+        </div>
+        <div class="step-content" id="step5">
+          <div class="subheading">Intent</div>
+          Make sure Phase 1 reflects the lived experiences of students, staff, and families, not just leadership
+          perspectives.
+
+          <div class="subheading">Implementation sequence</div>
+          <ul class="bullet-list">
+            <li>Select at least two input methods per school. for example, a short survey and one listening session.</li>
+            <li>Use three or four focused questions that ask about learning, assessment, and communication.</li>
+            <li>Summarize responses into themes and check how they align with evidence and readiness ratings.</li>
+          </ul>
+
+          <div class="example-callout">
+            <div class="example-label">Smith County Example</div>
+            <div>
+              At North Smith Elementary, families shared that they appreciated frequent communication about behavior
+              but wanted more information about what their children were actually learning. That theme pushed the
+              school to make "clear learning communication" one of its Phase 2 design priorities.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="card step-card">
+        <div class="step-header" onclick="toggleStep('step6')">
+          <div>
+            <div class="step-title">Step 6. School Phase 1 Summary Profile</div>
+            <div class="step-meta">Synthesize findings into a concise, shareable portrait.</div>
+          </div>
+          <div class="step-toggle" id="toggle-step6">+</div>
+        </div>
+        <div class="step-content" id="step6">
+          <div class="subheading">Intent</div>
+          Help each Smith County school tell its Phase 1 story in a short, clear document that can guide Phase 2
+          design.
+
+          <div class="subheading">Core sections</div>
+          <ul class="bullet-list">
+            <li>School context snapshot.</li>
+            <li>Current conditions highlights across key domains.</li>
+            <li>Readiness ratings summary with brief justifications.</li>
+            <li>Pillar and Continuum alignment notes.</li>
+            <li>Stakeholder input themes from students and families.</li>
+            <li>Three to five priorities that will guide Phase 2 work.</li>
+          </ul>
+
+          <div class="callout success">
+            <div class="callout-title">Smith County practice</div>
+            Smith County Middle School limited its Phase 1 Summary Profile to four pages and used simple charts and
+            student quotes alongside tables. Teachers reported that the document felt honest and readable, not like a
+            compliance report.
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="card step-card">
+        <div class="step-header" onclick="toggleStep('step7')">
+          <div>
+            <div class="step-title">Step 7. District Synthesis and Closure</div>
+            <div class="step-meta">Create the district wide picture and mark the end of Phase 1.</div>
+          </div>
+          <div class="step-toggle" id="toggle-step7">+</div>
+        </div>
+        <div class="step-content" id="step7">
+          <div class="subheading">Intent</div>
+          Pull together School Phase 1 Summary Profiles into a coherent district story and provide clear closure
+          before moving to Phase 2.
+
+          <div class="subheading">Implementation sequence</div>
+          <ul class="bullet-list">
+            <li>District team reviews all school profiles and notes system level strengths and challenges.</li>
+            <li>Create a District Phase 1 Summary that uses simple visuals, quotes, and clear language.</li>
+            <li>Share the District Summary with principals, the board, and community in appropriate formats.</li>
+            <li>Superintendent declares Phase 1 complete and names specific ways findings will shape Phase 2.</li>
+          </ul>
+
+          <div class="callout warn">
+            <div class="callout-title">Pitfall to avoid in Smith County</div>
+            Do not skip a public closure to Phase 1. When leaders rush forward without naming what they learned,
+            staff may see the work as another initiative that quietly disappears instead of the foundation for a new
+            system.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fidelity -->
+    <section id="fidelity">
+      <div class="section-title">6. Fidelity and Monitoring</div>
+      <div class="section-subtitle">
+        Simple indicators that Phase 1 has been implemented with integrity in Smith County Schools.
+      </div>
+
+      <div class="grid-2" id="checklists">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">School Level Fidelity Checklist</div>
+            <div class="chip">Smith County schools</div>
+          </div>
+          <div class="card-body">
+            <ul class="checklist">
+              <li><span class="check-icon">✓</span><span>
+                Our school engaged a representative leadership team for Phase 1 that included classroom teachers.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We collected evidence from classrooms, not only from office level reports.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We completed the Readiness Rubric using evidence rather than opinion.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We gathered at least one form of student voice and one form of family input.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We created a School Phase 1 Summary Profile and shared it with staff.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We identified three to five priorities that will guide Phase 2 design work.
+              </span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">District Level Fidelity Checklist</div>
+            <div class="chip">Smith County central office</div>
+          </div>
+          <div class="card-body">
+            <ul class="checklist">
+              <li><span class="check-icon">✓</span><span>
+                Every Smith County school completed Phase 1 activities and submitted artifacts.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We checked for consistency in how schools applied the Readiness Rubric and clarified when needed.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We created a District Phase 1 Summary that reflects the reality of schools, not just district goals.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We aligned Phase 1 findings to the Six Pillars, the Continuum, and the DDIER cycle.
+              </span></li>
+              <li><span class="check-icon">✓</span><span>
+                We communicated key Phase 1 messages and next steps to the board, staff, and community.
+              </span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Professional learning -->
+    <section id="pl">
+      <div class="section-title">7. Professional Learning Supports</div>
+      <div class="section-subtitle">
+        Short, targeted supports that help Smith County leaders and teachers do Phase 1 well.
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Suggested mini sessions</div>
+          <div class="chip">Practical and focused</div>
+        </div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Reading evidence without blaming people.</strong> Use Smith County examples to practice
+              discussing data in ways that are honest and improvement focused.</li>
+            <li><strong>Using the Readiness Rubric.</strong> Walk through one domain together and calibrate what
+              Emerging, Developing, and Implementing look like in a real Smith County school.</li>
+            <li><strong>Listening to student and family voice.</strong> Practice asking open, simple questions and
+              responding without defensiveness.</li>
+            <li><strong>Turning findings into clear priorities.</strong> Help principals and teams take long lists of
+              insights and reduce them to three or four focused priorities for Phase 2.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pitfalls -->
+    <section id="pitfalls">
+      <div class="section-title">8. Common Pitfalls and Course Corrections</div>
+      <div class="section-subtitle">
+        Patterns that often appear in Phase 1 and ways Smith County leaders can respond.
+      </div>
+
+      <div class="grid-2" id="smith-snapshots">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Pitfall. Treating Phase 1 as paperwork</div>
+            <div class="chip">Course correction</div>
+          </div>
+          <div class="card-body">
+            <div class="callout warn">
+              <div class="callout-title">Risk in Smith County</div>
+              If teams in Smith County rush through forms without real conversation, Phase 1 will produce thin
+              documents that do not change thinking.
+            </div>
+            <div class="subheading">Course correction</div>
+            Build Phase 1 into existing PLCs, staff meetings, and leadership sessions. Use real artifacts and ask
+            real questions about student experience. Slow down enough to think together, even if you adjust the
+            number of documents you complete.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Pitfall. Overstating readiness</div>
+            <div class="chip">Honest reflection</div>
+          </div>
+          <div class="card-body">
+            <div class="callout warn">
+              <div class="callout-title">Risk in Smith County</div>
+              To look strong, some schools may rate themselves higher on the Readiness Rubric than evidence supports.
+              That makes Phase 2 design less realistic.
+            </div>
+            <div class="subheading">Course correction</div>
+            Normalize that honest Emerging ratings are a sign of courage and growth. Use side by side examples of
+            what Emerging, Developing, and Implementing look like in Smith County classrooms so leaders feel safer
+            rating accurately.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      Phase 1 Implementation Guide. Smith County Schools, KY. Local Accountability Framework.
+    </div>
+  </main>
+</div>
+
+<script>
+  function toggleStep(id) {
+    var content = document.getElementById(id);
+    var toggle = document.getElementById('toggle-' + id);
+    if (!content || !toggle) return;
+    var isOpen = content.classList.contains('open');
+    if (isOpen) {
+      content.classList.remove('open');
+      toggle.textContent = '+';
+    } else {
+      content.classList.add('open');
+      toggle.textContent = '−';
+    }
+  }
+
+  // Simple nav highlight on click (does not track scroll, safe for Canvas)
+  document.querySelectorAll('.nav-link').forEach(function (link) {
+    link.addEventListener('click', function () {
+      document.querySelectorAll('.nav-link').forEach(function (l) {
+        l.classList.remove('active');
+      });
+      this.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
