@@ -1,1270 +1,591 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Local Accountability Design Map – Phase 1</title>
-<style>
-  html {
-    scroll-behavior: smooth;
-  }
-  body {
-    font-family: 'Inter', sans-serif;
-    background-color: #f9f9f9;
-    margin: 0;
-    padding: 0;
-    color: #111;
-    padding-top: 80px; /* space for fixed navbar */
-  }
-
-  /* Top navigation bar */
-  .navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    background: #ffffff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    padding: 10px 24px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .nav-button {
-    display: inline-block;
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: #0a355e;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 500;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.18);
-    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
-    white-space: nowrap;
-    border: none;
-    cursor: pointer;
-  }
-
-  .nav-button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 5px 12px rgba(0,0,0,0.25);
-    background: #13508c;
-  }
-
-  .nav-button:active {
-    transform: translateY(1px) scale(0.98);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    background: #072744;
-  }
-
-  /* Print button variant */
-  .print-button {
-    background: #d9822b;
-  }
-  .print-button:hover {
-    background: #b86822;
-  }
-  .print-button:active {
-    background: #8b4e18;
-  }
-
-  /* PDF button variant */
-  .pdf-button {
-    background: #4b5563; /* neutral gray */
-  }
-  .pdf-button:hover {
-    background: #374151;
-  }
-  .pdf-button:active {
-    background: #1f2933;
-  }
-
-  .page {
-    width: 100%;
-    padding: 40px;
-    box-sizing: border-box;
-  }
-
-  /* Header logo */
-  .header-logo-wrap {
-    text-align: center;
-    margin-bottom: 12px;
-  }
-  .header-logo {
-    max-width: 420px;
-    width: 100%;
-    height: auto;
-    display: inline-block;
-  }
-
-  h1, h2, h3, h4 {
-    text-align: center;
-    margin-bottom: 10px;
-  }
-  h1 { color: #0a355e; }
-  h2 { color: #d9822b; }
-  h3 { color: #1b4965; }
-  h4 { color: #0a355e; margin-top: 0; }
-
-  .section {
-    background: #fff;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    border-radius: 16px;
-    padding: 24px 28px;
-    margin-bottom: 32px;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
-  }
-
-  .card {
-    background: #f0f4f8;
-    border-radius: 14px;
-    padding: 18px 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease;
-    font-size: 0.95rem;
-    line-height: 1.45;
-  }
-  .card:hover { transform: translateY(-3px); }
-
-  /* Color coding for Pillars / Continuum / DDIER (Phase-wide) */
-  .pillar {
-    border-left: 6px solid #7A4EC4; /* purple */
-  }
-  .continuum {
-    border-left: 6px solid #3B7C3A; /* green */
-  }
-  .ddier {
-    border-left: 6px solid #D4A017; /* golden yellow */
-  }
-
-  .pillartxt {
-    color: #7A4EC4;
-    font-weight: 600;
-  }
-  .continuumtxt {
-    color: #3B7C3A;
-    font-weight: 600;
-  }
-  .ddiertxt {
-    color: #D4A017;
-    font-weight: 700;
-  }
-
-  /* Best Practice Box (soft purple) */
-  .bestpractice {
-    border-left: 6px solid #7A4EC4;
-    background: #f3edfa;
-  }
-  .bestpracticetxt {
-    color: #7A4EC4;
-    font-weight: 700;
-  }
-
-  .highlight {
-    background: #d9e6f2;
-    border-left: 5px solid #d9822b;
-    padding: 12px 14px;
-    margin: 12px 0;
-    font-size: 0.95rem;
-  }
-
-  .step-list {
-    counter-reset: step;
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-  }
-  .step-list li {
-    counter-increment: step;
-    margin-bottom: 10px;
-    padding-left: 28px;
-    position: relative;
-    font-size: 0.96rem;
-  }
-  .step-list li::before {
-    content: counter(step);
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 20px;
-    height: 20px;
-    border-radius: 999px;
-    background: #0a355e;
-    color: #fff;
-    font-size: 0.8rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .mini-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-
-  .tag-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
-  }
-  .tag {
-    font-size: 0.8rem;
-    padding: 4px 8px;
-    border-radius: 999px;
-    background: #eef2f7;
-    border: 1px solid #c7d2e3;
-  }
-
-  .logic-columns {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 14px;
-    font-size: 0.9rem;
-  }
-
-  .logic-box {
-    background: #f7f7fb;
-    border-radius: 12px;
-    padding: 12px;
-    border: 1px solid #dde3f0;
-  }
-  .logic-box h4 {
-    text-align: left;
-    margin-bottom: 6px;
-    font-size: 0.95rem;
-  }
-  .logic-box ul {
-    margin: 0;
-    padding-left: 18px;
-  }
-  .logic-box li {
-    margin-bottom: 4px;
-  }
-
-  /* Legend styling */
-  .legend {
-    display: inline-flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.8rem;
-    margin-bottom: 12px;
-    padding: 8px 10px;
-    border-radius: 999px;
-    background: #f3f4f6;
-  }
-  .legend-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .legend-pillars,
-  .legend-continuum,
-  .legend-ddier {
-    width: 14px;
-    height: 14px;
-    border-radius: 999px;
-    display: inline-block;
-  }
-  .legend-pillars {
-    background: #7A4EC4;
-  }
-  .legend-continuum {
-    background: #3B7C3A;
-  }
-  .legend-ddier {
-    background: #D4A017;
-  }
-
-  @media (max-width: 1100px) {
-    .navbar {
-      justify-content: flex-start;
-      overflow-x: auto;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Accountability Framework – Phase 1: Laying the Groundwork</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    html {
+      scroll-behavior: smooth;
     }
-  }
-
-  @media (max-width: 900px) {
-    .grid {
-      grid-template-columns: 1fr;
-    }
-    .logic-columns {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  @media (max-width: 600px) {
-    .logic-columns {
-      grid-template-columns: 1fr;
-    }
-    .mini-grid {
-      grid-template-columns: 1fr;
-    }
-  }
-
-  /* Print styling */
-  @page {
-    size: 8.5in 11in;
-    margin: 0.5in;
-  }
-
-  @media print {
     body {
-      padding-top: 0;
-      background: #ffffff;
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #111;
+      padding-top: 80px;
     }
+
+    /* Top navigation bar */
     .navbar {
-      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    .page {
-      box-shadow: none;
-      padding: 20px;
-      page-break-after: always;
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .page:last-of-type {
-      page-break-after: auto;
+    .navbar-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #0a355e;
     }
-  }
-</style>
+    .navbar-subtitle {
+      font-size: 13px;
+      color: #666;
+    }
+    .navbar-links {
+      display: flex;
+      gap: 16px;
+      font-size: 14px;
+    }
+    .navbar-links a {
+      text-decoration: none;
+      color: #333;
+      padding: 6px 10px;
+      border-radius: 999px;
+      transition: background 0.2s, color 0.2s;
+    }
+    .navbar-links a:hover,
+    .navbar-links a.active {
+      background: #0a355e;
+      color: #fff;
+    }
+
+    /* Layout */
+    .page-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    .page-header {
+      margin-bottom: 24px;
+    }
+    .page-header h1 {
+      font-size: 28px;
+      margin: 0 0 8px;
+      color: #0a355e;
+    }
+    .page-header p {
+      margin: 0;
+      color: #444;
+      font-size: 14px;
+      max-width: 800px;
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+    }
+
+    /* Left sidebar */
+    .sidebar-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+      border: 1px solid #eceff3;
+      position: sticky;
+      top: 96px;
+      align-self: flex-start;
+    }
+    .sidebar-card h2 {
+      font-size: 18px;
+      margin: 0 0 12px;
+      color: #0a355e;
+    }
+    .sidebar-section-title {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #888;
+      margin: 16px 0 6px;
+    }
+    .sidebar-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 13px;
+    }
+    .sidebar-list li {
+      margin-bottom: 6px;
+    }
+    .sidebar-list a {
+      text-decoration: none;
+      color: #333;
+      border-radius: 10px;
+      padding: 4px 6px;
+      display: block;
+      transition: background 0.15s, color 0.15s;
+    }
+    .sidebar-list a:hover {
+      background: #f0f3f9;
+      color: #0a355e;
+    }
+
+    /* Main content cards */
+    .content-column {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 18px 20px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+      border: 1px solid #eceff3;
+    }
+    .card h2,
+    .card h3 {
+      margin-top: 0;
+      color: #0a355e;
+    }
+    .card h2 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .card h3 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+    .card p {
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0 0 10px;
+      color: #333;
+    }
+    .card ul {
+      margin: 8px 0 10px 18px;
+      padding: 0;
+      font-size: 14px;
+      color: #333;
+    }
+    .card li {
+      margin-bottom: 4px;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 10px;
+      font-size: 11px;
+      border-radius: 999px;
+      background: #f0f3fa;
+      color: #0a355e;
+      font-weight: 500;
+      margin-right: 6px;
+      margin-bottom: 4px;
+    }
+
+    /* Checklist section */
+    .checklist-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+    .checklist-card h3 {
+      font-size: 15px;
+    }
+    .checklist-card ul {
+      list-style: none;
+      margin-left: 0;
+    }
+    .checklist-card li {
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    .checklist-card input[type="checkbox"] {
+      margin-right: 6px;
+    }
+
+    /* Small helper styles */
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 500;
+      background: #0a355e;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .subtle {
+      font-size: 12px;
+      color: #666;
+    }
+
+    @media (max-width: 900px) {
+      .phase-grid {
+        grid-template-columns: 1fr;
+      }
+      .sidebar-card {
+        position: static;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<!-- FLOATING MENU -->
-<div class="navbar">
-  <a href="#phase1-overview" class="nav-button">Phase 1 Overview</a>
-  <a href="#current-conditions-1" class="nav-button">Current Conditions</a>
-  <a href="#guiding-principles-1" class="nav-button">Guiding Principles</a>
-  <a href="#preconditions-readiness-1" class="nav-button">Preconditions &amp; Readiness</a>
-  <a href="#systems-architecture-1" class="nav-button">Systems &amp; Architecture</a>
-  <a href="#design-workstreams-1" class="nav-button">Design Workstreams</a>
-  <a href="#milestones-progress-1" class="nav-button">Milestones &amp; Progress</a>
-  <a href="#evidence-learning-loop-1" class="nav-button">Evidence &amp; Learning Loop</a>
-  <a href="#stakeholder-roles-1" class="nav-button">Stakeholder Roles</a>
-  <a href="#risks-mitigation-1" class="nav-button">Risks &amp; Mitigation</a>
-  <a href="#phase1-key-outcome" class="nav-button">Phase 1 Key Outcome</a>
-  <a href="#practice-in-action-1" class="nav-button">Practice in Action</a>
-  <a href="#implementation-supports-1" class="nav-button">Implementation Supports</a>
-  <a href="#research-base-1" class="nav-button">Research Base</a>
-  <button type="button" class="nav-button print-button" onclick="window.print()">Print</button>
-  <button type="button" class="nav-button pdf-button" onclick="downloadPDF()">PDF</button>
-</div>
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <div class="navbar-left">
+      <div>
+        <div class="navbar-title">Local Accountability Framework</div>
+        <div class="navbar-subtitle">Phase 1 – Laying the Groundwork</div>
+      </div>
+    </div>
+    <div class="navbar-links">
+      <a href="#phase1-overview" class="active">Phase 1</a>
+      <a href="#phase1-areas-changes">Improvements</a>
+      <a href="#phase1-principles">Principle Alignment</a>
+      <a href="#phase1-checklists">Checklists</a>
+    </div>
+  </nav>
 
-<!-- PAGE 1: Overview, Current Conditions, Guiding Principles -->
-<div class="page" id="phase1-overview">
-  <div class="header-logo-wrap">
-    <img
-      src="https://i.postimg.cc/jSXFZymK/Nx-GLearning-Assessment-Accountability-(2).png"
-      alt="NxG Learning, Assessment, and Accountability"
-      class="header-logo"
-    >
+  <div class="page-wrapper">
+    <header class="page-header" id="phase1-overview">
+      <span class="badge">Phase 1</span>
+      <h1>Laying the Groundwork: Current Conditions, Coherence, and Readiness</h1>
+      <p>
+        Phase 1 establishes the essential foundation for any district implementing a Local Accountability System.
+        It ensures that districts begin with a shared understanding of their current conditions, systemic readiness,
+        guiding principles, and the evidence required to inform Phase 2 system design. This phase embeds the
+        key framework principles of systemic coherence, instructional relevance, structured adaptability,
+        evidence-based reflexive monitoring, equity, transparency, leadership commitment, and calibration.
+      </p>
+    </header>
+
+    <main class="phase-grid">
+      <!-- Sidebar -->
+      <aside class="sidebar-card">
+        <h2>Phase 1 Map</h2>
+        <p class="subtle">Use this as your navigation and implementation guide for Laying the Groundwork.</p>
+
+        <div class="sidebar-section-title">Core Sections</div>
+        <ul class="sidebar-list">
+          <li><a href="#phase1-narrative">Narrative Overview</a></li>
+          <li><a href="#phase1-areas-changes">Areas for Improvement & Changes</a></li>
+          <li><a href="#phase1-principles">Principle-Based Design</a></li>
+          <li><a href="#phase1-outputs">Phase 1 Outputs</a></li>
+        </ul>
+
+        <div class="sidebar-section-title">Leadership Tools</div>
+        <ul class="sidebar-list">
+          <li><a href="#phase1-checklists">Six Pillars Checklist</a></li>
+          <li><a href="#phase1-checklists">Continuum Checklist</a></li>
+          <li><a href="#phase1-checklists">DDIER Checklist</a></li>
+        </ul>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="content-column">
+
+        <!-- Narrative Card -->
+        <section class="card" id="phase1-narrative">
+          <h2>Phase 1 Narrative Overview</h2>
+          <p>
+            Phase 1 is strategic, diagnostic, and deeply reflective. It prepares leaders, educators, and community partners
+            to enter the design process with clarity rather than assumptions. Districts begin by identifying existing
+            instructional, cultural, and operational conditions through a comprehensive readiness analysis that examines
+            resource structures, assessment systems, professional learning, instructional practices, community expectations,
+            and student experience data.
+          </p>
+          <p>
+            During this process, teams examine coherence across curriculum, instruction, assessment, and resource allocation.
+            This step directly addresses the <strong>Area for Improvement: the phase does not explicitly link findings to a hierarchy of student outcomes</strong>
+            by requiring every evidence source to be mapped to the district’s student success outcomes, including academic,
+            real-world, durable-skills, well-being, and readiness indicators.
+          </p>
+          <p>
+            Phase 1 now includes a <strong>Systemic Coherence Scan</strong>, a structured tool that ensures schools and districts identify where alignment exists
+            and where fragmentation persists across curriculum, instruction, assessment, and student-support systems. To address
+            the <strong>Area for Improvement: components feel isolated rather than connected</strong>, districts complete a
+            <strong>Phase 1 Outcome Alignment Summary</strong> and a visual <strong>Phase 1 Coherence Map</strong> that show how current practices support (or fail to support)
+            desired outcomes. These are core <strong>Recommended Changes</strong> that make coherence visible, documented, and ready to inform Phase 2 architecture.
+          </p>
+          <p>
+            Instructional relevance is a core requirement. Current research emphasizes that the value of accountability rests on its
+            utility for teachers and students, not its compliance function. To respond to the <strong>Area for Improvement: the phase does not identify instructional implications</strong>,
+            Phase 1 introduces <strong>Instructional Impact Prompts</strong> in all analysis tools. Districts must generate concrete statements such as:
+            “What does this condition imply for instruction?” and “What would a teacher need tomorrow as a result of this finding?”
+            A <strong>Teacher-Level Insights Summary</strong> is also required, addressing the <strong>Area for Improvement: no mechanism ensures data is translated into classroom action</strong>.
+          </p>
+          <p>
+            Structured adaptability is central to scalability. Phase 1 now defines <strong>Core Requirements (the What)</strong>
+            – readiness analysis, coherence mapping, evidence disaggregation, guiding principles verification – and
+            <strong>Flexible Components (the How)</strong>, ensuring districts may adapt tools or engagement structures without compromising integrity.
+            This directly responds to the <strong>Area for Improvement: non-negotiables are not clearly stated</strong>. A
+            <strong>Fidelity-with-Flexibility Rubric</strong> (a key <strong>Recommended Change</strong>) supports consistent understanding of what must remain constant across districts
+            versus what can be customized.
+          </p>
+          <p>
+            Evidence-based monitoring is strengthened through an embedded <strong>Mini-PDSA Cycle</strong>
+            (Plan → Do → Study → Act), addressing the <strong>Area for Improvement: Phase 1 lacks reflexive monitoring or iterative processes</strong>.
+            Teams must Gather, Analyze, Validate, and Reflect on their Phase 1 findings. Each district produces a
+            <strong>Phase 1 Reflection Memo</strong> as a <strong>Recommended Change</strong>, documenting emergent insights and early hypotheses about future system design.
+          </p>
+          <p>
+            Equity is now a non-negotiable analytic lens. To address the <strong>Area for Improvement: Phase 1 does not explicitly address equity or disaggregate evidence</strong>,
+            teams complete an <strong>Equity Readiness Scan</strong> that includes subgroup disaggregation, opportunity-to-learn analysis, barrier identification,
+            and equity-focused stakeholder reflection. This ensures Phase 1 identifies disproportionate experiences and supports
+            Phase 2 in building responsive system architecture.
+          </p>
+          <p>
+            Transparency and communication expectations are explicit. Responding to the <strong>Area for Improvement: there is no communication protocol</strong>,
+            Phase 1 requires a formal <strong>Transparency Protocol</strong> documenting how findings will be shared internally and publicly.
+            Districts also produce a <strong>Phase 1 Community Summary Report</strong>, a key <strong>Recommended Change</strong> that ensures community-facing
+            communication is clear, accessible, and multi-channel.
+          </p>
+          <p>
+            Leadership commitment is essential for Phase 1 integrity. To address the <strong>Area for Improvement: leadership commitment is not codified</strong>,
+            districts must complete a <strong>Leadership Commitment Statement</strong>, signed by district and school leaders, outlining resources,
+            time allocations, and expectations for participation. A <strong>Shared Ownership Map</strong> clarifies who is responsible for each Phase 1 component
+            and supports durable implementation.
+          </p>
+          <p>
+            Finally, implementation reliability is strengthened through calibration. Responding to the
+            <strong>Area for Improvement: lack of calibration protocols</strong>, Phase 1 includes a <strong>Calibration Protocol</strong>,
+            a <strong>Phase 1 Evidence Rating Guide</strong>, and required team training. These <strong>Recommended Changes</strong> ensure consistent
+            interpretation of readiness indicators, reduce variation in data quality, and build trust in the evidence base that
+            anchors Phases 2–6.
+          </p>
+          <p>
+            Collectively, these <strong>Recommended Changes</strong> ensure Phase 1 functions as a powerful, coherent, equity-centered
+            diagnostic engine that prepares districts for high-quality system design in Phase 2 while remaining scalable,
+            sustainable, and rooted in lived, local reality.
+          </p>
+        </section>
+
+        <!-- Explicit AFI & RC list -->
+        <section class="card" id="phase1-areas-changes">
+          <h2>Phase 1 – Embedded Areas for Improvement & Recommended Changes</h2>
+          <p class="subtle">
+            The following Areas for Improvement and Recommended Changes have been directly integrated into Phase 1’s design,
+            tools, and outputs.
+          </p>
+
+          <h3>Areas for Improvement Addressed</h3>
+          <ul>
+            <li><strong>the phase does not explicitly link findings to a hierarchy of student outcomes</strong></li>
+            <li><strong>components feel isolated rather than connected</strong></li>
+            <li><strong>the phase does not identify instructional implications</strong></li>
+            <li><strong>no mechanism ensures data is translated into classroom action</strong></li>
+            <li><strong>non-negotiables are not clearly stated</strong></li>
+            <li><strong>Phase 1 lacks reflexive monitoring or iterative processes</strong></li>
+            <li><strong>Phase 1 does not explicitly address equity or disaggregate evidence</strong></li>
+            <li><strong>there is no communication protocol</strong></li>
+            <li><strong>leadership commitment is not codified</strong></li>
+            <li><strong>lack of calibration protocols</strong></li>
+          </ul>
+
+          <h3>Recommended Changes Now Built into Phase 1</h3>
+          <ul>
+            <li><strong>Systemic Coherence Scan</strong></li>
+            <li><strong>Phase 1 Outcome Alignment Summary</strong></li>
+            <li><strong>Phase 1 Coherence Map</strong></li>
+            <li><strong>Instructional Impact Prompts</strong></li>
+            <li><strong>Teacher-Level Insights Summary</strong></li>
+            <li><strong>Core Requirements (the What)</strong> and <strong>Flexible Components (the How)</strong></li>
+            <li><strong>Fidelity-with-Flexibility Rubric</strong></li>
+            <li><strong>Mini-PDSA Cycle</strong> for Phase 1</li>
+            <li><strong>Phase 1 Reflection Memo</strong></li>
+            <li><strong>Equity Readiness Scan</strong> with disaggregation and opportunity-to-learn analysis</li>
+            <li><strong>Transparency Protocol</strong></li>
+            <li><strong>Phase 1 Community Summary Report</strong></li>
+            <li><strong>Leadership Commitment Statement</strong></li>
+            <li><strong>Shared Ownership Map</strong></li>
+            <li><strong>Calibration Protocol</strong> and <strong>Phase 1 Evidence Rating Guide</strong></li>
+          </ul>
+        </section>
+
+        <!-- Principle alignment / outputs -->
+        <section class="card" id="phase1-principles">
+          <h2>Phase 1 – Principle-Based Design</h2>
+          <p>
+            Phase 1 is deliberately aligned to the Framework Principle Criteria:
+            Systemic Coherence & Outcome Alignment (SCOA), Instructional Relevance & Actionability (IRA),
+            Structured Adaptability & Protection of Core (SAPC), Evidence-Based Reflexive Monitoring (EBRM),
+            Equitable Design & Impact (EDI), Stakeholder Transparency & Communication (STC),
+            Leadership Commitment & Sustained Ownership (LCSO), and Implementation Reliability & Calibration (IRC).
+          </p>
+          <p>
+            Key Phase 1 tools and outputs:
+          </p>
+          <ul>
+            <li><span class="tag-pill">SCOA</span><strong>Systemic Coherence Scan</strong>, <strong>Phase 1 Outcome Alignment Summary</strong>, and <strong>Phase 1 Coherence Map</strong></li>
+            <li><span class="tag-pill">IRA</span><strong>Instructional Impact Prompts</strong> and <strong>Teacher-Level Insights Summary</strong></li>
+            <li><span class="tag-pill">SAPC</span><strong>Core Requirements (the What)</strong>, <strong>Flexible Components (the How)</strong>, and <strong>Fidelity-with-Flexibility Rubric</strong></li>
+            <li><span class="tag-pill">EBRM</span><strong>Mini-PDSA Cycle</strong> and <strong>Phase 1 Reflection Memo</strong></li>
+            <li><span class="tag-pill">EDI</span><strong>Equity Readiness Scan</strong> and disaggregated evidence expectations</li>
+            <li><span class="tag-pill">STC</span><strong>Transparency Protocol</strong> and <strong>Phase 1 Community Summary Report</strong></li>
+            <li><span class="tag-pill">LCSO</span><strong>Leadership Commitment Statement</strong> and <strong>Shared Ownership Map</strong></li>
+            <li><span class="tag-pill">IRC</span><strong>Calibration Protocol</strong> and <strong>Phase 1 Evidence Rating Guide</strong></li>
+          </ul>
+        </section>
+
+        <!-- Outputs card -->
+        <section class="card" id="phase1-outputs">
+          <h2>Phase 1 – Required Outputs</h2>
+          <ul>
+            <li><strong>Phase 1 Outcome Alignment Summary</strong></li>
+            <li><strong>Phase 1 Coherence Map</strong></li>
+            <li><strong>Equity Readiness Scan</strong> and disaggregated data tables</li>
+            <li><strong>Teacher-Level Insights Summary</strong></li>
+            <li><strong>Phase 1 Reflection Memo</strong> (Mini-PDSA documentation)</li>
+            <li><strong>Leadership Commitment Statement</strong> and <strong>Shared Ownership Map</strong></li>
+            <li><strong>Transparency Protocol</strong> and <strong>Phase 1 Community Summary Report</strong></li>
+            <li><strong>Calibration Protocol</strong> and <strong>Phase 1 Evidence Rating Guide</strong></li>
+          </ul>
+          <p class="subtle">
+            These outputs become the required bridge into Phase 2: Designing the Vision and Architecture of the Local Accountability System.
+          </p>
+        </section>
+
+        <!-- Checklists -->
+        <section class="card" id="phase1-checklists">
+          <h2>Phase 1 Checklists for Leaders & Users</h2>
+          <p class="subtle">
+            Use these checklists as you begin your Local Accountability journey. They are organized by the Six Pillars,
+            the Local Accountability Continuum, and the DDIER cycle.
+          </p>
+
+          <div class="checklist-columns">
+
+            <!-- Six Pillars -->
+            <div class="checklist-card">
+              <h3>Checklist A – Six Pillars</h3>
+              <strong>1. Purpose & Theory of Action</strong>
+              <ul>
+                <li><input type="checkbox"> Guiding Principles reviewed and affirmed</li>
+                <li><input type="checkbox"> <strong>Systemic Coherence Scan</strong> completed</li>
+                <li><input type="checkbox"> <strong>Phase 1 Outcome Alignment Summary</strong> produced</li>
+                <li><input type="checkbox"> <strong>Phase 1 Coherence Map</strong> documented</li>
+                <li><input type="checkbox"> <strong>Leadership Commitment Statement</strong> signed</li>
+              </ul>
+              <strong>2. Governance & Leadership</strong>
+              <ul>
+                <li><input type="checkbox"> <strong>Shared Ownership Map</strong> completed</li>
+                <li><input type="checkbox"> Leadership roles and responsibilities documented</li>
+                <li><input type="checkbox"> Protected time allocated for Phase 1 activities</li>
+              </ul>
+              <strong>3. Community Engagement & Advocacy</strong>
+              <ul>
+                <li><input type="checkbox"> <strong>Transparency Protocol</strong> established</li>
+                <li><input type="checkbox"> <strong>Phase 1 Community Summary Report</strong> drafted</li>
+                <li><input type="checkbox"> Stakeholder listening sessions and feedback activities conducted</li>
+              </ul>
+              <strong>4. Data Validation & Utilization</strong>
+              <ul>
+                <li><input type="checkbox"> <strong>Equity Readiness Scan</strong> completed</li>
+                <li><input type="checkbox"> All evidence disaggregated by student subgroup</li>
+                <li><input type="checkbox"> <strong>Calibration Protocol</strong> executed</li>
+                <li><input type="checkbox"> <strong>Phase 1 Evidence Rating Guide</strong> applied</li>
+              </ul>
+              <strong>5. Evaluating Progress & Impact</strong>
+              <ul>
+                <li><input type="checkbox"> <strong>Mini-PDSA Cycle</strong> for Phase 1 completed</li>
+                <li><input type="checkbox"> <strong>Phase 1 Reflection Memo</strong> written</li>
+                <li><input type="checkbox"> <strong>Instructional Impact Prompts</strong> responses documented</li>
+                <li><input type="checkbox"> <strong>Teacher-Level Insights Summary</strong> created</li>
+              </ul>
+              <strong>6. Reporting & Transparency</strong>
+              <ul>
+                <li><input type="checkbox"> Public-facing documents prepared using plain language</li>
+                <li><input type="checkbox"> Findings shared via multi-channel communication (web, meetings, print)</li>
+                <li><input type="checkbox"> Internal and external feedback loops established</li>
+              </ul>
+            </div>
+
+            <!-- Continuum -->
+            <div class="checklist-card">
+              <h3>Checklist B – Local Accountability Continuum</h3>
+              <strong>1. Define Success for Students</strong>
+              <ul>
+                <li><input type="checkbox"> Student success outcomes clarified and documented</li>
+                <li><input type="checkbox"> Gaps between desired and actual student experiences identified</li>
+                <li><input type="checkbox"> Findings incorporated into the <strong>Phase 1 Outcome Alignment Summary</strong></li>
+              </ul>
+              <strong>2. Design Vibrant Learning Experiences</strong>
+              <ul>
+                <li><input type="checkbox"> <strong>Instructional Impact Prompts</strong> completed for key findings</li>
+                <li><input type="checkbox"> <strong>Teacher-Level Insights Summary</strong> reflects concrete instructional implications</li>
+              </ul>
+              <strong>3. Demonstrate Student Success</strong>
+              <ul>
+                <li><input type="checkbox"> Evidence sources mapped to student outcomes and equity metrics</li>
+                <li><input type="checkbox"> Readiness analysis identifies performance gaps across student groups</li>
+              </ul>
+              <strong>4. Define Success for the Local School District</strong>
+              <ul>
+                <li><input type="checkbox"> System-level readiness evaluated (governance, staffing, resources)</li>
+                <li><input type="checkbox"> Fragmentation and coherence documented in the <strong>Phase 1 Coherence Map</strong></li>
+              </ul>
+              <strong>5. Design an Interactive Local Accountability System</strong>
+              <ul>
+                <li><input type="checkbox"> Phase 1 outputs assembled as required inputs for Phase 2 design</li>
+                <li><input type="checkbox"> <strong>Core Requirements (the What)</strong> and <strong>Flexible Components (the How)</strong> identified</li>
+              </ul>
+              <strong>6. Demonstrate Success of the Local School District</strong>
+              <ul>
+                <li><input type="checkbox"> <strong>Transparency Protocol</strong> and public reporting expectations defined</li>
+                <li><input type="checkbox"> Equity and calibration foundations in place to support later measures of district success</li>
+              </ul>
+            </div>
+
+            <!-- DDIER -->
+            <div class="checklist-card">
+              <h3>Checklist C – DDIER Cycle</h3>
+              <strong>Design</strong>
+              <ul>
+                <li><input type="checkbox"> Guiding Principles for Local Accountability confirmed and documented</li>
+                <li><input type="checkbox"> Intended Phase 1 outputs defined and communicated to teams</li>
+              </ul>
+              <strong>Development</strong>
+              <ul>
+                <li><input type="checkbox"> <strong>Systemic Coherence Scan</strong> and evidence collection tools developed or selected</li>
+                <li><input type="checkbox"> <strong>Equity Readiness Scan</strong> tools and subgroup disaggregation structures prepared</li>
+              </ul>
+              <strong>Implementation</strong>
+              <ul>
+                <li><input type="checkbox"> Teams trained using the <strong>Calibration Protocol</strong> and <strong>Phase 1 Evidence Rating Guide</strong></li>
+                <li><input type="checkbox"> Stakeholder engagement activities (listening sessions, surveys, focus groups) implemented</li>
+              </ul>
+              <strong>Evaluation</strong>
+              <ul>
+                <li><input type="checkbox"> <strong>Mini-PDSA Cycle</strong> completed for Phase 1 processes</li>
+                <li><input type="checkbox"> <strong>Phase 1 Reflection Memo</strong> synthesizes insights, tensions, and early decisions</li>
+              </ul>
+              <strong>Revision</strong>
+              <ul>
+                <li><input type="checkbox"> Adjustments identified for Phase 2 design based on Phase 1 findings</li>
+                <li><input type="checkbox"> Feedback from stakeholders and implementation teams incorporated into revised readiness profile</li>
+              </ul>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
   </div>
-
-  <h1>Local Accountability Design Map</h1>
-  <h2>Phase 1: Design (DDIER), Pillar 1, and Defining Success for Students</h2>
-
-  <div class="section">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Phase 1 Overview</h3>
-    <p>
-      In the Design stage of DDIER, the district answers a simple but powerful question:
-      <strong>What does success look like for our students, in our community, right now and in the future</strong>.
-      <span class="pillartxt">Pillar 1: Purpose and Logic Model</span> anchors this work and keeps it from becoming another short term initiative.
-      Design is where the district clarifies its vision, names the outcomes that truly matter, and creates a shared logic model that connects daily classroom practice to long term student readiness.
-    </p>
-    <p>
-      At this stage, a coalition of students, families, educators, leaders, and community partners comes together to
-      <strong>co create a Portrait of a Learner</strong>.
-      That portrait emphasizes inquiry, collaboration, and other local priorities.
-      It becomes the living picture of what it means to be successful in this district and anchors the
-      <span class="continuumtxt">Define Success for Students</span> phase in the Local Accountability Continuum.
-    </p>
-    <div class="highlight">
-      <strong>Key Insight:</strong>
-      Design is not just about choosing metrics.
-      It is about agreeing on who students are becoming, then building a simple, coherent logic model that keeps every decision tied to that purpose.
-    </div>
-  </div>
-
-  <div class="section" id="current-conditions-1">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Current Conditions</h3>
-    <p>
-      Phase 1 begins in the real world, not on a blank page.
-      Most districts enter Design with state accountability as the primary scoreboard, fragmented initiatives around instruction and assessment, and a set of mission or vision statements that do not yet drive daily decisions.
-      Staff and families may feel the tension between what they value for students and what current systems measure, but they do not yet have a shared way to describe or address that gap.
-    </p>
-    <p>
-      In many systems, conversations about “student success” are still dominated by test scores and graduation rates.
-      Portraits of a Learner, Measures of Quality, and performance assessments may exist in pockets, but they are not yet stitched together into a single, coherent story.
-      Phase 1 acknowledges these conditions honestly so that Define Success for Students is grounded in lived experience, not aspiration alone.
-    </p>
-    <div class="highlight">
-      <strong>Why This Matters:</strong>
-      Clear-eyed, on-the-ground conditions help the coalition name what must change, what should be preserved, and where the Portrait and logic model must challenge the status quo.
-    </div>
-  </div>
-
-  <div class="section" id="guiding-principles-1">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Guiding Principles for Phase 1 Design</h3>
-    <div class="mini-grid">
-      <div class="card pillar">
-        <h4 class="pillartxt">Coherence Over Collection</h4>
-        <p>
-          Design is about connecting what already exists into a coherent story, not inventing entirely new work.
-          The Portrait and logic model become organizing tools that help the district simplify, align, and prioritize.
-          If a measure, initiative, or routine does not clearly support the Portrait, it is reconsidered or retired.
-        </p>
-      </div>
-      <div class="card continuum">
-        <h4 class="continuumtxt">Community Co-Design</h4>
-        <p>
-          Define Success for Students is co-created with students, staff, families, and community partners.
-          This principle keeps the work from becoming a central office document and ensures that the Portrait reflects local values, equity commitments, and emerging opportunities for young people.
-        </p>
-      </div>
-    </div>
-    <div class="mini-grid" style="margin-top:16px;">
-      <div class="card ddier">
-        <h4 class="ddiertxt">Evidence as Learning</h4>
-        <p>
-          From the beginning, Phase 1 treats evidence not as a compliance requirement but as a way to understand and improve learning.
-          The Portrait and logic model foreground Growth, Mastery, and Readiness, signaling that local accountability will prioritize student work, performance tasks, and lived experiences alongside test scores.
-        </p>
-      </div>
-      <div class="card bestpractice">
-        <h4 class="bestpracticetxt">Simplicity and Usability</h4>
-        <p>
-          The Portrait, logic model, and early evidence map must be simple enough to fit on a page and usable enough for students and families to understand.
-          If people cannot explain the design in plain language, it will be hard to implement and even harder to sustain.
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PAGE 2: Preconditions, Systems & Architecture (Conceptual), Design Workstreams -->
-<div class="page" id="preconditions-readiness-1">
-  <div class="section">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Preconditions &amp; Readiness for Phase 1</h3>
-    <p>
-      Before entering Phase 1 fully, districts need a baseline level of readiness so that Design is more than a one-time retreat.
-      These conditions do not have to be perfect, but they must be present enough to support honest, focused work.
-    </p>
-    <div class="mini-grid">
-      <div class="card pillar">
-        <h4>Minimum Criteria for Entry</h4>
-        <ul class="step-list">
-          <li>Leadership agreement that local accountability will prioritize learning, not just test scores and rankings.</li>
-          <li>Board and cabinet willingness to invest time and attention in defining student success, not just monitoring existing dashboards.</li>
-          <li>Initial understanding of the Six Pillars, the Local Accountability Continuum, and the DDIER cycle as the frame for the work.</li>
-          <li>Commitment to include student, staff, family, and community voices as co-designers, not just as audience members.</li>
-        </ul>
-      </div>
-      <div class="card continuum">
-        <h4>Readiness Indicators</h4>
-        <ul class="step-list">
-          <li>Leaders can describe current accountability limits and name why a more vibrant, locally grounded model is needed.</li>
-          <li>Staff are asking for better ways to capture student learning, growth, and readiness beyond the state test.</li>
-          <li>There is at least one existing effort (Portrait, performance assessments, or portfolios) that can be strengthened and connected.</li>
-          <li>Stakeholder groups are open to engaging in design work and have a basic understanding of the district’s aspirations.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="highlight">
-      <strong>Why This Matters:</strong>
-      Preconditions ensure Phase 1 does not become a symbolic exercise.
-      When readiness is real, the design work has a place to land and momentum to build on.
-    </div>
-  </div>
-
-  <div class="section" id="systems-architecture-1">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Systems &amp; Architecture in Phase 1 (Conceptual Design Architecture)</h3>
-    <p>
-      In Phase 1, “Systems &amp; Architecture” refers to the conceptual design architecture, not yet the full set of operational tools.
-      The focus is on defining the big pieces that will later become performance assessments, Measures of Quality, dashboards, and reporting routines.
-      The Portrait and logic model act as the structural beams that will support everything else.
-    </p>
-    <div class="logic-columns">
-      <div class="logic-box">
-        <h4>Vision &amp; Portrait Architecture</h4>
-        <ul>
-          <li>A co-created Portrait of a Learner that names core traits such as inquiry, collaboration, communication, and real-world problem solving.</li>
-          <li>Student-friendly language and visuals that make the Portrait visible in classrooms and community spaces.</li>
-          <li>Explicit links between Portrait traits, state standards, and graduation expectations.</li>
-        </ul>
-      </div>
-      <div class="logic-box">
-        <h4>Logic Model Architecture</h4>
-        <ul>
-          <li>A Phase 1 logic model that connects inputs, key activities, outputs, and outcomes to the Portrait.</li>
-          <li>Shared understanding of how classroom experiences, school conditions, and district supports interact to produce student readiness.</li>
-          <li>A simple one-page visual that can be used in schools, board meetings, and community sessions.</li>
-        </ul>
-      </div>
-      <div class="logic-box">
-        <h4>Evidence Architecture</h4>
-        <ul>
-          <li>An initial evidence map that lists existing data sources and where they do (and do not) reflect the Portrait and Measures of Quality.</li>
-          <li>Draft criteria for what counts as compelling evidence of Growth, Mastery, and Readiness.</li>
-          <li>Early examples of student work and performance tasks that illustrate deeper learning.</li>
-        </ul>
-      </div>
-      <div class="logic-box">
-        <h4>Governance Architecture</h4>
-        <ul>
-          <li>A defined local accountability leadership or advisory group with student, staff, family, and community representation.</li>
-          <li>Agreements about how information tied to the Portrait and Measures of Quality will be used by the board and leadership teams.</li>
-          <li>Initial protocols for feedback, revision, and communication as the design evolves.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="tag-row">
-      <span class="tag pillartxt">Pillar 1: Purpose &amp; Logic Model</span>
-      <span class="tag continuumtxt">Define Success for Students</span>
-      <span class="tag ddiertxt">Design (DDIER)</span>
-    </div>
-  </div>
-
-  <div class="section" id="design-workstreams-1">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Phase 1 Design Workstreams</h3>
-    <p>
-      To keep Phase 1 focused and actionable, districts often organize the work into a few key design workstreams.
-      These workstreams set up later development and implementation phases without overloading the system.
-    </p>
-    <div class="mini-grid">
-      <div class="card pillar">
-        <h4>Workstream 1: Portrait of a Learner</h4>
-        <ul class="step-list">
-          <li>Convene a representative coalition to surface hopes, priorities, and non-negotiables for student success.</li>
-          <li>Draft, revise, and finalize a Portrait of a Learner with student-friendly descriptors.</li>
-          <li>Check the Portrait against standards, graduation requirements, and local workforce and civic needs.</li>
-          <li>Develop visuals and language that can be used across schools and community settings.</li>
-        </ul>
-      </div>
-      <div class="card continuum">
-        <h4>Workstream 2: Logic Model &amp; Evidence Map</h4>
-        <ul class="step-list">
-          <li>Translate the Portrait into a simple logic model that shows how daily work leads to student outcomes.</li>
-          <li>Map existing data sources and identify where Growth, Mastery, and Readiness are already visible.</li>
-          <li>Identify evidence gaps, especially around deeper learning, student agency, and real-world application.</li>
-          <li>Draft initial ideas for performance tasks, portfolios, and Measures of Quality that will fill those gaps.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="mini-grid" style="margin-top:16px;">
-      <div class="card ddier">
-        <h4 class="ddiertxt">Workstream 3: Governance &amp; Engagement</h4>
-        <ul class="step-list">
-          <li>Define the role, membership, and expectations for the local accountability leadership or advisory group.</li>
-          <li>Design feedback cycles so students, staff, families, and community partners can react to drafts.</li>
-          <li>Establish routines for reporting back “you said, we did” to build trust and reciprocity.</li>
-          <li>Align board agendas and leadership meetings so the Portrait and logic model become regular reference points.</li>
-        </ul>
-      </div>
-      <div class="card bestpractice">
-        <h4 class="bestpracticetxt">Workstream 4: Communication &amp; Story</h4>
-        <ul class="step-list">
-          <li>Develop a simple narrative that explains why the district is redefining success and how local accountability will work.</li>
-          <li>Create communication tools (slides, one-page summaries, talking points) for leaders, teachers, and students.</li>
-          <li>Identify early stories and examples of vibrant learning that illustrate the Portrait and logic model in action.</li>
-          <li>Plan how Phase 1 outcomes will be introduced to staff, families, and the board over the course of the year.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PAGE 3: Milestones & Progress, Evidence & Learning Loop -->
-<div class="page" id="milestones-progress-1">
-  <div class="section">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Milestones &amp; Progress Indicators for Phase 1</h3>
-    <p>
-      Milestones in Phase 1 are not test scores.
-      They are evidence that the design work is becoming real, visible, and shared across the system.
-      These indicators help teams know whether they are on track before moving into full development.
-    </p>
-    <div class="mini-grid">
-      <div class="card pillar">
-        <h4>Design Milestones</h4>
-        <ul class="step-list">
-          <li>A draft Portrait of a Learner has been created, reviewed, and refined with input from multiple stakeholder groups.</li>
-          <li>The Portrait is visible in at least some classrooms, meetings, and communications, not just in planning documents.</li>
-          <li>A one-page logic model is complete and being used by leaders to guide conversations about instruction and assessment.</li>
-          <li>An initial evidence map has highlighted where existing measures align with the Portrait and where new evidence is needed.</li>
-        </ul>
-      </div>
-      <div class="card continuum">
-        <h4>Progress Indicators</h4>
-        <ul class="step-list">
-          <li>Students and adults can describe the Portrait traits in their own words and connect them to real learning experiences.</li>
-          <li>School improvement plans and leadership agendas reference the Portrait and Measures of Quality, even in early stages.</li>
-          <li>At least one example of a Next Generation Readiness Assessment or performance task is being piloted as a proof of concept.</li>
-          <li>Board and community conversations are beginning to shift from only test scores to a broader story of Growth, Mastery, and Readiness.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="highlight">
-      <strong>Why This Matters:</strong>
-      These milestones signal that the system is ready to move from defining success to building the tools and routines that will make that success visible.
-    </div>
-  </div>
-
-  <div class="section" id="evidence-learning-loop-1">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Evidence &amp; Learning Loop for Phase 1</h3>
-    <p>
-      Phase 1 uses evidence to test whether the design is clear, compelling, and usable.
-      The learning loop combines <strong>Evidence of Efficacy</strong>, <strong>Guiding Questions</strong>, and <strong>Reflection</strong> so leaders can adjust before moving into large-scale development.
-    </p>
-
-    <div class="mini-grid">
-      <div class="card pillar">
-        <h4>Evidence of Efficacy</h4>
-        <ul class="step-list">
-          <li>The Portrait of a Learner and logic model are referenced in board presentations, school improvement plans, and principal meetings, not only in launch documents.</li>
-          <li>Unit plans, performance assessments, and Next Generation Readiness Assessments explicitly connect standards to Portrait traits and local definitions of success.</li>
-          <li>Student work, including digital portfolios, shows evidence of durable skills like communication, collaboration, and problem solving, not just test prep tasks.</li>
-          <li>Stakeholder surveys reflect growing understanding of the Portrait and Measures of Quality, and families can describe what success looks like in their own words.</li>
-          <li>Board conversations and district dashboards begin to focus on Growth, Mastery, and Readiness as a balanced story, rather than only a single test snapshot.</li>
-        </ul>
-      </div>
-
-      <div class="card continuum">
-        <h4>Guiding Questions</h4>
-        <ul class="step-list">
-          <li>Where is our Portrait of a Learner and logic model already visible in daily work, and where is it still mostly living in slide decks and posters.</li>
-          <li>Do our current metrics and reports reflect the full picture of success we named in Phase 1, or are we still over weighted toward a few state assessments.</li>
-          <li>How often do school and district teams use the Portrait and logic model when making decisions about curriculum, assessment, staffing, or resource allocation.</li>
-          <li>What evidence tells us that students are experiencing more vibrant, relevant learning since we defined success for students in this way.</li>
-          <li>Where are we hearing confusion or mixed messages about what matters most, and what adjustments to the design or communication are needed.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card ddier" style="margin-top:16px;">
-      <h4 class="ddiertxt">Learning Loop (Reflection)</h4>
-      <ul class="step-list">
-        <li>As a superintendent or district leader, where has the Phase 1 design clarified your own decision making, and where do you still feel pulled back toward old scoreboard thinking.</li>
-        <li>As a principal, how has the Portrait of a Learner changed the way you talk with staff about instruction, feedback, and evidence of learning in classrooms.</li>
-        <li>As a teacher, in what ways has the design helped you see your students differently, and what kinds of tasks or assessments are you now more excited to create.</li>
-        <li>Across the system, what have we learned about our community values and hopes for students through this design process, and how are we honoring those insights in our next steps.</li>
-        <li>What is one practice, report, or routine we should stop, start, or strengthen so that our daily work lines up more fully with the success we have defined for students.</li>
-      </ul>
-      <div class="highlight">
-        <strong>Use in Practice:</strong>
-        Districts can build these prompts into annual retreats, leadership team agendas, and staff reflection tools so that Phase 1 remains a living checkpoint, not a one time event.
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PAGE 4: Stakeholder Roles, Risks & Mitigation -->
-<div class="page" id="stakeholder-roles-1">
-  <div class="section">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Stakeholder Roles in Phase 1: Engagement, Empowerment, and Reciprocity</h3>
-    <p>
-      Local accountability only becomes real when every stakeholder group has a visible role in Phase 1.
-      Engagement is about participation, empowerment is about influence, and reciprocity is about shared responsibility and benefit.
-      In this phase, each group contributes to defining success, reviewing evidence, and shaping the logic model so that the system reflects lived experience, not just central office design.
-    </p>
-    <p>
-      The boxes below describe what each group is doing during Phase 1 when engagement, empowerment, and reciprocity are working well.
-      These roles keep the work grounded in classrooms, responsive to families, and aligned to community hopes for students.
-    </p>
-
-    <div class="grid">
-      <div class="card pillar">
-        <h4>School and District Leaders</h4>
-        <ul class="step-list">
-          <li>Convene and support a representative coalition to co create the Portrait of a Learner and the Phase 1 logic model.</li>
-          <li>Share data, context, and constraints transparently so partners can make informed contributions to the design.</li>
-          <li>Model reciprocity by listening first, adjusting drafts based on feedback, and clearly naming what changed because stakeholders spoke up.</li>
-          <li>Use the emerging Portrait and logic model to guide their own decisions, reinforcing that leaders are also accountable to the design.</li>
-        </ul>
-      </div>
-
-      <div class="card continuum">
-        <h4>Teachers and School Staff</h4>
-        <ul class="step-list">
-          <li>Translate early Portrait and logic model drafts into sample tasks, units, and reflections to test how the design plays out in classrooms.</li>
-          <li>Bring student work, questions, and reflections back to the coalition so real classroom evidence shapes Phase 1 decisions.</li>
-          <li>Offer professional insights on what is realistic, what is promising, and what supports are needed for vibrancy to take root.</li>
-          <li>Co lead communication with students and families so the Portrait becomes a shared language, not just a poster or slide.</li>
-        </ul>
-      </div>
-
-      <div class="card ddier">
-        <h4 class="ddiertxt">Parents and Guardians</h4>
-        <ul class="step-list">
-          <li>Participate in listening sessions, advisory councils, and design meetings that explore what success should look like beyond test scores.</li>
-          <li>Share stories about their children’s strengths, challenges, and aspirations to ground the Portrait and logic model in real family experience.</li>
-          <li>Respond to surveys and feedback loops that ask them to react to draft Portrait traits, student evidence, and early definitions of readiness.</li>
-          <li>Partner with schools to help students reflect on learning at home, reinforcing that accountability is a shared effort, not a one way report.</li>
-        </ul>
-      </div>
-
-      <div class="card pillar">
-        <h4>Students</h4>
-        <ul class="step-list">
-          <li>Serve on student panels or councils that react to draft Portrait traits and describe what success feels like from their point of view.</li>
-          <li>Provide examples of work, projects, and experiences that they believe show who they are and what they can do.</li>
-          <li>Give feedback on reflection prompts, portfolios, and performance tasks so Phase 1 designs are meaningful and authentic to them.</li>
-          <li>Practice self assessment and goal setting using draft Portrait language, modeling the kind of agency the system hopes to cultivate.</li>
-        </ul>
-      </div>
-
-      <div class="card continuum">
-        <h4>Community and Partners</h4>
-        <ul class="step-list">
-          <li>Participate in coalition meetings, focus groups, and design sessions that connect the Portrait to local workforce, civic, and community needs.</li>
-          <li>Offer examples of real world challenges, internships, and service projects that can later become performance tasks and evidence of readiness.</li>
-          <li>Help interpret local data through a community lens, asking whether measures and definitions reflect what matters for life beyond school.</li>
-          <li>Act as accountability partners by asking how the emerging design advances equity, opportunity, and long-term community well being.</li>
-        </ul>
-      </div>
-
-      <div class="card bestpractice">
-        <h4 class="bestpracticetxt">Best Practices Across Stakeholders</h4>
-        <ul class="step-list">
-          <li>Co design structures such as councils, design teams, and feedback cycles in which each stakeholder group has a defined voice and role.</li>
-          <li>Use transparent feedback loops, including surveys, listening sessions, and student panels, and publicly share what changed because of that input.</li>
-          <li>Create shared learning sessions where stakeholders review evidence together, rather than in separate silos, so everyone sees the same story of success.</li>
-          <li>Rotate visible leadership opportunities such as student facilitators, family co chairs, and teacher leads, which reinforces reciprocity and shared ownership.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="highlight">
-      <strong>Why This Matters:</strong>
-      When engagement, empowerment, and reciprocity are built into Phase 1, local accountability becomes something districts do with their community, not to them.
-      Stakeholders see their ideas reflected in the Portrait, logic model, and early evidence.
-      This shared ownership builds trust, strengthens implementation, and makes it far more likely that future phases will stay focused on vibrant learning and real student readiness.
-    </div>
-  </div>
-
-  <div class="section" id="risks-mitigation-1">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Risks &amp; Mitigation Strategies in Phase 1</h3>
-    <p>
-      Phase 1 carries real risks if the work is rushed, overdesigned, or disconnected from daily practice.
-      The table below reflects lessons learned in districts like Fleming County that have treated Phase 1 as both a design lab and a reality check.
-    </p>
-    <div class="mini-grid">
-      <div class="card pillar">
-        <h4>Common Risks</h4>
-        <ul class="step-list">
-          <li><strong>Scoreboard Gravity:</strong> The system quietly snaps back to test scores as the primary definition of success, even as new language is introduced.</li>
-          <li><strong>Portrait Fatigue:</strong> Staff and students see the Portrait as another poster or slogan, not as a tool that changes instruction or feedback.</li>
-          <li><strong>Overcomplexity:</strong> The logic model and evidence map become too detailed, making it hard for people to see the big picture.</li>
-          <li><strong>Thin Engagement:</strong> Stakeholder input is gathered but not visibly used, creating cynicism and weakening trust.</li>
-          <li><strong>Premature Pressure:</strong> Boards or leaders treat early design artifacts as high-stakes accountability tools before the system is ready.</li>
-        </ul>
-      </div>
-      <div class="card continuum">
-        <h4>Mitigation Strategies</h4>
-        <ul class="step-list">
-          <li>Anchor every major conversation and decision in the Portrait and Measures of Quality, not just in test score trends.</li>
-          <li>Build quick-win examples where the Portrait reshapes a unit, performance task, or BPI Website, and make those examples highly visible.</li>
-          <li>Keep the logic model to a single page and the evidence map to a simple, revisitable visual that can be refined over time.</li>
-          <li>Use “you said, we did” feedback loops to show how student, staff, family, and community input shaped the final design.</li>
-          <li>Clarify that Phase 1 artifacts are design tools, not rating tools, and set a clear timeline for when and how evidence will be used for accountability.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="highlight">
-      <strong>Field Insight:</strong>
-      Treating Phase 1 as a learning phase, rather than a public grading phase, allows the system to grow stronger roots before it carries high-stakes weight.
-    </div>
-  </div>
-</div>
-
-<!-- PAGE 5: Phase 1 Key Outcome, Practice in Action, Implementation Supports, Research Base -->
-<div class="page" id="phase1-key-outcome">
-  <div class="section">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Phase 1 Key Outcome</h3>
-    <p>
-      By the end of Phase 1, the district should have more than a vision statement.
-      It should have a small set of concrete products that anchor local accountability and create a strong runway into Phase 2 Development.
-      These outcomes make it possible to build systems, tools, and routines that are aligned from the start, instead of bolting accountability onto existing work.
-    </p>
-
-    <div class="mini-grid">
-      <div class="card pillar">
-        <h4>Shared Definition of Student Success</h4>
-        <ul class="step-list">
-          <li>A finalized Portrait of a Learner that has been co created with students, staff, families, and community partners.</li>
-          <li>Student friendly language and visuals that describe the Portrait traits and can be used in classrooms, hallways, and family communication.</li>
-          <li>Clear connections between the Portrait, state standards, and graduation expectations so staff can see how everything fits together.</li>
-          <li>A short narrative that explains what success looks like in this district, in plain language that any stakeholder can understand.</li>
-        </ul>
-      </div>
-
-      <div class="card continuum">
-        <h4>Coherent Logic Model and Evidence Map</h4>
-        <ul class="step-list">
-          <li>A district logic model that links inputs, key activities, outputs, and outcomes to the Portrait and local definitions of success.</li>
-          <li>An initial map of existing data sources and evidence, including where Growth, Mastery, and Readiness are already visible and where there are gaps.</li>
-          <li>Draft criteria for what counts as compelling evidence of student learning, including examples of performance tasks and student work.</li>
-          <li>A simple visual that shows how classroom evidence, school measures, and district reporting connect across the local accountability system.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="mini-grid" style="margin-top:16px;">
-      <div class="card ddier">
-        <h4 class="ddiertxt">Governance, Engagement, and Communication</h4>
-        <ul class="step-list">
-          <li>A clearly defined local accountability leadership or advisory group, with roles for students, staff, families, and community members.</li>
-          <li>A communication plan that explains the Portrait, logic model, and local accountability journey to stakeholders on a regular schedule.</li>
-          <li>Agreement on how the board of education will receive and use information that is tied to the Portrait and Measures of Quality.</li>
-          <li>Protocols for listening sessions and feedback loops so that future phases continue to be co designed, not just announced.</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h4>Readiness for Phase 2 Development</h4>
-        <ul class="step-list">
-          <li>A prioritized list of systems and tools that need to be built or refined in Phase 2, such as performance assessments, dashboards, and reporting templates.</li>
-          <li>Agreement on a small set of early implementation indicators that will show whether the design is starting to take root in classrooms and schools.</li>
-          <li>Initial alignment between professional learning plans and the Portrait and logic model, so that Phase 2 support is focused and coherent.</li>
-          <li>A shared understanding across leadership that Phase 2 will be about building and testing, not redefining success, which protects the work of Phase 1.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="highlight">
-      <strong>Why This Matters:</strong>
-      When these outcomes are in place, Phase 2 Development can move faster and with less confusion.
-      Teams are not debating what success looks like.
-      They are building the systems that will help students, staff, and the community live into that definition every day.
-    </div>
-  </div>
-
-  <div class="section" id="practice-in-action-1">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Practice in Action: Phase 1 in Fleming County Schools</h3>
-    <p>
-      Fleming County Schools has treated Phase 1 Design as more than a planning exercise.
-      It has become the foundation for a full shift from test centered accountability to vibrant, student rich learning.
-      The work began by revisiting the district Portrait of a Learner and BRIDGE Performance Indicators, then using them as anchors for a local accountability logic model.
-      That logic model now connects the Portrait, Measures of Quality, Next Generation Readiness Assessments, and student BPI Websites into one coherent picture of success for students.
-    </p>
-
-    <div class="mini-grid">
-      <div class="card pillar">
-        <h4>Defining Success for Students</h4>
-        <ul class="step-list">
-          <li>The district Portrait of a Learner names the durable skills and dispositions that matter most, such as communication, collaboration, problem solving, and real world application.</li>
-          <li>BRIDGE Performance Indicators translate that portrait into concrete evidence of Growth, Mastery, and Readiness across grades 3 through 12.</li>
-          <li>The Local Accountability Advisory Council and other stakeholder groups helped refine these definitions so they reflect community values, not just state requirements.</li>
-          <li>As a result, success is defined by who students are becoming and what they can do with their learning, not only by a single test score.</li>
-        </ul>
-      </div>
-
-      <div class="card continuum">
-        <h4>Purpose and Logic Model in Action</h4>
-        <ul class="step-list">
-          <li>Measures of Quality 4.1 serves as the district wide logic model, showing how Vibrant Learning, Vibrant Outcomes, Vibrant Culture, Vibrant Community, and the Vibrant Ecosystem fit together.</li>
-          <li>Next Generation Readiness Assessments give students real world performance tasks that align to priority standards and Portrait traits, making the logic model visible in daily classroom work.</li>
-          <li>BPI Websites function as living portfolios where students curate compelling evidence of their growth, mastery, and readiness over time.</li>
-          <li>Each of these pieces is intentionally tied back to Pillar 1 and the Define Success for Students phase so that the system stays focused on the original purpose.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="mini-grid" style="margin-top:16px;">
-      <div class="card ddier">
-        <h4 class="ddiertxt">Design Choices that Matter</h4>
-        <ul class="step-list">
-          <li>The district chose to make student agency and real world application non negotiable features of success, so these show up in the Portrait, the BRIDGE Indicators, and the Measures of Quality.</li>
-          <li>Local accountability work is framed as a way to improve learning experiences, not just as a reporting requirement, which keeps the focus on classrooms and students.</li>
-          <li>Dashboards and reports are designed last, after the logic model and Portrait are clear, so that reporting reflects learning rather than driving it.</li>
-          <li>Phase 1 is regularly revisited as new evidence and experiences accumulate, which keeps the design flexible and responsive instead of fixed and compliance driven.</li>
-        </ul>
-      </div>
-
-      <div class="card">
-        <h4>What Phase 1 Looks Like to Stakeholders</h4>
-        <ul class="step-list">
-          <li>Students see themselves named in the Portrait of a Learner and use BPI Websites to show who they are becoming, not just what scores they earned.</li>
-          <li>Teachers use the Portrait and BRIDGE Performance Indicators to design vibrant learning tasks and Next Generation Readiness Assessments that connect standards to real life.</li>
-          <li>Families and community members can look at Measures of Quality and local reporting tools and see how classroom experiences, student evidence, and district goals fit together.</li>
-          <li>Board members receive information that connects directly to student outcomes, culture, and readiness, allowing governance to focus on learning and growth rather than isolated numbers.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="highlight">
-      <strong>Field Insight:</strong>
-      In Fleming County Schools, Phase 1 Design is not a binder on a shelf.
-      It is the daily reference point that connects the Portrait of a Learner, BRIDGE Performance Indicators, Measures of Quality, and BPI Websites.
-      Together they define success for students and keep the accountability system centered on vibrant learning.
-    </div>
-  </div>
-
-  <div class="section" id="implementation-supports-1">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Implementation Supports for Phase 1</h3>
-    <p>
-      Strategy stalls without tools.
-      Phase 1 is strengthened when districts use simple, repeatable supports that make design work easier to launch, document, and share.
-    </p>
-    <div class="mini-grid">
-      <div class="card pillar">
-        <h4>Design &amp; Facilitation Tools</h4>
-        <ul class="step-list">
-          <li>Sample agendas and protocols for Portrait of a Learner design sessions with students, staff, families, and community partners.</li>
-          <li>Templates for logic models and evidence maps that can be customized for local context.</li>
-          <li>Guides for facilitating listening sessions and focus groups that elevate quieter voices.</li>
-          <li>Slide decks and one-page handouts that explain the Six Pillars, the Continuum, and DDIER in accessible language.</li>
-        </ul>
-      </div>
-      <div class="card continuum">
-        <h4>Communication &amp; Storytelling Tools</h4>
-        <ul class="step-list">
-          <li>Talking points for leaders, teachers, and students that keep messages about Phase 1 consistent and clear.</li>
-          <li>Infographic or web templates that show the Portrait, logic model, and Measures of Quality on a single screen or page.</li>
-          <li>Sample newsletters, social media posts, and board updates that highlight early wins and student stories.</li>
-          <li>FAQ documents that anticipate common questions and concerns from staff and families.</li>
-        </ul>
-      </div>
-    </div>
-    <div class="mini-grid" style="margin-top:16px;">
-      <div class="card ddier">
-        <h4 class="ddiertxt">Collaboration &amp; Learning Tools</h4>
-        <ul class="step-list">
-          <li>Shared digital spaces where teams can store drafts, exemplars, and feedback from design sessions.</li>
-          <li>Reflection tools for leaders and teachers to document what they are learning about defining success for students.</li>
-          <li>Calibration protocols for looking at student work as early evidence of Portrait traits.</li>
-          <li>Planning tools that connect Phase 1 outcomes to Phase 2 workstreams and timelines.</li>
-        </ul>
-      </div>
-      <div class="card bestpractice">
-        <h4 class="bestpracticetxt">Toolkit Placeholders</h4>
-        <ul class="step-list">
-          <li><strong>Portrait Design Toolkit:</strong> Protocols, templates, and examples for co creating the Portrait of a Learner.</li>
-          <li><strong>Logic Model Builder:</strong> Step-by-step guide for translating the Portrait into a Phase 1 logic model.</li>
-          <li><strong>Evidence Map Starter:</strong> A structured process for cataloging existing measures and identifying gaps.</li>
-          <li><strong>Stakeholder Engagement Playbook:</strong> Strategies and tools for sustaining authentic, reciprocal engagement throughout Phase 1.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <div class="section" id="research-base-1">
-    <div class="legend">
-      <span class="legend-label">
-        <span class="legend-pillars"></span> Six Pillars
-      </span>
-      <span class="legend-label">
-        <span class="legend-continuum"></span> Local Accountability Continuum
-      </span>
-      <span class="legend-label">
-        <span class="legend-ddier"></span> DDIER Cycle
-      </span>
-    </div>
-    <h3>Research Base and References</h3>
-
-    <h4>Portraits of a Learner / Graduate and Defining Success</h4>
-    <p>
-      The use of a Portrait of a Learner or Graduate to define success for students is supported by a growing body of research and practice.
-      These studies and reports show that clearly articulated, community co created learner profiles help align instruction, assessment, and accountability with the skills students need for college, career, and life.
-    </p>
-    <ul class="step-list">
-      <li>
-        <strong>Next Generation Learning Challenges (NGLC).</strong>
-        <em>Portrait of a Graduate in Practice.</em>
-        Describes how districts use community developed portraits to articulate a shared vision for student success and guide learning experiences and assessment.
-        <a href="https://www.nextgenlearning.org/portrait-of-a-graduate-in-practice" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>WestEd.</strong>
-        <em>Building Future-Ready Students: The State of Portraits of a Graduate.</em>
-        Reviews how states and districts are adopting Portraits of a Graduate to define essential competencies and align systems for future readiness.
-        <a href="https://www.wested.org/resource/building-future-ready-students/" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>KnowledgeWorks (2024).</strong>
-        <em>6 Ways to Operationalize a Portrait of a Graduate.</em>
-        Offers guidance on translating portraits into classroom practice, assessment, and culture, reinforcing the need for coherent implementation.
-        <a href="https://knowledgeworks.org/resources/portrait-graduate-learner-skills/" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>CASEL (2024).</strong>
-        <em>Portraits of a Graduate.</em>
-        Highlights how portraits can integrate academic, social emotional, and civic competencies to support holistic readiness.
-        <a href="https://casel.org/portraits-of-a-graduate-2024/" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>FairTest (2025).</strong>
-        <em>Portraits of a Graduate.</em>
-        Synthesizes how portraits broaden definitions of success beyond test scores to include academic, social emotional, and civic outcomes.
-        <a href="https://fairtest.org/wp-content/uploads/2025/01/Portraits-of-a-Graduate.pdf" target="_blank" rel="noopener">Read more</a>
-      </li>
-    </ul>
-
-    <h4>Student Agency, Engagement, and Deeper Learning</h4>
-    <p>
-      The emphasis on student agency, reflection, and vibrant, real world learning in Phase 1 is grounded in research showing that when students have more ownership over their learning, they are more engaged, more persistent, and better prepared for future challenges.
-    </p>
-    <ul class="step-list">
-      <li>
-        <strong>Brandt, W. C. (2024).</strong>
-        <em>A Review of the Literature on Student Agency.</em> International Baccalaureate.
-        Synthesizes research on agency, including self regulation, goal setting, and autonomy, and links these to deeper learning and self directed pathways.
-        <a href="https://ibo.org/globalassets/new-structure/research/pdfs/student-agency-final-report.pdf" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>XQ Institute.</strong>
-        <em>Student Agency &amp; Engagement Knowledge Module.</em>
-        Argues that students must play an active role in charting their learning journeys and provides design principles for schools to support that shift.
-        <a href="https://www.isbe.net/Documents/Student-Agency-Engagement.pdf" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>Gallup (2025).</strong>
-        <em>How Student Agency Can Boost Engagement and Readiness.</em>
-        Shows that students who feel more control over their learning report higher engagement and readiness indicators, reinforcing the case for agency focused design.
-        <a href="https://news.gallup.com/poll/660503/student-agency-boost-engagement-readiness.aspx" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>Schneider, J. M. (2022).</strong>
-        <em>Student Agency, Engagement, Autonomy, and Motivation in Hybrid Project-Based Learning.</em>
-        Finds that carefully designed project based environments can increase student agency and engagement in complex learning tasks.
-        <a href="https://digitalcommons.unl.edu/dissertations/AAI29999749/" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>Getting Smart (2014).</strong>
-        <em>Assessing Deeper Learning.</em>
-        Describes how deeper learning environments prioritize critical thinking, communication, and collaboration, and calls for assessment systems that capture these competencies.
-        <a href="https://www.gettingsmart.com/wp-content/uploads/2014/04/FINAL-Assessing-Deeper-Learning.pdf" target="_blank" rel="noopener">Read more</a>
-      </li>
-    </ul>
-
-    <h4>Performance Assessment, Portfolios, and Local Accountability</h4>
-    <p>
-      The focus on performance tasks, digital portfolios, and local accountability systems is supported by research showing that authentic assessments can better capture deeper learning and that community grounded accountability can balance rigor with relevance.
-    </p>
-    <ul class="step-list">
-      <li>
-        <strong>Learning Policy Institute (2020).</strong>
-        <em>Using Performance Assessments to Support Student Learning.</em>
-        Documents how performance assessments help students demonstrate deeper learning competencies and support more meaningful evaluation of student growth and readiness.
-        <a href="https://learningpolicyinstitute.org/product/cpac-performance-assessments-support-student-learning-brief" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>Stosich, E. L. (Stanford Center for Opportunity Policy in Education).</strong>
-        <em>The Role of Performance Assessments in Fostering Deeper Learning.</em>
-        Describes how performance tasks tied to real world problems promote authentic learning and better preparation for adult life.
-        <a href="https://edpolicy.stanford.edu/library/blog/1349.html" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>Annenberg Institute (2017).</strong>
-        <em>Performance Assessment: A Deeper Look at Practice and Research.</em>
-        Synthesizes evidence that performance assessments can provide rigorous, personalized alternatives to standardized tests and support more equitable outcomes.
-        <a href="https://annenberg.brown.edu/sites/default/files/VUE47.pdf" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>NASBE (National Association of State Boards of Education).</strong>
-        <em>Performance Assessments: How State Policy Can Advance Assessments for 21st Century Learning.</em>
-        Explains how states are using performance assessments to evaluate complex student skills and make accountability more meaningful.
-        <a href="https://www.nasbe.org/performance-assessments-how-state-policy-can-advance-assessments-for-21st-century-learning/" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>WestEd.</strong>
-        <em>Creating Systems of Assessment for Deeper Learning.</em>
-        Provides guidance on coherent assessment systems that blend formative, performance, and summative measures centered on deeper learning outcomes.
-        <a href="https://csaa.wested.org/resource/creating-systems-of-assessment-for-deeper-learning/" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>Leader, J. A. (2023).</strong>
-        <em>Toward a More Balanced School Accountability System.</em>
-        Describes community based accountability systems in which local districts and communities co define goals, measures, and acceptable outcomes for students and schools.
-        <a href="https://scholarworks.sfasu.edu/cgi/viewcontent.cgi?article=1240&context=slr" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>Kentucky Department of Education.</strong>
-        <em>Local Accountability Design Guide and Toolkit.</em>
-        Outlines how Kentucky districts can design locally grounded accountability models, including the use of performance evidence and alignment to Portraits of a Learner.
-        <a href="https://www.education.ky.gov/school/innov/Documents/Local%20Accountability%20Guide%20and%20Toolkit.pdf" target="_blank" rel="noopener">Read more</a>
-      </li>
-      <li>
-        <strong>Aurora Institute (2023).</strong>
-        <em>Innovating Towards Next Generation Accountability.</em>
-        Argues for accountability models that move beyond single snapshot tests and toward richer, locally derived frameworks capturing whole student learning.
-        <a href="https://aurora-institute.org/blog/innovating-towards-next-generation-accountability/" target="_blank" rel="noopener">Read more</a>
-      </li>
-    </ul>
-    <div class="highlight">
-      <strong>How to Use This Section:</strong>
-      These references can be shared with boards, advisory councils, and community partners to show that local accountability, Portraits of a Learner, performance tasks, and student agency are not isolated ideas.
-      They are grounded in a strong and growing research base that supports the direction of this work.
-    </div>
-  </div>
-</div>
-
-<!-- html2pdf script for PDF button -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-YcsIPQoa+6Ck1vZ1tcHTul3e8DqRLVQjaxAg/P6MqxsVXni4eWh05rq6ArtyTc95xJMu38xAi8u1bU6UqvN0Gg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script>
-  function downloadPDF() {
-    const element = document.body;
-    const opt = {
-      margin:       0.5,
-      filename:     'phase1_local_accountability_design_map.pdf',
-      image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
-      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-    html2pdf().from(element).set(opt).save();
-  }
-</script>
 
 </body>
 </html>
