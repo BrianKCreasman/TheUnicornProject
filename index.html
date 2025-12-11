@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Kentucky's Local Accountability Framework – Home</title>
+  <title>Kentucky's Local Accountability Framework - Home</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -80,6 +80,39 @@
     .header-title p {
       font-size: 0.95rem;
       color: var(--text-muted);
+    }
+
+    /* Divider and Quote */
+    .header-divider {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(
+        to right,
+        rgba(10, 53, 94, 0.4),
+        rgba(17, 138, 154, 0.5),
+        rgba(219, 213, 155, 0.5)
+      );
+      margin: 16px 0 20px 0;
+      border-radius: 2px;
+    }
+
+    .header-quote {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 12px auto;
+      padding: 6px 12px;
+      font-size: 1rem;
+      color: #333333;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .header-quote .quote-author {
+      display: block;
+      font-size: 0.9rem;
+      margin-top: 6px;
+      font-style: normal;
+      color: #555555;
     }
 
     /* Grid layout */
@@ -224,12 +257,18 @@
     .card-phase:hover .card-hover {
       opacity: 1;
       transform: translateY(0);
-      max-height: 220px;
+      max-height: 260px;
     }
 
     .card-hover p {
       margin-bottom: 10px;
       color: rgba(255, 255, 255, 0.95);
+    }
+
+    .card-hover-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
 
     .pill-link {
@@ -246,6 +285,7 @@
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
       border: 1px solid rgba(255, 255, 255, 0.9);
       white-space: nowrap;
+      transition: background-color 0.18s ease, transform 0.18s ease;
     }
 
     .pill-link:hover {
@@ -304,9 +344,18 @@
              alt="Next-Generation Learning, Assessment, and Accountability Header">
       </div>
       <div class="header-title">
-        <h1>Kentucky's Local Accountability Framework</h1>
+        <h1>KENTUCKY'S LOCAL ACCOUNTABILITY FRAMEWORK</h1>
         <p>Next-Generation Learning, Assessment, and Accountability</p>
       </div>
+
+      <div class="header-divider"></div>
+
+      <div class="header-quote">
+        <p>"Two roads diverged in a wood, and I - I took the one less traveled by, and that has made all the difference."</p>
+        <span class="quote-author">- Robert Frost</span>
+      </div>
+
+      <div class="header-divider"></div>
     </header>
 
     <!-- 3x3 grid of dynamic rounded squares -->
@@ -374,7 +423,18 @@
               Get clear on where you are today. Identify current conditions, strengths, gaps,
               and readiness so the work begins with shared understanding.
             </p>
-            <a href="#phase1" class="pill-link">Phase Deep-Dive</a>
+            <div class="card-hover-actions">
+              <a href="https://briankcreasman.github.io/TheUnicornProject/Phase1.html"
+                 class="pill-link"
+                 target="_blank">
+                Phase Deep-Dive
+              </a>
+              <a href="https://briankcreasman.github.io/TheUnicornProject/Phase1ImplementationGuide.html#pitfalls"
+                 class="pill-link"
+                 target="_blank">
+                Phase Guide
+              </a>
+            </div>
           </div>
         </div>
         <div class="card-footer-band"></div>
@@ -396,7 +456,9 @@
               Build the blueprint. Define principles, architecture, and early system design
               that will guide a coherent local accountability model.
             </p>
-            <a href="#phase2" class="pill-link">Phase Deep-Dive</a>
+            <div class="card-hover-actions">
+              <a href="#phase2" class="pill-link">Phase Deep-Dive</a>
+            </div>
           </div>
         </div>
         <div class="card-footer-band"></div>
@@ -418,7 +480,9 @@
               Connect the pieces. Align principles, pillars, processes, and workstreams
               so the system operates as one unified model.
             </p>
-            <a href="#phase3" class="pill-link">Phase Deep-Dive</a>
+            <div class="card-hover-actions">
+              <a href="#phase3" class="pill-link">Phase Deep-Dive</a>
+            </div>
           </div>
         </div>
         <div class="card-footer-band"></div>
@@ -441,7 +505,9 @@
               Center the operational moment when the system becomes real in daily work,
               routines, instruction, assessment, communication, and leadership.
             </p>
-            <a href="#phase4" class="pill-link">Phase Deep-Dive</a>
+            <div class="card-hover-actions">
+              <a href="#phase4" class="pill-link">Phase Deep-Dive</a>
+            </div>
           </div>
         </div>
         <div class="card-footer-band"></div>
@@ -463,7 +529,9 @@
               Strengthen through feedback. Use evidence, data, and reflection to refine the system
               and improve practice across the district.
             </p>
-            <a href="#phase5" class="pill-link">Phase Deep-Dive</a>
+            <div class="card-hover-actions">
+              <a href="#phase5" class="pill-link">Phase Deep-Dive</a>
+            </div>
           </div>
         </div>
         <div class="card-footer-band"></div>
@@ -485,7 +553,9 @@
               Show impact and sustain the work. Communicate results, share real evidence of learning,
               and build long-term stability for the system.
             </p>
-            <a href="#phase6" class="pill-link">Phase Deep-Dive</a>
+            <div class="card-hover-actions">
+              <a href="#phase6" class="pill-link">Phase Deep-Dive</a>
+            </div>
           </div>
         </div>
         <div class="card-footer-band"></div>
