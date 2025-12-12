@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Local Accountability Journey Map - Starting Points by Phase</title>
+  <style>
+    :root{
+      --navy:#0a355e;
+      --navy2:#12406b;
+      --teal:#118a9a;
+      --gold:#dbd59b;
+      --orange:#d9822b;
+
+      --bg:#f5f5f7;
+      --card:#ffffff;
+      --soft:#eef2f7;
+      --muted:#4b5563;
+      --text:#111111;
+
+      --shadow:0 14px 35px rgba(0,0,0,0.12);
+      --shadow2:0 8px 20px rgba(0,0,0,0.10);
+      --radius:22px;
+
+      /* Readiness colors */
+      --r1:#b91c1c;   /* red */
+      --r2:#ea580c;   /* orange */
+      --r3:#0ea5e9;   /* blue */
+      --r4:#16a34a;   /* green */
+
+      /* Phase colors */
+      --p1:#7c3aed; /* purple */
+      --p2:#0ea5e9; /* sky */
+      --p3:#f59e0b; /* amber */
+      --p4:#22c55e; /* green */
+      --p5:#ef4444; /* red */
+      --p6:#111827; /* slate */
+    }
+
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* Top bar */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(17,24,39,0.08);
+      padding: 12px 16px;
+    }
+    .topbar-inner{
+      max-width: 1250px;
+      margin: 0 auto;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content: space-between;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+    .brand h1{
+      margin:0;
+      font-size:1.05rem;
+      color: var(--navy);
+      letter-spacing:0.2px;
+    }
+    .brand .sub{
+      font-size:0.86rem;
+      color: var(--muted);
+    }
+
+    .controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,0.12);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      font-size:0.88rem;
+      color: var(--text);
+    }
+    select, button{
+      font: inherit;
+    }
+    select{
+      border:none;
+      outline:none;
+      background:transparent;
+      color: var(--navy2);
+      font-weight:600;
+      cursor:pointer;
+    }
+    .btn{
+      border:none;
+      cursor:pointer;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: var(--navy);
+      color:#fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      font-weight:600;
+      font-size:0.88rem;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.22);
+      background: #13508c;
+    }
+    .btn:active{
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+      background: #072744;
+    }
+
+    .wrap{
+      max-width: 1250px;
+      margin: 0 auto;
+      padding: 18px 16px 40px;
+    }
+
+    .intro{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      padding: 18px 18px;
+      border: 1px solid rgba(17,24,39,0.08);
+    }
+    .intro-grid{
+      display:grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 14px;
+      align-items:start;
+    }
+    .intro h2{
+      margin:0 0 8px 0;
+      font-size:1.08rem;
+      color: var(--navy);
+    }
+    .intro p{
+      margin: 0 0 10px 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.95rem;
+    }
+
+    .legend{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      padding: 12px;
+      border-radius: 16px;
+      background: #fbfbfd;
+      border: 1px solid rgba(17,24,39,0.08);
+    }
+    .legend h3{
+      margin:0;
+      font-size:0.95rem;
+      color: var(--navy2);
+      letter-spacing:0.2px;
+    }
+    .legend-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      align-items:center;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,0.10);
+      font-size:0.82rem;
+      color: var(--text);
+    }
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:999px;
+      display:inline-block;
+    }
+
+    /* Diagram */
+    .diagram{
+      margin-top: 14px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(17,24,39,0.08);
+      overflow:hidden;
+    }
+
+    .diag-header{
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(17,24,39,0.08);
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content: space-between;
+    }
+    .diag-header .title{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+    }
+    .diag-header .title strong{
+      color: var(--navy);
+      font-size: 1rem;
+    }
+    .diag-header .title span{
+      color: var(--muted);
+      font-size:0.88rem;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 220px repeat(6, minmax(190px, 1fr));
+      gap: 0;
+      width: 100%;
+      overflow:auto;
+    }
+
+    .cell{
+      padding: 12px 12px;
+      border-right: 1px solid rgba(17,24,39,0.06);
+      border-bottom: 1px solid rgba(17,24,39,0.06);
+      min-height: 170px;
+      background:#fff;
+    }
+    .cell.head{
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: #fff;
+      min-height: auto;
+      padding: 12px 12px;
+      border-bottom: 1px solid rgba(17,24,39,0.10);
+    }
+    .cell.left{
+      position: sticky;
+      left: 0;
+      z-index: 6;
+      background: #fff;
+      border-right: 1px solid rgba(17,24,39,0.10);
+    }
+    .cell.left.head{
+      z-index: 8;
+    }
+
+    .phase-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.2px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+      white-space: nowrap;
+    }
+    .phase-badge small{
+      font-weight: 600;
+      opacity: 0.92;
+    }
+
+    .rowlabel{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .rowlabel .rname{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight: 800;
+      color: var(--navy2);
+    }
+    .rowlabel .rdesc{
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .cards{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .mini{
+      border-radius: 16px;
+      padding: 10px 10px;
+      border: 1px solid rgba(17,24,39,0.10);
+      background: #fbfbfe;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      cursor: pointer;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .mini:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.10);
+    }
+    .mini .top{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap:10px;
+      margin-bottom: 8px;
+    }
+    .mini .label{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--soft);
+      border: 1px solid rgba(17,24,39,0.10);
+      color: var(--muted);
+      font-size: 0.78rem;
+      white-space:nowrap;
+    }
+    .mini .text{
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.42;
+      margin:0;
+    }
+
+    .mini[data-readiness="r1"]{ border-left: 6px solid var(--r1); }
+    .mini[data-readiness="r2"]{ border-left: 6px solid var(--r2); }
+    .mini[data-readiness="r3"]{ border-left: 6px solid var(--r3); }
+    .mini[data-readiness="r4"]{ border-left: 6px solid var(--r4); }
+
+    /* Footer helper */
+    .helper{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .box{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow2);
+      border: 1px solid rgba(17,24,39,0.08);
+      padding: 14px 14px;
+    }
+    .box h3{
+      margin:0 0 8px 0;
+      font-size: 1rem;
+      color: var(--navy);
+    }
+    .box ul{
+      margin:0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.95rem;
+    }
+    .box li{ margin-bottom: 6px; }
+
+    /* Modal */
+    .modal{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 16px;
+      z-index: 100;
+    }
+    .modal.open{ display:flex; }
+    .modal-card{
+      width: min(980px, 100%);
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+    .modal-head{
+      padding: 14px 16px;
+      background: linear-gradient(90deg, rgba(10,53,94,0.08), rgba(217,130,43,0.08));
+      border-bottom: 1px solid rgba(17,24,39,0.10);
+      display:flex;
+      align-items:flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .modal-title{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .modal-title strong{
+      font-size: 1.05rem;
+      color: var(--navy);
+    }
+    .modal-title span{
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .close{
+      border:none;
+      cursor:pointer;
+      background: #fff;
+      border: 1px solid rgba(17,24,39,0.12);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: 800;
+      color: var(--navy2);
+    }
+
+    .modal-body{
+      padding: 14px 16px 18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .panel{
+      border-radius: 18px;
+      border: 1px solid rgba(17,24,39,0.10);
+      background: #fbfbfd;
+      padding: 12px 12px;
+    }
+    .panel h4{
+      margin: 0 0 8px 0;
+      color: var(--navy2);
+      font-size: 0.95rem;
+    }
+    .panel p, .panel li{
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.92rem;
+    }
+    .panel ul{ margin:0; padding-left: 18px; }
+    .panel li{ margin-bottom: 6px; }
+
+    .kv{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .kv .chip{
+      background:#fff;
+    }
+
+    .foot{
+      padding: 0 16px 16px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 980px){
+      .intro-grid{ grid-template-columns: 1fr; }
+      .helper{ grid-template-columns: 1fr; }
+      .modal-body{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: 220px repeat(6, minmax(220px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <h1>Local Accountability Journey Map</h1>
+        <div class="sub">Different starting points that can exist inside each of the Six Phases.</div>
+      </div>
+
+      <div class="controls">
+        <div class="pill" title="Filter the grid to highlight one phase at a time.">
+          <span style="font-weight:800;color:var(--muted);">Focus:</span>
+          <select id="phaseFilter">
+            <option value="all">All Phases</option>
+            <option value="p1">Phase 1</option>
+            <option value="p2">Phase 2</option>
+            <option value="p3">Phase 3</option>
+            <option value="p4">Phase 4</option>
+            <option value="p5">Phase 5</option>
+            <option value="p6">Phase 6</option>
+          </select>
+        </div>
+
+        <div class="pill" title="Filter the grid by readiness starting point.">
+          <span style="font-weight:800;color:var(--muted);">Starting Point:</span>
+          <select id="readinessFilter">
+            <option value="all">All Starting Points</option>
+            <option value="r1">Compliance-Only</option>
+            <option value="r2">Emerging</option>
+            <option value="r3">Building</option>
+            <option value="r4">Ready to Accelerate</option>
+          </select>
+        </div>
+
+        <button class="btn" type="button" onclick="resetFilters()">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="intro">
+      <div class="intro-grid">
+        <div>
+          <h2>How to read this diagram</h2>
+          <p>
+            Pick a phase, then look down the column to see four common starting points districts can have within that same phase.
+            Click any card to open a deeper description and practical examples of what that starting point often looks like.
+          </p>
+          <p>
+            This is designed for real planning. A district can be “Ready to Accelerate” in one phase while still “Emerging” in another.
+            Use the cards to name reality without shame, then decide the next move with clarity.
+          </p>
+        </div>
+
+        <div class="legend">
+          <h3>Starting Point Legend</h3>
+          <div class="legend-row">
+            <span class="chip"><span class="dot" style="background:var(--r1)"></span><strong>Compliance-Only</strong> <span style="color:var(--muted)">Minimum to satisfy requirements</span></span>
+            <span class="chip"><span class="dot" style="background:var(--r2)"></span><strong>Emerging</strong> <span style="color:var(--muted)">Interest is growing, uneven practice</span></span>
+          </div>
+          <div class="legend-row">
+            <span class="chip"><span class="dot" style="background:var(--r3)"></span><strong>Building</strong> <span style="color:var(--muted)">Structures exist, needs coherence</span></span>
+            <span class="chip"><span class="dot" style="background:var(--r4)"></span><strong>Ready to Accelerate</strong> <span style="color:var(--muted)">Strong foundation, scale with quality</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diagram" id="diagram">
+      <div class="diag-header">
+        <div class="title">
+          <strong>Six Phases x Starting Points</strong>
+          <span>Click a card to see examples, typical conditions, risks, and next moves.</span>
+        </div>
+        <div class="legend-row">
+          <span class="chip"><span class="dot" style="background:var(--p1)"></span>Phase 1</span>
+          <span class="chip"><span class="dot" style="background:var(--p2)"></span>Phase 2</span>
+          <span class="chip"><span class="dot" style="background:var(--p3)"></span>Phase 3</span>
+          <span class="chip"><span class="dot" style="background:var(--p4)"></span>Phase 4</span>
+          <span class="chip"><span class="dot" style="background:var(--p5)"></span>Phase 5</span>
+          <span class="chip"><span class="dot" style="background:var(--p6)"></span>Phase 6</span>
+        </div>
+      </div>
+
+      <div class="grid" id="grid">
+        <!-- Header row -->
+        <div class="cell left head">
+          <div class="rowlabel">
+            <div class="rname">Starting Point</div>
+            <div class="rdesc">A district’s entry condition inside a phase.</div>
+          </div>
+        </div>
+
+        <div class="cell head" data-phase="p1">
+          <span class="phase-badge" style="background:var(--p1)">
+            Phase 1 <small>Groundwork</small>
+          </span>
+        </div>
+        <div class="cell head" data-phase="p2">
+          <span class="phase-badge" style="background:var(--p2)">
+            Phase 2 <small>Design</small>
+          </span>
+        </div>
+        <div class="cell head" data-phase="p3">
+          <span class="phase-badge" style="background:var(--p3)">
+            Phase 3 <small>Build</small>
+          </span>
+        </div>
+        <div class="cell head" data-phase="p4">
+          <span class="phase-badge" style="background:var(--p4)">
+            Phase 4 <small>Implement</small>
+          </span>
+        </div>
+        <div class="cell head" data-phase="p5">
+          <span class="phase-badge" style="background:var(--p5)">
+            Phase 5 <small>Evaluate</small>
+          </span>
+        </div>
+        <div class="cell head" data-phase="p6">
+          <span class="phase-badge" style="background:var(--p6)">
+            Phase 6 <small>Sustain</small>
+          </span>
+        </div>
+
+        <!-- Row 1 -->
+        <div class="cell left" data-readiness="r1">
+          <div class="rowlabel">
+            <div class="rname"><span class="dot" style="background:var(--r1)"></span>Compliance-Only</div>
+            <div class="rdesc">Work happens mainly because it is required. Ownership and meaning are thin.</div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p1" data-readiness="r1">
+          <div class="cards">
+            <div class="mini" data-phase="p1" data-readiness="r1" onclick="openModal('p1_r1')">
+              <div class="top">
+                <div class="label">Groundwork feels like paperwork</div>
+                <div class="tag">Portrait is a poster</div>
+              </div>
+              <p class="text">Few stakeholders. No clear gap analysis. “We already have a mission statement.”</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p2" data-readiness="r1">
+          <div class="cards">
+            <div class="mini" data-phase="p2" data-readiness="r1" onclick="openModal('p2_r1')">
+              <div class="top">
+                <div class="label">Design is metric shopping</div>
+                <div class="tag">Dashboards first</div>
+              </div>
+              <p class="text">Measures are selected before the definition of success is clear.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p3" data-readiness="r1">
+          <div class="cards">
+            <div class="mini" data-phase="p3" data-readiness="r1" onclick="openModal('p3_r1')">
+              <div class="top">
+                <div class="label">Build tools without a theory</div>
+                <div class="tag">One-off rubrics</div>
+              </div>
+              <p class="text">Lots of templates. Little shared calibration or validity logic.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p4" data-readiness="r1">
+          <div class="cards">
+            <div class="mini" data-phase="p4" data-readiness="r1" onclick="openModal('p4_r1')">
+              <div class="top">
+                <div class="label">Implementation is “add-on”</div>
+                <div class="tag">Low coherence</div>
+              </div>
+              <p class="text">Teachers experience this as one more thing on top of everything else.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p5" data-readiness="r1">
+          <div class="cards">
+            <div class="mini" data-phase="p5" data-readiness="r1" onclick="openModal('p5_r1')">
+              <div class="top">
+                <div class="label">Evaluate = report compliance</div>
+                <div class="tag">No learning loop</div>
+              </div>
+              <p class="text">Data is collected, but not used to improve design or instruction.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p6" data-readiness="r1">
+          <div class="cards">
+            <div class="mini" data-phase="p6" data-readiness="r1" onclick="openModal('p6_r1')">
+              <div class="top">
+                <div class="label">Sustainability is fragile</div>
+                <div class="tag">Leader-dependent</div>
+              </div>
+              <p class="text">If a champion leaves, the work collapses or resets.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="cell left" data-readiness="r2">
+          <div class="rowlabel">
+            <div class="rname"><span class="dot" style="background:var(--r2)"></span>Emerging</div>
+            <div class="rdesc">Interest and early pilots exist, but the system is uneven across schools.</div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p1" data-readiness="r2">
+          <div class="cards">
+            <div class="mini" data-phase="p1" data-readiness="r2" onclick="openModal('p1_r2')">
+              <div class="top">
+                <div class="label">Groundwork is real, but incomplete</div>
+                <div class="tag">Some voices missing</div>
+              </div>
+              <p class="text">Listening sessions exist, but hard truths (gaps, inequities) stay vague.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p2" data-readiness="r2">
+          <div class="cards">
+            <div class="mini" data-phase="p2" data-readiness="r2" onclick="openModal('p2_r2')">
+              <div class="top">
+                <div class="label">Design drafts exist</div>
+                <div class="tag">No guardrails</div>
+              </div>
+              <p class="text">A portrait or principles are drafted, but not yet operational in classrooms.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p3" data-readiness="r2">
+          <div class="cards">
+            <div class="mini" data-phase="p3" data-readiness="r2" onclick="openModal('p3_r2')">
+              <div class="top">
+                <div class="label">Pilots are happening</div>
+                <div class="tag">Inconsistent quality</div>
+              </div>
+              <p class="text">Some performance tasks and rubrics exist, but scoring varies widely.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p4" data-readiness="r2">
+          <div class="cards">
+            <div class="mini" data-phase="p4" data-readiness="r2" onclick="openModal('p4_r2')">
+              <div class="top">
+                <div class="label">Implementation depends on “early adopters”</div>
+                <div class="tag">Patchwork</div>
+              </div>
+              <p class="text">A few schools are strong. Others are unsure, or overloaded.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p5" data-readiness="r2">
+          <div class="cards">
+            <div class="mini" data-phase="p5" data-readiness="r2" onclick="openModal('p5_r2')">
+              <div class="top">
+                <div class="label">Evaluation is mostly descriptive</div>
+                <div class="tag">Weak inference</div>
+              </div>
+              <p class="text">Teams can describe what happened, but cannot yet defend claims of impact.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p6" data-readiness="r2">
+          <div class="cards">
+            <div class="mini" data-phase="p6" data-readiness="r2" onclick="openModal('p6_r2')">
+              <div class="top">
+                <div class="label">Sustainability is planned, not embedded</div>
+                <div class="tag">Turnover risk</div>
+              </div>
+              <p class="text">Processes are being written down, but routines are not yet “the way we work.”</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="cell left" data-readiness="r3">
+          <div class="rowlabel">
+            <div class="rname"><span class="dot" style="background:var(--r3)"></span>Building</div>
+            <div class="rdesc">Structures exist. The next challenge is coherence, calibration, and trust.</div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p1" data-readiness="r3">
+          <div class="cards">
+            <div class="mini" data-phase="p1" data-readiness="r3" onclick="openModal('p1_r3')">
+              <div class="top">
+                <div class="label">Clear baseline and gap map</div>
+                <div class="tag">Honest diagnosis</div>
+              </div>
+              <p class="text">District can name what is working, what is missing, and what must be protected.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p2" data-readiness="r3">
+          <div class="cards">
+            <div class="mini" data-phase="p2" data-readiness="r3" onclick="openModal('p2_r3')">
+              <div class="top">
+                <div class="label">Design has decision rules</div>
+                <div class="tag">Coherence checks</div>
+              </div>
+              <p class="text">The district uses principles to accept, reject, or revise measures and evidence.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p3" data-readiness="r3">
+          <div class="cards">
+            <div class="mini" data-phase="p3" data-readiness="r3" onclick="openModal('p3_r3')">
+              <div class="top">
+                <div class="label">Tools are being standardized</div>
+                <div class="tag">Calibration routines</div>
+              </div>
+              <p class="text">Common rubrics, anchor papers, moderation, and evidence tags start to stabilize.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p4" data-readiness="r3">
+          <div class="cards">
+            <div class="mini" data-phase="p4" data-readiness="r3" onclick="openModal('p4_r3')">
+              <div class="top">
+                <div class="label">Implementation is supported</div>
+                <div class="tag">PL + coaching</div>
+              </div>
+              <p class="text">There is a clear cadence for training, practice, feedback, and revision.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p5" data-readiness="r3">
+          <div class="cards">
+            <div class="mini" data-phase="p5" data-readiness="r3" onclick="openModal('p5_r3')">
+              <div class="top">
+                <div class="label">Evaluation uses multiple measures</div>
+                <div class="tag">Stronger claims</div>
+              </div>
+              <p class="text">Evidence supports inferences about growth, mastery, readiness, and experience.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p6" data-readiness="r3">
+          <div class="cards">
+            <div class="mini" data-phase="p6" data-readiness="r3" onclick="openModal('p6_r3')">
+              <div class="top">
+                <div class="label">Sustaining through systems</div>
+                <div class="tag">Institutionalized</div>
+              </div>
+              <p class="text">Leadership transitions do not break the model because routines are embedded.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="cell left" data-readiness="r4">
+          <div class="rowlabel">
+            <div class="rname"><span class="dot" style="background:var(--r4)"></span>Ready to Accelerate</div>
+            <div class="rdesc">Foundation is strong. The work is scaling, validating, and communicating clearly.</div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p1" data-readiness="r4">
+          <div class="cards">
+            <div class="mini" data-phase="p1" data-readiness="r4" onclick="openModal('p1_r4')">
+              <div class="top">
+                <div class="label">Shared purpose is owned</div>
+                <div class="tag">Community clarity</div>
+              </div>
+              <p class="text">Stakeholders can explain the “why” and name evidence that will count.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p2" data-readiness="r4">
+          <div class="cards">
+            <div class="mini" data-phase="p2" data-readiness="r4" onclick="openModal('p2_r4')">
+              <div class="top">
+                <div class="label">Design is precise and lean</div>
+                <div class="tag">Few, high-value measures</div>
+              </div>
+              <p class="text">A coherent architecture exists, with clear guardrails and decision rights.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p3" data-readiness="r4">
+          <div class="cards">
+            <div class="mini" data-phase="p3" data-readiness="r4" onclick="openModal('p3_r4')">
+              <div class="top">
+                <div class="label">Build includes validity arguments</div>
+                <div class="tag">Evidence quality</div>
+              </div>
+              <p class="text">Scoring, moderation, and comparability are designed into the tools from day one.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p4" data-readiness="r4">
+          <div class="cards">
+            <div class="mini" data-phase="p4" data-readiness="r4" onclick="openModal('p4_r4')">
+              <div class="top">
+                <div class="label">Implementation is predictable</div>
+                <div class="tag">High reliability</div>
+              </div>
+              <p class="text">Teams know the cadence, supports, expectations, and what “good” looks like.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p5" data-readiness="r4">
+          <div class="cards">
+            <div class="mini" data-phase="p5" data-readiness="r4" onclick="openModal('p5_r4')">
+              <div class="top">
+                <div class="label">Evaluation drives improvement</div>
+                <div class="tag">DDIER loop is real</div>
+              </div>
+              <p class="text">Claims are tested, revisions are made, and reporting builds trust.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cell" data-phase="p6" data-readiness="r4">
+          <div class="cards">
+            <div class="mini" data-phase="p6" data-readiness="r4" onclick="openModal('p6_r4')">
+              <div class="top">
+                <div class="label">Sustainability scales responsibly</div>
+                <div class="tag">Quality at scale</div>
+              </div>
+              <p class="text">The district can expand without lowering standards of evidence or equity.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="helper">
+      <div class="box">
+        <h3>Common “misreads” to avoid</h3>
+        <ul>
+          <li><strong>Phase skipping:</strong> rushing into dashboards or new measures before defining success and evidence rules.</li>
+          <li><strong>Pilot traps:</strong> staying in pilots forever without calibration, comparability, and decision rights.</li>
+          <li><strong>Overbuilding:</strong> too many indicators that dilute attention and create reporting fatigue.</li>
+          <li><strong>Trust gaps:</strong> scoring and moderation are not technical extras. They are the trust engine.</li>
+        </ul>
+      </div>
+
+      <div class="box">
+        <h3>How to use this with leaders</h3>
+        <ul>
+          <li>Pick one phase. Ask, “Which starting point best matches our reality, and why?”</li>
+          <li>Identify the <strong>highest leverage constraint</strong> (capacity, coherence, calibration, communication, governance).</li>
+          <li>Commit to one “next move” that reduces risk and increases clarity.</li>
+          <li>Repeat quarterly. Movement across starting points is progress worth tracking.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Starting Point Details">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title">
+          <strong id="mTitle">Title</strong>
+          <span id="mSub">Subtitle</span>
+        </div>
+        <button class="close" type="button" onclick="closeModal()">Close</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="panel">
+          <h4>What this often looks like</h4>
+          <p id="mLooks"></p>
+          <div class="kv" id="mTags"></div>
+        </div>
+        <div class="panel">
+          <h4>Examples you might recognize</h4>
+          <ul id="mExamples"></ul>
+        </div>
+        <div class="panel">
+          <h4>Primary risks if you stay here</h4>
+          <ul id="mRisks"></ul>
+        </div>
+        <div class="panel">
+          <h4>Next move that actually helps</h4>
+          <ul id="mNext"></ul>
+        </div>
+      </div>
+
+      <div class="foot" id="mFoot"></div>
+    </div>
+  </div>
+
+  <script>
+    const DETAILS = {
+      /* Phase 1 */
+      p1_r1: {
+        title: "Phase 1 (Groundwork) - Compliance-Only Starting Point",
+        sub: "The district is “doing groundwork” but mainly for optics or requirements.",
+        looks: "Leaders can point to a mission statement or strategic plan, but stakeholders cannot explain a shared definition of success. Listening is limited, data is fragmented, and the district avoids naming gaps because it feels political or heavy.",
+        tags: ["Portrait is a poster", "No gap map", "Stakeholder voice is thin", "Low trust baseline"],
+        examples: [
+          "A Portrait of a Graduate exists in a slide deck but is not used in planning or instruction.",
+          "Meetings focus on what to report, not what to learn from current conditions.",
+          "Community engagement is a one-time survey with low response, and results are not revisited."
+        ],
+        risks: [
+          "Phase 2 becomes metric shopping or dashboard-first design.",
+          "The community reads the work as rebranding rather than change.",
+          "Teachers experience the initiative as “one more thing.”"
+        ],
+        next: [
+          "Run an honest Current Conditions and Readiness scan (what is strong, what is missing, what must be protected).",
+          "Hold 2-3 structured listening sessions that include students and families, and publish “what we heard, what we will do.”",
+          "Draft 5-8 non-negotiable learner outcomes in plain language and test them with stakeholders."
+        ],
+        foot: "If Phase 1 is weak, every later phase becomes harder and more expensive."
+      },
+      p1_r2: {
+        title: "Phase 1 (Groundwork) - Emerging Starting Point",
+        sub: "The district is ready to be honest, but the picture is still incomplete.",
+        looks: "There is real engagement, but not yet broad participation. The district can name some strengths and gaps, but the story is not coherent across schools. Baseline evidence exists, but it is not organized into a clear map of what will count.",
+        tags: ["Some coalition work", "Partial baseline", "Uneven clarity by school"],
+        examples: [
+          "Student panels exist, but only at secondary or only in one school.",
+          "Some schools use portfolios or performance tasks, others do not.",
+          "The district has multiple initiatives, but no single logic thread connecting them."
+        ],
+        risks: [
+          "The district overpromises before coherence is built.",
+          "Early adopters burn out and skeptics feel validated.",
+          "Equity gaps widen because implementation quality varies."
+        ],
+        next: [
+          "Create a one-page “current conditions map” showing: strengths, gaps, equity concerns, capacity constraints, and bright spots.",
+          "Define an initial Evidence Map (what counts as evidence of growth, mastery, readiness, and learner experience).",
+          "Name decision rules: what the district will stop, start, and protect during the transition."
+        ],
+        foot: "Emerging districts should protect momentum, but not confuse momentum with coherence."
+      },
+      p1_r3: {
+        title: "Phase 1 (Groundwork) - Building Starting Point",
+        sub: "The district can clearly describe reality and is ready to lock in the foundation.",
+        looks: "A representative coalition exists. The district has a baseline and an evidence inventory. Leaders can articulate what success should mean locally and why the current system undercaptures student capability.",
+        tags: ["Baseline + gap map", "Clear narrative", "Coalition functioning"],
+        examples: [
+          "A draft Portrait is already being used to shape conversations about instruction and assessment.",
+          "Leaders can show where current measures overemphasize test snapshots.",
+          "Early evidence practices exist (portfolios, tasks, exhibitions) and are being documented."
+        ],
+        risks: [
+          "Getting stuck in discussion without making clear decisions.",
+          "Letting “perfect” delay Phase 2 tool-building.",
+          "Underestimating communication needs for the broader community."
+        ],
+        next: [
+          "Finalize the Phase 1 products: Portrait, principles, and a simple logic model that connects daily work to outcomes.",
+          "Publish a clear Phase 1 summary for families and staff: ‘What we learned and what comes next.’",
+          "Define Phase 2 build priorities (the few tools that will do the most work)."
+        ],
+        foot: "Building districts should now shift from sensemaking to architecture."
+      },
+      p1_r4: {
+        title: "Phase 1 (Groundwork) - Ready to Accelerate Starting Point",
+        sub: "Purpose is owned, gaps are named, and the evidence plan is credible.",
+        looks: "Stakeholders can explain local success and the reason for change. The district has a disciplined evidence philosophy: what will count, how it will be judged, and how trust will be protected (calibration and transparency).",
+        tags: ["High trust", "Clear evidence philosophy", "Ready for Phase 2 architecture"],
+        examples: [
+          "Board and community partners can describe the Portrait and the role of performance evidence.",
+          "The district can show current vs desired evidence balance (growth, mastery, readiness).",
+          "There is a clear set of non-negotiable principles that will guide design choices."
+        ],
+        risks: [
+          "Overbuilding in Phase 2 (too many measures).",
+          "Scaling too quickly without scoring and moderation routines.",
+          "Not budgeting time for professional learning and calibration."
+        ],
+        next: [
+          "Move into Phase 2 with a ‘lean architecture’ mindset: fewer measures, higher quality.",
+          "Define the validity and reliability guardrails for any new evidence source.",
+          "Set the first-year implementation boundary: what will be piloted vs scaled."
+        ],
+        foot: "Acceleration is safest when the evidence quality system is planned, not assumed."
+      },
+
+      /* Phase 2 */
+      p2_r1: {
+        title: "Phase 2 (Design) - Compliance-Only Starting Point",
+        sub: "Design starts with metrics instead of meaning.",
+        looks: "Teams pick indicators because they are easy to count or already in a spreadsheet. The system becomes a collection of measures without a defensible story about what they mean or why they matter.",
+        tags: ["Dashboards first", "No decision rules", "Low coherence"],
+        examples: [
+          "Selecting 30+ measures to show ‘we cover everything.’",
+          "Copying another district’s indicators without local adaptation.",
+          "Defining readiness as an index score without evidence logic."
+        ],
+        risks: [
+          "Reporting fatigue and low trust.",
+          "Weak validity, unclear interpretations, and political pushback.",
+          "Schools chase numbers rather than improving learning experiences."
+        ],
+        next: [
+          "Write the design constraints: principles, purpose, and the few outcomes that matter most.",
+          "Use a measure-selection rubric: relevance, fairness, feasibility, interpretability, actionability.",
+          "Publish a one-page model: outcomes -> evidence -> measures -> decisions."
+        ],
+        foot: "Good design is not more measures. It is clearer meaning."
+      },
+      p2_r2: {
+        title: "Phase 2 (Design) - Emerging Starting Point",
+        sub: "Good drafts exist, but the architecture still shifts from meeting to meeting.",
+        looks: "There is movement toward clarity, but decision rights, guardrails, and evidence rules are not fully established. The system is still vulnerable to “loudest voice” changes.",
+        tags: ["Drafts exist", "Guardrails missing", "Inconsistent decisions"],
+        examples: [
+          "A portrait is drafted, but measures still default to state test outcomes.",
+          "Teams debate what counts as evidence without a shared rubric.",
+          "Different schools interpret learner outcomes differently."
+        ],
+        risks: [
+          "Design creep and stakeholder confusion.",
+          "Inconsistent implementation due to unclear definitions.",
+          "Equity issues because evidence rules vary by context."
+        ],
+        next: [
+          "Finalize principles and define decision rules (accept, revise, reject).",
+          "Create an Evidence Map with examples and non-examples.",
+          "Define what will be common vs what can be locally flexible."
+        ],
+        foot: "Emerging design needs guardrails more than new ideas."
+      },
+      p2_r3: {
+        title: "Phase 2 (Design) - Building Starting Point",
+        sub: "Architecture is forming and coherence checks are being used.",
+        looks: "Teams have a stable set of outcomes and are building a coherent system around them. The district can explain how different evidence sources combine to tell a balanced story.",
+        tags: ["Coherence checks", "Decision rules", "Balanced evidence model"],
+        examples: [
+          "A measure set that separates growth, mastery, readiness, and experience.",
+          "Clear tagging for evidence types (performance task, portfolio, survey, observation).",
+          "Design documents that schools can actually use."
+        ],
+        risks: [
+          "Underbuilding the quality-control system (calibration).",
+          "Failing to plan for data literacy and communication.",
+          "Trying to launch too much at once."
+        ],
+        next: [
+          "Specify the scoring and moderation approach for performance evidence.",
+          "Create communication artifacts for different audiences (families, board, teachers).",
+          "Define Phase 3 build priorities and the pilot plan."
+        ],
+        foot: "Good design anticipates quality assurance and communication."
+      },
+      p2_r4: {
+        title: "Phase 2 (Design) - Ready to Accelerate Starting Point",
+        sub: "Design is lean, defensible, and built for trust.",
+        looks: "A clear architecture exists with evidence rules, equity checks, and stakeholder roles. The district can defend interpretations and decisions without overclaiming.",
+        tags: ["Lean architecture", "Trust by design", "Equity checks"],
+        examples: [
+          "A small set of ‘Measures of Quality’ aligned to local principles.",
+          "A published evidence validity argument in plain language.",
+          "Clear governance on how measures will be reviewed and revised."
+        ],
+        risks: [
+          "Scaling too fast without training scorers and leaders.",
+          "Technology decisions outpacing instructional reality.",
+          "Communication lag creating rumors or resistance."
+        ],
+        next: [
+          "Move into Phase 3 by building only what your people can support with quality.",
+          "Invest in calibration and data literacy early.",
+          "Start public reporting with clarity and humility (what we know, what we are learning)."
+        ],
+        foot: "Acceleration is sustainable when quality control scales with it."
+      },
+
+      /* Phase 3 */
+      p3_r1: {
+        title: "Phase 3 (Build) - Compliance-Only Starting Point",
+        sub: "Tools appear, but the measurement logic is weak.",
+        looks: "Rubrics and templates are created quickly, but the district cannot explain how they produce trustworthy results. Scoring is inconsistent and evidence is hard to compare across classrooms.",
+        tags: ["Templates everywhere", "No calibration", "Low comparability"],
+        examples: [
+          "Each teacher uses a different rubric for the same standard.",
+          "No anchor papers or exemplars exist.",
+          "Portfolio requirements are unclear or arbitrary."
+        ],
+        risks: [
+          "Stakeholders lose trust in performance evidence.",
+          "Equity concerns increase due to inconsistent scoring.",
+          "Teachers experience performance assessment as subjective."
+        ],
+        next: [
+          "Build a common rubric backbone and add discipline-specific exemplars.",
+          "Establish moderation routines (team scoring, calibration meetings).",
+          "Define evidence tagging and minimum quality standards."
+        ],
+        foot: "If people cannot trust scoring, the whole model becomes vulnerable."
+      },
+      p3_r2: {
+        title: "Phase 3 (Build) - Emerging Starting Point",
+        sub: "Pilots exist, but quality varies too much to scale.",
+        looks: "Some tasks and rubrics are strong, others are unclear. The district is learning what works, but has not stabilized common expectations yet.",
+        tags: ["Pilot energy", "Uneven task quality", "Developing exemplars"],
+        examples: [
+          "One school has strong performance tasks, another relies on traditional tests only.",
+          "Portfolio use varies by grade band.",
+          "Students receive mixed messages about what counts."
+        ],
+        risks: [
+          "Pilot islands and uneven student experience.",
+          "Scaling failures due to weak support structures.",
+          "Overreliance on a few talented individuals."
+        ],
+        next: [
+          "Select a small set of high-quality tasks to become district exemplars.",
+          "Create an assessment quality checklist (alignment, accessibility, scoring clarity).",
+          "Train and practice calibration with representative student work."
+        ],
+        foot: "Emerging build requires standardization without killing teacher creativity."
+      },
+      p3_r3: {
+        title: "Phase 3 (Build) - Building Starting Point",
+        sub: "Tools are stabilizing through calibration and common routines.",
+        looks: "The district is building a shared language for scoring and evidence. Moderation is routine, and teams can explain how evidence supports claims about learning.",
+        tags: ["Common rubrics", "Moderation cadence", "Evidence tagging"],
+        examples: [
+          "Anchor sets exist for each major rubric dimension.",
+          "Moderation happens monthly or by unit.",
+          "Portfolio evidence is structured and meaningful."
+        ],
+        risks: [
+          "Not tracking drift in scoring over time.",
+          "Not addressing accessibility and fairness consistently.",
+          "Underinvesting in technology training and support."
+        ],
+        next: [
+          "Introduce periodic reliability checks (agreement rates, drift checks).",
+          "Audit tasks for accessibility and bias.",
+          "Build user-friendly tools for evidence collection and reporting."
+        ],
+        foot: "Building districts are close. Now protect quality at scale."
+      },
+      p3_r4: {
+        title: "Phase 3 (Build) - Ready to Accelerate Starting Point",
+        sub: "Build includes a defensible quality system from day one.",
+        looks: "The district designs scoring, moderation, and reporting together. Evidence quality, fairness, and interpretability are explicit, not assumed.",
+        tags: ["Validity argument", "Reliability routines", "Fairness checks"],
+        examples: [
+          "Clear scoring training with anchor work and feedback loops.",
+          "Structured portfolio evidence types with minimum thresholds.",
+          "Comparability strategies across schools are in place."
+        ],
+        risks: [
+          "Overengineering tools that users will not adopt.",
+          "Scaling before enough people are trained.",
+          "Not aligning build timelines to instructional calendars."
+        ],
+        next: [
+          "Pilot with quality, then scale with training and guardrails.",
+          "Publish ‘how scoring works’ in plain language for families and board.",
+          "Keep the toolset small and coherent."
+        ],
+        foot: "Acceleration works when you build for adoption, not perfection."
+      },
+
+      /* Phase 4 */
+      p4_r1: {
+        title: "Phase 4 (Implement) - Compliance-Only Starting Point",
+        sub: "Implementation feels like an add-on initiative.",
+        looks: "Teachers are told to implement new practices without time, models, or coaching. Confusion rises because expectations are unclear and the ‘why’ is not consistently communicated.",
+        tags: ["Low support", "Initiative overload", "Inconsistent expectations"],
+        examples: [
+          "Performance tasks are required, but rubrics and exemplars are missing.",
+          "Implementation timelines ignore pacing and workload realities.",
+          "Leaders check compliance rather than supporting practice."
+        ],
+        risks: [
+          "Teacher burnout and pushback.",
+          "Low-quality evidence and reduced trust.",
+          "Student experience becomes inconsistent."
+        ],
+        next: [
+          "Define minimum viable implementation (what must happen, what can wait).",
+          "Provide coaching cycles and exemplar walkthroughs.",
+          "Reduce competing initiatives for a defined window."
+        ],
+        foot: "Implementation quality is the student experience. Protect it."
+      },
+      p4_r2: {
+        title: "Phase 4 (Implement) - Emerging Starting Point",
+        sub: "Some schools are strong, others are stuck.",
+        looks: "Implementation depends on a few champions. Schools with capacity thrive, while others struggle due to leadership turnover, staffing, or unclear supports.",
+        tags: ["Patchwork implementation", "Champion-dependent", "Uneven student experience"],
+        examples: [
+          "One school runs exhibitions, another cannot get portfolios started.",
+          "Coaching exists, but only for some grade levels.",
+          "Data use is inconsistent across schools."
+        ],
+        risks: [
+          "Equity problems across schools.",
+          "Implementation stalls when champions leave.",
+          "Community confusion about what the system really is."
+        ],
+        next: [
+          "Create a common cadence: training, practice, moderation, feedback, revision.",
+          "Assign implementation supports by need (not evenly).",
+          "Clarify what evidence is required and why."
+        ],
+        foot: "Emerging implementation needs predictable routines and differentiated support."
+      },
+      p4_r3: {
+        title: "Phase 4 (Implement) - Building Starting Point",
+        sub: "Implementation is supported and improving through feedback loops.",
+        looks: "There are clear routines and supports. Schools can show evidence of practice and improvement. Leaders focus on capacity-building, not compliance.",
+        tags: ["Coaching + PL", "Clear cadence", "Visible classroom evidence"],
+        examples: [
+          "District-wide moderation days exist.",
+          "Leaders use walkthrough tools aligned to the learner outcomes.",
+          "Schools share exemplars and learn from each other."
+        ],
+        risks: [
+          "Scaling too quickly without maintaining calibration.",
+          "Neglecting communication with families and partners.",
+          "Not integrating with existing improvement planning."
+        ],
+        next: [
+          "Strengthen cross-school learning networks.",
+          "Integrate implementation indicators into improvement cycles.",
+          "Continue training for new staff and leaders."
+        ],
+        foot: "Building implementation is about steady quality, not speed."
+      },
+      p4_r4: {
+        title: "Phase 4 (Implement) - Ready to Accelerate Starting Point",
+        sub: "Implementation is predictable, supported, and high-trust.",
+        looks: "Teams understand expectations and the support system. Evidence is produced with quality, scoring is stable, and stakeholder communication is frequent and clear.",
+        tags: ["High reliability", "Strong supports", "Coherent system behavior"],
+        examples: [
+          "Implementation dashboards track support needs and quality indicators.",
+          "Students can explain how they demonstrate growth and readiness.",
+          "Families can interpret reports and see evidence samples."
+        ],
+        risks: [
+          "Complacency (assuming the system will self-sustain).",
+          "Tool creep (adding measures as soon as things work).",
+          "Not planning for long-term governance and revision."
+        ],
+        next: [
+          "Scale responsibly: keep measures lean, quality high.",
+          "Formalize governance routines for annual review and revision.",
+          "Invest in continuous onboarding and calibration."
+        ],
+        foot: "Acceleration is sustained by disciplined simplicity."
+      },
+
+      /* Phase 5 */
+      p5_r1: {
+        title: "Phase 5 (Evaluate) - Compliance-Only Starting Point",
+        sub: "Evaluation is reporting, not learning.",
+        looks: "Teams collect data and produce a report, but do not test claims or revise system components. Evidence is used to justify decisions already made.",
+        tags: ["Reporting only", "No improvement loop", "Weak inference"],
+        examples: [
+          "Year-end report is produced and shelved.",
+          "No stakeholder review sessions exist.",
+          "Measures are not audited for quality or fairness."
+        ],
+        risks: [
+          "System stagnation and loss of trust.",
+          "Bad measures remain because no one challenges them.",
+          "The district cannot defend claims publicly."
+        ],
+        next: [
+          "Run an annual ‘claims and evidence’ review: what do we claim, what supports it, what is missing?",
+          "Audit scoring consistency and task quality.",
+          "Use findings to revise Phase 2 and Phase 3 artifacts."
+        ],
+        foot: "Evaluation should strengthen credibility, not just produce a document."
+      },
+      p5_r2: {
+        title: "Phase 5 (Evaluate) - Emerging Starting Point",
+        sub: "The district can describe change, but cannot yet defend impact confidently.",
+        looks: "There are early evaluation routines, but evidence is not yet strong enough for high-stakes conclusions. The district is learning how to triangulate measures and avoid overclaiming.",
+        tags: ["Descriptive evaluation", "Growing evidence literacy", "Learning to triangulate"],
+        examples: [
+          "Teams review survey data and portfolio samples, but scoring is inconsistent.",
+          "Schools interpret results differently.",
+          "Equity analyses are partial."
+        ],
+        risks: [
+          "Overclaiming results and losing trust.",
+          "Underclaiming and losing momentum.",
+          "Missing equity issues until they become political."
+        ],
+        next: [
+          "Strengthen the evaluation plan: questions, evidence sources, and interpretation rules.",
+          "Run moderation and reliability checks before public claims.",
+          "Add equity and access analyses as required components."
+        ],
+        foot: "Emerging evaluation improves credibility when it is disciplined and humble."
+      },
+      p5_r3: {
+        title: "Phase 5 (Evaluate) - Building Starting Point",
+        sub: "Evidence supports stronger inferences and improvement actions.",
+        looks: "Multiple measures are used thoughtfully. The district can identify what is improving, what is stuck, and why. Evaluation results lead to specific revisions.",
+        tags: ["Triangulation", "Actionable findings", "Revision routines"],
+        examples: [
+          "Annual review includes student experience, outcomes, and evidence quality.",
+          "System components are revised based on findings.",
+          "Stakeholders are engaged in interpreting results."
+        ],
+        risks: [
+          "Not communicating findings clearly to different audiences.",
+          "Letting evaluation become too technical and inaccessible.",
+          "Neglecting ongoing reliability and fairness checks."
+        ],
+        next: [
+          "Create public-facing summaries with clear claims and examples.",
+          "Institutionalize annual revision cycles tied to governance.",
+          "Continue auditing evidence quality and equity."
+        ],
+        foot: "Building evaluation turns accountability into a learning system."
+      },
+      p5_r4: {
+        title: "Phase 5 (Evaluate) - Ready to Accelerate Starting Point",
+        sub: "Evaluation drives system improvement and public trust.",
+        looks: "The district tests claims, communicates clearly, and revises confidently. Evidence quality is monitored and protected. Stakeholders see how feedback changes the system.",
+        tags: ["DDIER loop is real", "High trust", "Clear public narrative"],
+        examples: [
+          "Public reports include evidence samples and plain-language interpretation.",
+          "The district can explain measurement error and uncertainty responsibly.",
+          "Revisions are tracked and communicated as improvements."
+        ],
+        risks: [
+          "Becoming too complex for stakeholders to follow.",
+          "Mission drift under political pressure.",
+          "Assuming trust will maintain itself."
+        ],
+        next: [
+          "Keep reporting simple while maintaining technical rigor.",
+          "Guard against drift with principle-based reviews.",
+          "Expand peer review and external validation as needed."
+        ],
+        foot: "Acceleration here means strengthening credibility while staying human."
+      },
+
+      /* Phase 6 */
+      p6_r1: {
+        title: "Phase 6 (Sustain) - Compliance-Only Starting Point",
+        sub: "The model depends on a person, not a system.",
+        looks: "A few leaders or teachers hold the model together. Documentation is thin, onboarding is informal, and routines are not embedded in governance or calendars.",
+        tags: ["Leader-dependent", "Fragile routines", "Low institutional memory"],
+        examples: [
+          "No written scoring or moderation procedures.",
+          "New staff receive inconsistent training.",
+          "Reporting pauses when leadership changes."
+        ],
+        risks: [
+          "Collapse after leadership transitions.",
+          "Community skepticism (“here we go again”).",
+          "Loss of evidence quality over time."
+        ],
+        next: [
+          "Document the core routines (what, when, who, how).",
+          "Build onboarding and calibration into annual calendars.",
+          "Assign governance ownership for annual review and revision."
+        ],
+        foot: "Sustainability is a design problem, not a motivation problem."
+      },
+      p6_r2: {
+        title: "Phase 6 (Sustain) - Emerging Starting Point",
+        sub: "Sustainability plans exist, but habits are not yet durable.",
+        looks: "The district is writing procedures and building calendars, but routines still feel new. Turnover creates wobble, and quality varies across schools.",
+        tags: ["Procedures forming", "Habits not durable", "Turnover sensitivity"],
+        examples: [
+          "Annual review meetings exist but are inconsistent.",
+          "Onboarding is improving but incomplete.",
+          "Calibration happens sometimes, not always."
+        ],
+        risks: [
+          "Gradual drift in scoring and expectations.",
+          "Equity issues re-emerge as consistency slips.",
+          "Staff perceive the work as optional over time."
+        ],
+        next: [
+          "Make routines non-optional by embedding them in governance, calendars, and improvement cycles.",
+          "Create cross-school peer review structures.",
+          "Monitor drift and address it early."
+        ],
+        foot: "Emerging sustainability means turning routines into default practice."
+      },
+      p6_r3: {
+        title: "Phase 6 (Sustain) - Building Starting Point",
+        sub: "The model survives leadership changes because it is embedded.",
+        looks: "Routines are institutionalized. Onboarding, calibration, evaluation, and revision are predictable. The district can maintain quality and coherence across schools.",
+        tags: ["Institutionalized routines", "Durable onboarding", "Cross-school coherence"],
+        examples: [
+          "Annual calendar includes moderation windows and evidence reviews.",
+          "New leaders receive training on the logic and evidence system.",
+          "The board expects updates aligned to the model."
+        ],
+        risks: [
+          "Innovation freeze (system becomes rigid).",
+          "Tool creep under new priorities.",
+          "Communication fatigue with stakeholders."
+        ],
+        next: [
+          "Maintain disciplined revision cycles so the system stays adaptive.",
+          "Protect simplicity by pruning measures regularly.",
+          "Keep the public narrative centered on student learning."
+        ],
+        foot: "Building sustainability requires both stability and adaptability."
+      },
+      p6_r4: {
+        title: "Phase 6 (Sustain) - Ready to Accelerate Starting Point",
+        sub: "The district can scale responsibly without sacrificing quality or equity.",
+        looks: "Quality assurance scales with expansion. Evidence remains credible, interpretation stays clear, and stakeholder trust increases because the system stays coherent over time.",
+        tags: ["Quality at scale", "Equity protected", "High trust governance"],
+        examples: [
+          "Peer review across schools is routine.",
+          "External validation is used strategically.",
+          "The district can add components without clutter."
+        ],
+        risks: [
+          "Overconfidence and rapid expansion.",
+          "Political pressure to simplify into a single score.",
+          "Undercommunicating uncertainty or limitations."
+        ],
+        next: [
+          "Scale in waves with clear quality gates.",
+          "Continue transparent reporting with examples and plain language.",
+          "Use principle-based reviews to prevent drift."
+        ],
+        foot: "Acceleration here means scaling integrity, not just scaling activity."
+      }
+    };
+
+    function openModal(key){
+      const d = DETAILS[key];
+      if(!d) return;
+
+      document.getElementById("mTitle").textContent = d.title;
+      document.getElementById("mSub").textContent = d.sub;
+      document.getElementById("mLooks").textContent = d.looks;
+
+      const tags = document.getElementById("mTags");
+      tags.innerHTML = "";
+      (d.tags || []).forEach(t => {
+        const el = document.createElement("span");
+        el.className = "chip";
+        el.innerHTML = `<span class="dot" style="background:${tagDotColor(key)}"></span><span>${escapeHtml(t)}</span>`;
+        tags.appendChild(el);
+      });
+
+      const ex = document.getElementById("mExamples");
+      ex.innerHTML = "";
+      (d.examples || []).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        ex.appendChild(li);
+      });
+
+      const rs = document.getElementById("mRisks");
+      rs.innerHTML = "";
+      (d.risks || []).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        rs.appendChild(li);
+      });
+
+      const nx = document.getElementById("mNext");
+      nx.innerHTML = "";
+      (d.next || []).forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        nx.appendChild(li);
+      });
+
+      document.getElementById("mFoot").textContent = d.foot || "";
+      document.getElementById("modal").classList.add("open");
+    }
+
+    function closeModal(){
+      document.getElementById("modal").classList.remove("open");
+    }
+
+    // Close modal when clicking backdrop
+    document.getElementById("modal").addEventListener("click", (e) => {
+      if(e.target.id === "modal") closeModal();
+    });
+
+    // Escape helper
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function tagDotColor(key){
+      // color based on readiness in key (r1-r4)
+      if(key.includes("_r1")) return getComputedStyle(document.documentElement).getPropertyValue("--r1");
+      if(key.includes("_r2")) return getComputedStyle(document.documentElement).getPropertyValue("--r2");
+      if(key.includes("_r3")) return getComputedStyle(document.documentElement).getPropertyValue("--r3");
+      if(key.includes("_r4")) return getComputedStyle(document.documentElement).getPropertyValue("--r4");
+      return "#9ca3af";
+    }
+
+    // Filtering
+    const phaseFilter = document.getElementById("phaseFilter");
+    const readinessFilter = document.getElementById("readinessFilter");
+
+    phaseFilter.addEventListener("change", applyFilters);
+    readinessFilter.addEventListener("change", applyFilters);
+
+    function applyFilters(){
+      const p = phaseFilter.value;     // all or p1..p6
+      const r = readinessFilter.value; // all or r1..r4
+
+      const phaseHeads = document.querySelectorAll(".cell.head[data-phase]");
+      phaseHeads.forEach(h => {
+        h.style.opacity = (p === "all" || h.dataset.phase === p) ? "1" : "0.35";
+      });
+
+      const allCells = document.querySelectorAll(".cell[data-phase][data-readiness]");
+      allCells.forEach(c => {
+        const show = (p === "all" || c.dataset.phase === p) && (r === "all" || c.dataset.readiness === r);
+        c.style.display = show ? "block" : "none";
+      });
+
+      const leftLabels = document.querySelectorAll(".cell.left[data-readiness]");
+      leftLabels.forEach(l => {
+        const showRow = (r === "all" || l.dataset.readiness === r);
+        l.style.display = showRow ? "block" : "none";
+      });
+
+      // Maintain grid alignment: if phase filtered, hide phase header cells too
+      const headCells = document.querySelectorAll(".cell.head[data-phase]");
+      headCells.forEach(h => {
+        h.style.display = (p === "all" || h.dataset.phase === p) ? "block" : "none";
+      });
+    }
+
+    function resetFilters(){
+      phaseFilter.value = "all";
+      readinessFilter.value = "all";
+
+      // reset visibility
+      document.querySelectorAll(".cell").forEach(c => c.style.display = "block");
+      document.querySelectorAll(".cell.head[data-phase]").forEach(h => h.style.opacity = "1");
+    }
+  </script>
+</body>
+</html>
