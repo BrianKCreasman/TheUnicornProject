@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Local Accountability Framework – Guided Experience</title>
+
+<style>
+  :root {
+    --navy: #0a355e;
+    --gold: #dbd59b;
+    --light: #f7f7f7;
+    --gray: #666;
+  }
+
+  body {
+    margin: 0;
+    font-family: Inter, Arial, sans-serif;
+    background: var(--light);
+    color: #111;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 260px;
+    background: white;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .sidebar h3 {
+    margin-top: 0;
+    color: var(--navy);
+  }
+
+  .nav-link {
+    display: block;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    text-decoration: none;
+    color: #111;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .nav-link.active {
+    background: var(--navy);
+    color: white;
+  }
+
+  /* Main area */
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top toggles */
+  .top-bar {
+    background: white;
+    padding: 12px 20px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pill-group button {
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    background: white;
+    cursor: pointer;
+    margin-right: 6px;
+  }
+
+  .pill-group button.active {
+    background: var(--navy);
+    color: white;
+    border-color: var(--navy);
+  }
+
+  /* Content */
+  .content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+  }
+
+  section {
+    display: none;
+    max-width: 900px;
+  }
+
+  section.active {
+    display: block;
+  }
+
+  h2 {
+    color: var(--navy);
+  }
+
+  .step-box {
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  }
+
+  /* Navigation buttons */
+  .step-nav {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .step-nav button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+  }
+
+  .back-btn {
+    background: #e6e6e6;
+  }
+
+  .next-btn {
+    background: var(--navy);
+    color: white;
+  }
+
+  .back-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+</style>
+</head>
+
+<body class="single-panel">
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h3>Framework Steps</h3>
+  <a class="nav-link active" data-target="step1">Phase 1 · Groundwork</a>
+  <a class="nav-link" data-target="step2">Phase 2 · Design</a>
+  <a class="nav-link" data-target="step3">Phase 3 · Development</a>
+  <a class="nav-link" data-target="step4">Phase 4 · Implementation</a>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- Top Toggles -->
+  <div class="top-bar">
+    <strong>Kentucky Local Accountability Framework</strong>
+    <div class="pill-group">
+      <button class="active">Everyone View</button>
+      <button>Leader View</button>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- STEP 1 -->
+    <section id="step1" class="active">
+      <div class="step-box">
+        <h2>Phase 1: Laying the Groundwork</h2>
+        <p>
+          This phase helps districts slow down and understand current reality.
+          Leaders examine how learning, assessment, and accountability actually
+          function today. The goal is clarity, not judgment.
+        </p>
+        <ul>
+          <li>Surface current practices and assumptions</li>
+          <li>Engage stakeholders in honest reflection</li>
+          <li>Form the Local Accountability Advisory Council</li>
+        </ul>
+
+        <div class="step-nav">
+          <button class="back-btn" disabled>Back</button>
+          <button class="next-btn" onclick="goNext()">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2 -->
+    <section id="step2">
+      <div class="step-box">
+        <h2>Phase 2: Designing the Vision</h2>
+        <p>
+          This is the design studio. Districts translate insights from Phase 1
+          into a clear architecture. Decisions are made about what matters,
+          how success is defined, and what evidence counts.
+        </p>
+        <ul>
+          <li>Define the theory of action</li>
+          <li>Align Six Pillars and Continuum</li>
+          <li>Draft measures of quality</li>
+        </ul>
+
+        <div class="step-nav">
+          <button class="back-btn" onclick="goBack()">Back</button>
+          <button class="next-btn" onclick="goNext()">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3 -->
+    <section id="step3">
+      <div class="step-box">
+        <h2>Phase 3: Development and Testing</h2>
+        <p>
+          In this phase, the framework comes to life. Tools, rubrics, dashboards,
+          and routines are developed and tested with real classrooms and schools.
+        </p>
+        <ul>
+          <li>Create prototypes and tools</li>
+          <li>Pilot with early adopters</li>
+          <li>Collect feedback and refine</li>
+        </ul>
+
+        <div class="step-nav">
+          <button class="back-btn" onclick="goBack()">Back</button>
+          <button class="next-btn" onclick="goNext()">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4 -->
+    <section id="step4">
+      <div class="step-box">
+        <h2>Phase 4: Implementation and Learning</h2>
+        <p>
+          Implementation is not a finish line. Districts launch the system,
+          support leaders and teachers, and continuously learn from the work.
+        </p>
+        <ul>
+          <li>Scale implementation</li>
+          <li>Monitor evidence in real time</li>
+          <li>Revise through continuous improvement</li>
+        </ul>
+
+        <div class="step-nav">
+          <button class="back-btn" onclick="goBack()">Back</button>
+          <button class="next-btn" disabled>Finish</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  const sections = ["step1", "step2", "step3", "step4"];
+  let currentIndex = 0;
+
+  function showSection(index) {
+    sections.forEach((id, i) => {
+      document.getElementById(id).classList.toggle("active", i === index);
+      document.querySelectorAll(".nav-link")[i].classList.toggle("active", i === index);
+    });
+    currentIndex = index;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function goNext() {
+    if (currentIndex < sections.length - 1) {
+      showSection(currentIndex + 1);
+    }
+  }
+
+  function goBack() {
+    if (currentIndex > 0) {
+      showSection(currentIndex - 1);
+    }
+  }
+
+  document.querySelectorAll(".nav-link").forEach((link, index) => {
+    link.addEventListener("click", () => showSection(index));
+  });
+</script>
+
+</body>
+</html>
