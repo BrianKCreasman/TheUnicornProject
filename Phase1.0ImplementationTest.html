@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Phase 1 Implementation Guide – Local Accountability Framework</title>
+  <title>Phase 1 Implementation Guide - Local Accountability Framework</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
@@ -14,6 +14,15 @@
       --muted: #70747a;
       --card-bg: #ffffff;
       --border-soft: #dde3ee;
+
+      --role-student: #2f80ed;
+      --role-teacher: #27ae60;
+      --role-staff: #7f8c8d;
+      --role-schoolLeader: #f2c94c;
+      --role-districtLeader: #0a355e;
+      --role-boardMember: #9b51e0;
+      --role-parent: #f2994a;
+      --role-community: #0e8577;
     }
 
     * {
@@ -221,10 +230,53 @@
       white-space: nowrap;
     }
 
-    .stakeholder-pill.active {
-      background: var(--teal);
+    /* Active colors for stakeholder pills */
+    .stakeholder-pill[data-role="student"].active {
+      background: var(--role-student);
+      border-color: var(--role-student);
       color: #ffffff;
-      border-color: var(--teal);
+    }
+
+    .stakeholder-pill[data-role="teacher"].active {
+      background: var(--role-teacher);
+      border-color: var(--role-teacher);
+      color: #ffffff;
+    }
+
+    .stakeholder-pill[data-role="staff"].active {
+      background: var(--role-staff);
+      border-color: var(--role-staff);
+      color: #ffffff;
+    }
+
+    .stakeholder-pill[data-role="schoolLeader"].active {
+      background: var(--role-schoolLeader);
+      border-color: var(--role-schoolLeader);
+      color: #ffffff;
+    }
+
+    .stakeholder-pill[data-role="districtLeader"].active {
+      background: var(--role-districtLeader);
+      border-color: var(--role-districtLeader);
+      color: #ffffff;
+    }
+
+    .stakeholder-pill[data-role="boardMember"].active {
+      background: var(--role-boardMember);
+      border-color: var(--role-boardMember);
+      color: #ffffff;
+    }
+
+    .stakeholder-pill[data-role="parentGuardian"].active {
+      background: var(--role-parent);
+      border-color: var(--role-parent);
+      color: #ffffff;
+    }
+
+    .stakeholder-pill[data-role="communityMember"].active {
+      background: var(--role-community);
+      border-color: var(--role-community);
+      color: #ffffff;
     }
 
     section {
@@ -625,7 +677,6 @@
       margin-top: 6px;
       border-radius: 10px;
       border: 1px dashed var(--border-soft);
-      background: #f7f9ff;
       padding: 8px;
       font-size: 12px;
     }
@@ -641,6 +692,47 @@
       letter-spacing: 0.08em;
       color: var(--muted);
       margin-bottom: 3px;
+    }
+
+    /* Stakeholder panel colors */
+    .stakeholder-panel[data-role="student"] {
+      border-left: 3px solid var(--role-student);
+      background: #eef3ff;
+    }
+
+    .stakeholder-panel[data-role="teacher"] {
+      border-left: 3px solid var(--role-teacher);
+      background: #e9f8f0;
+    }
+
+    .stakeholder-panel[data-role="staff"] {
+      border-left: 3px solid var(--role-staff);
+      background: #f5f6f6;
+    }
+
+    .stakeholder-panel[data-role="schoolLeader"] {
+      border-left: 3px solid var(--role-schoolLeader);
+      background: #fff9e7;
+    }
+
+    .stakeholder-panel[data-role="districtLeader"] {
+      border-left: 3px solid var(--role-districtLeader);
+      background: #e8f0f7;
+    }
+
+    .stakeholder-panel[data-role="boardMember"] {
+      border-left: 3px solid var(--role-boardMember);
+      background: #f5e9ff;
+    }
+
+    .stakeholder-panel[data-role="parentGuardian"] {
+      border-left: 3px solid var(--role-parent);
+      background: #fff3e6;
+    }
+
+    .stakeholder-panel[data-role="communityMember"] {
+      border-left: 3px solid var(--role-community);
+      background: #e7f7f4;
     }
 
     .footer {
@@ -669,13 +761,11 @@
       <li><a href="#hero" class="nav-link">Phase 1 Snapshot</a></li>
       <li><a href="#orientation" class="nav-link">1. Orientation</a></li>
       <li><a href="#preconditions" class="nav-link">2. Preconditions</a></li>
-      <li><a href="#roles" class="nav-link">3. Roles</a></li>
+      <li><a href="#roles" class="nav-link">3. Roles and LAAC</a></li>
       <li><a href="#process" class="nav-link">4. Process Map</a></li>
       <li><a href="#steps" class="nav-link">5. Step by Step</a></li>
       <li><a href="#summary-template" class="nav-link">6. School Summary</a></li>
       <li><a href="#fidelity" class="nav-link">7. Checklists</a></li>
-      <li><a href="#pl" class="nav-link">8. PL Supports</a></li>
-      <li><a href="#pitfalls" class="nav-link">9. Pitfalls</a></li>
       <li><a href="#huddle" class="nav-link">Leadership Huddle</a></li>
     </ul>
   </aside>
@@ -746,24 +836,26 @@
             <ul>
               <li>We tell the truth about what school feels like right now for students, families, and staff.</li>
               <li>We gather real examples of learning and assessment, not only test scores and rankings.</li>
+              <li>We create a Local Accountability Advisory Council so every stakeholder group has a seat at the table.</li>
               <li>We decide, together, where we are ready to grow and where we need to build foundations first.</li>
             </ul>
             <div class="subheading">By the end of Phase 1, we have:</div>
             <ul>
               <li>A one page summary for each school that captures strengths, challenges, and readiness.</li>
-              <li>A district wide picture of where we are starting from.</li>
+              <li>A district wide picture of where we are starting from that the board and community can see.</li>
               <li>Three to five clear priorities that will drive Phase 2 design and decisions.</li>
+              <li>A functioning Local Accountability Advisory Council that understands its role and next steps.</li>
             </ul>
           </div>
           <div>
-            <div class="subheading">Who needs to understand this?</div>
+            <div class="subheading">Who needs to understand this</div>
             <ul>
-              <li>Board members and district leaders who set direction.</li>
-              <li>Principals and teacher leaders who organize the work.</li>
-              <li>Staff, families, and community partners who will live the changes.</li>
+              <li>Board members and district leaders who set direction and expectations.</li>
+              <li>Principals and teacher leaders who organize the work and gather evidence.</li>
+              <li>Staff, families, community partners, and students who will live the changes.</li>
             </ul>
             <div class="tiny-label" style="margin-top:6px;">
-              Most people only need this view. The detailed steps and tools are for the teams actually running Phase 1.
+              Most people only need this view. The detailed steps, checklists, and LAAC tools are for the teams actually running Phase 1.
             </div>
           </div>
         </div>
@@ -772,43 +864,67 @@
         <div class="stakeholder-panel" data-role="student">
           <div class="stakeholder-panel-title">From a student perspective</div>
           <ul class="checklist">
-            <li><input type="checkbox" /><span>I know that adults are asking honest questions about what school feels like for students.</span></li>
-            <li><input type="checkbox" /><span>I have at least one way to share my voice in this process. survey, panel, conversation, or reflection.</span></li>
-            <li><input type="checkbox" /><span>I see that when I share feedback, someone acknowledges it or explains next steps.</span></li>
+            <li><input type="checkbox" /><span>I know that adults are asking honest questions about what school feels like for students, not only about test scores.</span></li>
+            <li><input type="checkbox" /><span>I have at least one way to share my voice in this process such as a survey, panel, conversation, or reflection.</span></li>
+            <li><input type="checkbox" /><span>I see or hear a summary of what students are saying, not just questions going into a black box.</span></li>
           </ul>
-          <div class="tiny-label">
-            Example. A student panel is invited to talk about grading and feedback. The facilitator explains that this is part of Phase 1, not just a one time event.
+          <div class="example-callout">
+            <div class="example-label">Student example</div>
+            <div>
+              Eighth grade students are invited to a lunch conversation where the principal asks, "When do you feel like
+              your learning really matters" and "What makes it hard to show what you really know". Notes from the
+              conversation are shared with the Local Accountability Advisory Council.
+            </div>
           </div>
         </div>
 
         <div class="stakeholder-panel" data-role="teacher">
           <div class="stakeholder-panel-title">From a teacher perspective</div>
           <ul class="checklist">
-            <li><input type="checkbox" /><span>I understand why we are doing Phase 1 and how it connects to my classroom.</span></li>
-            <li><input type="checkbox" /><span>I have helped select or provide sample units, student work, or assessments that show what learning looks like.</span></li>
-            <li><input type="checkbox" /><span>I have been part of at least one conversation about what our current reality really looks like.</span></li>
+            <li><input type="checkbox" /><span>I understand why we are doing Phase 1 and how it connects to my classroom practice.</span></li>
+            <li><input type="checkbox" /><span>I have helped select or provide sample units, student work, or assessments that show what learning looks like in my classes.</span></li>
+            <li><input type="checkbox" /><span>I have been part of at least one conversation about what our current reality really looks like for students and teachers.</span></li>
           </ul>
-          <div class="tiny-label">
-            Example. A PLC uses part of its meeting time to examine current assessment tasks and talk about which ones truly capture student thinking.
+          <div class="example-callout">
+            <div class="example-label">Teacher example</div>
+            <div>
+              In a PLC, teachers bring recent assessment tasks and student work. The group looks at which tasks allow
+              students to demonstrate thinking and which ones only ask for recall. That conversation shapes what goes
+              into the current conditions scan.
+            </div>
           </div>
         </div>
 
         <div class="stakeholder-panel" data-role="staff">
           <div class="stakeholder-panel-title">From a staff member perspective</div>
           <ul class="checklist">
-            <li><input type="checkbox" /><span>I understand that Phase 1 is about improving student experience, not blaming staff.</span></li>
-            <li><input type="checkbox" /><span>I have at least one way to share what I see and experience in my role.</span></li>
-            <li><input type="checkbox" /><span>I know where to find the basic Phase 1 information if families ask me about it.</span></li>
+            <li><input type="checkbox" /><span>I understand that Phase 1 is about improving student experience, not blaming staff members.</span></li>
+            <li><input type="checkbox" /><span>I have at least one way to share what I see and experience in my role such as bus, cafeteria, front office, or support services.</span></li>
+            <li><input type="checkbox" /><span>I know where to find basic Phase 1 information if families ask questions at the front desk or on the phone.</span></li>
           </ul>
+          <div class="example-callout">
+            <div class="example-label">Staff example</div>
+            <div>
+              Office staff collect common parent questions and concerns for one month. Those patterns become part of the
+              school summary under family communication and support.
+            </div>
+          </div>
         </div>
 
         <div class="stakeholder-panel" data-role="schoolLeader">
           <div class="stakeholder-panel-title">From a school leader perspective</div>
           <ul class="checklist">
-            <li><input type="checkbox" /><span>I can explain Phase 1 in two or three sentences to any staff member or parent.</span></li>
+            <li><input type="checkbox" /><span>I can explain Phase 1 in two or three sentences to any staff member, student, or parent.</span></li>
             <li><input type="checkbox" /><span>I have a simple schedule for how my school will collect evidence, listen to stakeholders, and complete the summary.</span></li>
-            <li><input type="checkbox" /><span>I know how Phase 1 connects to the Six Pillars, the Continuum, and DDIER.</span></li>
+            <li><input type="checkbox" /><span>I know how Phase 1 connects to the Six Pillars, the Continuum, and DDIER for our district.</span></li>
           </ul>
+          <div class="example-callout">
+            <div class="example-label">School leader example</div>
+            <div>
+              During a faculty meeting, the principal shows a one slide visual of the Phase 1 steps and explains which
+              parts will happen in staff meetings, which in PLCs, and which through student and family input.
+            </div>
+          </div>
         </div>
 
         <div class="stakeholder-panel" data-role="districtLeader">
@@ -816,80 +932,108 @@
           <ul class="checklist">
             <li><input type="checkbox" /><span>We have clearly communicated expectations and supports for schools during Phase 1.</span></li>
             <li><input type="checkbox" /><span>We have a plan for how we will synthesize school level findings into a district story for the board and community.</span></li>
-            <li><input type="checkbox" /><span>We can name how Phase 1 findings will influence Phase 2 design decisions.</span></li>
+            <li><input type="checkbox" /><span>We can name how Phase 1 findings will influence concrete Phase 2 design decisions.</span></li>
           </ul>
+          <div class="example-callout">
+            <div class="example-label">District example</div>
+            <div>
+              The accountability director drafts a two page Phase 1 overview and reviews it with the Local Accountability
+              Advisory Council. Their feedback helps refine language before it goes to principals and the board.
+            </div>
+          </div>
         </div>
 
         <div class="stakeholder-panel" data-role="boardMember">
           <div class="stakeholder-panel-title">From a board member perspective</div>
           <ul class="checklist">
-            <li><input type="checkbox" /><span>I have seen at least one short overview of Phase 1 goals and timeline.</span></li>
+            <li><input type="checkbox" /><span>I have seen at least one short overview of Phase 1 goals and how it fits into the long range accountability work.</span></li>
             <li><input type="checkbox" /><span>I understand that Phase 1 is about learning how the system is working, not evaluating individual teachers.</span></li>
-            <li><input type="checkbox" /><span>I know when and how I will see a summary of Phase 1 findings.</span></li>
+            <li><input type="checkbox" /><span>I know when and how I will see a summary of Phase 1 findings at the board table.</span></li>
           </ul>
+          <div class="example-callout">
+            <div class="example-label">Board example</div>
+            <div>
+              At a work session, district leaders use three slides to explain Phase 1, the role of the Local Accountability
+              Advisory Council, and how board members will eventually see school and district summaries.
+            </div>
+          </div>
         </div>
 
         <div class="stakeholder-panel" data-role="parentGuardian">
           <div class="stakeholder-panel-title">From a parent or guardian perspective</div>
           <ul class="checklist">
-            <li><input type="checkbox" /><span>I have heard in simple language what the district is doing in Phase 1 and why.</span></li>
+            <li><input type="checkbox" /><span>I have heard in simple language what the district is doing in Phase 1 and why it matters for my child.</span></li>
             <li><input type="checkbox" /><span>I have at least one easy option to share my experience, such as a survey or listening session.</span></li>
-            <li><input type="checkbox" /><span>I believe my feedback will be used to shape what happens next.</span></li>
+            <li><input type="checkbox" /><span>I believe my feedback will be used to shape what happens next, not just stored in a report.</span></li>
           </ul>
+          <div class="example-callout">
+            <div class="example-label">Parent example</div>
+            <div>
+              The school sends a brief family newsletter with two questions about communication and one about grading.
+              Results are shared back to families and discussed at the next Local Accountability Advisory Council meeting.
+            </div>
+          </div>
         </div>
 
         <div class="stakeholder-panel" data-role="communityMember">
           <div class="stakeholder-panel-title">From a community member perspective</div>
           <ul class="checklist">
             <li><input type="checkbox" /><span>I understand that the district is building a local accountability model that goes beyond test scores.</span></li>
-            <li><input type="checkbox" /><span>I know how local businesses, organizations, or partners can share input.</span></li>
-            <li><input type="checkbox" /><span>I have seen at least one communication that connects this work to the community future.</span></li>
+            <li><input type="checkbox" /><span>I know how local businesses, organizations, or partners can share input about readiness and real world skills.</span></li>
+            <li><input type="checkbox" /><span>I have seen at least one communication that connects this work to the community future and workforce needs.</span></li>
           </ul>
+          <div class="example-callout">
+            <div class="example-label">Community example</div>
+            <div>
+              A local employer sits on the Local Accountability Advisory Council and shares how they currently hire, train,
+              and support graduates from the district. That feedback influences how the district talks about readiness.
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="section-title" style="margin-top:4px;">The Three Big Moves in Phase 1</div>
       <div class="section-subtitle">
-        Instead of seven separate tasks, think of Phase 1 as three moves that everyone can name and remember.
+        Instead of many separate tasks, think of Phase 1 as three big moves that everyone can name and remember.
       </div>
 
       <div class="big-moves-grid">
         <div class="big-move-card">
           <div class="big-move-label">Big Move 1</div>
-          <div class="big-move-title">Launch the Story</div>
+          <div class="big-move-title">Launch the Story and Form the Council</div>
           <ul>
             <li>Explain why the district is moving toward local accountability.</li>
-            <li>Connect Phase 1 to student experience, not just compliance.</li>
-            <li>Set simple expectations for what schools will do in this phase.</li>
+            <li>Connect Phase 1 to student experience, not just compliance or test scores.</li>
+            <li>Form the Local Accountability Advisory Council with representation from each stakeholder group.</li>
           </ul>
           <div class="tiny-label">
-            Output. A shared message that every principal and teacher can restate in their own words.
+            Output. A shared message and a functioning LAAC that will walk with the district through all phases.
           </div>
         </div>
 
         <div class="big-move-card">
           <div class="big-move-label">Big Move 2</div>
-          <div class="big-move-title">Look at Reality</div>
+          <div class="big-move-title">Look at Reality Together</div>
           <ul>
-            <li>Gather real examples of teaching, learning, and assessment.</li>
+            <li>Gather real examples of teaching, learning, and assessment across schools.</li>
             <li>Listen to students, staff, and families about their experience.</li>
             <li>Use a simple rubric to rate readiness in a few key areas.</li>
           </ul>
           <div class="tiny-label">
-            Output. A clear, honest picture of strengths and gaps in each school.
+            Output. A clear, honest picture of strengths and gaps in each school that the LAAC can review and respond to.
           </div>
         </div>
 
         <div class="big-move-card">
           <div class="big-move-label">Big Move 3</div>
-          <div class="big-move-title">Choose Priorities</div>
+          <div class="big-move-title">Choose Priorities and Next Steps</div>
           <ul>
             <li>Summarize Phase 1 findings into a one page school profile.</li>
             <li>Identify three to five focus areas for Phase 2 design work.</li>
-            <li>Combine school profiles into a district wide starting picture.</li>
+            <li>Combine school profiles into a district wide starting picture and preview it with the LAAC.</li>
           </ul>
           <div class="tiny-label">
-            Output. School and district summaries that point Phase 2 in the right direction.
+            Output. School and district summaries that point Phase 2 in the right direction, validated by the LAAC.
           </div>
         </div>
       </div>
@@ -905,7 +1049,7 @@
             <span class="district-system"
                   data-smith="Smith County Schools, KY"
                   data-template="[District Name], [State]">Smith County Schools, KY</span>
-            begins with evidence, not assumptions.
+            begins with evidence, not assumptions, and includes a Local Accountability Advisory Council from the start.
           </div>
           <div class="hero-badges">
             <span class="pill-inline">
@@ -914,7 +1058,7 @@
                     data-template="[District Name], [State]">Smith County Schools, KY</span>
             </span>
             <span class="pill-inline">Phase 1. Current Conditions and Readiness</span>
-            <span class="pill-inline">Audience. District, School, Classroom</span>
+            <span class="pill-inline">Local Accountability Advisory Council engaged</span>
           </div>
         </div>
         <div class="hero-stat-grid">
@@ -925,7 +1069,7 @@
           <div class="hero-stat">
             <div class="hero-stat-label">Key users</div>
             <div class="hero-stat-value">
-              Superintendent, district leads, principals, teacher leaders
+              Superintendent, district leads, principals, LAAC members
             </div>
           </div>
           <div class="hero-stat">
@@ -937,7 +1081,7 @@
           <div class="hero-stat">
             <div class="hero-stat-label">Phase 2 dependency</div>
             <div class="hero-stat-value">
-              Design decisions flow directly from Phase 1 findings
+              Design decisions and LAAC recommendations flow directly from Phase 1 findings
             </div>
           </div>
         </div>
@@ -952,7 +1096,7 @@
         <span class="district-name"
               data-smith="Smith County"
               data-template="[District Name]">Smith County</span>
-        leaders can use this guide as a working roadmap rather than a static document.
+        leaders can use this guide as a working roadmap instead of a static document.
       </div>
 
       <div class="grid-2">
@@ -966,25 +1110,27 @@
             <span class="district-name"
                   data-smith="Smith County"
                   data-template="[District Name]">Smith County</span>
-            build an honest, evidence based picture of current conditions and readiness across all schools. Phase 1
-            asks a simple question. What is the actual learner and teacher experience right now.
+            build an honest, evidence based picture of current conditions and readiness across all schools, with a Local
+            Accountability Advisory Council that reflects every stakeholder group.
             <ul>
               <li>Describe the current learner experience with real artifacts and data.</li>
               <li>Identify strengths that can be leveraged in the local accountability design.</li>
               <li>Surface gaps, inequities, and pain points that must be addressed.</li>
               <li>Determine readiness levels at both school and district levels.</li>
               <li>Agree on a small number of priorities that will guide Phase 2 design work.</li>
+              <li>Establish and activate the LAAC as a standing partner throughout all phases.</li>
             </ul>
             <div class="example-callout">
-              <div class="example-label">District Example</div>
+              <div class="example-label">District example</div>
               <div>
                 At
                 <span class="district-high"
                       data-smith="Smith County High School"
                       data-template="[Example High School]">Smith County High School</span>,
                 the leadership team realized through Phase 1 that students had many project based experiences, but very
-                few of those projects ever became part of a formal record of learning. That insight became a central
-                design driver in Phase 2.
+                few of those projects ever became part of a formal record of learning. The Local Accountability Advisory
+                Council highlighted this gap and recommended that Phase 2 design include a plan for performance evidence
+                and student portfolios.
               </div>
             </div>
           </div>
@@ -1006,7 +1152,7 @@
               <li>Principals and assistant principals who organize and lead Phase 1 in each building.</li>
               <li>Teacher leaders and PLC facilitators who bring classroom evidence and insight.</li>
               <li>Program directors for special education, multilingual learners, counseling, and other services.</li>
-              <li>Student leadership teams, family advisory councils, and community partners as informed voices.</li>
+              <li>Members of the Local Accountability Advisory Council who represent students, families, staff, and community.</li>
             </ul>
             <div class="callout info">
               <div class="callout-title">How to use this guide</div>
@@ -1014,7 +1160,8 @@
               accountability site, and mark it up as you learn from practice. The view toggle at the top lets you move
               between an
               <span class="pill-inline">Everyone view</span> and a
-              <span class="pill-inline">Leader Edition</span>.
+              <span class="pill-inline">Leader Edition</span>. LAAC members can use the Everyone view and selected
+              leader sections to understand the full process.
             </div>
 
             <!-- Stakeholder specific orientation -->
@@ -1025,8 +1172,9 @@
                 system is. Your job is to be honest about what helps you learn and what gets in the way.
               </p>
               <ul class="checklist">
-                <li><input type="checkbox" /><span>I know who to talk to at my school if I have feedback about learning or grading.</span></li>
+                <li><input type="checkbox" /><span>I know who to talk to at my school if I have feedback about learning, grading, or belonging.</span></li>
                 <li><input type="checkbox" /><span>I have been asked questions like "What helps you learn best" and "When does school feel most meaningful".</span></li>
+                <li><input type="checkbox" /><span>If I serve on the LAAC, I know that my role is to bring student voice and examples, not to speak for every student alone.</span></li>
               </ul>
             </div>
 
@@ -1037,8 +1185,9 @@
                 It is a way to show what is already working and to name the conditions that limit your impact.
               </p>
               <ul class="checklist">
-                <li><input type="checkbox" /><span>I have seen examples of the kinds of artifacts the district is looking for.</span></li>
-                <li><input type="checkbox" /><span>I know how my voice and evidence will be used to inform district decisions.</span></li>
+                <li><input type="checkbox" /><span>I have seen examples of the kinds of artifacts the district is looking for such as units, tasks, and student work.</span></li>
+                <li><input type="checkbox" /><span>I know how my voice and evidence will be used to inform district decisions and LAAC discussions.</span></li>
+                <li><input type="checkbox" /><span>If I am a teacher representative on the LAAC, I understand I am there to share patterns, not only individual stories.</span></li>
               </ul>
             </div>
 
@@ -1051,7 +1200,8 @@
               </p>
               <ul class="checklist">
                 <li><input type="checkbox" /><span>Our leadership team has reviewed this guide together and assigned leads for each step.</span></li>
-                <li><input type="checkbox" /><span>We have decided where Phase 1 work will sit. staff meetings, PLCs, leadership huddles.</span></li>
+                <li><input type="checkbox" /><span>We have decided where Phase 1 work will sit such as staff meetings, PLCs, leadership huddles, and LAAC updates.</span></li>
+                <li><input type="checkbox" /><span>We know who from our school serves on the LAAC and how we will keep them informed.</span></li>
               </ul>
             </div>
 
@@ -1059,11 +1209,13 @@
               <div class="stakeholder-panel-title">Orientation for district leaders</div>
               <p style="margin-top:0;">
                 For district leaders, Phase 1 must be coherent across schools but not rigid. Your challenge is to balance
-                clarity of expectations with enough flexibility for schools to show their unique context.
+                clarity of expectations with enough flexibility for schools to show their unique context, while keeping the
+                LAAC engaged and informed.
               </p>
               <ul class="checklist">
                 <li><input type="checkbox" /><span>We have named non negotiables for Phase 1 and where schools can adapt tools.</span></li>
                 <li><input type="checkbox" /><span>We have identified who will coach and support principals as they implement the steps.</span></li>
+                <li><input type="checkbox" /><span>We have scheduled LAAC meetings at key points in Phase 1 for input and sensemaking.</span></li>
               </ul>
             </div>
 
@@ -1071,11 +1223,11 @@
               <div class="stakeholder-panel-title">Orientation for board members</div>
               <p style="margin-top:0;">
                 For board members, Phase 1 is the foundation for future decisions about policy, resources, and priorities.
-                You are not running the process, but your understanding and support will signal that this is serious work.
+                You are not running the process, but your understanding and support signal that this is serious work.
               </p>
               <ul class="checklist">
-                <li><input type="checkbox" /><span>I have asked district leaders how Phase 1 aligns with our current board goals.</span></li>
-                <li><input type="checkbox" /><span>I have clarity on when the board will see a Phase 1 summary.</span></li>
+                <li><input type="checkbox" /><span>I have asked district leaders how Phase 1 aligns with our current board goals and adopted plans.</span></li>
+                <li><input type="checkbox" /><span>I have clarity on when the board will see a Phase 1 summary and how LAAC feedback will be included.</span></li>
               </ul>
             </div>
 
@@ -1087,7 +1239,7 @@
               </p>
               <ul class="checklist">
                 <li><input type="checkbox" /><span>I have received at least one simple explanation of this work from the school or district.</span></li>
-                <li><input type="checkbox" /><span>I know how to give feedback if I choose to.</span></li>
+                <li><input type="checkbox" /><span>I know how to give feedback if I choose to and what will happen with that feedback.</span></li>
               </ul>
             </div>
 
@@ -1097,6 +1249,9 @@
                 For support staff, Phase 1 is a chance to describe what you see in hallways, buses, offices, cafeterias,
                 and playgrounds. You see parts of the system that others miss and your perspective is essential.
               </p>
+              <ul class="checklist">
+                <li><input type="checkbox" /><span>I have been asked about what I notice in student behavior, stress, and relationships in the spaces where I work.</span></li>
+              </ul>
             </div>
 
             <div class="stakeholder-panel" data-role="communityMember">
@@ -1105,6 +1260,10 @@
                 For community partners, Phase 1 is the entry point into a shared story about readiness. It connects
                 classroom learning to the skills, habits, and character that matter in your organizations and workplaces.
               </p>
+              <ul class="checklist">
+                <li><input type="checkbox" /><span>I know how to share my perspective on what graduates need to thrive beyond school.</span></li>
+                <li><input type="checkbox" /><span>If I serve on the LAAC, I understand how my voice connects to student learning and community goals.</span></li>
+              </ul>
             </div>
           </div>
         </div>
@@ -1122,7 +1281,7 @@
           <span class="district-name"
                 data-smith="Smith County"
                 data-template="[District Name]">Smith County</span>
-          to confirm that minimum conditions are in place before asking schools to begin.
+          to confirm that minimum conditions are in place before asking schools and the LAAC to begin.
         </div>
 
         <div class="grid-2">
@@ -1134,27 +1293,18 @@
             <div>
               District leaders should review these items before launching Phase 1.
               <ul class="checklist">
-                <li>
-                  <input type="checkbox" />
-                  <span>We can explain in two or three sentences why the district is moving toward a local accountability model and how it connects to student experience.</span>
-                </li>
-                <li>
-                  <input type="checkbox" />
-                  <span>We have introduced the Six Pillars, the Local Accountability Continuum, and the DDIER cycle to school leaders at a basic level.</span>
-                </li>
-                <li>
-                  <input type="checkbox" />
-                  <span>We have identified a Phase 1 district lead team and clarified roles for accountability, curriculum, assessment, and school support.</span>
-                </li>
-                <li>
-                  <input type="checkbox" />
-                  <span>We have created draft templates for the Current Conditions Scan, the Readiness Rubric, and the School Phase 1 Summary Profile.</span>
-                </li>
-                <li>
-                  <input type="checkbox" />
-                  <span>We have a clear plan for how schools will submit artifacts and how the district will organize and access them.</span>
-                </li>
+                <li><input type="checkbox" /><span>We can explain in two or three sentences why the district is moving toward a local accountability model and how it connects to student experience.</span></li>
+                <li><input type="checkbox" /><span>We have introduced the Six Pillars, the Local Accountability Continuum, and the DDIER cycle to school leaders at a basic level.</span></li>
+                <li><input type="checkbox" /><span>We have identified a Phase 1 district lead team and clarified roles for accountability, curriculum, assessment, and school support.</span></li>
+                <li><input type="checkbox" /><span>We have designed draft templates for the Current Conditions Scan, the Readiness Rubric, and the School Phase 1 Summary Profile.</span></li>
+                <li><input type="checkbox" /><span>We have drafted a plan for how the LAAC will be formed, how members will be selected, and how often it will meet during Phase 1.</span></li>
+                <li><input type="checkbox" /><span>We have a clear plan for how schools will submit artifacts and how the district will organize and access them.</span></li>
               </ul>
+              <div class="callout info">
+                <div class="callout-title">LAAC focus in this stage</div>
+                The LAAC chair or co chairs are identified, and a short charter is drafted that defines the council
+                purpose in Phase 1. even before the full membership is finalized.
+              </div>
             </div>
           </div>
 
@@ -1192,23 +1342,23 @@
                 </tbody>
               </table>
               <div class="tiny-label" style="margin-top:6px;">
-                As Phase 1 progresses, the district can update this snapshot to show movement from Emerging toward
-                Implementing and Embedding.
+                As Phase 1 progresses, the district can update this snapshot and review it with the LAAC to show movement
+                from Emerging toward Implementing and Embedding.
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Roles -->
+      <!-- Roles and LAAC -->
       <section id="roles">
-        <div class="section-title">3. Roles and Responsibilities</div>
+        <div class="section-title">3. Roles, Responsibilities, and the Local Accountability Advisory Council</div>
         <div class="section-subtitle">
           Clear lanes for who does what in Phase 1 so work in
           <span class="district-name"
                 data-smith="Smith County"
                 data-template="[District Name]">Smith County</span>
-          is collaborative but not confusing.
+          is collaborative but not confusing, with the LAAC as a visible connector across stakeholder groups.
         </div>
 
         <div class="grid-2">
@@ -1220,9 +1370,10 @@
             <div>
               <div class="subheading">Superintendent and district leaders</div>
               <ul>
-                <li>Frame the purpose of Phase 1 publicly and consistently.</li>
+                <li>Frame the purpose of Phase 1 publicly and consistently, including why the LAAC matters.</li>
                 <li>Protect time for schools to do the work without feeling rushed or overloaded.</li>
                 <li>Provide tools, coaching, and feedback to principals and school teams.</li>
+                <li>Coordinate and support LAAC meetings, ensuring members have clear information and questions.</li>
                 <li>Monitor fidelity and ensure that every school participates meaningfully.</li>
               </ul>
 
@@ -1230,34 +1381,13 @@
               <ul>
                 <li>Understand the purpose, timeline, and connections to district goals.</li>
                 <li>Ask questions that keep the focus on student learning and readiness.</li>
-                <li>Use Phase 1 findings as context for policy and resource decisions.</li>
+                <li>Use Phase 1 findings and LAAC input as context for policy and resource decisions.</li>
               </ul>
 
-              <!-- Stakeholder panel for district leaders and board -->
-              <div class="stakeholder-panel" data-role="districtLeader">
-                <div class="stakeholder-panel-title">What this looks like for district leaders</div>
-                <ul class="checklist">
-                  <li><input type="checkbox" /><span>I schedule recurring check ins with principals about Phase 1 progress.</span></li>
-                  <li><input type="checkbox" /><span>I co design or review the tools schools are using so they align with the Framework language.</span></li>
-                  <li><input type="checkbox" /><span>I prepare short briefs that keep the superintendent and board informed without overwhelming them.</span></li>
-                </ul>
-              </div>
-
-              <div class="stakeholder-panel" data-role="boardMember">
-                <div class="stakeholder-panel-title">What this looks like for board members</div>
-                <ul class="checklist">
-                  <li><input type="checkbox" /><span>I request clear, visual summaries instead of only long narrative reports.</span></li>
-                  <li><input type="checkbox" /><span>I ask "How do we know" questions that point back to evidence from classrooms and stakeholders.</span></li>
-                  <li><input type="checkbox" /><span>I avoid turning Phase 1 updates into personnel evaluations.</span></li>
-                </ul>
-              </div>
-
-              <div class="stakeholder-panel" data-role="communityMember">
-                <div class="stakeholder-panel-title">What this looks like for community members</div>
-                <p style="margin-top:0;">
-                  Community partners may serve on advisory councils, attend listening sessions, or provide insight about
-                  what readiness looks like beyond school.
-                </p>
+              <div class="callout info">
+                <div class="callout-title">LAAC focus in this stage</div>
+                District leaders present a draft LAAC charter to the board, clarifying how members will be selected,
+                how the council will function, and how its voice will be integrated into district decisions.
               </div>
             </div>
           </div>
@@ -1274,6 +1404,7 @@
                 <li>Lead evidence review conversations and self assessment sessions.</li>
                 <li>Coordinate student, family, and community input at the school level.</li>
                 <li>Draft, refine, and finalize the School Phase 1 Summary Profile.</li>
+                <li>Nominate or support representatives from their school to serve on the LAAC.</li>
               </ul>
 
               <div class="subheading">Teachers and staff</div>
@@ -1281,6 +1412,7 @@
                 <li>Provide classroom and program level evidence that shows what learning and assessment look like.</li>
                 <li>Participate honestly in surveys, focus groups, and self assessment conversations.</li>
                 <li>Suggest realistic priorities and changes based on daily experience.</li>
+                <li>If serving on the LAAC, share patterns from their school and listen for patterns across the district.</li>
               </ul>
 
               <div class="subheading">Students and families</div>
@@ -1288,52 +1420,55 @@
                 <li>Share experiences of learning, communication, and support in district schools.</li>
                 <li>Lift up moments when the system works well and times when it does not.</li>
                 <li>Help confirm or challenge the way adults interpret the data.</li>
+                <li>As LAAC members, bring forward questions and ideas from peers and networks.</li>
               </ul>
 
-              <!-- Stakeholder specific roles -->
-              <div class="stakeholder-panel" data-role="teacher">
-                <div class="stakeholder-panel-title">Role of teachers in Phase 1</div>
-                <ul class="checklist">
-                  <li><input type="checkbox" /><span>I have selected sample units and student work that reflect the range of learners in my class, not only the strongest or weakest.</span></li>
-                  <li><input type="checkbox" /><span>I have shared my concerns and hopes about grading, assessment, and student readiness in at least one structured conversation.</span></li>
-                  <li><input type="checkbox" /><span>I have helped identify where our current practices already align with the Portrait of a Learner or district expectations.</span></li>
-                </ul>
-              </div>
-
-              <div class="stakeholder-panel" data-role="schoolLeader">
-                <div class="stakeholder-panel-title">Role of school leaders in Phase 1</div>
-                <ul class="checklist">
-                  <li><input type="checkbox" /><span>I have named at least one staff member to champion Phase 1 logistics in our building.</span></li>
-                  <li><input type="checkbox" /><span>I have scheduled time in existing meetings for evidence review rather than adding separate meetings whenever possible.</span></li>
-                  <li><input type="checkbox" /><span>I have created a simple timeline or visual for my staff that shows the steps and what we will produce.</span></li>
-                </ul>
-              </div>
-
-              <div class="stakeholder-panel" data-role="student">
-                <div class="stakeholder-panel-title">Role of students in Phase 1</div>
-                <ul class="checklist">
-                  <li><input type="checkbox" /><span>I have been invited to share my experience in a way that feels safe and respectful.</span></li>
-                  <li><input type="checkbox" /><span>I can name at least one change that adults are considering based on student input.</span></li>
-                </ul>
-              </div>
-
-              <div class="stakeholder-panel" data-role="parentGuardian">
-                <div class="stakeholder-panel-title">Role of parents and guardians</div>
-                <ul class="checklist">
-                  <li><input type="checkbox" /><span>I have shared something specific that is going well for my child at school.</span></li>
-                  <li><input type="checkbox" /><span>I have shared at least one suggestion or concern about learning, communication, or assessment.</span></li>
-                </ul>
-              </div>
-
-              <div class="stakeholder-panel" data-role="staff">
-                <div class="stakeholder-panel-title">Role of staff members</div>
-                <p style="margin-top:0;">
-                  Staff members such as bus drivers, office staff, instructional assistants, and cafeteria workers see
-                  important patterns in student behavior, relationships, and stress. Sharing those observations helps
-                  leaders see the full picture.
-                </p>
+              <div class="callout info">
+                <div class="callout-title">LAAC membership example</div>
+                A secondary student leader, an elementary parent, a high school teacher, a middle school principal, a
+                local employer, and a board member all serve on the LAAC along with district leaders. Each member knows
+                how they were selected and what their responsibilities are.
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- Dedicated LAAC card -->
+        <div class="card" style="margin-top:10px;">
+          <div class="card-header">
+            <div class="card-title">Local Accountability Advisory Council (LAAC) in Phase 1</div>
+            <div class="chip">Cross stakeholder council</div>
+          </div>
+          <div>
+            <div class="subheading">Purpose</div>
+            The LAAC exists to provide real time input, feedback, and sensemaking from all stakeholder groups as the
+            district designs and implements a local accountability model.
+            <ul>
+              <li>Ensure that students, families, staff, community partners, and the board have a structured voice.</li>
+              <li>Review Phase 1 tools and findings to see whether they match lived experience.</li>
+              <li>Help the district identify blind spots, equity concerns, and opportunities.</li>
+              <li>Act as a bridge between district level work and conversations in schools and the community.</li>
+            </ul>
+
+            <div class="subheading">Membership</div>
+            <ul>
+              <li>Students from different grade levels and school types.</li>
+              <li>Teachers representing elementary, middle, and high schools.</li>
+              <li>Classified and support staff such as office, bus, or cafeteria.</li>
+              <li>School leaders such as principals and assistant principals.</li>
+              <li>District leaders from instruction, assessment, and student services.</li>
+              <li>Parents and guardians from different neighborhoods and backgrounds.</li>
+              <li>Community members and local employers.</li>
+              <li>One or more board members in a listening and learning role.</li>
+            </ul>
+
+            <div class="subheading">Expectations in Phase 1</div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>The LAAC meets at least two to three times during Phase 1.</span></li>
+              <li><input type="checkbox" /><span>Members receive clear, plain language materials before each meeting.</span></li>
+              <li><input type="checkbox" /><span>Each meeting includes time for questions, small group discussion, and recommendations.</span></li>
+              <li><input type="checkbox" /><span>District leaders follow up on LAAC recommendations and report back on how they were used.</span></li>
+            </ul>
           </div>
         </div>
       </section>
@@ -1342,7 +1477,7 @@
       <section id="process">
         <div class="section-title">4. Phase 1 Process Map</div>
         <div class="section-subtitle">
-          Seven steps that keep Phase 1 organized from launch through district synthesis.
+          Eight steps that keep Phase 1 organized from launch through district synthesis, with the LAAC engaged throughout.
         </div>
 
         <div class="card">
@@ -1354,13 +1489,17 @@
             Leaders can use this map as a visual agenda so everyone knows where the work sits and what comes next.
             <ul>
               <li>Step 1. Launch and framing</li>
-              <li>Step 2. Current conditions evidence collection</li>
-              <li>Step 3. School self assessment and readiness rating</li>
-              <li>Step 4. Alignment to pillars, continuum, DDIER</li>
-              <li>Step 5. Stakeholder input and sensemaking</li>
-              <li>Step 6. School Phase 1 summary profile</li>
-              <li>Step 7. District synthesis and closure</li>
+              <li>Step 2. Form and activate the LAAC</li>
+              <li>Step 3. Current conditions evidence collection</li>
+              <li>Step 4. School self assessment and readiness rating</li>
+              <li>Step 5. Alignment to pillars, continuum, and DDIER</li>
+              <li>Step 6. Stakeholder input, LAAC review, and sensemaking</li>
+              <li>Step 7. School Phase 1 summary profile</li>
+              <li>Step 8. District synthesis, LAAC recommendations, and closure</li>
             </ul>
+            <div class="tiny-label">
+              The LAAC has a defined role in each step so members are not only brought in at the end.
+            </div>
           </div>
         </div>
       </section>
@@ -1369,7 +1508,7 @@
       <section id="steps">
         <div class="section-title">5. Step by Step Guidance</div>
         <div class="section-subtitle">
-          Detailed guidance for each of the seven steps, including realistic scenes leaders can recognize.
+          Detailed guidance for each of the eight steps, including realistic scenes leaders and LAAC members can recognize.
         </div>
 
         <!-- Step 1 -->
@@ -1383,14 +1522,15 @@
           </div>
           <div class="step-content" id="step1">
             <div class="subheading">Intent</div>
-            Help every principal, teacher, and staff member understand what Phase 1 is, why the district is doing it, and
-            what will be expected of them.
+            Help every principal, teacher, staff member, student, and board member understand what Phase 1 is, why the
+            district is doing it, and what will be expected of them.
 
             <div class="subheading">Implementation sequence</div>
             <ol style="padding-left:18px;margin-top:0;">
-              <li><strong>Develop a Phase 1 message set.</strong> District leaders draft a short narrative that connects Phase 1 to student experience and to the long term vision for local accountability.</li>
-              <li><strong>District leadership launch.</strong> Superintendent and district team use the message set in a principals meeting and provide time for questions and concerns.</li>
-              <li><strong>School level launch.</strong> Principals adapt the message for their staff and present it in a faculty meeting, using local examples from their building.</li>
+              <li><strong>Develop a Phase 1 message set.</strong> District leaders draft a short narrative that connects Phase 1 to student experience, the Local Accountability Framework, and the future local accountability model.</li>
+              <li><strong>District leadership launch.</strong> Superintendent and district team use the message set in a principals meeting, including a short overview of the LAAC, and provide time for questions and concerns.</li>
+              <li><strong>School level launch.</strong> Principals adapt the message for their staff and present it in a faculty meeting, using local examples from their building. Staff see how Phase 1 fits into existing work, not as a separate initiative.</li>
+              <li><strong>Public communication.</strong> A brief family and community message uses the same core language, posted on the district site and shared through schools, and includes an invitation to learn more about the LAAC.</li>
             </ol>
 
             <div class="subheading">Sample talking points for principals</div>
@@ -1399,28 +1539,74 @@
               "We are beginning Phase 1 of our Local Accountability work. This is not a new test or a new label. It is a
               chance to tell the truth about how learning and assessment feel in our classrooms right now. We will collect
               real examples from our school, listen to students and families, and look at our data together. Our goal is
-              simple. We want a clear picture of where we are so we can design a better system for our students."
+              simple. We want a clear picture of where we are so we can design a better system for our students, together
+              with our Local Accountability Advisory Council."
             </div>
 
             <div class="subheading">Evidence of completion</div>
             <ul class="checklist">
-              <li><input type="checkbox" /><span>Phase 1 overview shared with principals and staff.</span></li>
+              <li><input type="checkbox" /><span>Phase 1 overview shared with principals, staff, and the LAAC.</span></li>
               <li><input type="checkbox" /><span>Staff in each school can state in simple terms what Phase 1 is about and why it matters.</span></li>
-              <li><input type="checkbox" /><span>Communication artifacts are stored in the Phase 1 shared folder.</span></li>
+              <li><input type="checkbox" /><span>Communication artifacts are stored in the Phase 1 shared folder and available to LAAC members.</span></li>
             </ul>
+
+            <div class="callout success">
+              <div class="callout-title">LAAC focus in this step</div>
+              LAAC members receive the same Phase 1 message set and provide feedback on clarity and language before
+              broader public communication goes out.
+            </div>
           </div>
         </div>
 
-        <!-- Step 2 -->
+        <!-- Step 2: LAAC -->
         <div class="card step-card">
           <div class="step-header" onclick="toggleStep('step2')">
             <div>
-              <div class="step-title">Step 2. Current Conditions Evidence Collection</div>
-              <div class="step-meta">Gather a well rounded picture of how the system is actually working.</div>
+              <div class="step-title">Step 2. Form and Activate the Local Accountability Advisory Council (LAAC)</div>
+              <div class="step-meta">Put a real cross stakeholder council in place.</div>
             </div>
             <div class="step-toggle" id="toggle-step2">+</div>
           </div>
           <div class="step-content" id="step2">
+            <div class="subheading">Intent</div>
+            Build a council that reflects the community and has a clear purpose, role, and schedule in Phase 1 and beyond.
+
+            <div class="subheading">Implementation sequence</div>
+            <ol style="padding-left:18px;margin-top:0;">
+              <li><strong>Confirm membership categories.</strong> District leaders decide how many seats will come from each stakeholder group such as students, parents, teachers, staff, school leaders, community, and board.</li>
+              <li><strong>Invite and select members.</strong> Principals, staff, and community organizations help identify possible members. Some are invited directly, and some may express interest through an open form.</li>
+              <li><strong>Hold an orientation meeting.</strong> The district holds the first LAAC meeting to review the Phase 1 purpose, the Framework, and the council charter, and to answer questions.</li>
+              <li><strong>Set a meeting schedule.</strong> LAAC members agree on two or three meeting dates during Phase 1 that align with key milestones in the process map.</li>
+            </ol>
+
+            <div class="example-callout">
+              <div class="example-label">LAAC example</div>
+              <div>
+                The district invites one student from each secondary school, one teacher from each level, a parent from
+                each attendance area, a local employer, a faith based leader, and a board member to join the LAAC. At the
+                first meeting, members write on sticky notes what "real accountability" should mean in their community.
+              </div>
+            </div>
+
+            <div class="subheading">Evidence of completion</div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>A written LAAC charter that defines purpose, membership, and expectations.</span></li>
+              <li><input type="checkbox" /><span>A current roster of LAAC members with contact information and represented stakeholder groups.</span></li>
+              <li><input type="checkbox" /><span>A Phase 1 meeting schedule for the LAAC that aligns with the eight steps.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="card step-card">
+          <div class="step-header" onclick="toggleStep('step3')">
+            <div>
+              <div class="step-title">Step 3. Current Conditions Evidence Collection</div>
+              <div class="step-meta">Gather a well rounded picture of how the system is actually working.</div>
+            </div>
+            <div class="step-toggle" id="toggle-step3">+</div>
+          </div>
+          <div class="step-content" id="step3">
             <div class="subheading">Intent</div>
             Move beyond opinion and gather concrete evidence about learning, assessment, climate, and community
             connection.
@@ -1441,36 +1627,40 @@
               <li><strong>Create the Current Conditions Scan Tool.</strong> District team builds a simple template with domains, guiding questions, and space for strengths, gaps, and questions.</li>
               <li><strong>Identify existing evidence.</strong> Each school lists what data and artifacts already exist for each domain and where there are gaps.</li>
               <li><strong>Collect targeted evidence.</strong> Schools gather missing artifacts such as sample units, student work, observation notes, and survey results.</li>
-              <li><strong>Build an evidence inventory.</strong> Each school logs each artifact with a title, date, domain, and brief description.</li>
+              <li><strong>Build an evidence inventory.</strong> Each school logs each artifact with a title, date, domain, and brief description in a shared tracker.</li>
             </ol>
 
             <div class="example-callout">
-              <div class="example-label">School Example</div>
+              <div class="example-label">School example</div>
               <div>
-                At one elementary school, the principal asked each grade level team to submit two units and six pieces of
-                student work that showed how students demonstrate understanding in reading and math. Teachers also added
-                short reflections about where the current units feel relevant and where they feel disconnected from
-                student interests.
+                At one elementary school, the principal asks each grade level team to submit two units and six pieces of
+                student work that show how students demonstrate understanding in reading and math. Teachers also add short
+                reflections about where the current units feel relevant and where they feel disconnected from student
+                interests.
               </div>
+            </div>
+
+            <div class="callout success">
+              <div class="callout-title">LAAC focus in this step</div>
+              LAAC members review the list of evidence types and suggest additional sources such as employer feedback,
+              graduate follow up data, or student artifacts from extracurricular programs.
             </div>
           </div>
         </div>
 
-        <!-- Steps 3 to 7 kept as in previous version (for brevity, structure unchanged) -->
-        <!-- You can keep or expand them exactly as in your current Implementation HTML. -->
-
-        <!-- Step 3 -->
+        <!-- Step 4 -->
         <div class="card step-card">
-          <div class="step-header" onclick="toggleStep('step3')">
+          <div class="step-header" onclick="toggleStep('step4')">
             <div>
-              <div class="step-title">Step 3. School Self Assessment and Readiness Rating</div>
+              <div class="step-title">Step 4. School Self Assessment and Readiness Rating</div>
               <div class="step-meta">Turn evidence into clear readiness levels for each school.</div>
             </div>
-            <div class="step-toggle" id="toggle-step3">+</div>
+            <div class="step-toggle" id="toggle-step4">+</div>
           </div>
-          <div class="step-content" id="step3">
+          <div class="step-content" id="step4">
             <div class="subheading">Intent</div>
-            Use a shared rubric to help each school rate its readiness for local accountability work in key domains.
+            Use a shared rubric to help each school rate its readiness for local accountability work in key domains, using
+            the evidence collected.
 
             <div class="subheading">Sample readiness rubric slice</div>
             <table>
@@ -1491,22 +1681,21 @@
               </tr>
               </tbody>
             </table>
-          </div>
-        </div>
 
-        <!-- Step 4 -->
-        <div class="card step-card">
-          <div class="step-header" onclick="toggleStep('step4')">
-            <div>
-              <div class="step-title">Step 4. Alignment to Pillars, Continuum, and DDIER</div>
-              <div class="step-meta">Connect Phase 1 work to the larger Local Accountability architecture.</div>
+            <div class="subheading">Implementation sequence</div>
+            <ol style="padding-left:18px;margin-top:0;">
+              <li><strong>Introduce the rubric.</strong> District leaders explain each domain and level, with examples from real schools.</li>
+              <li><strong>School leadership team rating.</strong> Each school leadership team reviews evidence and assigns preliminary ratings, noting where evidence is thin.</li>
+              <li><strong>Teacher and staff check.</strong> Teachers and key staff provide feedback on whether ratings feel accurate based on their experience.</li>
+              <li><strong>Finalize school ratings.</strong> Ratings are finalized and recorded in the district tracker for later LAAC review.</li>
+            </ol>
+
+            <div class="callout success">
+              <div class="callout-title">LAAC focus in this step</div>
+              LAAC members look at sample rubric ratings for a few schools to see if they align with what students,
+              families, and community members experience. They flag any domains where the rubric language feels unclear or
+              incomplete.
             </div>
-            <div class="step-toggle" id="toggle-step4">+</div>
-          </div>
-          <div class="step-content" id="step4">
-            <div class="subheading">Intent</div>
-            Ensure that Phase 1 is not a stand alone activity, but part of the Six Pillars, the Local Accountability
-            Continuum, and the DDIER improvement cycle.
           </div>
         </div>
 
@@ -1514,15 +1703,28 @@
         <div class="card step-card">
           <div class="step-header" onclick="toggleStep('step5')">
             <div>
-              <div class="step-title">Step 5. Stakeholder Input and Sensemaking</div>
-              <div class="step-meta">Bring student, staff, and family voice into the picture of reality.</div>
+              <div class="step-title">Step 5. Alignment to Pillars, Continuum, and DDIER</div>
+              <div class="step-meta">Connect Phase 1 work to the larger local accountability architecture.</div>
             </div>
             <div class="step-toggle" id="toggle-step5">+</div>
           </div>
           <div class="step-content" id="step5">
             <div class="subheading">Intent</div>
-            Make sure Phase 1 reflects the lived experiences of students, staff, and families, not only leadership
-            perspectives.
+            Ensure that Phase 1 is not a stand alone activity, but part of the Six Pillars, the Local Accountability
+            Continuum, and the DDIER improvement cycle.
+
+            <div class="subheading">Implementation sequence</div>
+            <ol style="padding-left:18px;margin-top:0;">
+              <li><strong>Tag evidence and ratings.</strong> District and school teams tag relevant findings to pillars such as governance, data, and reporting.</li>
+              <li><strong>Map to the Continuum.</strong> Leaders discuss where the district currently sits in the Continuum stages such as defining success, designing experiences, and demonstrating success.</li>
+              <li><strong>Connect to DDIER.</strong> Teams note where Phase 1 has already informed design, development, or evaluation decisions, and where revision will be needed.</li>
+            </ol>
+
+            <div class="callout success">
+              <div class="callout-title">LAAC focus in this step</div>
+              LAAC members review a simple one page map that shows how Phase 1 findings sit inside the pillars and
+              Continuum. They offer suggestions on where community communication should be strongest.
+            </div>
           </div>
         </div>
 
@@ -1530,14 +1732,31 @@
         <div class="card step-card">
           <div class="step-header" onclick="toggleStep('step6')">
             <div>
-              <div class="step-title">Step 6. School Phase 1 Summary Profile</div>
-              <div class="step-meta">Synthesize findings into a concise, shareable portrait.</div>
+              <div class="step-title">Step 6. Stakeholder Input, LAAC Review, and Sensemaking</div>
+              <div class="step-meta">Bring voices together around what the evidence is saying.</div>
             </div>
             <div class="step-toggle" id="toggle-step6">+</div>
           </div>
           <div class="step-content" id="step6">
             <div class="subheading">Intent</div>
-            Help each school tell its Phase 1 story in a short, clear document that can guide Phase 2 design.
+            Make sure Phase 1 reflects the lived experiences of students, staff, and families, and that the LAAC has a
+            structured role in interpreting what the evidence means.
+
+            <div class="subheading">Implementation sequence</div>
+            <ol style="padding-left:18px;margin-top:0;">
+              <li><strong>Share school level findings.</strong> Principals share a draft of their school ratings and key themes with staff and families, inviting reactions.</li>
+              <li><strong>Hold focus groups or panels.</strong> Student, teacher, and family groups provide feedback on what feels accurate and what may be missing.</li>
+              <li><strong>LAAC sensemaking.</strong> The LAAC reviews district wide patterns and asks, "If this is our story, what does it call us to do next".</li>
+            </ol>
+
+            <div class="example-callout">
+              <div class="example-label">Sensemaking example</div>
+              <div>
+                In a LAAC meeting, members work in mixed groups of students, parents, staff, and leaders. Each group picks
+                one domain such as student voice and writes three statements. "What we are encouraged by", "What worries
+                us", and "What we hope changes in Phase 2".
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1545,15 +1764,51 @@
         <div class="card step-card">
           <div class="step-header" onclick="toggleStep('step7')">
             <div>
-              <div class="step-title">Step 7. District Synthesis and Closure</div>
-              <div class="step-meta">Create the district wide picture and mark the end of Phase 1.</div>
+              <div class="step-title">Step 7. School Phase 1 Summary Profile</div>
+              <div class="step-meta">Synthesize findings into a concise, shareable portrait.</div>
             </div>
             <div class="step-toggle" id="toggle-step7">+</div>
           </div>
           <div class="step-content" id="step7">
             <div class="subheading">Intent</div>
-            Pull together School Phase 1 Summary Profiles into a coherent district story and provide clear closure before
-            moving to Phase 2.
+            Help each school tell its Phase 1 story in a short, clear document that can guide Phase 2 design.
+
+            <div class="subheading">Implementation sequence</div>
+            <ol style="padding-left:18px;margin-top:0;">
+              <li><strong>Draft the profile.</strong> School leadership team completes each section of the School Summary Profile using Phase 1 tools and notes.</li>
+              <li><strong>Share with staff and LAAC reps.</strong> Draft profiles are shared with staff and any LAAC members connected to that school for feedback.</li>
+              <li><strong>Finalize and submit.</strong> Profiles are revised and then submitted to the district for synthesis.</li>
+            </ol>
+
+            <div class="callout success">
+              <div class="callout-title">LAAC focus in this step</div>
+              LAAC members look at a sample of School Summary Profiles to see whether they are understandable to
+              non educators and whether key concerns from Phase 1 show up clearly.
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 8 -->
+        <div class="card step-card">
+          <div class="step-header" onclick="toggleStep('step8')">
+            <div>
+              <div class="step-title">Step 8. District Synthesis, LAAC Recommendations, and Closure</div>
+              <div class="step-meta">Create the district wide picture and mark the end of Phase 1.</div>
+            </div>
+            <div class="step-toggle" id="toggle-step8">+</div>
+          </div>
+          <div class="step-content" id="step8">
+            <div class="subheading">Intent</div>
+            Pull together School Phase 1 Summary Profiles into a coherent district story, invite LAAC recommendations,
+            and provide clear closure before moving to Phase 2.
+
+            <div class="subheading">Implementation sequence</div>
+            <ol style="padding-left:18px;margin-top:0;">
+              <li><strong>District synthesis.</strong> District team identifies common strengths, gaps, and readiness patterns across schools.</li>
+              <li><strong>LAAC recommendations.</strong> LAAC reviews the district synthesis and makes specific recommendations for Phase 2 design priorities.</li>
+              <li><strong>Board and community update.</strong> District leaders present a Phase 1 summary and LAAC recommendations to the board and community.</li>
+              <li><strong>Closure and preview.</strong> The district officially closes Phase 1 and previews what Phase 2 will involve for schools and stakeholders.</li>
+            </ol>
           </div>
         </div>
       </section>
@@ -1562,7 +1817,7 @@
       <section id="summary-template">
         <div class="section-title">6. Phase 1 School Summary Profile Template</div>
         <div class="section-subtitle">
-          A live skeleton that principals and leadership teams can use to visualize and plan their Phase 1 Summary Profile.
+          A live skeleton that principals, leadership teams, and LAAC members can use to visualize and plan their Phase 1 Summary Profile.
         </div>
 
         <div class="card">
@@ -1595,7 +1850,7 @@
       <section id="fidelity">
         <div class="section-title">7. Online Checklists and Fidelity Monitoring</div>
         <div class="section-subtitle">
-          Interactive checklists that school and district leaders and other stakeholders can use online or print as part of their Phase 1 documentation.
+          Interactive checklists that school and district leaders, LAAC members, and other stakeholders can use online or print as part of their Phase 1 documentation.
         </div>
 
         <div class="grid-2">
@@ -1606,12 +1861,12 @@
             </div>
             <div>
               <ul class="checklist">
-                <li><input type="checkbox" /><span>We engaged a representative leadership team for Phase 1 that included classroom teachers.</span></li>
-                <li><input type="checkbox" /><span>We collected evidence from classrooms, not only from office level reports.</span></li>
-                <li><input type="checkbox" /><span>We completed the Readiness Rubric using evidence rather than opinion.</span></li>
-                <li><input type="checkbox" /><span>We gathered at least one form of student voice and one form of family input.</span></li>
-                <li><input type="checkbox" /><span>We created a School Phase 1 Summary Profile and shared it with staff.</span></li>
-                <li><input type="checkbox" /><span>We identified three to five priorities that will guide Phase 2 design work.</span></li>
+                <li><input type="checkbox" /><span>We engaged a representative leadership team for Phase 1 that included classroom teachers and staff.</span></li>
+                <li><input type="checkbox" /><span>We collected evidence from classrooms, not only from office level reports or test score dashboards.</span></li>
+                <li><input type="checkbox" /><span>We completed the Readiness Rubric using evidence rather than opinion and documented our reasoning.</span></li>
+                <li><input type="checkbox" /><span>We gathered at least one form of student voice and one form of family input and recorded key themes.</span></li>
+                <li><input type="checkbox" /><span>We created a School Phase 1 Summary Profile and shared it with staff in a way that invited questions.</span></li>
+                <li><input type="checkbox" /><span>We identified three to five priorities that will guide Phase 2 design work and shared them with our LAAC representatives.</span></li>
               </ul>
             </div>
           </div>
@@ -1623,12 +1878,12 @@
             </div>
             <div>
               <ul class="checklist">
-                <li><input type="checkbox" /><span>Every school completed Phase 1 activities and submitted artifacts.</span></li>
+                <li><input type="checkbox" /><span>Every school completed Phase 1 activities and submitted artifacts, with adjustments made where support was needed.</span></li>
                 <li><input type="checkbox" /><span>We checked for consistency in how schools applied the Readiness Rubric and clarified when needed.</span></li>
                 <li><input type="checkbox" /><span>We created a District Phase 1 Summary that reflects the reality of schools, not only district goals.</span></li>
-                <li><input type="checkbox" /><span>We aligned Phase 1 findings to the Six Pillars, the Continuum, and the DDIER cycle.</span></li>
-                <li><input type="checkbox" /><span>We communicated key Phase 1 messages and next steps to the board, staff, and community.</span></li>
-                <li><input type="checkbox" /><span>We stored Phase 1 artifacts and summaries in a shared, easy to access location.</span></li>
+                <li><input type="checkbox" /><span>We aligned Phase 1 findings to the Six Pillars, the Continuum, and the DDIER cycle in at least one visual.</span></li>
+                <li><input type="checkbox" /><span>We communicated key Phase 1 messages and next steps to the board, staff, and community, including LAAC recommendations.</span></li>
+                <li><input type="checkbox" /><span>We stored Phase 1 artifacts and summaries in a shared, easy to access location with clear naming conventions.</span></li>
               </ul>
             </div>
           </div>
@@ -1644,7 +1899,7 @@
             <div class="stakeholder-panel-title">Student quick check</div>
             <ul class="checklist">
               <li><input type="checkbox" /><span>I have been asked about my experience in at least one survey, focus group, or conversation.</span></li>
-              <li><input type="checkbox" /><span>I know that adults are using student input to improve learning and assessment.</span></li>
+              <li><input type="checkbox" /><span>I can name at least one change adults are considering based on what students said.</span></li>
             </ul>
           </div>
 
@@ -1668,13 +1923,14 @@
             <div class="stakeholder-panel-title">Community member quick check</div>
             <ul class="checklist">
               <li><input type="checkbox" /><span>I have been invited to share insight about what readiness looks like after graduation.</span></li>
+              <li><input type="checkbox" /><span>I know how my feedback will be carried back into LAAC meetings or district planning.</span></li>
             </ul>
           </div>
 
           <div class="stakeholder-panel" data-role="boardMember">
             <div class="stakeholder-panel-title">Board member quick check</div>
             <ul class="checklist">
-              <li><input type="checkbox" /><span>I can connect Phase 1 findings to at least one board action or discussion.</span></li>
+              <li><input type="checkbox" /><span>I can connect Phase 1 findings and LAAC recommendations to at least one board action or discussion.</span></li>
             </ul>
           </div>
 
@@ -1691,7 +1947,7 @@
       <section id="huddle">
         <div class="section-title">Leadership Huddle Script</div>
         <div class="section-subtitle">
-          A turnkey panel you can drop into principal meetings, Wednesday Leadership Connection, or PLC agendas, with prompts for different stakeholders.
+          A turnkey panel you can drop into principal meetings, Wednesday Leadership Connection, or PLC agendas, with prompts for different stakeholders and a clear role for the LAAC.
         </div>
 
         <div class="card">
@@ -1743,7 +1999,8 @@
               <div class="callout info">
                 <div class="callout-title">Leadership move</div>
                 Use this panel as the final slide in your leadership meeting. Ask principals to circle one question and
-                one watch out that they will carry back to their schools this week.
+                one watch out that they will carry back to their schools this week and share with any LAAC members
+                connected to their building.
               </div>
             </div>
           </div>
@@ -1752,7 +2009,7 @@
     </div>
 
     <div class="footer">
-      Phase 1 Implementation Guide. Framework and Guide use shared terms to build one coherent, local based accountability model.
+      Phase 1 Implementation Guide. Framework and Guide use shared terms to build one coherent, local based accountability model with the LAAC as a standing partner.
     </div>
   </main>
 </div>
@@ -1768,7 +2025,7 @@
       toggle.textContent = "+";
     } else {
       content.classList.add("open");
-      toggle.textContent = "−";
+      toggle.textContent = "-";
     }
   }
 
@@ -1815,7 +2072,6 @@
     }
   }
 
-  // Everyone vs Leader Edition toggle
   (function () {
     var viewEveryone = document.getElementById("viewEveryone");
     var viewLeader = document.getElementById("viewLeader");
@@ -1846,11 +2102,9 @@
       setView("leader");
     });
 
-    // default to Everyone view
     setView("everyone");
   })();
 
-  // Stakeholder toggle
   (function () {
     var pills = document.querySelectorAll(".stakeholder-pill");
     var panels = document.querySelectorAll(".stakeholder-panel");
@@ -1880,7 +2134,6 @@
       });
     });
 
-    // default role
     setStakeholder("student");
   })();
 
