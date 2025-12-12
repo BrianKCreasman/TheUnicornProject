@@ -2,27 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Phase 1 Implementation Guide - Local Accountability Framework</title>
+  <title>Phase 1 Local Accountability Simulator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
       --navy: #0a355e;
       --teal: #0e8577;
       --gold: #dbb550;
-      --bg: #f5f7fb;
-      --text: #111111;
-      --muted: #70747a;
+      --bg: #f4f6fb;
       --card-bg: #ffffff;
       --border-soft: #dde3ee;
-
-      --role-student: #2f80ed;
-      --role-teacher: #27ae60;
-      --role-staff: #7f8c8d;
-      --role-schoolLeader: #f2c94c;
-      --role-districtLeader: #0a355e;
-      --role-boardMember: #9b51e0;
-      --role-parent: #f2994a;
-      --role-community: #0e8577;
+      --text: #111111;
+      --muted: #70747a;
+      --danger: #b74b4b;
+      --success: #1e8a4b;
     }
 
     * { box-sizing: border-box; }
@@ -30,1984 +23,1075 @@
     body {
       margin: 0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
+      background: radial-gradient(circle at top left, #fdf7e7, #f4f6fb);
       color: var(--text);
-      line-height: 1.5;
     }
-
-    a { color: var(--teal); text-decoration: none; }
-    a:hover { text-decoration: underline; }
 
     .page {
-      display: grid;
-      grid-template-columns: 270px minmax(0, 1fr);
-      min-height: 100vh;
+      max-width: 960px;
+      margin: 16px auto 40px;
+      padding: 0 16px 24px;
     }
 
-    @media (max-width: 960px) {
-      .page { grid-template-columns: 1fr; }
-      .sidebar {
-        position: static;
-        max-height: none;
-        border-right: none;
-        border-bottom: 1px solid var(--border-soft);
-      }
-    }
-
-    .sidebar {
-      background: #ffffff;
-      border-right: 1px solid var(--border-soft);
-      padding: 20px 18px;
-      position: sticky;
-      top: 0;
-      align-self: start;
-      max-height: 100vh;
-      overflow-y: auto;
-      font-size: 13px;
-    }
-
-    .brand {
+    header {
       display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .brand-logo {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 20%, var(--gold), var(--navy));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 16px;
-    }
-
-    .brand-text-title { font-size: 15px; font-weight: 700; color: var(--navy); }
-    .brand-text-sub { font-size: 11px; color: var(--muted); }
-
-    .nav-section-title {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin: 12px 0 4px;
-    }
-
-    .nav-list { list-style: none; margin: 0; padding: 0; }
-    .nav-list li { margin: 2px 0; }
-
-    .nav-link {
-      display: block;
-      padding: 6px 8px;
-      border-radius: 999px;
-      color: var(--muted);
-      cursor: pointer;
-    }
-
-    .nav-link:hover { background: #e8f2f1; color: var(--navy); }
-    .nav-link.active { background: var(--navy); color: #ffffff; }
-
-    .main { padding: 22px 24px 32px; }
-
-    .toolbar {
-      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
       flex-wrap: wrap;
-      gap: 8px;
-      justify-content: flex-end;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
-    .toolbar-button {
+    .brand-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .controls {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+      min-width: 240px;
+    }
+
+    .selector-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    label {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    select {
+      font-family: inherit;
+      font-size: 12px;
       border-radius: 999px;
       border: 1px solid var(--border-soft);
-      padding: 6px 14px;
+      padding: 4px 10px;
+      background: #f9fafc;
+      color: var(--text);
+    }
+
+    select:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 1px rgba(14, 133, 119, 0.25);
+    }
+
+    .btn-pill {
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      padding: 5px 12px;
       font-size: 12px;
       background: #ffffff;
       color: var(--navy);
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
       cursor: pointer;
-      box-shadow: 0 3px 8px rgba(15, 35, 52, 0.06);
+      box-shadow: 0 3px 10px rgba(10, 53, 94, 0.08);
     }
 
-    .toolbar-button.primary {
+    .btn-pill.primary {
       background: linear-gradient(to right, var(--navy), var(--teal));
       color: #ffffff;
       border-color: transparent;
     }
 
-    .toolbar-button.gold {
-      background: linear-gradient(to right, var(--gold), #f2c94c);
-      color: #1b1b1b;
-      border-color: transparent;
-    }
+    .btn-pill:hover { opacity: 0.96; }
 
-    .toolbar-button span.icon { font-size: 14px; }
-    .toolbar-button:hover { opacity: 0.92; }
-
-    #viewToggleRow {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 8px;
+    .tagline {
       font-size: 12px;
       color: var(--muted);
-      flex-wrap: wrap;
-    }
-
-    .view-pill {
-      cursor: pointer;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border-soft);
-      font-size: 11px;
-      background: #f7f8fc;
-      color: var(--navy);
-      margin-left: 4px;
-    }
-    .view-pill.active { background: var(--navy); color: #ffffff; }
-
-    .stakeholder-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
       margin-bottom: 12px;
-      font-size: 11px;
-      align-items: center;
-    }
-
-    .stakeholder-pill {
-      cursor: pointer;
-      padding: 4px 9px;
-      border-radius: 999px;
-      border: 1px solid var(--border-soft);
-      background: #f7f8fc;
-      color: var(--navy);
-      font-size: 11px;
-      white-space: nowrap;
-    }
-
-    .stakeholder-pill[data-role="student"].active { background: var(--role-student); border-color: var(--role-student); color: #ffffff; }
-    .stakeholder-pill[data-role="teacher"].active { background: var(--role-teacher); border-color: var(--role-teacher); color: #ffffff; }
-    .stakeholder-pill[data-role="staff"].active { background: var(--role-staff); border-color: var(--role-staff); color: #ffffff; }
-    .stakeholder-pill[data-role="schoolLeader"].active { background: var(--role-schoolLeader); border-color: var(--role-schoolLeader); color: #111111; }
-    .stakeholder-pill[data-role="districtLeader"].active { background: var(--role-districtLeader); border-color: var(--role-districtLeader); color: #ffffff; }
-    .stakeholder-pill[data-role="boardMember"].active { background: var(--role-boardMember); border-color: var(--role-boardMember); color: #ffffff; }
-    .stakeholder-pill[data-role="parentGuardian"].active { background: var(--role-parent); border-color: var(--role-parent); color: #ffffff; }
-    .stakeholder-pill[data-role="communityMember"].active { background: var(--role-community); border-color: var(--role-community); color: #ffffff; }
-
-    section { margin-bottom: 22px; }
-
-    .section-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 4px;
-    }
-
-    .section-subtitle {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .section-tag {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
-
-    .section-tag span {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(10, 53, 94, 0.16);
-      background: #f7f8fc;
-      margin-right: 4px;
+      max-width: 700px;
     }
 
     .card {
       background: var(--card-bg);
       border-radius: 16px;
       border: 1px solid var(--border-soft);
-      padding: 12px 12px 14px;
-      box-shadow: 0 5px 14px rgba(15, 35, 52, 0.04);
-      font-size: 13px;
+      padding: 10px 12px 12px;
+      box-shadow: 0 5px 16px rgba(9, 30, 66, 0.04);
     }
 
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 6px;
-      margin-bottom: 6px;
+      gap: 8px;
+      margin-bottom: 8px;
     }
 
-    .card-title { font-size: 14px; font-weight: 600; color: var(--navy); }
+    .card-title {
+      font-size: 14px;
+      font-weight: 650;
+      color: var(--navy);
+    }
 
     .chip {
       font-size: 10px;
       padding: 2px 8px;
       border-radius: 999px;
-      border: 1px solid rgba(10, 53, 94, 0.22);
-      background: #f7f8fc;
+      border: 1px solid rgba(10, 53, 94, 0.2);
+      background: #f7f8fd;
       color: var(--muted);
       white-space: nowrap;
     }
 
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-    @media (max-width: 840px) { .grid-2 { grid-template-columns: 1fr; } }
-
-    .phase-hero-compact {
-      background: #ffffff;
-      border-radius: 18px;
-      border: 1px solid #f0e3c3;
-      padding: 12px 12px 14px;
-      margin-bottom: 14px;
-      display: grid;
-      grid-template-columns: 2.2fr 1.6fr;
-      gap: 10px;
-      font-size: 13px;
-    }
-    @media (max-width: 840px) { .phase-hero-compact { grid-template-columns: 1fr; } }
-
-    .hero-title { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
-    .hero-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
-
-    .hero-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
+    .section-label {
       font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .gauges-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
       margin-bottom: 6px;
     }
 
-    .hero-stat-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 6px;
-      font-size: 11px;
+    .gauge {
+      flex: 1 1 130px;
+      min-width: 130px;
     }
 
-    .hero-stat {
-      background: #fefaf0;
-      border-radius: 10px;
-      padding: 6px 8px;
-      border: 1px solid rgba(219, 181, 80, 0.5);
-    }
-
-    .hero-stat-label {
+    .gauge-label-row {
+      display: flex;
+      justify-content: space-between;
       font-size: 10px;
+      margin-bottom: 2px;
       color: var(--muted);
+    }
+
+    .gauge-name {
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      margin-bottom: 2px;
     }
 
-    .hero-stat-value { font-weight: 600; color: var(--navy); }
+    .gauge-value {
+      font-weight: 600;
+      color: var(--navy);
+    }
 
-    .tiny-label { font-size: 11px; color: var(--muted); }
+    .gauge-bar {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      background: #e5e9f3;
+      overflow: hidden;
+    }
 
-    .pill-inline {
+    .gauge-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 50%;
+      background: linear-gradient(to right, var(--teal), var(--gold));
+      border-radius: 999px;
+      transition: width 0.25s ease-out;
+    }
+
+    .meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .pill-tag {
       display: inline-flex;
       align-items: center;
+      gap: 4px;
       padding: 2px 8px;
       border-radius: 999px;
       border: 1px solid rgba(10, 53, 94, 0.18);
-      background: #f7f8fc;
+      background: #f7f8fd;
       font-size: 11px;
       color: var(--navy);
     }
 
-    .big-moves-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      font-size: 12px;
-    }
-    @media (max-width: 1024px) { .big-moves-grid { grid-template-columns: 1fr; } }
-
-    .big-move-card {
-      background: #ffffff;
-      border-radius: 16px;
-      border: 1px solid var(--border-soft);
-      padding: 10px 10px 12px;
-      box-shadow: 0 4px 10px rgba(15, 35, 52, 0.03);
-    }
-
-    .big-move-label {
+    .role-note {
       font-size: 11px;
-      font-weight: 700;
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 2px;
+      margin: 4px 0 6px;
     }
 
-    .big-move-title {
-      font-size: 13px;
+    .scenario-title {
+      font-size: 14px;
       font-weight: 650;
       color: var(--navy);
       margin-bottom: 4px;
     }
 
-    ul { margin-top: 0; margin-bottom: 6px; padding-left: 18px; }
-    li { margin-bottom: 3px; }
-
-    .subheading { font-size: 12px; font-weight: 600; color: var(--navy); margin-top: 6px; margin-bottom: 2px; }
-
-    .example-callout {
-      border-left: 3px solid var(--teal);
-      background: #e6f3f1;
-      padding: 6px 8px;
-      border-radius: 10px;
-      font-size: 12px;
-      margin-top: 6px;
-    }
-
-    .example-label {
+    .scenario-meta {
       font-size: 11px;
-      font-weight: 700;
-      color: var(--teal);
-      margin-bottom: 2px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 6px;
     }
 
-    .checklist {
-      list-style: none;
-      padding-left: 0;
-      margin: 4px 0;
-      font-size: 12px;
+    .scenario-text {
+      font-size: 13px;
+      margin-bottom: 6px;
     }
 
-    .checklist li {
+    .option-group {
+      margin: 6px 0 8px;
+    }
+
+    .option {
       display: flex;
       align-items: flex-start;
       gap: 6px;
       margin-bottom: 4px;
+      font-size: 13px;
+      cursor: pointer;
     }
 
-    .checklist input[type="checkbox"] { margin-top: 2px; accent-color: var(--teal); }
+    .option input[type="radio"] {
+      margin-top: 2px;
+      accent-color: var(--teal);
+    }
 
-    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
-    th, td { border: 1px solid var(--border-soft); padding: 5px 6px; text-align: left; }
-    th { background: #f2f4fb; font-size: 11px; font-weight: 600; color: var(--navy); }
+    .helper-text {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
 
-    .step-card { margin-bottom: 10px; }
+    .dropdown-row {
+      margin: 6px 0 8px;
+    }
 
-    .step-header {
+    .dropdown-row select {
+      width: 100%;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      font-family: inherit;
+      font-size: 13px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      padding: 6px 10px;
+      background: #f9fafc;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--teal);
+      box-shadow: 0 0 0 1px rgba(14, 133, 119, 0.25);
+    }
+
+    .feedback {
+      margin-top: 6px;
+      border-radius: 10px;
+      padding: 6px 8px;
+      font-size: 12px;
+      display: none;
+    }
+
+    .feedback.success {
+      border-left: 3px solid var(--success);
+      background: #f2fbf6;
+      color: #155634;
+    }
+
+    .feedback.warn {
+      border-left: 3px solid var(--danger);
+      background: #fef5f5;
+      color: #7f3131;
+    }
+
+    .feedback.neutral {
+      border-left: 3px solid var(--navy);
+      background: #eef2fb;
+      color: var(--navy);
+    }
+
+    .scenario-footer {
+      margin-top: 8px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .link-button {
+      font-size: 12px;
+      color: var(--teal);
       cursor: pointer;
+      text-decoration: underline;
+      background: none;
+      border: none;
+      padding: 0;
     }
 
-    .step-title { font-size: 14px; font-weight: 650; color: var(--navy); }
-    .step-meta { font-size: 11px; color: var(--muted); }
-
-    .step-toggle {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 1px solid var(--border-soft);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      color: var(--muted);
-      background: #ffffff;
+    /* Drag and drop board */
+    .board {
+      margin-top: 8px;
+      border-radius: 10px;
+      border: 1px dashed var(--border-soft);
+      padding: 6px;
+      background: #f9fafc;
     }
 
-    .step-content { margin-top: 6px; font-size: 13px; display: none; }
-    .step-content.open { display: block; }
-
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-    }
-    @media (max-width: 840px) { .profile-grid { grid-template-columns: 1fr; } }
-
-    .profile-field-label {
+    .board-header {
       font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .board-columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .board-column {
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      padding: 4px;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+    }
+
+    .board-column-title {
       font-weight: 600;
       color: var(--navy);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
       margin-bottom: 2px;
-    }
-
-    .profile-field-box {
-      min-height: 32px;
-      border-radius: 10px;
-      border: 1px dashed var(--border-soft);
-      background: #fafbff;
-      padding: 6px 8px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .huddle-grid { display: grid; grid-template-columns: 2fr 1.6fr; gap: 10px; }
-    @media (max-width: 840px) { .huddle-grid { grid-template-columns: 1fr; } }
-
-    .callout {
-      border-radius: 10px;
-      padding: 8px 8px;
-      border: 1px solid var(--border-soft);
-      background: #ffffff;
-      font-size: 12px;
-      margin-top: 6px;
-    }
-
-    .callout-title {
       font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 3px;
     }
 
-    .callout.info { border-left: 3px solid var(--navy); }
-    .callout.warn { border-left: 3px solid #b74b4b; background: #fef5f5; }
-    .callout.success { border-left: 3px solid #1e8a4b; background: #f3fbf7; }
-
-    .stakeholder-panel {
-      display: none;
-      margin-top: 6px;
-      border-radius: 10px;
-      border: 1px dashed var(--border-soft);
-      padding: 8px;
-      font-size: 12px;
-    }
-    .stakeholder-panel.active { display: block; }
-
-    .stakeholder-panel-title {
+    .card-draggable {
+      background: #f4f6fd;
+      border-radius: 6px;
+      border: 1px solid #d1d7ea;
+      padding: 4px 6px;
       font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 3px;
+      cursor: move;
     }
 
-    .stakeholder-panel[data-role="student"] { border-left: 3px solid var(--role-student); background: #eef3ff; }
-    .stakeholder-panel[data-role="teacher"] { border-left: 3px solid var(--role-teacher); background: #e9f8f0; }
-    .stakeholder-panel[data-role="staff"] { border-left: 3px solid var(--role-staff); background: #f5f6f6; }
-    .stakeholder-panel[data-role="schoolLeader"] { border-left: 3px solid var(--role-schoolLeader); background: #fff9e7; }
-    .stakeholder-panel[data-role="districtLeader"] { border-left: 3px solid var(--role-districtLeader); background: #e8f0f7; }
-    .stakeholder-panel[data-role="boardMember"] { border-left: 3px solid var(--role-boardMember); background: #f5e9ff; }
-    .stakeholder-panel[data-role="parentGuardian"] { border-left: 3px solid var(--role-parent); background: #fff3e6; }
-    .stakeholder-panel[data-role="communityMember"] { border-left: 3px solid var(--role-community); background: #e7f7f4; }
-
-    .footer { font-size: 11px; color: var(--muted); margin-top: 20px; text-align: right; }
-
-    .stakeholder-box-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 8px;
+    .board-column.drop-hover {
+      border-color: var(--teal);
+      background: #ecf8f6;
     }
-    @media (max-width: 1100px) { .stakeholder-box-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (max-width: 640px) { .stakeholder-box-grid { grid-template-columns: 1fr; } }
-
-    .stakeholder-box {
-      border-radius: 16px;
-      border: 1px solid var(--border-soft);
-      background: #ffffff;
-      padding: 10px 10px 12px;
-      box-shadow: 0 4px 10px rgba(15, 35, 52, 0.03);
-      position: relative;
-      overflow: hidden;
-      min-height: 150px;
-    }
-
-    .stakeholder-box::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 6px;
-      background: var(--navy);
-      opacity: 0.95;
-    }
-
-    .stakeholder-box .box-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 4px;
-      padding-left: 6px;
-    }
-
-    .stakeholder-box .box-sub {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 6px;
-      padding-left: 6px;
-    }
-
-    .stakeholder-box .box-bullets {
-      margin: 0;
-      padding-left: 18px;
-      font-size: 12px;
-      color: #1a1a1a;
-    }
-
-    .stakeholder-box .box-bullets li { margin-bottom: 4px; }
-
-    .stakeholder-box[data-role="student"]::before { background: var(--role-student); }
-    .stakeholder-box[data-role="teacher"]::before { background: var(--role-teacher); }
-    .stakeholder-box[data-role="staff"]::before { background: var(--role-staff); }
-    .stakeholder-box[data-role="schoolLeader"]::before { background: var(--role-schoolLeader); }
-    .stakeholder-box[data-role="districtLeader"]::before { background: var(--role-districtLeader); }
-    .stakeholder-box[data-role="boardMember"]::before { background: var(--role-boardMember); }
-    .stakeholder-box[data-role="parentGuardian"]::before { background: var(--role-parent); }
-    .stakeholder-box[data-role="communityMember"]::before { background: var(--role-community); }
-
-    .entry-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 6px;
-      margin-bottom: 8px;
-    }
-
-    .entry-tab {
-      cursor: pointer;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid var(--border-soft);
-      background: #f7f8fc;
-      color: var(--navy);
-      font-size: 11px;
-      white-space: nowrap;
-    }
-
-    .entry-tab.active {
-      background: var(--navy);
-      color: #ffffff;
-      border-color: var(--navy);
-    }
-
-    .entry-panel { display: none; }
-    .entry-panel.active { display: block; }
-
-    .entry-panel .mini-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 8px;
-    }
-    @media (max-width: 840px) { .entry-panel .mini-grid { grid-template-columns: 1fr; } }
-
-    .mini-card {
-      border-radius: 12px;
-      border: 1px solid var(--border-soft);
-      background: #ffffff;
-      padding: 10px;
-    }
-    .mini-card .mini-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--navy);
-      margin-bottom: 4px;
-    }
-    .mini-card .mini-text { font-size: 12px; color: #1a1a1a; }
-    .mini-card .mini-muted { font-size: 11px; color: var(--muted); margin-top: 6px; }
-
-    .print-pack { display: none; }
-    body.print-pack-mode .page { display: block; }
-    body.print-pack-mode .sidebar { display: none; }
-    body.print-pack-mode .toolbar { display: none; }
-    body.print-pack-mode #viewToggleRow { display: none; }
-    body.print-pack-mode .stakeholder-row { display: none; }
-    body.print-pack-mode .leader-only { display: none; }
-    body.print-pack-mode section:not(#print-phase1) { display: none; }
-    body.print-pack-mode #print-phase1 { display: block; }
-
-    @media print {
-      @page { size: letter landscape; margin: 0.5in; }
-      body { background: #ffffff; }
-      .sidebar, .toolbar, #viewToggleRow, .stakeholder-row, .footer { display: none !important; }
-      .page { display: block; }
-      .main { padding: 0 !important; }
-      section { margin-bottom: 0 !important; }
-      .card, .stakeholder-box, .mini-card {
-        box-shadow: none !important;
-        break-inside: avoid;
-        page-break-inside: avoid;
-      }
-      .print-break { break-before: page; page-break-before: always; }
-      .no-print { display: none !important; }
-      .print-only { display: block !important; }
-    }
-
-    .print-only { display: none; }
-    .muted-line { font-size: 12px; color: var(--muted); margin-top: 6px; }
   </style>
 </head>
-
 <body>
 <div class="page">
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="brand">
-      <div class="brand-logo">LA</div>
-      <div>
-        <div class="brand-text-title">Local Accountability Framework</div>
-        <div class="brand-text-sub">Phase 1 Implementation Guide</div>
-      </div>
+  <header>
+    <div>
+      <div class="brand-title">Phase 1 Local Accountability Simulator</div>
+      <div class="brand-subtitle">Practice real decisions before you make them live.</div>
     </div>
-
-    <div class="nav-section-title">Guide Map</div>
-    <ul class="nav-list">
-      <li><a href="#phase1-lite" class="nav-link active">Phase 1 on a Page</a></li>
-      <li><a href="#stage-set" class="nav-link">Stakeholder Stage Set</a></li>
-      <li><a href="#hero" class="nav-link">Phase 1 Snapshot</a></li>
-      <li><a href="#orientation" class="nav-link">1. Orientation</a></li>
-      <li><a href="#entry-point" class="nav-link">Entry Point</a></li>
-      <li><a href="#preconditions" class="nav-link">2. Preconditions</a></li>
-      <li><a href="#roles" class="nav-link">3. Roles and LAAC</a></li>
-      <li><a href="#process" class="nav-link">4. Process Map</a></li>
-      <li><a href="#steps" class="nav-link">5. Step by Step</a></li>
-      <li><a href="#summary-template" class="nav-link">6. School Summary</a></li>
-      <li><a href="#fidelity" class="nav-link">7. Checklists</a></li>
-      <li><a href="#huddle" class="nav-link">Leadership Huddle</a></li>
-      <li><a href="#print-phase1" class="nav-link">Print Phase 1 Pack</a></li>
-    </ul>
-  </aside>
-
-  <!-- Main content -->
-  <main class="main">
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <button class="toolbar-button primary" onclick="window.print()">
-        <span class="icon">🖨️</span>
-        <span>Print this Guide</span>
-      </button>
-
-      <button class="toolbar-button gold" onclick="printPhase1Pack()">
-        <span class="icon">🧾</span>
-        <span>Print Phase 1 (Paper Pack)</span>
-      </button>
-
-      <button class="toolbar-button" onclick="downloadTools()">
-        <span class="icon">📁</span>
-        <span>Download Phase 1 Tools</span>
-      </button>
-
-      <button class="toolbar-button" id="templateToggle" onclick="toggleTemplateMode()">
-        <span class="icon">🔁</span>
-        <span>Switch to Template View</span>
-      </button>
-    </div>
-
-    <!-- View toggle row -->
-    <div id="viewToggleRow">
-      <div>
-        Choose your view.
-        <span id="viewEveryone" class="view-pill active">Everyone</span>
-        <span id="viewLeader" class="view-pill">Leader Edition</span>
-      </div>
-      <div>
-        Framework and Guide use the same language. Framework explains the why and what. This guide shows the how.
-      </div>
-    </div>
-
-    <!-- Stakeholder toggle -->
-    <div class="stakeholder-row">
-      <span class="tiny-label">See Phase 1 through different eyes.</span>
-      <div>
-        <button class="stakeholder-pill active" data-role="student">Student</button>
-        <button class="stakeholder-pill" data-role="teacher">Teacher</button>
-        <button class="stakeholder-pill" data-role="staff">Staff Member</button>
-        <button class="stakeholder-pill" data-role="schoolLeader">School Leader</button>
-        <button class="stakeholder-pill" data-role="districtLeader">District Leader</button>
-        <button class="stakeholder-pill" data-role="boardMember">Board Member</button>
-        <button class="stakeholder-pill" data-role="parentGuardian">Parent or Guardian</button>
-        <button class="stakeholder-pill" data-role="communityMember">Community Member</button>
-      </div>
-    </div>
-
-    <!-- PHASE 1 ON A PAGE -->
-    <section id="phase1-lite">
-      <div class="card" style="margin-bottom:10px;">
-        <div class="card-title" style="margin-bottom:4px;">
-          Phase 1 on a Page. Laying the Groundwork
-        </div>
-        <div class="section-tag" style="margin-bottom:6px;">
-          <span>Framework. Current Conditions and Readiness</span>
-          <span>Framework. Evidence and Learning Loop</span>
-          <span>Framework. Phase 1 Key Outcome</span>
-        </div>
-        <div class="section-subtitle" style="margin-bottom:8px;">
-          Goal. Build an honest picture of how learning and assessment feel today, so the local accountability model is
-          grounded in reality, not guesses.
-        </div>
-        <div class="grid-2">
-          <div>
-            <div class="subheading">In plain language</div>
-            <ul>
-              <li>We tell the truth about what school feels like right now for students, families, and staff.</li>
-              <li>We gather real examples of learning and assessment, not only test scores and rankings.</li>
-              <li>We create a Local Accountability Advisory Council so every stakeholder group has a seat at the table.</li>
-              <li>We decide, together, where we are ready to grow and where we need to build foundations first.</li>
-            </ul>
-            <div class="subheading">By the end of Phase 1, we have:</div>
-            <ul>
-              <li>A one page summary for each school that captures strengths, challenges, and readiness.</li>
-              <li>A district wide picture of where we are starting from that the board and community can see.</li>
-              <li>Three to five clear priorities that will drive Phase 2 design and decisions.</li>
-              <li>A functioning Local Accountability Advisory Council that understands its role and next steps.</li>
-            </ul>
-          </div>
-          <div>
-            <div class="subheading">Who needs to understand this</div>
-            <ul>
-              <li>Board members and district leaders who set direction and expectations.</li>
-              <li>Principals and teacher leaders who organize the work and gather evidence.</li>
-              <li>Staff, families, community partners, and students who will live the changes.</li>
-            </ul>
-            <div class="tiny-label" style="margin-top:6px;">
-              Most people only need this view. The detailed steps, checklists, and LAAC tools are for the teams actually running Phase 1.
-            </div>
-          </div>
-        </div>
-
-        <!-- Stakeholder perspective in Phase 1 on a Page -->
-        <div class="stakeholder-panel" data-role="student">
-          <div class="stakeholder-panel-title">From a student perspective</div>
-          <ul class="checklist">
-            <li><input type="checkbox" /><span>I know adults are asking honest questions about what school feels like for students, not only about test scores.</span></li>
-            <li><input type="checkbox" /><span>I have more than one way to share my voice, such as a survey, panel, classroom reflection, student council, or advisory conversation.</span></li>
-            <li><input type="checkbox" /><span>I see evidence that adults are acting on student voice, like a summary shared back to students and a clear next step.</span></li>
-            <li><input type="checkbox" /><span>I understand that Phase 1 is about the system improving, not students being judged.</span></li>
-          </ul>
-          <div class="example-callout">
-            <div class="example-label">Student example</div>
-            <div>
-              Eighth grade students are invited to a lunch conversation where the principal asks, "When do you feel like
-              your learning really matters" and "What makes it hard to show what you really know". Notes from the
-              conversation are shared with the Local Accountability Advisory Council, then posted back to students with three themes and two actions.
-            </div>
-          </div>
-        </div>
-
-        <div class="stakeholder-panel" data-role="teacher">
-          <div class="stakeholder-panel-title">From a teacher perspective</div>
-          <ul class="checklist">
-            <li><input type="checkbox" /><span>I understand why we are doing Phase 1 and how it connects to what students experience in my classroom.</span></li>
-            <li><input type="checkbox" /><span>I have provided sample units, tasks, and student work that show both strong learning and common constraints.</span></li>
-            <li><input type="checkbox" /><span>I have participated in a short sensemaking conversation about grading, assessment, relevance, and student voice.</span></li>
-            <li><input type="checkbox" /><span>I know what will happen with the evidence we submit, who reviews it, and how it will shape Phase 2 decisions.</span></li>
-          </ul>
-          <div class="example-callout">
-            <div class="example-label">Teacher example</div>
-            <div>
-              In a PLC, teachers bring recent assessment tasks and student work. The group identifies which tasks allow
-              students to demonstrate thinking and which ones mainly reward compliance. The PLC writes two recommendations for Phase 2, including one change they can pilot now.
-            </div>
-          </div>
-        </div>
-
-        <div class="stakeholder-panel" data-role="staff">
-          <div class="stakeholder-panel-title">From a staff member perspective</div>
-          <ul class="checklist">
-            <li><input type="checkbox" /><span>I understand Phase 1 is about improving the student experience, not blaming staff members.</span></li>
-            <li><input type="checkbox" /><span>I have a simple way to share what I see in my role, including patterns I notice over time.</span></li>
-            <li><input type="checkbox" /><span>I know what to say when a parent asks, "What is local accountability" and where to point them for a simple explanation.</span></li>
-            <li><input type="checkbox" /><span>I can name at least one thing leaders are paying attention to because of input from support staff.</span></li>
-          </ul>
-          <div class="example-callout">
-            <div class="example-label">Staff example</div>
-            <div>
-              Transportation and cafeteria teams share short weekly notes on student energy, behavior hotspots, and communication breakdowns they observe. Those notes become part of the school summary under conditions that support or hinder learning.
-            </div>
-          </div>
-        </div>
-
-        <div class="stakeholder-panel" data-role="schoolLeader">
-          <div class="stakeholder-panel-title">From a school leader perspective</div>
-          <ul class="checklist">
-            <li><input type="checkbox" /><span>I can explain Phase 1 in two or three sentences to any staff member, student, or parent.</span></li>
-            <li><input type="checkbox" /><span>I have an actual calendar for evidence collection, listening sessions, ratings, and summary completion, with owners for each task.</span></li>
-            <li><input type="checkbox" /><span>I know how Phase 1 connects to the Six Pillars, the Continuum, and DDIER, and I can show that connection in one simple visual.</span></li>
-            <li><input type="checkbox" /><span>I am protecting staff time by using existing structures, like PLCs and faculty meetings, instead of adding separate meetings.</span></li>
-          </ul>
-          <div class="example-callout">
-            <div class="example-label">School leader example</div>
-            <div>
-              During a faculty meeting, the principal shares a one page Phase 1 calendar and a short evidence list. Teachers leave knowing exactly what is needed, when it is due, and how it will be discussed and used.
-            </div>
-          </div>
-        </div>
-
-        <div class="stakeholder-panel" data-role="districtLeader">
-          <div class="stakeholder-panel-title">From a district leader perspective</div>
-          <ul class="checklist">
-            <li><input type="checkbox" /><span>We have communicated expectations and supports clearly, including what is required and what is flexible.</span></li>
-            <li><input type="checkbox" /><span>We have a plan to synthesize school findings into a district story that is honest, understandable, and useful.</span></li>
-            <li><input type="checkbox" /><span>We can name exactly how Phase 1 findings will influence Phase 2 decisions, including what will stop, start, or be redesigned.</span></li>
-            <li><input type="checkbox" /><span>We are actively scanning for equity and consistency so Phase 1 is not stronger in some buildings only because of capacity.</span></li>
-          </ul>
-          <div class="example-callout">
-            <div class="example-label">District example</div>
-            <div>
-              The district team provides a "Phase 1 evidence menu" with examples and a shared naming system. They assign a point person to each school, run short weekly office hours, and track participation so no school falls behind quietly.
-            </div>
-          </div>
-        </div>
-
-        <div class="stakeholder-panel" data-role="boardMember">
-          <div class="stakeholder-panel-title">From a board member perspective</div>
-          <ul class="checklist">
-            <li><input type="checkbox" /><span>I have seen a short, plain-language overview of Phase 1 goals and how it fits into the long range accountability work.</span></li>
-            <li><input type="checkbox" /><span>I understand Phase 1 is about learning how the system is working, not evaluating individual teachers.</span></li>
-            <li><input type="checkbox" /><span>I know when I will see a Phase 1 synthesis, what questions to ask, and how LAAC recommendations will be presented.</span></li>
-            <li><input type="checkbox" /><span>I am prepared to support the next step by aligning policy, resources, and public messaging with what Phase 1 shows.</span></li>
-          </ul>
-          <div class="example-callout">
-            <div class="example-label">Board example</div>
-            <div>
-              At a work session, leaders share three things Phase 1 will reveal, three things it will not do, and the exact board decision points that will come later. Board members ask clarifying questions that keep the focus on learner experience and evidence.
-            </div>
-          </div>
-        </div>
-
-        <div class="stakeholder-panel" data-role="parentGuardian">
-          <div class="stakeholder-panel-title">From a parent or guardian perspective</div>
-          <ul class="checklist">
-            <li><input type="checkbox" /><span>I have heard, in simple language, what the district is doing in Phase 1 and why it matters for my child.</span></li>
-            <li><input type="checkbox" /><span>I have more than one easy option to share my experience, such as a survey, a listening session, or a quick phone check-in.</span></li>
-            <li><input type="checkbox" /><span>I believe my feedback will shape what happens next because I see a summary shared back and at least one action taken.</span></li>
-            <li><input type="checkbox" /><span>I understand how this work can improve grading clarity, communication, and real-world learning opportunities.</span></li>
-          </ul>
-          <div class="example-callout">
-            <div class="example-label">Parent example</div>
-            <div>
-              The school sends a short family note with three questions about communication, grading clarity, and student engagement. Results are shared back with "what we heard" and "what we will do next" within two weeks.
-            </div>
-          </div>
-        </div>
-
-        <div class="stakeholder-panel" data-role="communityMember">
-          <div class="stakeholder-panel-title">From a community member perspective</div>
-          <ul class="checklist">
-            <li><input type="checkbox" /><span>I understand the district is building a local accountability model that goes beyond test scores.</span></li>
-            <li><input type="checkbox" /><span>I know how local businesses, organizations, and partners can share input about readiness and real-world skills.</span></li>
-            <li><input type="checkbox" /><span>I have seen communication that connects this work to community priorities, workforce needs, and the future of the community.</span></li>
-            <li><input type="checkbox" /><span>I can name one way I can support learning, such as mentorships, authentic audiences, internships, or project partnerships.</span></li>
-          </ul>
-          <div class="example-callout">
-            <div class="example-label">Community example</div>
-            <div>
-              A local employer sits on the LAAC and offers two specific insights. One about communication habits and one about problem-solving. Those insights become criteria the district later uses when designing performance evidence.
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="section-title" style="margin-top:4px;">The Three Big Moves in Phase 1</div>
-      <div class="section-subtitle">
-        Instead of many separate tasks, think of Phase 1 as three big moves that everyone can name and remember.
-      </div>
-
-      <div class="big-moves-grid">
-        <div class="big-move-card">
-          <div class="big-move-label">Big Move 1</div>
-          <div class="big-move-title">Launch the Story and Form the Council</div>
-          <ul>
-            <li>Explain why the district is moving toward local accountability.</li>
-            <li>Connect Phase 1 to learner experience, not compliance or rankings.</li>
-            <li>Form the LAAC with representation from each stakeholder group.</li>
-            <li>Set expectations for how LAAC feedback will be used and shared back.</li>
-          </ul>
-          <div class="tiny-label">
-            Output. A shared message and a functioning LAAC that will walk with the district through all phases.
-          </div>
-        </div>
-
-        <div class="big-move-card">
-          <div class="big-move-label">Big Move 2</div>
-          <div class="big-move-title">Look at Reality Together</div>
-          <ul>
-            <li>Gather real examples of teaching, learning, and assessment across schools.</li>
-            <li>Listen to students, staff, and families about their lived experience.</li>
-            <li>Use a simple readiness rubric to rate a few key domains consistently.</li>
-            <li>Surface equity gaps in opportunities, expectations, and evidence.</li>
-          </ul>
-          <div class="tiny-label">
-            Output. A clear, honest picture of strengths and gaps in each school that the LAAC can review and respond to.
-          </div>
-        </div>
-
-        <div class="big-move-card">
-          <div class="big-move-label">Big Move 3</div>
-          <div class="big-move-title">Choose Priorities and Next Steps</div>
-          <ul>
-            <li>Synthesize Phase 1 findings into a one page school profile.</li>
-            <li>Identify three to five focus areas for Phase 2 design work.</li>
-            <li>Create a district wide starting picture and review it with the LAAC.</li>
-            <li>Close Phase 1 with clear next steps and clear ownership.</li>
-          </ul>
-          <div class="tiny-label">
-            Output. School and district summaries that point Phase 2 in the right direction, validated by the LAAC.
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- STAGE SET -->
-    <section id="stage-set">
-      <div class="section-title">Stakeholder Stage Set. What Phase 1 Often Feels Like</div>
-      <div class="section-subtitle">
-        These boxes set the stage for Phase 1. They describe what people may be experiencing and what Phase 1 asks from them.
-        Use them to communicate with clarity and reduce confusion before the work begins.
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Phase 1, through each stakeholder</div>
-          <div class="chip">Quick reference</div>
-        </div>
-
-        <div class="stakeholder-box-grid">
-          <div class="stakeholder-box" data-role="student">
-            <div class="box-title">Students</div>
-            <div class="box-sub">Common reality and what Phase 1 changes</div>
-            <ul class="box-bullets">
-              <li>You might feel known for grades and tests more than your strengths and growth.</li>
-              <li>You might have strong projects, but they do not count as real evidence.</li>
-              <li>Phase 1 asks you to name what helps you learn and what blocks you.</li>
-              <li>You should see your feedback shared back, plus at least one action.</li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-box" data-role="teacher">
-            <div class="box-title">Teachers</div>
-            <div class="box-sub">Common reality and what Phase 1 changes</div>
-            <ul class="box-bullets">
-              <li>You might feel initiative fatigue or mixed messages about what matters.</li>
-              <li>You might have high-quality learning, but inconsistent grading and assessment norms.</li>
-              <li>Phase 1 asks you to bring real artifacts and describe constraints honestly.</li>
-              <li>You should see priorities narrowed, not a bigger to-do list.</li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-box" data-role="staff">
-            <div class="box-title">Staff Members</div>
-            <div class="box-sub">Common reality and what Phase 1 changes</div>
-            <ul class="box-bullets">
-              <li>You see student stress, routines, and communication breakdowns up close.</li>
-              <li>You are often asked to support change without being asked for your insight.</li>
-              <li>Phase 1 asks what you notice, where systems fail, and what support is missing.</li>
-              <li>You should get simple talking points for families and a clear contact.</li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-box" data-role="schoolLeader">
-            <div class="box-title">School Leaders</div>
-            <div class="box-sub">Common reality and what Phase 1 changes</div>
-            <ul class="box-bullets">
-              <li>You may be balancing improvement with daily operational pressure.</li>
-              <li>You may have uneven implementation across teams and grade levels.</li>
-              <li>Phase 1 asks you to organize evidence, listening, and readiness ratings.</li>
-              <li>You should exit Phase 1 with a clear school profile and priorities.</li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-box" data-role="districtLeader">
-            <div class="box-title">District Leaders</div>
-            <div class="box-sub">Common reality and what Phase 1 changes</div>
-            <ul class="box-bullets">
-              <li>You may have lots of data but limited evidence of authentic learning.</li>
-              <li>You may have inconsistent practice across schools and programs.</li>
-              <li>Phase 1 asks you to create coherence, tools, coaching, and synthesis.</li>
-              <li>You should exit with a district story, validated by the LAAC, and design targets.</li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-box" data-role="boardMember">
-            <div class="box-title">Board Members</div>
-            <div class="box-sub">Common reality and what Phase 1 changes</div>
-            <ul class="box-bullets">
-              <li>You may feel pressure to respond to scores, headlines, or comparisons.</li>
-              <li>You may want clearer indicators that match community values.</li>
-              <li>Phase 1 asks you to learn the system story before making big moves.</li>
-              <li>You should see a Phase 1 synthesis plus LAAC recommendations in plain language.</li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-box" data-role="parentGuardian">
-            <div class="box-title">Parents and Guardians</div>
-            <div class="box-sub">Common reality and what Phase 1 changes</div>
-            <ul class="box-bullets">
-              <li>You may get grades, but not clarity on what your child can actually do.</li>
-              <li>You may want more relevant learning and stronger communication.</li>
-              <li>Phase 1 asks you to describe what you see, especially about support and clarity.</li>
-              <li>You should see feedback shared back, plus one concrete improvement action.</li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-box" data-role="communityMember">
-            <div class="box-title">Community Members</div>
-            <div class="box-sub">Common reality and what Phase 1 changes</div>
-            <ul class="box-bullets">
-              <li>You may value test scores, but also readiness, work ethic, and contribution.</li>
-              <li>You may want stronger ties between school learning and community life.</li>
-              <li>Phase 1 asks you to define readiness indicators and authentic opportunities.</li>
-              <li>You should see a clear invite to support learning through real audiences and partnerships.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="callout info" style="margin-top:10px;">
-          <div class="callout-title">How to use these boxes</div>
-          If a stakeholder group is confused or skeptical, start here. Name the reality. Explain what Phase 1 will do. Then show what they will see back.
-        </div>
-      </div>
-    </section>
-
-    <!-- HERO -->
-    <section id="hero">
-      <div class="phase-hero-compact">
+    <div class="controls">
+      <div class="selector-row">
         <div>
-          <div class="hero-title">Phase 1. Laying the Groundwork</div>
-          <div class="hero-subtitle">
-            Understanding current conditions and readiness so local accountability work in
-            <span class="district-system"
-                  data-smith="Smith County Schools, KY"
-                  data-template="[District Name], [State]">Smith County Schools, KY</span>
-            begins with evidence, not assumptions, and includes a Local Accountability Advisory Council from the start.
-          </div>
-          <div class="hero-badges">
-            <span class="pill-inline">
-              <span class="district-system"
-                    data-smith="Smith County Schools, KY"
-                    data-template="[District Name], [State]">Smith County Schools, KY</span>
-            </span>
-            <span class="pill-inline">Phase 1. Current Conditions and Readiness</span>
-            <span class="pill-inline">Local Accountability Advisory Council engaged</span>
-          </div>
-        </div>
-        <div class="hero-stat-grid">
-          <div class="hero-stat">
-            <div class="hero-stat-label">Phase 1 primary outcome</div>
-            <div class="hero-stat-value">Shared picture of reality across all district schools</div>
-          </div>
-          <div class="hero-stat">
-            <div class="hero-stat-label">Key users</div>
-            <div class="hero-stat-value">Superintendent, district leads, principals, LAAC members</div>
-          </div>
-          <div class="hero-stat">
-            <div class="hero-stat-label">Core question</div>
-            <div class="hero-stat-value">Where are we today in learning, assessment, and readiness</div>
-          </div>
-          <div class="hero-stat">
-            <div class="hero-stat-label">Phase 2 dependency</div>
-            <div class="hero-stat-value">Design decisions and LAAC recommendations flow directly from Phase 1 findings</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ORIENTATION -->
-    <section id="orientation">
-      <div class="section-title">1. Orientation to Phase 1</div>
-      <div class="section-subtitle">
-        Why Phase 1 exists, what success looks like, and how
-        <span class="district-name" data-smith="Smith County" data-template="[District Name]">Smith County</span>
-        leaders can use this guide as a working roadmap instead of a static document.
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Purpose of Phase 1</div>
-            <div class="chip">Start with reality</div>
-          </div>
-          <div>
-            The purpose of Phase 1 is to help
-            <span class="district-name" data-smith="Smith County" data-template="[District Name]">Smith County</span>
-            build an honest, evidence based picture of current conditions and readiness across all schools, with a Local
-            Accountability Advisory Council that reflects every stakeholder group.
-            <ul>
-              <li>Describe the current learner experience with real artifacts and data.</li>
-              <li>Identify strengths that can be leveraged in the local accountability design.</li>
-              <li>Surface gaps, inequities, and pain points that must be addressed.</li>
-              <li>Determine readiness levels at both school and district levels.</li>
-              <li>Agree on a small number of priorities that will guide Phase 2 design work.</li>
-              <li>Establish and activate the LAAC as a standing partner throughout all phases.</li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">Who This Guide Is For</div>
-            <div class="chip">Primary users</div>
-          </div>
-          <div>
-            This guide is written for people who will actually do the work of Phase 1 in
-            <span class="district-system" data-smith="Smith County Schools, KY" data-template="[District Name], [State]">Smith County Schools, KY</span>.
-            <ul>
-              <li>Superintendent and central office leaders who frame the work and protect time for it.</li>
-              <li>District accountability, curriculum, and assessment leads who design tools and coach schools.</li>
-              <li>Principals and assistant principals who organize and lead Phase 1 in each building.</li>
-              <li>Teacher leaders and PLC facilitators who bring classroom evidence and insight.</li>
-              <li>Program directors for special education, multilingual learners, counseling, and other services.</li>
-              <li>Members of the Local Accountability Advisory Council who represent students, families, staff, and community.</li>
-            </ul>
-            <div class="callout info">
-              <div class="callout-title">How to use this guide</div>
-              Use this guide as a living playbook. Print key sections for leadership meetings, link it in your local
-              accountability site, and mark it up as you learn from practice. The view toggle at the top lets you move
-              between an <span class="pill-inline">Everyone view</span> and a <span class="pill-inline">Leader Edition</span>.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ENTRY POINT -->
-    <section id="entry-point">
-      <div class="section-title">Entry Point. How Schools and Districts Usually Begin</div>
-      <div class="section-subtitle">
-        Phase 1 starts at a real starting line. Choose the entry point that best matches your current reality, then use Phase 1 to convert that effort into evidence, shared understanding, and clear priorities.
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Select your most likely starting line</div>
-          <div class="chip">Major Step in Phase 1</div>
-        </div>
-
-        <div class="entry-tabs">
-          <button class="entry-tab active" data-entry="portrait">Deeper Learning and Portrait of a Learner/Graduate</button>
-          <button class="entry-tab" data-entry="ci">Continuous Improvement</button>
-          <button class="entry-tab" data-entry="sp">Strategic Planning</button>
-        </div>
-
-        <div class="entry-panel active" data-entry="portrait">
-          <div class="subheading">What this entry point usually looks like</div>
-          <ul>
-            <li>You already have a Portrait of a Learner/Graduate, Deeper Learning competencies, or a durable skills framework.</li>
-            <li>Staff can describe the vision, but the evidence system does not consistently capture it.</li>
-            <li>Students experience strong moments of authentic learning, but it is uneven across classrooms and courses.</li>
-          </ul>
-
-          <div class="subheading">Phase 1 purpose from this starting line</div>
-          Turn a vision into a clear baseline. Identify where the portrait is already visible in real work, where it is not, and what prevents it.
-
-          <div class="mini-grid">
-            <div class="mini-card">
-              <div class="mini-title">Starting line signals</div>
-              <div class="mini-text">You see agency in pockets, but reporting still leans on grades and scores as the main record.</div>
-              <div class="mini-muted">Phase 1 scans for artifacts of the portrait and how often they are captured.</div>
-            </div>
-            <div class="mini-card">
-              <div class="mini-title">What to collect first</div>
-              <div class="mini-text">6 to 10 strong artifacts that clearly show portrait outcomes. Student work, performance tasks, reflection prompts.</div>
-              <div class="mini-muted">Keep it tight. Quality and clarity beat volume.</div>
-            </div>
-            <div class="mini-card">
-              <div class="mini-title">Common pitfall</div>
-              <div class="mini-text">Celebrating portrait language while students cannot prove it with evidence that counts.</div>
-              <div class="mini-muted">Phase 1 asks: What is visible, what is invisible, and why.</div>
-            </div>
-            <div class="mini-card">
-              <div class="mini-title">LAAC role</div>
-              <div class="mini-text">Confirm whether the portrait describes real experience. Name what matters most locally and how it should be shown publicly.</div>
-              <div class="mini-muted">The LAAC keeps the portrait grounded and locally owned.</div>
-            </div>
-          </div>
-
-          <div class="callout success">
-            <div class="callout-title">Ready for Phase 2 if</div>
-            You can point to real student evidence of portrait outcomes, name gaps clearly, and define 3 to 5 priorities to build an evidence and reporting system that matches the portrait.
-          </div>
-        </div>
-
-        <div class="entry-panel" data-entry="ci">
-          <div class="subheading">What this entry point usually looks like</div>
-          <ul>
-            <li>You already have improvement plans, goals, and action steps.</li>
-            <li>Data cycles exist, but can feel compliance-driven and disconnected from authentic learning evidence.</li>
-            <li>Staff are used to reviewing numbers, but less used to reviewing student work as evidence.</li>
-          </ul>
-
-          <div class="subheading">Phase 1 purpose from this starting line</div>
-          Convert improvement work into a stronger evidence loop. Add learner experience and multiple measures so improvement is about learning, not only outputs.
-
-          <div class="mini-grid">
-            <div class="mini-card">
-              <div class="mini-title">Starting line signals</div>
-              <div class="mini-text">You have goals and rhythms, but struggle to show what students can do beyond the scoreboard.</div>
-              <div class="mini-muted">Phase 1 broadens evidence so improvement gets more actionable.</div>
-            </div>
-            <div class="mini-card">
-              <div class="mini-title">What to collect first</div>
-              <div class="mini-text">Evidence anchors for each goal. One student work artifact, one practice indicator, one perception indicator.</div>
-              <div class="mini-muted">This makes cycles less abstract and more real.</div>
-            </div>
-            <div class="mini-card">
-              <div class="mini-title">Common pitfall</div>
-              <div class="mini-text">Running the same cycle with the same narrow data, then expecting different results.</div>
-              <div class="mini-muted">Phase 1 asks: What evidence is missing that would change decisions.</div>
-            </div>
-            <div class="mini-card">
-              <div class="mini-title">LAAC role</div>
-              <div class="mini-text">Interpret whether priorities match lived experience and help choose measures the public understands and trusts.</div>
-              <div class="mini-muted">The LAAC strengthens legitimacy and clarity.</div>
-            </div>
-          </div>
-
-          <div class="callout success">
-            <div class="callout-title">Ready for Phase 2 if</div>
-            Improvement work includes multiple measures, student work is part of review, and the district can explain reporting in plain language.
-          </div>
-        </div>
-
-        <div class="entry-panel" data-entry="sp">
-          <div class="subheading">What this entry point usually looks like</div>
-          <ul>
-            <li>You are starting or refreshing a strategic plan.</li>
-            <li>Engagement is active, but the plan risks being broad without a learner evidence baseline.</li>
-            <li>Staff want alignment and focus, and the district wants clearer reporting of progress.</li>
-          </ul>
-
-          <div class="subheading">Phase 1 purpose from this starting line</div>
-          Build a baseline that prevents aspirational planning from drifting away from real evidence.
-
-          <div class="mini-grid">
-            <div class="mini-card">
-              <div class="mini-title">Starting line signals</div>
-              <div class="mini-text">You have committees and goal drafts, but cannot show where you are right now with clear evidence.</div>
-              <div class="mini-muted">Phase 1 becomes your baseline before commitments lock in.</div>
-            </div>
-            <div class="mini-card">
-              <div class="mini-title">What to collect first</div>
-              <div class="mini-text">Current conditions scan plus two listening cycles (students and families) to reflect lived experience.</div>
-              <div class="mini-muted">This reduces the gap between vision and reality.</div>
-            </div>
-            <div class="mini-card">
-              <div class="mini-title">Common pitfall</div>
-              <div class="mini-text">Writing a strategic plan and calling it accountability.</div>
-              <div class="mini-muted">Phase 1 asks: What counts as evidence, and who will trust it.</div>
-            </div>
-            <div class="mini-card">
-              <div class="mini-title">LAAC role</div>
-              <div class="mini-text">A standing community table that sustains feedback beyond a one-time engagement event.</div>
-              <div class="mini-muted">The LAAC prevents engage and disappear.</div>
-            </div>
-          </div>
-
-          <div class="callout success">
-            <div class="callout-title">Ready for Phase 2 if</div>
-            The plan has measures tied to learner experience, the baseline is credible, and reporting is understandable and locally validated.
-          </div>
-        </div>
-
-        <div class="callout info" style="margin-top:10px;">
-          <div class="callout-title">A practical test</div>
-          If you cannot answer "What is our starting line, and what evidence proves it" in one minute, you are still at the entry point. Phase 1 is the bridge to clarity.
-        </div>
-      </div>
-    </section>
-
-    <!-- LEADER ONLY -->
-    <div class="leader-only">
-
-      <!-- Preconditions -->
-      <section id="preconditions">
-        <div class="section-title">2. Preconditions and Readiness to Launch Phase 1</div>
-        <div class="section-subtitle">
-          A quick check for
-          <span class="district-name" data-smith="Smith County" data-template="[District Name]">Smith County</span>
-          to confirm that minimum conditions are in place before asking schools and the LAAC to begin.
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Minimum District Readiness</div>
-              <div class="chip">Before launch</div>
-            </div>
-            <div>
-              District leaders should review these items before launching Phase 1.
-              <ul class="checklist">
-                <li><input type="checkbox" /><span>We can explain in two or three sentences why the district is moving toward a local accountability model and how it connects to learner experience.</span></li>
-                <li><input type="checkbox" /><span>We identified our most likely entry point and explained why it fits our current reality.</span></li>
-                <li><input type="checkbox" /><span>We introduced the Six Pillars, the Local Accountability Continuum, and the DDIER cycle to school leaders at a basic level.</span></li>
-                <li><input type="checkbox" /><span>We identified a Phase 1 district lead team and clarified roles for accountability, curriculum, assessment, and school support.</span></li>
-                <li><input type="checkbox" /><span>We designed draft templates for the Current Conditions Scan, the Readiness Rubric, and the School Phase 1 Summary Profile.</span></li>
-                <li><input type="checkbox" /><span>We drafted a plan for how the LAAC will be formed, how members will be selected, and how often it will meet during Phase 1.</span></li>
-                <li><input type="checkbox" /><span>We have a clear plan for how schools will submit artifacts and how the district will organize and access them.</span></li>
-              </ul>
-              <div class="callout info">
-                <div class="callout-title">LAAC focus in this stage</div>
-                The LAAC chair or co-chairs are identified, and a short charter is drafted that defines the council purpose in Phase 1, even before the full membership is finalized.
-              </div>
-            </div>
-          </div>
-
-          <div class="card" id="readiness-rubric">
-            <div class="card-header">
-              <div class="card-title">Readiness Snapshot Visual</div>
-              <div class="chip">District overview</div>
-            </div>
-            <div>
-              The chart below can help leaders visualize their starting point.
-              <table>
-                <thead>
-                <tr>
-                  <th>Domain</th>
-                  <th>Readiness Level</th>
-                  <th>Evidence Anchor</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td>Instruction and Vibrant Learning</td>
-                  <td>Developing</td>
-                  <td>Classroom walkthrough notes from three schools</td>
-                </tr>
-                <tr>
-                  <td>Assessment and Grading</td>
-                  <td>Emerging</td>
-                  <td>Gradebook review and teacher survey results</td>
-                </tr>
-                <tr>
-                  <td>Student Voice and Agency</td>
-                  <td>Implementing</td>
-                  <td>Student panel notes from secondary schools</td>
-                </tr>
-                </tbody>
-              </table>
-              <div class="tiny-label" style="margin-top:6px;">
-                As Phase 1 progresses, update this snapshot and review it with the LAAC to show movement from Emerging toward Implementing and Embedding.
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Roles and LAAC -->
-      <section id="roles">
-        <div class="section-title">3. Roles, Responsibilities, and the Local Accountability Advisory Council</div>
-        <div class="section-subtitle">
-          Clear lanes for who does what in Phase 1 so work is collaborative but not confusing, with the LAAC as a visible connector.
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">System Level Roles</div>
-              <div class="chip">District and board</div>
-            </div>
-            <div>
-              <div class="subheading">Superintendent and district leaders</div>
-              <ul>
-                <li>Frame the purpose of Phase 1 publicly and consistently, including why the LAAC matters.</li>
-                <li>Protect time for schools to do the work without feeling rushed or overloaded.</li>
-                <li>Provide tools, coaching, and feedback to principals and school teams.</li>
-                <li>Coordinate and support LAAC meetings, ensuring members have clear information and questions.</li>
-                <li>Monitor fidelity and ensure every school participates meaningfully.</li>
-                <li>Share back "what we heard" after key listening moments so trust grows.</li>
-              </ul>
-
-              <div class="subheading">Board members</div>
-              <ul>
-                <li>Understand purpose, timeline, and connections to district goals.</li>
-                <li>Ask questions that keep the focus on learner experience and evidence.</li>
-                <li>Use Phase 1 findings and LAAC input as context for policy and resource decisions.</li>
-                <li>Support public messaging that explains why Phase 1 comes before redesign decisions.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">School and Classroom Roles</div>
-              <div class="chip">School and classroom level</div>
-            </div>
-            <div>
-              <div class="subheading">Principals and leadership teams</div>
-              <ul>
-                <li>Organize Phase 1 work at the school level and set clear expectations for staff.</li>
-                <li>Lead evidence review conversations and self assessment sessions.</li>
-                <li>Coordinate student, family, and community input at the school level.</li>
-                <li>Draft, refine, and finalize the School Phase 1 Summary Profile.</li>
-                <li>Nominate or support representatives to serve on the LAAC.</li>
-                <li>Embed work into PLCs and existing rhythms.</li>
-              </ul>
-
-              <div class="subheading">Teachers and staff</div>
-              <ul>
-                <li>Provide evidence that shows what learning and assessment look like.</li>
-                <li>Participate honestly in surveys and self assessment conversations.</li>
-                <li>Suggest realistic priorities based on daily experience.</li>
-                <li>If on the LAAC, share patterns and listen for district patterns.</li>
-                <li>Help define what "good evidence" looks like so expectations are fair.</li>
-              </ul>
-
-              <div class="subheading">Students and families</div>
-              <ul>
-                <li>Share experiences of learning, communication, and support.</li>
-                <li>Lift up moments when the system works and when it does not.</li>
-                <li>Help confirm or challenge adult interpretations of data.</li>
-                <li>As LAAC members, bring forward questions and ideas from peers.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:10px;">
-          <div class="card-header">
-            <div class="card-title">Local Accountability Advisory Council (LAAC) in Phase 1</div>
-            <div class="chip">Cross stakeholder council</div>
-          </div>
-          <div>
-            <div class="subheading">Purpose</div>
-            The LAAC provides real time input, feedback, and sensemaking from all stakeholder groups as the district designs and implements a local accountability model.
-            <ul>
-              <li>Ensure students, families, staff, community partners, and the board have a structured voice.</li>
-              <li>Review Phase 1 tools and findings to see whether they match lived experience.</li>
-              <li>Identify blind spots, equity concerns, and opportunities.</li>
-              <li>Bridge district level work and school and community conversations.</li>
-              <li>Strengthen trust by making feedback visible and followed by clear action.</li>
-            </ul>
-
-            <div class="subheading">Expectations in Phase 1</div>
-            <ul class="checklist">
-              <li><input type="checkbox" /><span>The LAAC meets at least two to three times during Phase 1.</span></li>
-              <li><input type="checkbox" /><span>Members receive clear, plain language materials before each meeting.</span></li>
-              <li><input type="checkbox" /><span>Each meeting includes questions, small group discussion, and recommendations.</span></li>
-              <li><input type="checkbox" /><span>District leaders report back on how recommendations were used.</span></li>
-              <li><input type="checkbox" /><span>The LAAC helps define what will be public-facing and understandable.</span></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Process -->
-      <section id="process">
-        <div class="section-title">4. Phase 1 Process Map</div>
-        <div class="section-subtitle">
-          Nine steps that keep Phase 1 organized from entry point through district synthesis, with the LAAC engaged throughout.
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">High level process overview</div>
-            <div class="chip">Use in leadership meetings</div>
-          </div>
-          <div>
-            <ul>
-              <li>Step 0. Entry point and starting line clarification</li>
-              <li>Step 1. Launch and framing</li>
-              <li>Step 2. Form and activate the LAAC</li>
-              <li>Step 3. Current conditions evidence collection</li>
-              <li>Step 4. School self assessment and readiness rating</li>
-              <li>Step 5. Alignment to pillars, continuum, and DDIER</li>
-              <li>Step 6. Stakeholder input, LAAC review, and sensemaking</li>
-              <li>Step 7. School Phase 1 summary profile</li>
-              <li>Step 8. District synthesis, LAAC recommendations, and closure</li>
-            </ul>
-            <div class="tiny-label">The LAAC has a defined role in each step so members are not only brought in at the end.</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Steps -->
-      <section id="steps">
-        <div class="section-title">5. Step by Step Guidance</div>
-        <div class="section-subtitle">Detailed guidance for each step.</div>
-
-        <!-- (Steps 0-8 are already present in your draft above. Kept as-is.) -->
-        <!-- NOTE: Your original content continues here in your file. -->
-      </section>
-
-      <!-- Summary template -->
-      <section id="summary-template">
-        <div class="section-title">6. Phase 1 School Summary Profile Template</div>
-        <div class="section-subtitle">
-          A live skeleton principals, leadership teams, and LAAC members can use to visualize and plan their Phase 1 Summary Profile.
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">School Phase 1 Summary Profile</div>
-            <div class="chip">Template view</div>
-          </div>
-          <div>
-            <div class="profile-grid">
-              <div>
-                <div class="profile-field-label">School name</div>
-                <div class="profile-field-box">Example. East Ridge Elementary.</div>
-              </div>
-              <div>
-                <div class="profile-field-label">District and state</div>
-                <div class="profile-field-box">
-                  <span class="district-system" data-smith="Smith County Schools, KY" data-template="[District Name], [State]">Smith County Schools, KY</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="muted-line">
-              Tip. Keep the final profile short enough that a board member or parent can read it in under five minutes.
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Fidelity / Checklists -->
-      <section id="fidelity">
-        <div class="section-title">7. Online Checklists and Fidelity Monitoring</div>
-        <div class="section-subtitle">
-          Interactive checklists leaders and LAAC members can use online. Also included in the Print Pack for paper use.
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">School Level Checklist</div>
-              <div class="chip">For principals and school teams</div>
-            </div>
-            <div>
-              <ul class="checklist">
-                <li><input type="checkbox" /><span>We named our entry point and explained it to staff in plain language.</span></li>
-                <li><input type="checkbox" /><span>We engaged a representative team for Phase 1 including teachers and staff.</span></li>
-                <li><input type="checkbox" /><span>We collected evidence from classrooms, not only from dashboards.</span></li>
-                <li><input type="checkbox" /><span>We completed the Readiness Rubric using evidence and documented our reasoning.</span></li>
-                <li><input type="checkbox" /><span>We gathered at least one student input and one family input and recorded themes.</span></li>
-                <li><input type="checkbox" /><span>We created a School Phase 1 Summary Profile and shared it to invite questions.</span></li>
-                <li><input type="checkbox" /><span>We identified three to five priorities for Phase 2 and shared them with our LAAC representatives.</span></li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">District Level Checklist</div>
-              <div class="chip">For central office teams</div>
-            </div>
-            <div>
-              <ul class="checklist">
-                <li><input type="checkbox" /><span>We clarified the entry point and published evidence anchors with examples.</span></li>
-                <li><input type="checkbox" /><span>Every school completed Phase 1 activities and submitted artifacts, with support provided where needed.</span></li>
-                <li><input type="checkbox" /><span>We checked for consistency in how schools applied the Readiness Rubric and clarified when needed.</span></li>
-                <li><input type="checkbox" /><span>We created a District Phase 1 Summary that reflects reality, not only goals.</span></li>
-                <li><input type="checkbox" /><span>We aligned Phase 1 findings to the Six Pillars, Continuum, and DDIER in at least one visual.</span></li>
-                <li><input type="checkbox" /><span>We communicated next steps to board, staff, and community, including LAAC recommendations.</span></li>
-                <li><input type="checkbox" /><span>We stored Phase 1 artifacts and summaries with clear naming conventions.</span></li>
-                <li><input type="checkbox" /><span>We published at least one "what we heard" summary.</span></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:10px;">
-          <div class="card-header">
-            <div class="card-title">Micro Checklists by Stakeholder</div>
-            <div class="chip">Perspective based</div>
-          </div>
-
-          <div class="stakeholder-panel" data-role="student">
-            <div class="stakeholder-panel-title">Student quick check</div>
-            <ul class="checklist">
-              <li><input type="checkbox" /><span>I was asked about my learning experience in a real way, not only with a generic survey.</span></li>
-              <li><input type="checkbox" /><span>I saw a summary shared back to students with at least one action step.</span></li>
-              <li><input type="checkbox" /><span>I can name one kind of work adults want to count as evidence in the future.</span></li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-panel" data-role="teacher">
-            <div class="stakeholder-panel-title">Teacher quick check</div>
-            <ul class="checklist">
-              <li><input type="checkbox" /><span>I know where our school is in Phase 1 and what comes next.</span></li>
-              <li><input type="checkbox" /><span>I contributed evidence that will show up in our school profile, not just in a folder.</span></li>
-              <li><input type="checkbox" /><span>I can name one constraint leaders are addressing because teachers named it.</span></li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-panel" data-role="parentGuardian">
-            <div class="stakeholder-panel-title">Parent or guardian quick check</div>
-            <ul class="checklist">
-              <li><input type="checkbox" /><span>I had at least one easy chance to share input.</span></li>
-              <li><input type="checkbox" /><span>I saw a short summary shared back and understand what happens next.</span></li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-panel" data-role="communityMember">
-            <div class="stakeholder-panel-title">Community member quick check</div>
-            <ul class="checklist">
-              <li><input type="checkbox" /><span>I was invited to define readiness skills that matter beyond graduation.</span></li>
-              <li><input type="checkbox" /><span>I know how my input moves into LAAC discussion or district planning.</span></li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-panel" data-role="boardMember">
-            <div class="stakeholder-panel-title">Board member quick check</div>
-            <ul class="checklist">
-              <li><input type="checkbox" /><span>I can connect Phase 1 findings and LAAC recommendations to at least one board action or discussion.</span></li>
-              <li><input type="checkbox" /><span>I can explain why Phase 1 came before design changes.</span></li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-panel" data-role="staff">
-            <div class="stakeholder-panel-title">Staff member quick check</div>
-            <ul class="checklist">
-              <li><input type="checkbox" /><span>I shared at least one pattern about routines, communication, or student stress and leaders listened.</span></li>
-              <li><input type="checkbox" /><span>I know a simple way to stay informed as Phase 2 begins.</span></li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-panel" data-role="schoolLeader">
-            <div class="stakeholder-panel-title">School leader quick check</div>
-            <ul class="checklist">
-              <li><input type="checkbox" /><span>We used existing structures to complete Phase 1 so staff time was protected.</span></li>
-              <li><input type="checkbox" /><span>Our school profile is clear enough for a non-educator to understand.</span></li>
-              <li><input type="checkbox" /><span>We can name the 3 to 5 priorities that will drive Phase 2 design.</span></li>
-            </ul>
-          </div>
-
-          <div class="stakeholder-panel" data-role="districtLeader">
-            <div class="stakeholder-panel-title">District leader quick check</div>
-            <ul class="checklist">
-              <li><input type="checkbox" /><span>We created a coherent district synthesis and validated it with the LAAC.</span></li>
-              <li><input type="checkbox" /><span>We published a next-steps timeline and an ownership list for Phase 2.</span></li>
-              <li><input type="checkbox" /><span>We can name what will stop, start, or simplify because of Phase 1 findings.</span></li>
-            </ul>
-          </div>
-
-          <div class="callout info" style="margin-top:10px;">
-            <div class="callout-title">Tip</div>
-            If your micro checklist cannot be completed honestly, do not hide it. That is exactly what Phase 1 is designed to reveal.
-          </div>
-        </div>
-      </section>
-
-      <!-- Leadership Huddle -->
-      <section id="huddle">
-        <div class="section-title">Leadership Huddle. 20 Minutes to Keep Phase 1 on Track</div>
-        <div class="section-subtitle">
-          A repeatable huddle structure principals and district leads can use weekly or biweekly during Phase 1. Tight, clear, and grounded in evidence.
-        </div>
-
-        <div class="huddle-grid">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Huddle Agenda</div>
-              <div class="chip">20 minutes</div>
-            </div>
-
-            <div class="subheading">1) Where are we in the process</div>
-            <ul>
-              <li>Name the current step and the next step.</li>
-              <li>Confirm what is due by when and who owns it.</li>
-            </ul>
-
-            <div class="subheading">2) What evidence did we gather this week</div>
-            <ul>
-              <li>One artifact. One sentence on what it shows.</li>
-              <li>One insight. One constraint. One question.</li>
-            </ul>
-
-            <div class="subheading">3) What are we hearing from stakeholders</div>
-            <ul>
-              <li>One student pattern and one family pattern.</li>
-              <li>What did we share back, and how quickly.</li>
-            </ul>
-
-            <div class="subheading">4) What needs district support</div>
-            <ul>
-              <li>Time, tools, clarity, coaching, or communication support.</li>
-              <li>Assign an owner and a response date.</li>
-            </ul>
-
-            <div class="callout success">
-              <div class="callout-title">Non-negotiable huddle output</div>
-              A one paragraph huddle note that captures evidence gathered, stakeholder signals, and next actions. Store it in the Phase 1 folder with date and school name.
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Huddle Prompts</div>
-              <div class="chip">Use as-is</div>
-            </div>
-
-            <ul>
-              <li>What is one thing we assumed that the evidence is challenging.</li>
-              <li>Where are students able to show thinking and application, and where are they blocked.</li>
-              <li>What does our evidence say about equity of opportunity across groups or courses.</li>
-              <li>What is one change we can pilot now that does not require Phase 2 design.</li>
-              <li>What do we need to clarify publicly so trust grows.</li>
-            </ul>
-
-            <div class="callout info">
-              <div class="callout-title">LAAC integration</div>
-              Add a 2 minute LAAC check. What question should we bring to the next LAAC meeting, and what do we need to share back from the last one.
-            </div>
-
-            <div class="callout warn">
-              <div class="callout-title">Watch for this drift</div>
-              If the huddle turns into a status meeting with no evidence, stop. Phase 1 is an evidence and sensemaking cycle, not a task checklist.
-            </div>
-          </div>
-        </div>
-      </section>
-    </div><!-- /leader-only -->
-
-    <!-- PRINT PACK -->
-    <section id="print-phase1" class="print-pack">
-      <div class="section-title">Phase 1 Paper Pack</div>
-      <div class="section-subtitle">
-        Print-friendly essentials for Phase 1. This view hides navigation and toggles and prints as a paper packet.
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">1) Phase 1 on a Page</div>
-          <div class="chip">Handout</div>
+          <label for="roleSelect">Stakeholder</label><br />
+          <select id="roleSelect">
+            <option value="districtLeader">Superintendent / District Leader</option>
+            <option value="schoolLeader">Principal / School Leader</option>
+            <option value="teacher">Teacher</option>
+            <option value="student">Student</option>
+            <option value="parent">Parent / Guardian</option>
+            <option value="boardMember">Board Member</option>
+            <option value="communityMember">Community Member</option>
+          </select>
         </div>
         <div>
-          <ul>
-            <li>Goal. Build an honest picture of how learning and assessment feel today.</li>
-            <li>Outputs. School summary profiles, district synthesis, and 3 to 5 Phase 2 priorities, validated with LAAC input.</li>
-            <li>Big moves. Launch and form LAAC. Look at reality. Choose priorities and close.</li>
-          </ul>
+          <label>Phase</label><br />
+          <div class="chip">Phase 1. Laying the Groundwork</div>
         </div>
       </div>
-
-      <div class="card" style="margin-top:10px;">
-        <div class="card-header">
-          <div class="card-title">2) School Level Checklist</div>
-          <div class="chip">Checkbox sheet</div>
-        </div>
-        <ul class="checklist">
-          <li><input type="checkbox" /><span>Entry point named and explained.</span></li>
-          <li><input type="checkbox" /><span>Evidence anchors collected and logged.</span></li>
-          <li><input type="checkbox" /><span>Student and family listening completed and summarized.</span></li>
-          <li><input type="checkbox" /><span>Readiness rubric completed with evidence justifications.</span></li>
-          <li><input type="checkbox" /><span>School Phase 1 Summary Profile drafted and revised.</span></li>
-          <li><input type="checkbox" /><span>Priorities identified for Phase 2 and shared with LAAC reps.</span></li>
-        </ul>
+      <div class="selector-row">
+        <button class="btn-pill primary" id="startBtn">Start or Resume</button>
+        <button class="btn-pill" id="resetBtn">Reset</button>
       </div>
+    </div>
+  </header>
 
-      <div class="card" style="margin-top:10px;">
-        <div class="card-header">
-          <div class="card-title">3) District Level Checklist</div>
-          <div class="chip">Checkbox sheet</div>
-        </div>
-        <ul class="checklist">
-          <li><input type="checkbox" /><span>Entry point and evidence anchors published with examples.</span></li>
-          <li><input type="checkbox" /><span>LAAC formed, oriented, and scheduled.</span></li>
-          <li><input type="checkbox" /><span>Schools supported with coaching and office hours.</span></li>
-          <li><input type="checkbox" /><span>District synthesis completed and reviewed with LAAC.</span></li>
-          <li><input type="checkbox" /><span>Phase 1 close communicated with Phase 2 timeline and ownership.</span></li>
-        </ul>
-      </div>
+  <div class="tagline">
+    Move through a short sequence of decisions that mirror Phase 1. Your choices shift Trust, Clarity, and Coherence for your chosen stakeholder.
+    One step at a time. No technical knowledge needed.
+  </div>
 
-      <div class="footer print-only">Local Accountability Framework. Phase 1 Implementation Guide.</div>
-    </section>
-
-    <div class="footer">
-      Local Accountability Framework. Phase 1 Implementation Guide.
+  <section class="card">
+    <div class="card-header">
+      <div class="card-title">Step by Step Simulation</div>
+      <span class="chip" id="stepChip">Step 0 of 4</span>
     </div>
 
-  </main>
+    <div class="section-label">System gauges</div>
+    <div class="gauges-row">
+      <div class="gauge">
+        <div class="gauge-label-row">
+          <span class="gauge-name">Trust</span>
+          <span class="gauge-value" id="trustValue">50</span>
+        </div>
+        <div class="gauge-bar">
+          <div class="gauge-fill" id="trustGauge"></div>
+        </div>
+      </div>
+      <div class="gauge">
+        <div class="gauge-label-row">
+          <span class="gauge-name">Clarity</span>
+          <span class="gauge-value" id="clarityValue">50</span>
+        </div>
+        <div class="gauge-bar">
+          <div class="gauge-fill" id="clarityGauge"></div>
+        </div>
+      </div>
+      <div class="gauge">
+        <div class="gauge-label-row">
+          <span class="gauge-name">Coherence</span>
+          <span class="gauge-value" id="coherenceValue">50</span>
+        </div>
+        <div class="gauge-bar">
+          <div class="gauge-fill" id="coherenceGauge"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="meta-row">
+      <span id="scenarioMetaLabel">Phase 1 orientation</span>
+      <span class="pill-tag" id="roleTag">Perspective: Superintendent / District Leader</span>
+    </div>
+    <div class="role-note" id="roleNote">
+      You are seeing Phase 1 through the district lens. Watch how the gauges move as you make choices.
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--border-soft);margin:6px 0 8px;" />
+
+    <div id="scenarioContainer">
+      <!-- scenario content will be rendered here -->
+      <div class="scenario-title">Welcome to the simulator</div>
+      <div class="scenario-meta">Orientation</div>
+      <div class="scenario-text">
+        When you are ready, select Start or Resume to move into Step 1. You will see one decision at a time with simple options.
+        There are no right answers. The goal is to notice how early choices shape trust, clarity, and coherence.
+      </div>
+    </div>
+
+    <div id="feedbackBox" class="feedback neutral"></div>
+
+    <div class="scenario-footer">
+      <button class="link-button" id="backBtn">Previous step</button>
+      <button class="btn-pill" id="continueBtn">Continue</button>
+    </div>
+  </section>
 </div>
 
 <script>
-  // ---------------------------
-  // State
-  // ---------------------------
-  const state = {
-    activeRole: "student",
-    leaderMode: false,
-    templateMode: false
+  // --------------------------------------------------------------------
+  // 1. CORE STATE MODEL (GAUGES, ROLE, HISTORY)
+  // --------------------------------------------------------------------
+
+  const simState = {
+    role: "districtLeader",
+    currentScenarioId: "intro",
+    stepIndex: 0,
+    totalSteps: 4,
+    gauges: {
+      trust: 50,
+      clarity: 50,
+      coherence: 50
+    },
+    // history stores what the user chose. This can be sent to AI in the background.
+    history: []
   };
 
-  // ---------------------------
-  // Helpers
-  // ---------------------------
-  function qs(sel, root=document) { return root.querySelector(sel); }
-  function qsa(sel, root=document) { return Array.from(root.querySelectorAll(sel)); }
+  const roleLabels = {
+    districtLeader: "Superintendent / District Leader",
+    schoolLeader: "Principal / School Leader",
+    teacher: "Teacher",
+    student: "Student",
+    parent: "Parent / Guardian",
+    boardMember: "Board Member",
+    communityMember: "Community Member"
+  };
 
-  function setActiveNavByHash() {
-    const hash = window.location.hash || "#phase1-lite";
-    qsa(".nav-link").forEach(a => a.classList.remove("active"));
-    const match = qsa(".nav-link").find(a => a.getAttribute("href") === hash);
-    if (match) match.classList.add("active");
+  const roleNotes = {
+    districtLeader: "You are seeing Phase 1 through the district lens. Watch how the gauges move as you make choices.",
+    schoolLeader: "You are seeing Phase 1 through a school lens. Notice how each choice will land with staff and families.",
+    teacher: "You are seeing Phase 1 through the classroom lens. Watch when decisions clear space for good teaching and when they add clutter.",
+    student: "You are seeing Phase 1 as a student. Notice when your experience is centered and when adults talk about you instead of with you.",
+    parent: "You are seeing Phase 1 as a parent or guardian. Notice how communication and respect shape your trust.",
+    boardMember: "You are seeing Phase 1 as a board member. Watch when you would feel confident supporting this work and when you would want more clarity.",
+    communityMember: "You are seeing Phase 1 as a community member or partner. Notice how the work connects to readiness for life, work, and citizenship."
+  };
+
+  // --------------------------------------------------------------------
+  // 2. LOCAL SCENARIO DEFINITIONS (DEFAULT CONTENT)
+  // --------------------------------------------------------------------
+  // These are safe default scenarios. Later, AI can override or extend them.
+
+  const localScenarios = {
+    intro: {
+      id: "intro",
+      step: 0,
+      title: "Welcome to the simulator",
+      metaByRole(role) {
+        return "A simple, four step walkthrough of Phase 1 decisions.";
+      },
+      textByRole(role) {
+        return "You will move through a short sequence of decisions that mirror how Phase 1 might feel in your district. There are no points or grades. The goal is to build shared understanding and better decisions.";
+      },
+      type: "info",
+      nextId: "launch"
+    },
+    launch: {
+      id: "launch",
+      step: 1,
+      title: "Launching Phase 1",
+      metaByRole(role) {
+        if (role === "teacher") {
+          return "How this is introduced will shape whether you see Phase 1 as helpful or as one more thing.";
+        }
+        if (role === "parent") {
+          return "You receive many district messages. You want to know if this one matters for your child.";
+        }
+        return "You are preparing to introduce Phase 1 to your system. Staff, families, and board members are paying attention.";
+      },
+      textByRole(role) {
+        return "You can choose a quick, light launch. You can slow down to build partners. Or you can wait until everything is perfect. Each path has tradeoffs.";
+      },
+      type: "choice",
+      options: [
+        {
+          id: "launch_email",
+          label: "Send a short email and attached overview. Ask principals to follow up in their own way.",
+          effects: { trust: -4, clarity: -2, coherence: +2 },
+          feedback: "People get basic information, but it may feel like one more initiative in the inbox."
+        },
+        {
+          id: "launch_partners",
+          label: "Host a short launch with principals, teacher leaders, and LAAC candidates first. Then send a refined message to staff and families.",
+          effects: { trust: +6, clarity: +5, coherence: +4 },
+          feedback: "You slow down enough to build partners. The message feels more shared and less top down."
+        },
+        {
+          id: "launch_wait",
+          label: "Wait until every tool is perfect before saying anything. Announce only when everything is finished.",
+          effects: { trust: -2, clarity: -3, coherence: -2 },
+          feedback: "You avoid early questions, but people may sense that something is happening without them."
+        }
+      ],
+      nextId: "laac"
+    },
+    laac: {
+      id: "laac",
+      step: 2,
+      title: "Forming the Advisory Council (LAAC)",
+      metaByRole(role) {
+        return "Who you invite into the LAAC will quietly define whose voice counts in this work.";
+      },
+      textByRole(role) {
+        return "You have room for 12 to 18 members. You want students, families, staff, leaders, a board representative, and community voices. Time is limited, and people are busy.";
+      },
+      type: "dropdown",
+      choices: [
+        {
+          id: "laac_existing",
+          label: "Invite people from existing committees and task forces only.",
+          effects: { trust: -3, clarity: 0, coherence: +3 },
+          feedback: "Efficient, but the group may feel like the same insiders who always meet."
+        },
+        {
+          id: "laac_blend",
+          label: "Blend invitations with open calls, reserving seats for students, families, staff, and community.",
+          effects: { trust: +7, clarity: +3, coherence: +4 },
+          feedback: "More effort, but the LAAC looks and feels like the community it serves."
+        },
+        {
+          id: "laac_principal",
+          label: "Ask each principal to choose one representative from their school without set criteria.",
+          effects: { trust: -2, clarity: -2, coherence: -3 },
+          feedback: "You move fast, but representation may be uneven and hard to explain."
+        }
+      ],
+      nextId: "evidence"
+    },
+    evidence: {
+      id: "evidence",
+      step: 3,
+      title: "Choosing Evidence of Current Conditions",
+      metaByRole(role) {
+        if (role === "teacher") {
+          return "You know test scores alone do not show what students can really do.";
+        }
+        return "The evidence you choose becomes the story the LAAC and board will see about your system.";
+      },
+      textByRole(role) {
+        return "You can lean on familiar metrics only. Or you can invite more authentic evidence of teaching and learning.";
+      },
+      type: "choice",
+      options: [
+        {
+          id: "evidence_minimal",
+          label: "Ask schools for test scores, attendance, and discipline data only.",
+          effects: { trust: -2, clarity: -3, coherence: +1 },
+          feedback: "Simple to collect, but many teachers and families will feel that key parts of learning are missing."
+        },
+        {
+          id: "evidence_balanced",
+          label: "Ask for test data, sample units, student work, student and family feedback, and short walkthrough notes.",
+          effects: { trust: +5, clarity: +6, coherence: +4 },
+          feedback: "More work, but it gives a fuller, more honest picture of learning in your district."
+        },
+        {
+          id: "evidence_bestlight",
+          label: "Tell schools to send whatever shows them in the best light.",
+          effects: { trust: -3, clarity: -4, coherence: -2 },
+          feedback: "You may see polished highlights, but gaps and struggles remain invisible."
+        }
+      ],
+      nextId: "priorities"
+    },
+    priorities: {
+      id: "priorities",
+      step: 4,
+      title: "Prioritizing What Happens Next",
+      metaByRole(role) {
+        return "You have early evidence and a first sense of readiness. Now you decide what happens first.";
+      },
+      textByRole(role) {
+        return "Drag each card into Do Now, Do Next, or Park for Later. There is no perfect pattern. The goal is to see your instincts.";
+      },
+      type: "board",
+      board: {
+        columns: [
+          { id: "do_now", label: "Do Now" },
+          { id: "do_next", label: "Do Next" },
+          { id: "park", label: "Park for Later" }
+        ],
+        cards: [
+          { id: "card_rubric", text: "Co design a simple readiness rubric with the LAAC and principals." },
+          { id: "card_summary", text: "Draft a one page School Summary Profile template for each school." },
+          { id: "card_voice", text: "Create a way for students to share how current assessments feel to them." },
+          { id: "card_families", text: "Send a short, clear message to families about what Phase 1 is and is not." }
+        ]
+      },
+      // gauge effects based on layout will be calculated in code
+      nextId: null
+    }
+  };
+
+  // --------------------------------------------------------------------
+  // 3. AI HOOKS - HIDDEN BACKGROUND PROMPTING (NO UI)
+  // --------------------------------------------------------------------
+  // This is where you would integrate with an AI service.
+  // For now, the simulator uses localScenarios above.
+  // Later, you can flip useAI to true and wire requestNextScenarioFromAI
+  // to your own backend that calls an AI model.
+
+  const useAI = false; // switch to true when you have a backend ready
+
+  function buildAIContext() {
+    // Build a structured payload with role, gauges, and history.
+    // This can be sent to a backend AI service.
+    return {
+      role: simState.role,
+      role_label: roleLabels[simState.role],
+      phase: "phase1",
+      gauges: simState.gauges,
+      history: simState.history
+    };
   }
 
-  function showRolePanels(role) {
-    state.activeRole = role;
+  async function requestNextScenarioFromAI(currentScenarioId) {
+    // Example only. Replace this with a real API call in your environment.
+    // const payload = buildAIContext();
+    // const response = await fetch("/api/phase1-next-scenario", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(payload)
+    // });
+    // const data = await response.json();
+    // return data; // data should be a scenario object similar to localScenarios entries
 
-    // pill active
-    qsa(".stakeholder-pill").forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.role === role);
+    // For now, just fall back to local scenarios.
+    return localScenarios[currentScenarioId];
+  }
+
+  // --------------------------------------------------------------------
+  // 4. DOM REFERENCES
+  // --------------------------------------------------------------------
+
+  const roleSelectEl = document.getElementById("roleSelect");
+  const stepChipEl = document.getElementById("stepChip");
+
+  const trustGaugeEl = document.getElementById("trustGauge");
+  const clarityGaugeEl = document.getElementById("clarityGauge");
+  const coherenceGaugeEl = document.getElementById("coherenceGauge");
+
+  const trustValueEl = document.getElementById("trustValue");
+  const clarityValueEl = document.getElementById("clarityValue");
+  const coherenceValueEl = document.getElementById("coherenceValue");
+
+  const scenarioMetaLabelEl = document.getElementById("scenarioMetaLabel");
+  const roleTagEl = document.getElementById("roleTag");
+  const roleNoteEl = document.getElementById("roleNote");
+  const scenarioContainerEl = document.getElementById("scenarioContainer");
+  const feedbackBoxEl = document.getElementById("feedbackBox");
+
+  const startBtnEl = document.getElementById("startBtn");
+  const resetBtnEl = document.getElementById("resetBtn");
+  const continueBtnEl = document.getElementById("continueBtn");
+  const backBtnEl = document.getElementById("backBtn");
+
+  // --------------------------------------------------------------------
+  // 5. UI HELPERS
+  // --------------------------------------------------------------------
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function updateGauges() {
+    trustGaugeEl.style.width = simState.gauges.trust + "%";
+    clarityGaugeEl.style.width = simState.gauges.clarity + "%";
+    coherenceGaugeEl.style.width = simState.gauges.coherence + "%";
+
+    trustValueEl.textContent = simState.gauges.trust;
+    clarityValueEl.textContent = simState.gauges.clarity;
+    coherenceValueEl.textContent = simState.gauges.coherence;
+  }
+
+  function updateRoleUI() {
+    roleTagEl.textContent = "Perspective: " + (roleLabels[simState.role] || "Role");
+    roleNoteEl.textContent = roleNotes[simState.role] || "";
+  }
+
+  function updateStepChip(step) {
+    stepChipEl.textContent = "Step " + step + " of " + simState.totalSteps;
+  }
+
+  function showFeedback(message, tone) {
+    feedbackBoxEl.style.display = "block";
+    feedbackBoxEl.textContent = message;
+    feedbackBoxEl.className = "feedback " + (tone || "neutral");
+  }
+
+  function clearFeedback() {
+    feedbackBoxEl.style.display = "none";
+    feedbackBoxEl.textContent = "";
+    feedbackBoxEl.className = "feedback neutral";
+  }
+
+  function enableBoardDragAndDrop() {
+    let dragCardId = null;
+    const cards = scenarioContainerEl.querySelectorAll(".card-draggable");
+    const columns = scenarioContainerEl.querySelectorAll(".board-column");
+
+    cards.forEach(card => {
+      card.addEventListener("dragstart", () => {
+        dragCardId = card.dataset.cardId;
+      });
+      card.addEventListener("dragend", () => {
+        dragCardId = null;
+      });
     });
 
-    // panels: show only those that match the role
-    qsa(".stakeholder-panel").forEach(panel => {
-      panel.classList.toggle("active", panel.dataset.role === role);
-    });
-  }
-
-  function setLeaderMode(on) {
-    state.leaderMode = !!on;
-    qs("#viewEveryone").classList.toggle("active", !state.leaderMode);
-    qs("#viewLeader").classList.toggle("active", state.leaderMode);
-
-    qsa(".leader-only").forEach(el => {
-      el.style.display = state.leaderMode ? "block" : "none";
-    });
-  }
-
-  function applyTemplateMode(on) {
-    state.templateMode = !!on;
-    const btn = qs("#templateToggle");
-    if (!btn) return;
-
-    btn.querySelector("span:last-child").textContent = state.templateMode
-      ? "Switch to Real Example View"
-      : "Switch to Template View";
-
-    // swap district placeholder text across all tagged elements
-    const modeAttr = state.templateMode ? "data-template" : "data-smith";
-    qsa(".district-name, .district-system, .district-high").forEach(el => {
-      const val = el.getAttribute(modeAttr);
-      if (val) el.textContent = val;
-    });
-  }
-
-  // ---------------------------
-  // UI actions
-  // ---------------------------
-  function toggleStep(id) {
-    const content = qs("#" + id);
-    const toggle = qs("#toggle-" + id);
-    if (!content || !toggle) return;
-
-    const open = content.classList.toggle("open");
-    toggle.textContent = open ? "−" : "+";
-  }
-
-  function toggleTemplateMode() {
-    applyTemplateMode(!state.templateMode);
-  }
-
-  function printPhase1Pack() {
-    document.body.classList.add("print-pack-mode");
-    // ensure print section exists and is visible in this mode
-    const pp = qs("#print-phase1");
-    if (pp) pp.classList.add("print-only");
-
-    // allow DOM to settle then print
-    setTimeout(() => {
-      window.print();
-      document.body.classList.remove("print-pack-mode");
-      if (pp) pp.classList.remove("print-only");
-    }, 120);
-  }
-
-  function downloadTools() {
-    alert("Placeholder. Link this button to your Phase 1 tools folder or ZIP download.");
-  }
-
-  // Entry point tabs
-  function initEntryTabs() {
-    const tabs = qsa(".entry-tab");
-    const panels = qsa(".entry-panel");
-
-    tabs.forEach(t => {
-      t.addEventListener("click", () => {
-        const key = t.dataset.entry;
-        tabs.forEach(x => x.classList.toggle("active", x === t));
-        panels.forEach(p => p.classList.toggle("active", p.dataset.entry === key));
+    columns.forEach(col => {
+      col.addEventListener("dragover", e => {
+        e.preventDefault();
+        col.classList.add("drop-hover");
+      });
+      col.addEventListener("dragleave", () => {
+        col.classList.remove("drop-hover");
+      });
+      col.addEventListener("drop", e => {
+        e.preventDefault();
+        col.classList.remove("drop-hover");
+        if (!dragCardId) return;
+        const card = scenarioContainerEl.querySelector('[data-card-id="' + dragCardId + '"]');
+        if (card) col.appendChild(card);
       });
     });
   }
 
-  // Stakeholder pills
-  function initStakeholderPills() {
-    qsa(".stakeholder-pill").forEach(btn => {
-      btn.addEventListener("click", () => showRolePanels(btn.dataset.role));
+  function getBoardLayout() {
+    const layout = {};
+    const columns = scenarioContainerEl.querySelectorAll(".board-column");
+    columns.forEach(col => {
+      const id = col.dataset.columnId;
+      layout[id] = [];
+      col.querySelectorAll(".card-draggable").forEach(card => {
+        layout[id].push(card.dataset.cardId);
+      });
     });
+    return layout;
   }
 
-  // View pills
-  function initViewPills() {
-    const everyone = qs("#viewEveryone");
-    const leader = qs("#viewLeader");
-    if (!everyone || !leader) return;
+  // --------------------------------------------------------------------
+  // 6. RENDER SCENARIOS
+  // --------------------------------------------------------------------
 
-    everyone.addEventListener("click", () => setLeaderMode(false));
-    leader.addEventListener("click", () => setLeaderMode(true));
+  function renderScenario(scenarioId) {
+    const scenario = localScenarios[scenarioId];
+    if (!scenario) return;
+
+    simState.currentScenarioId = scenarioId;
+    simState.stepIndex = scenario.step || 0;
+    updateStepChip(simState.stepIndex);
+    clearFeedback();
+
+    const metaText = scenario.metaByRole ? scenario.metaByRole(simState.role) : "Phase 1 decision";
+    const bodyText = scenario.textByRole ? scenario.textByRole(simState.role) : "";
+
+    scenarioMetaLabelEl.textContent = metaText;
+
+    let html = "";
+    html += `<div class="scenario-title">${scenario.title}</div>`;
+    html += `<div class="scenario-meta">${metaText}</div>`;
+    html += `<div class="scenario-text">${bodyText}</div>`;
+
+    if (scenario.type === "choice") {
+      html += `<div class="option-group">`;
+      scenario.options.forEach((opt, idx) => {
+        html += `
+          <label class="option">
+            <input type="radio" name="scenarioOption" value="${opt.id}" ${idx === 0 ? "checked" : ""}>
+            <span>${opt.label}</span>
+          </label>
+        `;
+      });
+      html += `<div class="helper-text">Choose the option that is closest to how you would proceed.</div>`;
+      html += `</div>`;
+    }
+
+    if (scenario.type === "dropdown") {
+      html += `<div class="dropdown-row">
+        <select id="scenarioDropdown">
+          <option value="">Choose an approach...</option>
+      `;
+      scenario.choices.forEach(choice => {
+        html += `<option value="${choice.id}">${choice.label}</option>`;
+      });
+      html += `</select>
+        <div class="helper-text">Your choice will shape who feels represented in this work.</div>
+      </div>`;
+    }
+
+    if (scenario.type === "board") {
+      const board = scenario.board;
+      html += `
+        <div class="board">
+          <div class="board-header">
+            Drag each card into Do Now, Do Next, or Park for Later.
+          </div>
+          <div class="board-columns">
+      `;
+      board.columns.forEach(col => {
+        html += `<div class="board-column" data-column-id="${col.id}">
+          <div class="board-column-title">${col.label}</div>
+        `;
+        if (col.id === "do_now") {
+          board.cards.forEach(card => {
+            html += `<div class="card-draggable" draggable="true" data-card-id="${card.id}">${card.text}</div>`;
+          });
+        }
+        html += `</div>`;
+      });
+      html += `</div></div>`;
+    }
+
+    scenarioContainerEl.innerHTML = html;
+    if (scenario.type === "board") enableBoardDragAndDrop();
   }
 
-  // Sidebar active tracking on scroll
-  function initScrollSpy() {
-    const links = qsa(".nav-link");
-    const sections = links
-      .map(a => qs(a.getAttribute("href")))
-      .filter(Boolean);
+  // --------------------------------------------------------------------
+  // 7. HANDLE CHOICES AND BRANCHING
+  // --------------------------------------------------------------------
 
-    const obs = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter(e => e.isIntersecting)
-        .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (!visible) return;
-
-      links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + visible.target.id));
-    }, { root: null, threshold: [0.15, 0.25, 0.4, 0.6] });
-
-    sections.forEach(s => obs.observe(s));
+  function applyEffects(effects) {
+    if (!effects) return;
+    simState.gauges.trust = clamp(simState.gauges.trust + (effects.trust || 0), 0, 100);
+    simState.gauges.clarity = clamp(simState.gauges.clarity + (effects.clarity || 0), 0, 100);
+    simState.gauges.coherence = clamp(simState.gauges.coherence + (effects.coherence || 0), 0, 100);
+    updateGauges();
   }
 
-  // Make sure leader-only content is hidden by default in Everyone view
-  function initDefaultVisibility() {
-    setLeaderMode(false);
-    showRolePanels(state.activeRole);
-    applyTemplateMode(false);
+  function handleContinue() {
+    const scenario = localScenarios[simState.currentScenarioId];
+    if (!scenario) return;
+
+    if (scenario.type === "info") {
+      simState.history.push({ scenarioId: "intro", choiceId: null, effects: {} });
+      renderScenario(scenario.nextId);
+      return;
+    }
+
+    if (scenario.type === "choice") {
+      const checked = scenarioContainerEl.querySelector("input[name='scenarioOption']:checked");
+      if (!checked) {
+        showFeedback("Please select an option to continue.", "warn");
+        return;
+      }
+      const optId = checked.value;
+      const opt = scenario.options.find(o => o.id === optId);
+      if (!opt) {
+        showFeedback("There was an issue with that selection. Try again.", "warn");
+        return;
+      }
+      applyEffects(opt.effects);
+      showFeedback(opt.feedback, (opt.effects.trust + opt.effects.clarity + opt.effects.coherence) >= 0 ? "success" : "warn");
+      simState.history.push({
+        scenarioId: scenario.id,
+        choiceId: opt.id,
+        choiceLabel: opt.label,
+        effects: opt.effects
+      });
+      if (scenario.nextId) {
+        renderScenario(scenario.nextId);
+      }
+      return;
+    }
+
+    if (scenario.type === "dropdown") {
+      const dropdown = scenarioContainerEl.querySelector("#scenarioDropdown");
+      if (!dropdown || !dropdown.value) {
+        showFeedback("Choose an approach to forming the LAAC before continuing.", "warn");
+        return;
+      }
+      const choiceId = dropdown.value;
+      const choice = scenario.choices.find(c => c.id === choiceId);
+      if (!choice) {
+        showFeedback("There was an issue with that selection. Try again.", "warn");
+        return;
+      }
+      applyEffects(choice.effects);
+      showFeedback(choice.feedback, (choice.effects.trust + choice.effects.clarity + choice.effects.coherence) >= 0 ? "success" : "warn");
+      simState.history.push({
+        scenarioId: scenario.id,
+        choiceId: choice.id,
+        choiceLabel: choice.label,
+        effects: choice.effects
+      });
+      if (scenario.nextId) {
+        renderScenario(scenario.nextId);
+      }
+      return;
+    }
+
+    if (scenario.type === "board") {
+      const layout = getBoardLayout();
+      const doNowCount = (layout.do_now || []).length;
+      const doNextCount = (layout.do_next || []).length;
+      const effects = {
+        trust: doNowCount >= 2 ? +3 : -1,
+        clarity: doNowCount + doNextCount >= 3 ? +4 : -2,
+        coherence: doNowCount >= 2 ? +4 : 0
+      };
+      applyEffects(effects);
+      simState.history.push({
+        scenarioId: scenario.id,
+        choiceId: "board_layout",
+        choiceLabel: JSON.stringify(layout),
+        effects
+      });
+      showFeedback("You have completed this short simulation. Use what you noticed as you plan real Phase 1 work.", "success");
+      return;
+    }
   }
 
-  // Close print-pack mode if user cancels print dialog and returns
-  window.addEventListener("afterprint", () => {
-    document.body.classList.remove("print-pack-mode");
-    const pp = qs("#print-phase1");
-    if (pp) pp.classList.remove("print-only");
+  function handleBack() {
+    if (simState.history.length === 0) {
+      showFeedback("You are at the start of the simulation.", "neutral");
+      return;
+    }
+    const last = simState.history.pop();
+    simState.gauges.trust = clamp(simState.gauges.trust - (last.effects.trust || 0), 0, 100);
+    simState.gauges.clarity = clamp(simState.gauges.clarity - (last.effects.clarity || 0), 0, 100);
+    simState.gauges.coherence = clamp(simState.gauges.coherence - (last.effects.coherence || 0), 0, 100);
+    updateGauges();
+    renderScenario(last.scenarioId);
+    showFeedback("You stepped back one decision. Adjust your choice if needed.", "neutral");
+  }
+
+  function resetSimulation() {
+    simState.currentScenarioId = "intro";
+    simState.stepIndex = 0;
+    simState.history = [];
+    simState.gauges = { trust: 50, clarity: 50, coherence: 50 };
+    updateGauges();
+    clearFeedback();
+    updateRoleUI();
+    updateStepChip(0);
+    // initial intro text
+    scenarioContainerEl.innerHTML = `
+      <div class="scenario-title">Welcome to the simulator</div>
+      <div class="scenario-meta">Orientation</div>
+      <div class="scenario-text">
+        When you are ready, select Start or Resume to move into Step 1. You will see one decision at a time with simple options.
+        There are no right or wrong answers. The goal is to build a clearer picture of what Phase 1 work can feel like.
+      </div>
+    `;
+  }
+
+  // --------------------------------------------------------------------
+  // 8. INITIALIZE AND EVENT LISTENERS
+  // --------------------------------------------------------------------
+
+  roleSelectEl.addEventListener("change", () => {
+    simState.role = roleSelectEl.value;
+    updateRoleUI();
+    // re render current scenario with new perspective if not intro
+    if (localScenarios[simState.currentScenarioId]) {
+      renderScenario(simState.currentScenarioId);
+    }
   });
 
-  // Hash nav highlight
-  window.addEventListener("hashchange", setActiveNavByHash);
-
-  // Init
-  document.addEventListener("DOMContentLoaded", () => {
-    initDefaultVisibility();
-    initStakeholderPills();
-    initViewPills();
-    initEntryTabs();
-    initScrollSpy();
-    setActiveNavByHash();
+  startBtnEl.addEventListener("click", () => {
+    if (simState.currentScenarioId === "intro") {
+      renderScenario("intro");
+      // move straight into first decision after intro continue
+    } else {
+      renderScenario(simState.currentScenarioId);
+    }
   });
+
+  resetBtnEl.addEventListener("click", () => {
+    resetSimulation();
+  });
+
+  continueBtnEl.addEventListener("click", () => {
+    if (simState.currentScenarioId === "intro") {
+      renderScenario("launch");
+    } else {
+      handleContinue();
+    }
+  });
+
+  backBtnEl.addEventListener("click", () => {
+    handleBack();
+  });
+
+  // Start
+  updateGauges();
+  updateRoleUI();
+  updateStepChip(0);
 </script>
 </body>
 </html>
