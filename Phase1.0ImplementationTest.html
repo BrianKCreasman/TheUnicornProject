@@ -1,0 +1,1892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Phase 1 Implementation Guide – Local Accountability Framework</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --navy: #0a355e;
+      --teal: #0e8577;
+      --gold: #dbb550;
+      --bg: #f5f7fb;
+      --text: #111111;
+      --muted: #70747a;
+      --card-bg: #ffffff;
+      --border-soft: #dde3ee;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--teal);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: 270px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    @media (max-width: 960px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+      .sidebar {
+        position: static;
+        max-height: none;
+        border-right: none;
+        border-bottom: 1px solid var(--border-soft);
+      }
+    }
+
+    .sidebar {
+      background: #ffffff;
+      border-right: 1px solid var(--border-soft);
+      padding: 20px 18px;
+      position: sticky;
+      top: 0;
+      align-self: start;
+      max-height: 100vh;
+      overflow-y: auto;
+      font-size: 13px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 20%, var(--gold), var(--navy));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .brand-text-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .brand-text-sub {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .nav-section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 12px 0 4px;
+    }
+
+    .nav-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-list li {
+      margin: 2px 0;
+    }
+
+    .nav-link {
+      display: block;
+      padding: 6px 8px;
+      border-radius: 999px;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .nav-link:hover {
+      background: #e8f2f1;
+      color: var(--navy);
+    }
+
+    .nav-link.active {
+      background: var(--navy);
+      color: #ffffff;
+    }
+
+    .main {
+      padding: 22px 24px 32px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      margin-bottom: 10px;
+    }
+
+    .toolbar-button {
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      padding: 6px 14px;
+      font-size: 12px;
+      background: #ffffff;
+      color: var(--navy);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(15, 35, 52, 0.06);
+    }
+
+    .toolbar-button.primary {
+      background: linear-gradient(to right, var(--navy), var(--teal));
+      color: #ffffff;
+      border-color: transparent;
+    }
+
+    .toolbar-button span.icon {
+      font-size: 14px;
+    }
+
+    .toolbar-button:hover {
+      opacity: 0.92;
+    }
+
+    #viewToggleRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      flex-wrap: wrap;
+    }
+
+    .view-pill {
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      font-size: 11px;
+      background: #f7f8fc;
+      color: var(--navy);
+      margin-left: 4px;
+    }
+
+    .view-pill.active {
+      background: var(--navy);
+      color: #ffffff;
+    }
+
+    .stakeholder-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+      font-size: 11px;
+      align-items: center;
+    }
+
+    .stakeholder-pill {
+      cursor: pointer;
+      padding: 4px 9px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: #f7f8fc;
+      color: var(--navy);
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .stakeholder-pill.active {
+      background: var(--teal);
+      color: #ffffff;
+      border-color: var(--teal);
+    }
+
+    section {
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .section-tag {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .section-tag span {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(10, 53, 94, 0.16);
+      background: #f7f8fc;
+      margin-right: 4px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      padding: 12px 12px 14px;
+      box-shadow: 0 5px 14px rgba(15, 35, 52, 0.04);
+      font-size: 13px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .chip {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(10, 53, 94, 0.22);
+      background: #f7f8fc;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    @media (max-width: 840px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .phase-hero-compact {
+      background: #ffffff;
+      border-radius: 18px;
+      border: 1px solid #f0e3c3;
+      padding: 12px 12px 14px;
+      margin-bottom: 14px;
+      display: grid;
+      grid-template-columns: 2.2fr 1.6fr;
+      gap: 10px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 840px) {
+      .phase-hero-compact {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .hero-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+
+    .hero-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      font-size: 11px;
+    }
+
+    .hero-stat {
+      background: #fefaf0;
+      border-radius: 10px;
+      padding: 6px 8px;
+      border: 1px solid rgba(219, 181, 80, 0.5);
+    }
+
+    .hero-stat-label {
+      font-size: 10px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+
+    .hero-stat-value {
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .tiny-label {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .pill-inline {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(10, 53, 94, 0.18);
+      background: #f7f8fc;
+      font-size: 11px;
+      color: var(--navy);
+    }
+
+    .big-moves-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 1024px) {
+      .big-moves-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .big-move-card {
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      padding: 10px 10px 12px;
+      box-shadow: 0 4px 10px rgba(15, 35, 52, 0.03);
+    }
+
+    .big-move-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+    }
+
+    .big-move-title {
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+
+    ul {
+      margin-top: 0;
+      margin-bottom: 6px;
+      padding-left: 18px;
+    }
+
+    li {
+      margin-bottom: 3px;
+    }
+
+    .subheading {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+
+    .example-callout {
+      border-left: 3px solid var(--teal);
+      background: #e6f3f1;
+      padding: 6px 8px;
+      border-radius: 10px;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .example-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+      margin: 4px 0;
+      font-size: 12px;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-bottom: 4px;
+    }
+
+    .checklist input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--teal);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--border-soft);
+      padding: 5px 6px;
+      text-align: left;
+    }
+
+    th {
+      background: #f2f4fb;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--navy);
+    }
+
+    .step-card {
+      margin-bottom: 10px;
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 650;
+      color: var(--navy);
+    }
+
+    .step-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .step-toggle {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid var(--border-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--muted);
+      background: #ffffff;
+    }
+
+    .step-content {
+      margin-top: 6px;
+      font-size: 13px;
+      display: none;
+    }
+
+    .step-content.open {
+      display: block;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    @media (max-width: 840px) {
+      .profile-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .profile-field-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+
+    .profile-field-box {
+      min-height: 32px;
+      border-radius: 10px;
+      border: 1px dashed var(--border-soft);
+      background: #fafbff;
+      padding: 6px 8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .huddle-grid {
+      display: grid;
+      grid-template-columns: 2fr 1.6fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 840px) {
+      .huddle-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .callout {
+      border-radius: 10px;
+      padding: 8px 8px;
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      font-size: 12px;
+      margin-top: 6px;
+    }
+
+    .callout-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .callout.info {
+      border-left: 3px solid var(--navy);
+    }
+
+    .callout.warn {
+      border-left: 3px solid #b74b4b;
+      background: #fef5f5;
+    }
+
+    .callout.success {
+      border-left: 3px solid #1e8a4b;
+      background: #f3fbf7;
+    }
+
+    .stakeholder-panel {
+      display: none;
+      margin-top: 6px;
+      border-radius: 10px;
+      border: 1px dashed var(--border-soft);
+      background: #f7f9ff;
+      padding: 8px;
+      font-size: 12px;
+    }
+
+    .stakeholder-panel.active {
+      display: block;
+    }
+
+    .stakeholder-panel-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .footer {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 20px;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-logo">LA</div>
+      <div>
+        <div class="brand-text-title">Local Accountability Framework</div>
+        <div class="brand-text-sub">Phase 1 Implementation Guide</div>
+      </div>
+    </div>
+
+    <div class="nav-section-title">Guide Map</div>
+    <ul class="nav-list">
+      <li><a href="#phase1-lite" class="nav-link active">Phase 1 on a Page</a></li>
+      <li><a href="#hero" class="nav-link">Phase 1 Snapshot</a></li>
+      <li><a href="#orientation" class="nav-link">1. Orientation</a></li>
+      <li><a href="#preconditions" class="nav-link">2. Preconditions</a></li>
+      <li><a href="#roles" class="nav-link">3. Roles</a></li>
+      <li><a href="#process" class="nav-link">4. Process Map</a></li>
+      <li><a href="#steps" class="nav-link">5. Step by Step</a></li>
+      <li><a href="#summary-template" class="nav-link">6. School Summary</a></li>
+      <li><a href="#fidelity" class="nav-link">7. Checklists</a></li>
+      <li><a href="#pl" class="nav-link">8. PL Supports</a></li>
+      <li><a href="#pitfalls" class="nav-link">9. Pitfalls</a></li>
+      <li><a href="#huddle" class="nav-link">Leadership Huddle</a></li>
+    </ul>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main">
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button class="toolbar-button primary" onclick="window.print()">
+        <span class="icon">🖨️</span>
+        <span>Print this Guide</span>
+      </button>
+      <button class="toolbar-button" onclick="downloadTools()">
+        <span class="icon">📁</span>
+        <span>Download Phase 1 Tools</span>
+      </button>
+      <button class="toolbar-button" id="templateToggle" onclick="toggleTemplateMode()">
+        <span class="icon">🔁</span>
+        <span>Switch to Template View</span>
+      </button>
+    </div>
+
+    <!-- View toggle row -->
+    <div id="viewToggleRow">
+      <div>
+        Choose your view.
+        <span id="viewEveryone" class="view-pill active">Everyone</span>
+        <span id="viewLeader" class="view-pill">Leader Edition</span>
+      </div>
+      <div>
+        Framework and Guide use the same language. Framework explains the why and what. This guide shows the how.
+      </div>
+    </div>
+
+    <!-- Stakeholder toggle -->
+    <div class="stakeholder-row">
+      <span class="tiny-label">See Phase 1 through different eyes.</span>
+      <div>
+        <button class="stakeholder-pill active" data-role="student">Student</button>
+        <button class="stakeholder-pill" data-role="teacher">Teacher</button>
+        <button class="stakeholder-pill" data-role="staff">Staff Member</button>
+        <button class="stakeholder-pill" data-role="schoolLeader">School Leader</button>
+        <button class="stakeholder-pill" data-role="districtLeader">District Leader</button>
+        <button class="stakeholder-pill" data-role="boardMember">Board Member</button>
+        <button class="stakeholder-pill" data-role="parentGuardian">Parent or Guardian</button>
+        <button class="stakeholder-pill" data-role="communityMember">Community Member</button>
+      </div>
+    </div>
+
+    <!-- Phase 1 on a Page and Three Big Moves -->
+    <section id="phase1-lite">
+      <div class="card" style="margin-bottom:10px;">
+        <div class="card-title" style="margin-bottom:4px;">
+          Phase 1 on a Page. Laying the Groundwork
+        </div>
+        <div class="section-tag" style="margin-bottom:6px;">
+          <span>Framework. Current Conditions and Readiness</span>
+          <span>Framework. Evidence and Learning Loop</span>
+          <span>Framework. Phase 1 Key Outcome</span>
+        </div>
+        <div class="section-subtitle" style="margin-bottom:8px;">
+          Goal. Build an honest picture of how learning and assessment feel today, so the local accountability model is
+          grounded in reality, not guesses.
+        </div>
+        <div class="grid-2">
+          <div>
+            <div class="subheading">In plain language</div>
+            <ul>
+              <li>We tell the truth about what school feels like right now for students, families, and staff.</li>
+              <li>We gather real examples of learning and assessment, not only test scores and rankings.</li>
+              <li>We decide, together, where we are ready to grow and where we need to build foundations first.</li>
+            </ul>
+            <div class="subheading">By the end of Phase 1, we have:</div>
+            <ul>
+              <li>A one page summary for each school that captures strengths, challenges, and readiness.</li>
+              <li>A district wide picture of where we are starting from.</li>
+              <li>Three to five clear priorities that will drive Phase 2 design and decisions.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="subheading">Who needs to understand this?</div>
+            <ul>
+              <li>Board members and district leaders who set direction.</li>
+              <li>Principals and teacher leaders who organize the work.</li>
+              <li>Staff, families, and community partners who will live the changes.</li>
+            </ul>
+            <div class="tiny-label" style="margin-top:6px;">
+              Most people only need this view. The detailed steps and tools are for the teams actually running Phase 1.
+            </div>
+          </div>
+        </div>
+
+        <!-- Stakeholder perspective in Phase 1 on a Page -->
+        <div class="stakeholder-panel" data-role="student">
+          <div class="stakeholder-panel-title">From a student perspective</div>
+          <ul class="checklist">
+            <li><input type="checkbox" /><span>I know that adults are asking honest questions about what school feels like for students.</span></li>
+            <li><input type="checkbox" /><span>I have at least one way to share my voice in this process. survey, panel, conversation, or reflection.</span></li>
+            <li><input type="checkbox" /><span>I see that when I share feedback, someone acknowledges it or explains next steps.</span></li>
+          </ul>
+          <div class="tiny-label">
+            Example. A student panel is invited to talk about grading and feedback. The facilitator explains that this is part of Phase 1, not just a one time event.
+          </div>
+        </div>
+
+        <div class="stakeholder-panel" data-role="teacher">
+          <div class="stakeholder-panel-title">From a teacher perspective</div>
+          <ul class="checklist">
+            <li><input type="checkbox" /><span>I understand why we are doing Phase 1 and how it connects to my classroom.</span></li>
+            <li><input type="checkbox" /><span>I have helped select or provide sample units, student work, or assessments that show what learning looks like.</span></li>
+            <li><input type="checkbox" /><span>I have been part of at least one conversation about what our current reality really looks like.</span></li>
+          </ul>
+          <div class="tiny-label">
+            Example. A PLC uses part of its meeting time to examine current assessment tasks and talk about which ones truly capture student thinking.
+          </div>
+        </div>
+
+        <div class="stakeholder-panel" data-role="staff">
+          <div class="stakeholder-panel-title">From a staff member perspective</div>
+          <ul class="checklist">
+            <li><input type="checkbox" /><span>I understand that Phase 1 is about improving student experience, not blaming staff.</span></li>
+            <li><input type="checkbox" /><span>I have at least one way to share what I see and experience in my role.</span></li>
+            <li><input type="checkbox" /><span>I know where to find the basic Phase 1 information if families ask me about it.</span></li>
+          </ul>
+        </div>
+
+        <div class="stakeholder-panel" data-role="schoolLeader">
+          <div class="stakeholder-panel-title">From a school leader perspective</div>
+          <ul class="checklist">
+            <li><input type="checkbox" /><span>I can explain Phase 1 in two or three sentences to any staff member or parent.</span></li>
+            <li><input type="checkbox" /><span>I have a simple schedule for how my school will collect evidence, listen to stakeholders, and complete the summary.</span></li>
+            <li><input type="checkbox" /><span>I know how Phase 1 connects to the Six Pillars, the Continuum, and DDIER.</span></li>
+          </ul>
+        </div>
+
+        <div class="stakeholder-panel" data-role="districtLeader">
+          <div class="stakeholder-panel-title">From a district leader perspective</div>
+          <ul class="checklist">
+            <li><input type="checkbox" /><span>We have clearly communicated expectations and supports for schools during Phase 1.</span></li>
+            <li><input type="checkbox" /><span>We have a plan for how we will synthesize school level findings into a district story for the board and community.</span></li>
+            <li><input type="checkbox" /><span>We can name how Phase 1 findings will influence Phase 2 design decisions.</span></li>
+          </ul>
+        </div>
+
+        <div class="stakeholder-panel" data-role="boardMember">
+          <div class="stakeholder-panel-title">From a board member perspective</div>
+          <ul class="checklist">
+            <li><input type="checkbox" /><span>I have seen at least one short overview of Phase 1 goals and timeline.</span></li>
+            <li><input type="checkbox" /><span>I understand that Phase 1 is about learning how the system is working, not evaluating individual teachers.</span></li>
+            <li><input type="checkbox" /><span>I know when and how I will see a summary of Phase 1 findings.</span></li>
+          </ul>
+        </div>
+
+        <div class="stakeholder-panel" data-role="parentGuardian">
+          <div class="stakeholder-panel-title">From a parent or guardian perspective</div>
+          <ul class="checklist">
+            <li><input type="checkbox" /><span>I have heard in simple language what the district is doing in Phase 1 and why.</span></li>
+            <li><input type="checkbox" /><span>I have at least one easy option to share my experience, such as a survey or listening session.</span></li>
+            <li><input type="checkbox" /><span>I believe my feedback will be used to shape what happens next.</span></li>
+          </ul>
+        </div>
+
+        <div class="stakeholder-panel" data-role="communityMember">
+          <div class="stakeholder-panel-title">From a community member perspective</div>
+          <ul class="checklist">
+            <li><input type="checkbox" /><span>I understand that the district is building a local accountability model that goes beyond test scores.</span></li>
+            <li><input type="checkbox" /><span>I know how local businesses, organizations, or partners can share input.</span></li>
+            <li><input type="checkbox" /><span>I have seen at least one communication that connects this work to the community future.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:4px;">The Three Big Moves in Phase 1</div>
+      <div class="section-subtitle">
+        Instead of seven separate tasks, think of Phase 1 as three moves that everyone can name and remember.
+      </div>
+
+      <div class="big-moves-grid">
+        <div class="big-move-card">
+          <div class="big-move-label">Big Move 1</div>
+          <div class="big-move-title">Launch the Story</div>
+          <ul>
+            <li>Explain why the district is moving toward local accountability.</li>
+            <li>Connect Phase 1 to student experience, not just compliance.</li>
+            <li>Set simple expectations for what schools will do in this phase.</li>
+          </ul>
+          <div class="tiny-label">
+            Output. A shared message that every principal and teacher can restate in their own words.
+          </div>
+        </div>
+
+        <div class="big-move-card">
+          <div class="big-move-label">Big Move 2</div>
+          <div class="big-move-title">Look at Reality</div>
+          <ul>
+            <li>Gather real examples of teaching, learning, and assessment.</li>
+            <li>Listen to students, staff, and families about their experience.</li>
+            <li>Use a simple rubric to rate readiness in a few key areas.</li>
+          </ul>
+          <div class="tiny-label">
+            Output. A clear, honest picture of strengths and gaps in each school.
+          </div>
+        </div>
+
+        <div class="big-move-card">
+          <div class="big-move-label">Big Move 3</div>
+          <div class="big-move-title">Choose Priorities</div>
+          <ul>
+            <li>Summarize Phase 1 findings into a one page school profile.</li>
+            <li>Identify three to five focus areas for Phase 2 design work.</li>
+            <li>Combine school profiles into a district wide starting picture.</li>
+          </ul>
+          <div class="tiny-label">
+            Output. School and district summaries that point Phase 2 in the right direction.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Compact hero snapshot -->
+    <section id="hero">
+      <div class="phase-hero-compact">
+        <div>
+          <div class="hero-title">Phase 1. Laying the Groundwork</div>
+          <div class="hero-subtitle">
+            Understanding current conditions and readiness so local accountability work in
+            <span class="district-system"
+                  data-smith="Smith County Schools, KY"
+                  data-template="[District Name], [State]">Smith County Schools, KY</span>
+            begins with evidence, not assumptions.
+          </div>
+          <div class="hero-badges">
+            <span class="pill-inline">
+              <span class="district-system"
+                    data-smith="Smith County Schools, KY"
+                    data-template="[District Name], [State]">Smith County Schools, KY</span>
+            </span>
+            <span class="pill-inline">Phase 1. Current Conditions and Readiness</span>
+            <span class="pill-inline">Audience. District, School, Classroom</span>
+          </div>
+        </div>
+        <div class="hero-stat-grid">
+          <div class="hero-stat">
+            <div class="hero-stat-label">Phase 1 primary outcome</div>
+            <div class="hero-stat-value">Shared picture of reality across all district schools</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-label">Key users</div>
+            <div class="hero-stat-value">
+              Superintendent, district leads, principals, teacher leaders
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-label">Core question</div>
+            <div class="hero-stat-value">
+              Where are we today in learning, assessment, and readiness
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-label">Phase 2 dependency</div>
+            <div class="hero-stat-value">
+              Design decisions flow directly from Phase 1 findings
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORIENTATION -->
+    <section id="orientation">
+      <div class="section-title">1. Orientation to Phase 1</div>
+      <div class="section-subtitle">
+        Why Phase 1 exists, what success looks like, and how
+        <span class="district-name"
+              data-smith="Smith County"
+              data-template="[District Name]">Smith County</span>
+        leaders can use this guide as a working roadmap rather than a static document.
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Purpose of Phase 1</div>
+            <div class="chip">Start with reality</div>
+          </div>
+          <div>
+            The purpose of Phase 1 is to help
+            <span class="district-name"
+                  data-smith="Smith County"
+                  data-template="[District Name]">Smith County</span>
+            build an honest, evidence based picture of current conditions and readiness across all schools. Phase 1
+            asks a simple question. What is the actual learner and teacher experience right now.
+            <ul>
+              <li>Describe the current learner experience with real artifacts and data.</li>
+              <li>Identify strengths that can be leveraged in the local accountability design.</li>
+              <li>Surface gaps, inequities, and pain points that must be addressed.</li>
+              <li>Determine readiness levels at both school and district levels.</li>
+              <li>Agree on a small number of priorities that will guide Phase 2 design work.</li>
+            </ul>
+            <div class="example-callout">
+              <div class="example-label">District Example</div>
+              <div>
+                At
+                <span class="district-high"
+                      data-smith="Smith County High School"
+                      data-template="[Example High School]">Smith County High School</span>,
+                the leadership team realized through Phase 1 that students had many project based experiences, but very
+                few of those projects ever became part of a formal record of learning. That insight became a central
+                design driver in Phase 2.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Who This Guide Is For</div>
+            <div class="chip">Primary users</div>
+          </div>
+          <div>
+            This guide is written for people who will actually do the work of Phase 1 in
+            <span class="district-system"
+                  data-smith="Smith County Schools, KY"
+                  data-template="[District Name], [State]">Smith County Schools, KY</span>.
+            <ul>
+              <li>Superintendent and central office leaders who frame the work and protect time for it.</li>
+              <li>District accountability, curriculum, and assessment leads who design tools and coach schools.</li>
+              <li>Principals and assistant principals who organize and lead Phase 1 in each building.</li>
+              <li>Teacher leaders and PLC facilitators who bring classroom evidence and insight.</li>
+              <li>Program directors for special education, multilingual learners, counseling, and other services.</li>
+              <li>Student leadership teams, family advisory councils, and community partners as informed voices.</li>
+            </ul>
+            <div class="callout info">
+              <div class="callout-title">How to use this guide</div>
+              Use this guide as a living playbook. Print key sections for leadership meetings, link it in your local
+              accountability site, and mark it up as you learn from practice. The view toggle at the top lets you move
+              between an
+              <span class="pill-inline">Everyone view</span> and a
+              <span class="pill-inline">Leader Edition</span>.
+            </div>
+
+            <!-- Stakeholder specific orientation -->
+            <div class="stakeholder-panel" data-role="student">
+              <div class="stakeholder-panel-title">Orientation for students</div>
+              <p style="margin-top:0;">
+                For students, Phase 1 should feel like adults are genuinely listening. You are not being evaluated. The
+                system is. Your job is to be honest about what helps you learn and what gets in the way.
+              </p>
+              <ul class="checklist">
+                <li><input type="checkbox" /><span>I know who to talk to at my school if I have feedback about learning or grading.</span></li>
+                <li><input type="checkbox" /><span>I have been asked questions like "What helps you learn best" and "When does school feel most meaningful".</span></li>
+              </ul>
+            </div>
+
+            <div class="stakeholder-panel" data-role="teacher">
+              <div class="stakeholder-panel-title">Orientation for teachers</div>
+              <p style="margin-top:0;">
+                For teachers, Phase 1 is a chance to put real classroom evidence on the table. It is not another inspection.
+                It is a way to show what is already working and to name the conditions that limit your impact.
+              </p>
+              <ul class="checklist">
+                <li><input type="checkbox" /><span>I have seen examples of the kinds of artifacts the district is looking for.</span></li>
+                <li><input type="checkbox" /><span>I know how my voice and evidence will be used to inform district decisions.</span></li>
+              </ul>
+            </div>
+
+            <div class="stakeholder-panel" data-role="schoolLeader">
+              <div class="stakeholder-panel-title">Orientation for school leaders</div>
+              <p style="margin-top:0;">
+                For principals and assistant principals, Phase 1 is the moment to align your leadership team, PLCs, and
+                stakeholder groups around an honest look at your school. You are the bridge between system architecture and
+                classroom reality.
+              </p>
+              <ul class="checklist">
+                <li><input type="checkbox" /><span>Our leadership team has reviewed this guide together and assigned leads for each step.</span></li>
+                <li><input type="checkbox" /><span>We have decided where Phase 1 work will sit. staff meetings, PLCs, leadership huddles.</span></li>
+              </ul>
+            </div>
+
+            <div class="stakeholder-panel" data-role="districtLeader">
+              <div class="stakeholder-panel-title">Orientation for district leaders</div>
+              <p style="margin-top:0;">
+                For district leaders, Phase 1 must be coherent across schools but not rigid. Your challenge is to balance
+                clarity of expectations with enough flexibility for schools to show their unique context.
+              </p>
+              <ul class="checklist">
+                <li><input type="checkbox" /><span>We have named non negotiables for Phase 1 and where schools can adapt tools.</span></li>
+                <li><input type="checkbox" /><span>We have identified who will coach and support principals as they implement the steps.</span></li>
+              </ul>
+            </div>
+
+            <div class="stakeholder-panel" data-role="boardMember">
+              <div class="stakeholder-panel-title">Orientation for board members</div>
+              <p style="margin-top:0;">
+                For board members, Phase 1 is the foundation for future decisions about policy, resources, and priorities.
+                You are not running the process, but your understanding and support will signal that this is serious work.
+              </p>
+              <ul class="checklist">
+                <li><input type="checkbox" /><span>I have asked district leaders how Phase 1 aligns with our current board goals.</span></li>
+                <li><input type="checkbox" /><span>I have clarity on when the board will see a Phase 1 summary.</span></li>
+              </ul>
+            </div>
+
+            <div class="stakeholder-panel" data-role="parentGuardian">
+              <div class="stakeholder-panel-title">Orientation for parents and guardians</div>
+              <p style="margin-top:0;">
+                For families, Phase 1 should feel like an invitation. The district is asking, "What is it like to have your
+                child in our schools" and "How can we do better". Your lived experience matters.
+              </p>
+              <ul class="checklist">
+                <li><input type="checkbox" /><span>I have received at least one simple explanation of this work from the school or district.</span></li>
+                <li><input type="checkbox" /><span>I know how to give feedback if I choose to.</span></li>
+              </ul>
+            </div>
+
+            <div class="stakeholder-panel" data-role="staff">
+              <div class="stakeholder-panel-title">Orientation for staff members</div>
+              <p style="margin-top:0;">
+                For support staff, Phase 1 is a chance to describe what you see in hallways, buses, offices, cafeterias,
+                and playgrounds. You see parts of the system that others miss and your perspective is essential.
+              </p>
+            </div>
+
+            <div class="stakeholder-panel" data-role="communityMember">
+              <div class="stakeholder-panel-title">Orientation for community members</div>
+              <p style="margin-top:0;">
+                For community partners, Phase 1 is the entry point into a shared story about readiness. It connects
+                classroom learning to the skills, habits, and character that matter in your organizations and workplaces.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Everything below here is Leader-only detail that can be hidden -->
+    <div class="leader-only">
+
+      <!-- Preconditions -->
+      <section id="preconditions">
+        <div class="section-title">2. Preconditions and Readiness to Launch Phase 1</div>
+        <div class="section-subtitle">
+          A quick check for
+          <span class="district-name"
+                data-smith="Smith County"
+                data-template="[District Name]">Smith County</span>
+          to confirm that minimum conditions are in place before asking schools to begin.
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Minimum District Readiness</div>
+              <div class="chip">Before launch</div>
+            </div>
+            <div>
+              District leaders should review these items before launching Phase 1.
+              <ul class="checklist">
+                <li>
+                  <input type="checkbox" />
+                  <span>We can explain in two or three sentences why the district is moving toward a local accountability model and how it connects to student experience.</span>
+                </li>
+                <li>
+                  <input type="checkbox" />
+                  <span>We have introduced the Six Pillars, the Local Accountability Continuum, and the DDIER cycle to school leaders at a basic level.</span>
+                </li>
+                <li>
+                  <input type="checkbox" />
+                  <span>We have identified a Phase 1 district lead team and clarified roles for accountability, curriculum, assessment, and school support.</span>
+                </li>
+                <li>
+                  <input type="checkbox" />
+                  <span>We have created draft templates for the Current Conditions Scan, the Readiness Rubric, and the School Phase 1 Summary Profile.</span>
+                </li>
+                <li>
+                  <input type="checkbox" />
+                  <span>We have a clear plan for how schools will submit artifacts and how the district will organize and access them.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" id="readiness-rubric">
+            <div class="card-header">
+              <div class="card-title">Readiness Snapshot Visual</div>
+              <div class="chip">District overview</div>
+            </div>
+            <div>
+              The chart below can help leaders visualize their starting point.
+              <table>
+                <thead>
+                <tr>
+                  <th>Domain</th>
+                  <th>Readiness Level</th>
+                  <th>Evidence Anchor</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Instruction and Vibrant Learning</td>
+                  <td>Developing</td>
+                  <td>Classroom walkthrough notes from three schools</td>
+                </tr>
+                <tr>
+                  <td>Assessment and Grading</td>
+                  <td>Emerging</td>
+                  <td>Gradebook review and teacher survey results</td>
+                </tr>
+                <tr>
+                  <td>Student Voice and Agency</td>
+                  <td>Implementing</td>
+                  <td>Student panel notes from secondary schools</td>
+                </tr>
+                </tbody>
+              </table>
+              <div class="tiny-label" style="margin-top:6px;">
+                As Phase 1 progresses, the district can update this snapshot to show movement from Emerging toward
+                Implementing and Embedding.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Roles -->
+      <section id="roles">
+        <div class="section-title">3. Roles and Responsibilities</div>
+        <div class="section-subtitle">
+          Clear lanes for who does what in Phase 1 so work in
+          <span class="district-name"
+                data-smith="Smith County"
+                data-template="[District Name]">Smith County</span>
+          is collaborative but not confusing.
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">System Level Roles</div>
+              <div class="chip">District and board</div>
+            </div>
+            <div>
+              <div class="subheading">Superintendent and district leaders</div>
+              <ul>
+                <li>Frame the purpose of Phase 1 publicly and consistently.</li>
+                <li>Protect time for schools to do the work without feeling rushed or overloaded.</li>
+                <li>Provide tools, coaching, and feedback to principals and school teams.</li>
+                <li>Monitor fidelity and ensure that every school participates meaningfully.</li>
+              </ul>
+
+              <div class="subheading">Board members</div>
+              <ul>
+                <li>Understand the purpose, timeline, and connections to district goals.</li>
+                <li>Ask questions that keep the focus on student learning and readiness.</li>
+                <li>Use Phase 1 findings as context for policy and resource decisions.</li>
+              </ul>
+
+              <!-- Stakeholder panel for district leaders and board -->
+              <div class="stakeholder-panel" data-role="districtLeader">
+                <div class="stakeholder-panel-title">What this looks like for district leaders</div>
+                <ul class="checklist">
+                  <li><input type="checkbox" /><span>I schedule recurring check ins with principals about Phase 1 progress.</span></li>
+                  <li><input type="checkbox" /><span>I co design or review the tools schools are using so they align with the Framework language.</span></li>
+                  <li><input type="checkbox" /><span>I prepare short briefs that keep the superintendent and board informed without overwhelming them.</span></li>
+                </ul>
+              </div>
+
+              <div class="stakeholder-panel" data-role="boardMember">
+                <div class="stakeholder-panel-title">What this looks like for board members</div>
+                <ul class="checklist">
+                  <li><input type="checkbox" /><span>I request clear, visual summaries instead of only long narrative reports.</span></li>
+                  <li><input type="checkbox" /><span>I ask "How do we know" questions that point back to evidence from classrooms and stakeholders.</span></li>
+                  <li><input type="checkbox" /><span>I avoid turning Phase 1 updates into personnel evaluations.</span></li>
+                </ul>
+              </div>
+
+              <div class="stakeholder-panel" data-role="communityMember">
+                <div class="stakeholder-panel-title">What this looks like for community members</div>
+                <p style="margin-top:0;">
+                  Community partners may serve on advisory councils, attend listening sessions, or provide insight about
+                  what readiness looks like beyond school.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">School and Classroom Roles</div>
+              <div class="chip">School and classroom level</div>
+            </div>
+            <div>
+              <div class="subheading">Principals and leadership teams</div>
+              <ul>
+                <li>Organize Phase 1 work at the school level and set clear expectations for staff.</li>
+                <li>Lead evidence review conversations and self assessment sessions.</li>
+                <li>Coordinate student, family, and community input at the school level.</li>
+                <li>Draft, refine, and finalize the School Phase 1 Summary Profile.</li>
+              </ul>
+
+              <div class="subheading">Teachers and staff</div>
+              <ul>
+                <li>Provide classroom and program level evidence that shows what learning and assessment look like.</li>
+                <li>Participate honestly in surveys, focus groups, and self assessment conversations.</li>
+                <li>Suggest realistic priorities and changes based on daily experience.</li>
+              </ul>
+
+              <div class="subheading">Students and families</div>
+              <ul>
+                <li>Share experiences of learning, communication, and support in district schools.</li>
+                <li>Lift up moments when the system works well and times when it does not.</li>
+                <li>Help confirm or challenge the way adults interpret the data.</li>
+              </ul>
+
+              <!-- Stakeholder specific roles -->
+              <div class="stakeholder-panel" data-role="teacher">
+                <div class="stakeholder-panel-title">Role of teachers in Phase 1</div>
+                <ul class="checklist">
+                  <li><input type="checkbox" /><span>I have selected sample units and student work that reflect the range of learners in my class, not only the strongest or weakest.</span></li>
+                  <li><input type="checkbox" /><span>I have shared my concerns and hopes about grading, assessment, and student readiness in at least one structured conversation.</span></li>
+                  <li><input type="checkbox" /><span>I have helped identify where our current practices already align with the Portrait of a Learner or district expectations.</span></li>
+                </ul>
+              </div>
+
+              <div class="stakeholder-panel" data-role="schoolLeader">
+                <div class="stakeholder-panel-title">Role of school leaders in Phase 1</div>
+                <ul class="checklist">
+                  <li><input type="checkbox" /><span>I have named at least one staff member to champion Phase 1 logistics in our building.</span></li>
+                  <li><input type="checkbox" /><span>I have scheduled time in existing meetings for evidence review rather than adding separate meetings whenever possible.</span></li>
+                  <li><input type="checkbox" /><span>I have created a simple timeline or visual for my staff that shows the steps and what we will produce.</span></li>
+                </ul>
+              </div>
+
+              <div class="stakeholder-panel" data-role="student">
+                <div class="stakeholder-panel-title">Role of students in Phase 1</div>
+                <ul class="checklist">
+                  <li><input type="checkbox" /><span>I have been invited to share my experience in a way that feels safe and respectful.</span></li>
+                  <li><input type="checkbox" /><span>I can name at least one change that adults are considering based on student input.</span></li>
+                </ul>
+              </div>
+
+              <div class="stakeholder-panel" data-role="parentGuardian">
+                <div class="stakeholder-panel-title">Role of parents and guardians</div>
+                <ul class="checklist">
+                  <li><input type="checkbox" /><span>I have shared something specific that is going well for my child at school.</span></li>
+                  <li><input type="checkbox" /><span>I have shared at least one suggestion or concern about learning, communication, or assessment.</span></li>
+                </ul>
+              </div>
+
+              <div class="stakeholder-panel" data-role="staff">
+                <div class="stakeholder-panel-title">Role of staff members</div>
+                <p style="margin-top:0;">
+                  Staff members such as bus drivers, office staff, instructional assistants, and cafeteria workers see
+                  important patterns in student behavior, relationships, and stress. Sharing those observations helps
+                  leaders see the full picture.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Process Map -->
+      <section id="process">
+        <div class="section-title">4. Phase 1 Process Map</div>
+        <div class="section-subtitle">
+          Seven steps that keep Phase 1 organized from launch through district synthesis.
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">High level process overview</div>
+            <div class="chip">Use in leadership meetings</div>
+          </div>
+          <div>
+            Leaders can use this map as a visual agenda so everyone knows where the work sits and what comes next.
+            <ul>
+              <li>Step 1. Launch and framing</li>
+              <li>Step 2. Current conditions evidence collection</li>
+              <li>Step 3. School self assessment and readiness rating</li>
+              <li>Step 4. Alignment to pillars, continuum, DDIER</li>
+              <li>Step 5. Stakeholder input and sensemaking</li>
+              <li>Step 6. School Phase 1 summary profile</li>
+              <li>Step 7. District synthesis and closure</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step by Step -->
+      <section id="steps">
+        <div class="section-title">5. Step by Step Guidance</div>
+        <div class="section-subtitle">
+          Detailed guidance for each of the seven steps, including realistic scenes leaders can recognize.
+        </div>
+
+        <!-- Step 1 -->
+        <div class="card step-card">
+          <div class="step-header" onclick="toggleStep('step1')">
+            <div>
+              <div class="step-title">Step 1. Launch and Framing</div>
+              <div class="step-meta">Create a shared understanding of Phase 1 across the district.</div>
+            </div>
+            <div class="step-toggle" id="toggle-step1">+</div>
+          </div>
+          <div class="step-content" id="step1">
+            <div class="subheading">Intent</div>
+            Help every principal, teacher, and staff member understand what Phase 1 is, why the district is doing it, and
+            what will be expected of them.
+
+            <div class="subheading">Implementation sequence</div>
+            <ol style="padding-left:18px;margin-top:0;">
+              <li><strong>Develop a Phase 1 message set.</strong> District leaders draft a short narrative that connects Phase 1 to student experience and to the long term vision for local accountability.</li>
+              <li><strong>District leadership launch.</strong> Superintendent and district team use the message set in a principals meeting and provide time for questions and concerns.</li>
+              <li><strong>School level launch.</strong> Principals adapt the message for their staff and present it in a faculty meeting, using local examples from their building.</li>
+            </ol>
+
+            <div class="subheading">Sample talking points for principals</div>
+            <div class="callout info">
+              <div class="callout-title">Leadership script</div>
+              "We are beginning Phase 1 of our Local Accountability work. This is not a new test or a new label. It is a
+              chance to tell the truth about how learning and assessment feel in our classrooms right now. We will collect
+              real examples from our school, listen to students and families, and look at our data together. Our goal is
+              simple. We want a clear picture of where we are so we can design a better system for our students."
+            </div>
+
+            <div class="subheading">Evidence of completion</div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>Phase 1 overview shared with principals and staff.</span></li>
+              <li><input type="checkbox" /><span>Staff in each school can state in simple terms what Phase 1 is about and why it matters.</span></li>
+              <li><input type="checkbox" /><span>Communication artifacts are stored in the Phase 1 shared folder.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="card step-card">
+          <div class="step-header" onclick="toggleStep('step2')">
+            <div>
+              <div class="step-title">Step 2. Current Conditions Evidence Collection</div>
+              <div class="step-meta">Gather a well rounded picture of how the system is actually working.</div>
+            </div>
+            <div class="step-toggle" id="toggle-step2">+</div>
+          </div>
+          <div class="step-content" id="step2">
+            <div class="subheading">Intent</div>
+            Move beyond opinion and gather concrete evidence about learning, assessment, climate, and community
+            connection.
+
+            <div class="subheading">Domains to scan</div>
+            <ul>
+              <li>Instruction and Vibrant Learning experiences.</li>
+              <li>Assessment practices, grading, and feedback.</li>
+              <li>Use of data in PLCs and leadership decisions.</li>
+              <li>Student voice, agency, and engagement in classes.</li>
+              <li>School climate, belonging, and relationships.</li>
+              <li>Family communication and community partnership.</li>
+              <li>Operational conditions that support or hinder learning.</li>
+            </ul>
+
+            <div class="subheading">Implementation sequence</div>
+            <ol style="padding-left:18px;margin-top:0;">
+              <li><strong>Create the Current Conditions Scan Tool.</strong> District team builds a simple template with domains, guiding questions, and space for strengths, gaps, and questions.</li>
+              <li><strong>Identify existing evidence.</strong> Each school lists what data and artifacts already exist for each domain and where there are gaps.</li>
+              <li><strong>Collect targeted evidence.</strong> Schools gather missing artifacts such as sample units, student work, observation notes, and survey results.</li>
+              <li><strong>Build an evidence inventory.</strong> Each school logs each artifact with a title, date, domain, and brief description.</li>
+            </ol>
+
+            <div class="example-callout">
+              <div class="example-label">School Example</div>
+              <div>
+                At one elementary school, the principal asked each grade level team to submit two units and six pieces of
+                student work that showed how students demonstrate understanding in reading and math. Teachers also added
+                short reflections about where the current units feel relevant and where they feel disconnected from
+                student interests.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Steps 3 to 7 kept as in previous version (for brevity, structure unchanged) -->
+        <!-- You can keep or expand them exactly as in your current Implementation HTML. -->
+
+        <!-- Step 3 -->
+        <div class="card step-card">
+          <div class="step-header" onclick="toggleStep('step3')">
+            <div>
+              <div class="step-title">Step 3. School Self Assessment and Readiness Rating</div>
+              <div class="step-meta">Turn evidence into clear readiness levels for each school.</div>
+            </div>
+            <div class="step-toggle" id="toggle-step3">+</div>
+          </div>
+          <div class="step-content" id="step3">
+            <div class="subheading">Intent</div>
+            Use a shared rubric to help each school rate its readiness for local accountability work in key domains.
+
+            <div class="subheading">Sample readiness rubric slice</div>
+            <table>
+              <thead>
+              <tr>
+                <th>Domain</th>
+                <th>Emerging</th>
+                <th>Developing</th>
+                <th>Implementing</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>Assessment and Multiple Measures</td>
+                <td>Most evidence of learning is test based and short term.</td>
+                <td>Some performance tasks and projects exist but they are not used consistently.</td>
+                <td>Performance tasks, projects, and portfolios are part of normal practice in many classrooms.</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="card step-card">
+          <div class="step-header" onclick="toggleStep('step4')">
+            <div>
+              <div class="step-title">Step 4. Alignment to Pillars, Continuum, and DDIER</div>
+              <div class="step-meta">Connect Phase 1 work to the larger Local Accountability architecture.</div>
+            </div>
+            <div class="step-toggle" id="toggle-step4">+</div>
+          </div>
+          <div class="step-content" id="step4">
+            <div class="subheading">Intent</div>
+            Ensure that Phase 1 is not a stand alone activity, but part of the Six Pillars, the Local Accountability
+            Continuum, and the DDIER improvement cycle.
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="card step-card">
+          <div class="step-header" onclick="toggleStep('step5')">
+            <div>
+              <div class="step-title">Step 5. Stakeholder Input and Sensemaking</div>
+              <div class="step-meta">Bring student, staff, and family voice into the picture of reality.</div>
+            </div>
+            <div class="step-toggle" id="toggle-step5">+</div>
+          </div>
+          <div class="step-content" id="step5">
+            <div class="subheading">Intent</div>
+            Make sure Phase 1 reflects the lived experiences of students, staff, and families, not only leadership
+            perspectives.
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="card step-card">
+          <div class="step-header" onclick="toggleStep('step6')">
+            <div>
+              <div class="step-title">Step 6. School Phase 1 Summary Profile</div>
+              <div class="step-meta">Synthesize findings into a concise, shareable portrait.</div>
+            </div>
+            <div class="step-toggle" id="toggle-step6">+</div>
+          </div>
+          <div class="step-content" id="step6">
+            <div class="subheading">Intent</div>
+            Help each school tell its Phase 1 story in a short, clear document that can guide Phase 2 design.
+          </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="card step-card">
+          <div class="step-header" onclick="toggleStep('step7')">
+            <div>
+              <div class="step-title">Step 7. District Synthesis and Closure</div>
+              <div class="step-meta">Create the district wide picture and mark the end of Phase 1.</div>
+            </div>
+            <div class="step-toggle" id="toggle-step7">+</div>
+          </div>
+          <div class="step-content" id="step7">
+            <div class="subheading">Intent</div>
+            Pull together School Phase 1 Summary Profiles into a coherent district story and provide clear closure before
+            moving to Phase 2.
+          </div>
+        </div>
+      </section>
+
+      <!-- School Summary Template -->
+      <section id="summary-template">
+        <div class="section-title">6. Phase 1 School Summary Profile Template</div>
+        <div class="section-subtitle">
+          A live skeleton that principals and leadership teams can use to visualize and plan their Phase 1 Summary Profile.
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">School Phase 1 Summary Profile</div>
+            <div class="chip">Template view</div>
+          </div>
+          <div>
+            <div class="profile-grid">
+              <div>
+                <div class="profile-field-label">School name</div>
+                <div class="profile-field-box">
+                  Example. East Ridge Elementary.
+                </div>
+              </div>
+              <div>
+                <div class="profile-field-label">District and state</div>
+                <div class="profile-field-box">
+                  <span class="district-system"
+                        data-smith="Smith County Schools, KY"
+                        data-template="[District Name], [State]">Smith County Schools, KY</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Checklists -->
+      <section id="fidelity">
+        <div class="section-title">7. Online Checklists and Fidelity Monitoring</div>
+        <div class="section-subtitle">
+          Interactive checklists that school and district leaders and other stakeholders can use online or print as part of their Phase 1 documentation.
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">School Level Checklist</div>
+              <div class="chip">For principals and school teams</div>
+            </div>
+            <div>
+              <ul class="checklist">
+                <li><input type="checkbox" /><span>We engaged a representative leadership team for Phase 1 that included classroom teachers.</span></li>
+                <li><input type="checkbox" /><span>We collected evidence from classrooms, not only from office level reports.</span></li>
+                <li><input type="checkbox" /><span>We completed the Readiness Rubric using evidence rather than opinion.</span></li>
+                <li><input type="checkbox" /><span>We gathered at least one form of student voice and one form of family input.</span></li>
+                <li><input type="checkbox" /><span>We created a School Phase 1 Summary Profile and shared it with staff.</span></li>
+                <li><input type="checkbox" /><span>We identified three to five priorities that will guide Phase 2 design work.</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">District Level Checklist</div>
+              <div class="chip">For central office teams</div>
+            </div>
+            <div>
+              <ul class="checklist">
+                <li><input type="checkbox" /><span>Every school completed Phase 1 activities and submitted artifacts.</span></li>
+                <li><input type="checkbox" /><span>We checked for consistency in how schools applied the Readiness Rubric and clarified when needed.</span></li>
+                <li><input type="checkbox" /><span>We created a District Phase 1 Summary that reflects the reality of schools, not only district goals.</span></li>
+                <li><input type="checkbox" /><span>We aligned Phase 1 findings to the Six Pillars, the Continuum, and the DDIER cycle.</span></li>
+                <li><input type="checkbox" /><span>We communicated key Phase 1 messages and next steps to the board, staff, and community.</span></li>
+                <li><input type="checkbox" /><span>We stored Phase 1 artifacts and summaries in a shared, easy to access location.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stakeholder micro checklists -->
+        <div class="card" style="margin-top:10px;">
+          <div class="card-header">
+            <div class="card-title">Micro Checklists by Stakeholder</div>
+            <div class="chip">Perspective based</div>
+          </div>
+          <div class="stakeholder-panel" data-role="student">
+            <div class="stakeholder-panel-title">Student quick check</div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>I have been asked about my experience in at least one survey, focus group, or conversation.</span></li>
+              <li><input type="checkbox" /><span>I know that adults are using student input to improve learning and assessment.</span></li>
+            </ul>
+          </div>
+
+          <div class="stakeholder-panel" data-role="teacher">
+            <div class="stakeholder-panel-title">Teacher quick check</div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>I know where our school is in the Phase 1 process and what comes next.</span></li>
+              <li><input type="checkbox" /><span>I have contributed at least one piece of evidence or one idea that will show up in our school summary.</span></li>
+            </ul>
+          </div>
+
+          <div class="stakeholder-panel" data-role="parentGuardian">
+            <div class="stakeholder-panel-title">Parent or guardian quick check</div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>I have had at least one chance to share my experience this year.</span></li>
+              <li><input type="checkbox" /><span>I can name at least one way the school has acted on family feedback.</span></li>
+            </ul>
+          </div>
+
+          <div class="stakeholder-panel" data-role="communityMember">
+            <div class="stakeholder-panel-title">Community member quick check</div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>I have been invited to share insight about what readiness looks like after graduation.</span></li>
+            </ul>
+          </div>
+
+          <div class="stakeholder-panel" data-role="boardMember">
+            <div class="stakeholder-panel-title">Board member quick check</div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>I can connect Phase 1 findings to at least one board action or discussion.</span></li>
+            </ul>
+          </div>
+
+          <div class="stakeholder-panel" data-role="staff">
+            <div class="stakeholder-panel-title">Staff member quick check</div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>I shared at least one observation about student behavior, climate, or support that leaders listened to.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Leadership Huddle -->
+      <section id="huddle">
+        <div class="section-title">Leadership Huddle Script</div>
+        <div class="section-subtitle">
+          A turnkey panel you can drop into principal meetings, Wednesday Leadership Connection, or PLC agendas, with prompts for different stakeholders.
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Phase 1 Leadership Huddle</div>
+            <div class="chip">Use in 15 minute check ins</div>
+          </div>
+          <div class="huddle-grid">
+            <div>
+              <div class="subheading">Three big questions for principals to ask their teams</div>
+              <ol style="padding-left:18px;margin-top:0;">
+                <li><strong>Where is the learner experience already strong in our school.</strong> What evidence can we point to that shows students are engaged, challenged, and supported.</li>
+                <li><strong>Where does our current system get in the way of meaningful learning.</strong> Which policies, grading practices, or routines feel misaligned with what we say we value.</li>
+                <li><strong>If we could only change one thing based on Phase 1 findings.</strong> What would have the biggest impact on student learning and sense of readiness this year.</li>
+              </ol>
+
+              <!-- Stakeholder prompts -->
+              <div class="stakeholder-panel" data-role="teacher">
+                <div class="stakeholder-panel-title">Huddle prompts for teachers</div>
+                <ul>
+                  <li>If you could redesign one assessment practice at our school, what would it be and why.</li>
+                  <li>Which recent learning experience felt most meaningful to students. What made it different.</li>
+                </ul>
+              </div>
+
+              <div class="stakeholder-panel" data-role="student">
+                <div class="stakeholder-panel-title">Huddle prompts for student voice groups</div>
+                <ul>
+                  <li>When did you feel most proud of your learning this year. What was happening.</li>
+                  <li>What makes it easier or harder for you to show what you really know.</li>
+                </ul>
+              </div>
+
+              <div class="stakeholder-panel" data-role="parentGuardian">
+                <div class="stakeholder-panel-title">Huddle prompts for family sessions</div>
+                <ul>
+                  <li>When does school feel most connected to your child future.</li>
+                  <li>What is one thing you wish we would change about how we communicate learning and progress.</li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="subheading">Three watch outs during Phase 1</div>
+              <ul>
+                <li><strong>Watch out for blaming people instead of systems.</strong> Focus on patterns and structures, not individual teachers or students.</li>
+                <li><strong>Watch out for collecting data you will not use.</strong> Only gather evidence that will help you make decisions in Phase 2.</li>
+                <li><strong>Watch out for trying to fix everything at once.</strong> Phase 1 is about clarity and priorities, not solving the entire system in one step.</li>
+              </ul>
+              <div class="callout info">
+                <div class="callout-title">Leadership move</div>
+                Use this panel as the final slide in your leadership meeting. Ask principals to circle one question and
+                one watch out that they will carry back to their schools this week.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="footer">
+      Phase 1 Implementation Guide. Framework and Guide use shared terms to build one coherent, local based accountability model.
+    </div>
+  </main>
+</div>
+
+<script>
+  function toggleStep(id) {
+    var content = document.getElementById(id);
+    var toggle = document.getElementById("toggle-" + id);
+    if (!content || !toggle) return;
+    var isOpen = content.classList.contains("open");
+    if (isOpen) {
+      content.classList.remove("open");
+      toggle.textContent = "+";
+    } else {
+      content.classList.add("open");
+      toggle.textContent = "−";
+    }
+  }
+
+  document.querySelectorAll(".nav-link").forEach(function (link) {
+    link.addEventListener("click", function () {
+      document.querySelectorAll(".nav-link").forEach(function (l) {
+        l.classList.remove("active");
+      });
+      this.classList.add("active");
+    });
+  });
+
+  var templateMode = false;
+
+  function toggleTemplateMode() {
+    templateMode = !templateMode;
+    var systemEls = document.querySelectorAll(".district-system");
+    var nameEls = document.querySelectorAll(".district-name");
+    var highEls = document.querySelectorAll(".district-high");
+    var toggleButton = document.getElementById("templateToggle");
+
+    systemEls.forEach(function (el) {
+      var smith = el.getAttribute("data-smith");
+      var template = el.getAttribute("data-template");
+      el.textContent = templateMode ? template : smith;
+    });
+
+    nameEls.forEach(function (el) {
+      var smith = el.getAttribute("data-smith");
+      var template = el.getAttribute("data-template");
+      el.textContent = templateMode ? template : smith;
+    });
+
+    highEls.forEach(function (el) {
+      var smith = el.getAttribute("data-smith");
+      var template = el.getAttribute("data-template");
+      el.textContent = templateMode ? template : smith;
+    });
+
+    if (templateMode) {
+      toggleButton.querySelector("span:last-child").textContent = "Switch to Smith County View";
+    } else {
+      toggleButton.querySelector("span:last-child").textContent = "Switch to Template View";
+    }
+  }
+
+  // Everyone vs Leader Edition toggle
+  (function () {
+    var viewEveryone = document.getElementById("viewEveryone");
+    var viewLeader = document.getElementById("viewLeader");
+    var leaderSections = document.querySelectorAll(".leader-only");
+
+    if (!viewEveryone || !viewLeader) return;
+
+    function setView(mode) {
+      if (mode === "everyone") {
+        viewEveryone.classList.add("active");
+        viewLeader.classList.remove("active");
+        leaderSections.forEach(function (el) {
+          el.style.display = "none";
+        });
+      } else {
+        viewEveryone.classList.remove("active");
+        viewLeader.classList.add("active");
+        leaderSections.forEach(function (el) {
+          el.style.display = "";
+        });
+      }
+    }
+
+    viewEveryone.addEventListener("click", function () {
+      setView("everyone");
+    });
+    viewLeader.addEventListener("click", function () {
+      setView("leader");
+    });
+
+    // default to Everyone view
+    setView("everyone");
+  })();
+
+  // Stakeholder toggle
+  (function () {
+    var pills = document.querySelectorAll(".stakeholder-pill");
+    var panels = document.querySelectorAll(".stakeholder-panel");
+
+    function setStakeholder(role) {
+      pills.forEach(function (p) {
+        if (p.getAttribute("data-role") === role) {
+          p.classList.add("active");
+        } else {
+          p.classList.remove("active");
+        }
+      });
+
+      panels.forEach(function (panel) {
+        if (panel.getAttribute("data-role") === role) {
+          panel.classList.add("active");
+        } else {
+          panel.classList.remove("active");
+        }
+      });
+    }
+
+    pills.forEach(function (p) {
+      p.addEventListener("click", function () {
+        var role = this.getAttribute("data-role");
+        setStakeholder(role);
+      });
+    });
+
+    // default role
+    setStakeholder("student");
+  })();
+
+  function downloadTools() {
+    alert("This button is a placeholder. Link it to your Phase 1 tools zip or shared folder URL.");
+  }
+</script>
+</body>
+</html>
