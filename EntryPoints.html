@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Local Accountability Entry Points (Dynamic Guide)</title>
+
+  <style>
+    :root{
+      --navy:#0a355e;
+      --navy-soft:#12406b;
+      --teal:#118a9a;
+      --teal-soft:#0f6f7b;
+      --gold:#dbd59b;
+      --gold-soft:#c8bf88;
+
+      --bg-page:#f5f5f7;
+      --card:#ffffff;
+      --text:#111111;
+      --muted:#4b5563;
+      --border:#e7e7ee;
+
+      --radius-xl:24px;
+      --radius-lg:18px;
+      --shadow:0 10px 26px rgba(10,53,94,.12);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:var(--bg-page);
+      color:var(--text);
+      padding-top:84px; /* fixed navbar space */
+    }
+
+    /* NAVBAR */
+    .navbar{
+      position:fixed;
+      top:0; left:0; right:0;
+      z-index:1000;
+      background:#fff;
+      border-bottom:1px solid var(--border);
+      box-shadow:0 4px 12px rgba(0,0,0,.06);
+      padding:14px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+      min-width:240px;
+    }
+    .brand .title{
+      font-weight:800;
+      letter-spacing:.2px;
+      font-size:16px;
+      color:var(--navy);
+      line-height:1.1;
+    }
+    .brand .subtitle{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.2;
+    }
+
+    .top-controls{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--navy);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+      transition:transform .08s ease, border-color .12s ease, box-shadow .12s ease;
+      user-select:none;
+    }
+    .pill:hover{
+      transform:translateY(-1px);
+      border-color:rgba(10,53,94,.22);
+      box-shadow:0 10px 18px rgba(10,53,94,.10);
+    }
+    .pill.primary{
+      background:linear-gradient(135deg, var(--navy), var(--navy-soft));
+      color:#fff;
+      border-color:rgba(10,53,94,.25);
+    }
+    .pill.teal{
+      background:linear-gradient(135deg, var(--teal), var(--teal-soft));
+      color:#fff;
+      border-color:rgba(17,138,154,.25);
+    }
+    .pill.gold{
+      background:linear-gradient(135deg, var(--gold), var(--gold-soft));
+      color:#111;
+      border-color:rgba(200,191,136,.45);
+    }
+
+    /* LAYOUT */
+    .wrap{
+      max-width:1240px;
+      margin:0 auto;
+      padding:22px;
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:18px;
+    }
+
+    /* LEFT NAV */
+    .side{
+      position:sticky;
+      top:98px;
+      align-self:start;
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .side-header{
+      padding:18px 18px 12px 18px;
+      border-bottom:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(10,53,94,.06), rgba(255,255,255,0));
+    }
+    .side-header h2{
+      margin:0 0 6px 0;
+      font-size:14px;
+      color:var(--navy);
+      letter-spacing:.2px;
+    }
+    .side-header p{
+      margin:0;
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.35;
+    }
+
+    .nav-list{
+      padding:12px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .nav-btn{
+      width:100%;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:16px;
+      padding:12px 12px;
+      cursor:pointer;
+      text-align:left;
+      transition:transform .08s ease, border-color .12s ease, box-shadow .12s ease, background .12s ease;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .nav-btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(10,53,94,.22);
+      box-shadow:0 12px 22px rgba(10,53,94,.10);
+      background:rgba(10,53,94,.02);
+    }
+    .nav-btn.active{
+      border-color:rgba(17,138,154,.45);
+      box-shadow:0 14px 28px rgba(17,138,154,.12);
+      background:rgba(17,138,154,.06);
+    }
+
+    .badge{
+      width:34px;
+      height:34px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      font-size:13px;
+      flex:0 0 auto;
+      color:#fff;
+      background:linear-gradient(135deg, var(--navy), var(--navy-soft));
+    }
+    .badge.teal{ background:linear-gradient(135deg, var(--teal), var(--teal-soft)); }
+    .badge.gold{ background:linear-gradient(135deg, var(--gold), var(--gold-soft)); color:#111; }
+
+    .nav-meta{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+    .nav-meta .nav-title{
+      font-weight:800;
+      font-size:13px;
+      color:var(--text);
+      line-height:1.15;
+    }
+    .nav-meta .nav-desc{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.25;
+    }
+
+    /* MAIN CARD */
+    .main{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .main-head{
+      padding:20px 20px 14px 20px;
+      border-bottom:1px solid var(--border);
+      background:
+        radial-gradient(1200px 380px at 10% 0%, rgba(219,213,155,.28), rgba(255,255,255,0)),
+        radial-gradient(900px 360px at 95% 10%, rgba(17,138,154,.18), rgba(255,255,255,0));
+    }
+
+    .kicker{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom:10px;
+    }
+    .chip{
+      font-size:12px;
+      font-weight:800;
+      color:var(--navy);
+      background:rgba(10,53,94,.06);
+      border:1px solid rgba(10,53,94,.12);
+      padding:6px 10px;
+      border-radius:999px;
+    }
+    .chip.role{
+      color:#0b3a3a;
+      background:rgba(17,138,154,.10);
+      border:1px solid rgba(17,138,154,.20);
+    }
+    .chip.evidence{
+      color:#3b2f00;
+      background:rgba(219,213,155,.38);
+      border:1px solid rgba(200,191,136,.55);
+    }
+
+    .main-head h1{
+      margin:0 0 8px 0;
+      font-size:20px;
+      color:var(--navy);
+      letter-spacing:.2px;
+      line-height:1.2;
+    }
+    .main-head p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+      max-width:880px;
+    }
+
+    .content{
+      padding:18px 20px 18px 20px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+    @media (max-width: 980px){
+      .wrap{ grid-template-columns:1fr; }
+      .side{ position:relative; top:auto; }
+      .grid{ grid-template-columns:1fr; }
+      body{ padding-top:96px; }
+    }
+
+    .panel{
+      border:1px solid var(--border);
+      border-radius:var(--radius-lg);
+      background:#fff;
+      padding:14px 14px;
+    }
+    .panel h3{
+      margin:0 0 8px 0;
+      font-size:13px;
+      letter-spacing:.2px;
+      color:var(--navy);
+    }
+    .panel ul{
+      margin:0;
+      padding-left:18px;
+      color:var(--text);
+      font-size:13px;
+      line-height:1.5;
+    }
+    .panel li{ margin:6px 0; }
+    .panel p{
+      margin:0;
+      font-size:13px;
+      line-height:1.5;
+      color:var(--text);
+    }
+    .muted{ color:var(--muted); }
+
+    .callout{
+      margin-top:14px;
+      border:1px solid rgba(17,138,154,.22);
+      background:rgba(17,138,154,.06);
+      border-radius:var(--radius-lg);
+      padding:14px;
+    }
+    .callout strong{ color:var(--teal-soft); }
+    .callout p{
+      margin:0;
+      font-size:13px;
+      line-height:1.5;
+      color:var(--text);
+    }
+
+    .footer-nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:14px 20px 18px 20px;
+      border-top:1px solid var(--border);
+      background:linear-gradient(180deg, rgba(10,53,94,.03), rgba(255,255,255,0));
+    }
+    .progress{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .btn-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    /* small helper */
+    .sr-only{
+      position:absolute;
+      left:-9999px;
+      width:1px; height:1px;
+      overflow:hidden;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="navbar">
+    <div class="brand">
+      <div class="title">LOCAL ACCOUNTABILITY ENTRY POINTS</div>
+      <div class="subtitle">Five practical starting doors that converge into one coherent evidence system</div>
+    </div>
+
+    <div class="top-controls">
+      <button class="pill" id="toggleRoleBtn" aria-label="Toggle role view">Role: District Leader</button>
+      <button class="pill teal" id="toggleDepthBtn" aria-label="Toggle quick or deep view">View: Deep</button>
+      <button class="pill gold" id="copyBtn" aria-label="Copy current entry point summary">Copy Summary</button>
+      <button class="pill primary" id="printBtn" aria-label="Print">Print</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- LEFT NAV -->
+    <aside class="side" aria-label="Entry point navigation">
+      <div class="side-header">
+        <h2>Choose an Entry Point</h2>
+        <p>Click a tile to view one entry point at a time. Use Next and Back to walk through all five.</p>
+      </div>
+
+      <div class="nav-list" id="navList">
+        <!-- JS injects buttons -->
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main" aria-live="polite">
+      <div class="main-head">
+        <div class="kicker">
+          <span class="chip" id="chipEntry">Entry Point 1 of 5</span>
+          <span class="chip role" id="chipRole">Role View: District Leader</span>
+          <span class="chip evidence" id="chipEvidence">Evidence Focus: Balanced</span>
+        </div>
+        <h1 id="entryTitle">Loading...</h1>
+        <p id="entryIntro">Loading...</p>
+      </div>
+
+      <div class="content">
+        <div class="grid">
+          <section class="panel">
+            <h3>How districts typically enter here</h3>
+            <p id="enterHere"></p>
+          </section>
+
+          <section class="panel">
+            <h3>Why this is a legitimate entry point</h3>
+            <p id="whyLegit"></p>
+          </section>
+
+          <section class="panel">
+            <h3>What counts as credible evidence</h3>
+            <ul id="evidenceList"></ul>
+          </section>
+
+          <section class="panel">
+            <h3>How it connects to local accountability</h3>
+            <p id="connects"></p>
+          </section>
+
+          <section class="panel">
+            <h3>Common risks if this becomes the only door</h3>
+            <ul id="risks"></ul>
+          </section>
+
+          <section class="panel">
+            <h3>Concrete first steps (next 30 days)</h3>
+            <ul id="firstSteps"></ul>
+          </section>
+        </div>
+
+        <div class="callout" id="roleCallout">
+          <p><strong>Role-specific quick moves:</strong> <span id="roleMoves"></span></p>
+        </div>
+
+        <div class="callout" id="convergenceCallout" style="border-color: rgba(10,53,94,.18); background: rgba(10,53,94,.04);">
+          <p><strong>Convergence check:</strong> <span id="convergence"></span></p>
+        </div>
+      </div>
+
+      <div class="footer-nav">
+        <div class="progress" id="progressText">1 of 5</div>
+        <div class="btn-row">
+          <button class="pill" id="backBtn">Back</button>
+          <button class="pill teal" id="nextBtn">Next</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const ENTRY_POINTS = [
+      {
+        id: "portrait",
+        label: "Portrait of a Learner or Graduate",
+        short: "Start with shared outcomes and community-defined success.",
+        evidenceFocus: "Outcome clarity",
+        badgeStyle: "navy",
+        intro: "This entry point begins with a clear question: Who do we want students to become, and what will count as proof that it is happening?",
+        enterHere: "Districts often enter through community listening sessions, graduate profile work, or a desire to define durable skills and whole-learner outcomes in plain language that everyone can use.",
+        whyLegit: "It establishes the construct first. In psychometric terms, it clarifies what you intend to measure before you choose measures. It also builds shared meaning across stakeholders.",
+        evidence: [
+          "Student work samples tied to clear success criteria (writing, projects, performances)",
+          "Common rubrics for durable skills with calibration routines",
+          "BPI-style portfolios or learner profiles with student reflection",
+          "Exhibitions of learning with documented feedback",
+          "Standards-based evidence that maps academic mastery to the portrait"
+        ],
+        connects: "The portrait becomes the anchor for defining success, aligning standards and durable skills, and building a coherent evidence system that can be reported transparently without reducing learners to a single score.",
+        risks: [
+          "The portrait becomes a poster instead of a system.",
+          "Dispositions get over-weighted without observable evidence.",
+          "Schools interpret the portrait differently, creating incoherence.",
+          "Reporting stays inspirational rather than credible."
+        ],
+        firstSteps: [
+          "Translate each portrait trait into 3 to 5 observable indicators and plain-language success criteria.",
+          "Select 2 evidence types per trait (product evidence and process evidence).",
+          "Build a shared rubric and run a short calibration session with real student work.",
+          "Identify one “signature performance” per grade band that naturally produces evidence.",
+          "Draft a simple reporting mock-up so the end product is clear from the start."
+        ],
+        convergence: "If you start here, you must still design routines for evidence quality, comparability, and continuous improvement. The portrait sets direction, but the evidence system provides credibility."
+      },
+
+      {
+        id: "ci",
+        label: "Continuous Improvement",
+        short: "Start with learning-focused cycles that value evidence over compliance.",
+        evidenceFocus: "Use of evidence",
+        badgeStyle: "teal",
+        intro: "This entry point starts with a practical need: make improvement cycles real, visible, and tied to the student experience rather than paperwork.",
+        enterHere: "Districts often enter because improvement plans feel disconnected from classrooms. Leaders want cycles that surface what is working, what is not, and what to change next without guesswork.",
+        whyLegit: "It strengthens consequential validity. When evidence is used to improve learning conditions, measures become meaningful rather than performative. It also builds disciplined routines for inquiry.",
+        evidence: [
+          "Short-cycle evidence reviews using common protocols (work samples, tasks, formative checks)",
+          "Implementation evidence that is tied to outcomes (not just checklists)",
+          "Student feedback and engagement signals used alongside achievement evidence",
+          "Trend evidence across multiple measures (not single-point comparisons)",
+          "Documented decisions: what changed, why, and what evidence triggered the change"
+        ],
+        connects: "Local accountability gives improvement cycles a learner-centered destination. It aligns inquiry routines to shared outcomes, defines what to monitor, and builds transparency around what the district learns and changes.",
+        risks: [
+          "Process compliance replaces learning impact.",
+          "Cycles focus on adult actions without student evidence.",
+          "Too many measures create noise rather than signal.",
+          "Schools improve different things in different ways without coherence."
+        ],
+        firstSteps: [
+          "Choose one district-wide problem of practice connected to the learner experience.",
+          "Define 2 to 3 outcome indicators and 2 to 3 process indicators that genuinely matter.",
+          "Adopt a single evidence review protocol for all schools (simple and repeatable).",
+          "Build an “evidence wall” or dashboard that shows learning evidence, not just scores.",
+          "Schedule one cross-school learning review to compare evidence and share adaptations."
+        ],
+        convergence: "If you start here, you must still define success outcomes clearly and ensure measures reflect those outcomes. Improvement without a shared destination becomes motion without direction."
+      },
+
+      {
+        id: "strategic",
+        label: "Strategic Planning",
+        short: "Start with alignment, coherence, and resourcing for what matters most.",
+        evidenceFocus: "System coherence",
+        badgeStyle: "gold",
+        intro: "This entry point begins with structure. A strategic plan becomes the container that turns values into priorities, priorities into investments, and investments into evidence.",
+        enterHere: "Districts often enter because of board expectations, leadership transitions, accreditation timelines, or a desire to unify competing initiatives under one clear direction.",
+        whyLegit: "It creates coherence and feasibility. Psychometrically, it reduces construct-irrelevant variance caused by inconsistent implementation and uneven opportunity to learn across schools.",
+        evidence: [
+          "A balanced scorecard that includes learning evidence (not only operational metrics)",
+          "Clear measurement specifications for each goal (what, why, how often, by whom)",
+          "Resource alignment evidence (time, staffing, PD) tied to priority outcomes",
+          "School-level “line of sight” plans that map to district outcomes",
+          "Transparent progress reporting with narrative plus evidence artifacts"
+        ],
+        connects: "Local accountability turns the plan into a living evidence system. It clarifies what will count as progress, how evidence will be gathered and validated, and how reporting will remain understandable and honest.",
+        risks: [
+          "Goals become activity lists rather than outcome commitments.",
+          "Metrics are selected for convenience, not meaning.",
+          "Reporting becomes a compliance product instead of a learning practice.",
+          "The plan stays district-level and never reaches classrooms."
+        ],
+        firstSteps: [
+          "Rewrite each strategic goal as a student-facing outcome statement (what changes for learners).",
+          "For each goal, define the evidence set: at least one academic, one durable-skill, and one experience indicator.",
+          "Create a simple measurement map that lists source, frequency, and decision use.",
+          "Pilot one transparent quarterly update that includes real evidence examples.",
+          "Reduce initiative overload by naming what will stop so focus becomes possible."
+        ],
+        convergence: "If you start here, you must protect the work from becoming metric-driven. The plan should serve learning evidence, not replace it."
+      },
+
+      {
+        id: "assessment",
+        label: "Assessment Redesign and Trust in Measurement",
+        short: "Start by fixing validity concerns and widening what counts as learning proof.",
+        evidenceFocus: "Validity and trust",
+        badgeStyle: "navy",
+        intro: "This entry point begins when people stop believing the measures represent the learning. That is a credibility problem, not a communication problem.",
+        enterHere: "Districts enter due to test fatigue, misalignment between scores and observed student ability, community frustration, or a desire to move beyond single-instrument judgments.",
+        whyLegit: "Loss of trust signals a validity crisis. When users do not believe the measure represents the construct, the system fails in practice, even if it looks technically strong on paper.",
+        evidence: [
+          "Performance tasks aligned to priority standards with shared rubrics",
+          "Portfolios that show growth over time (drafts, feedback, revision, reflection)",
+          "Multiple measures with clear weighting logic (not a grab bag)",
+          "Moderation or calibration routines to improve comparability",
+          "Technical notes that explain what evidence can and cannot claim"
+        ],
+        connects: "Local accountability reframes assessment as a system of evidence. It broadens the evidence base while tightening clarity, quality, and comparability so reporting remains credible and defensible.",
+        risks: [
+          "Removing tests without replacing them with credible evidence.",
+          "Replacing one narrow measure with many unvalidated measures.",
+          "Rubrics used inconsistently without calibration.",
+          "Equity issues if evidence quality varies by school or teacher."
+        ],
+        firstSteps: [
+          "Identify 2 to 4 priority standards per grade band where evidence quality must improve first.",
+          "Build one shared performance task per grade band and run a calibration session.",
+          "Define minimum evidence requirements for a claim of mastery (not just completion).",
+          "Create a short “evidence quality checklist” for teachers and leaders.",
+          "Publish a simple family-facing explanation of the evidence shift and why it matters."
+        ],
+        convergence: "If you start here, you must connect redesigned assessment evidence to a broader vision of learner success and improvement routines. Better measures without shared purpose still fragment the system."
+      },
+
+      {
+        id: "studentvoice",
+        label: "Student Voice and Engagement",
+        short: "Start by making learning relevant, agency-rich, and demonstrable.",
+        evidenceFocus: "Learner experience",
+        badgeStyle: "teal",
+        intro: "This entry point begins with a real signal: students are telling you that school is not working for them, or the data is showing it through attendance, behavior, or disengagement.",
+        enterHere: "Districts enter because students feel unknown, learning feels disconnected from real life, or engagement trends reveal that compliance is replacing curiosity.",
+        whyLegit: "Engagement is an early indicator of system health. If students cannot see meaning in learning, evidence quality declines, and any accountability system becomes brittle.",
+        evidence: [
+          "Student-created evidence of mastery through choice-based products tied to standards",
+          "Student reflection and goal-setting artifacts that show metacognition",
+          "Engagement and belonging indicators used as leading signals (not excuses)",
+          "Exhibitions of learning with feedback logs and revision evidence",
+          "Agency measures that track choice, voice, and co-creation opportunities"
+        ],
+        connects: "Local accountability treats agency as part of the evidence system, not an add-on. It protects rigor by anchoring student choice to clear criteria, aligned standards, and transparent demonstration expectations.",
+        risks: [
+          "Voice is collected but not acted on, which erodes trust.",
+          "Relevance replaces rigor instead of strengthening it.",
+          "Choice without criteria leads to uneven expectations.",
+          "Evidence becomes anecdotal if not structured."
+        ],
+        firstSteps: [
+          "Run a short student evidence audit: what do students produce that truly shows learning?",
+          "Define 3 non-negotiable success criteria for quality evidence across classrooms.",
+          "Add one student-choice pathway to an existing unit, but keep common criteria.",
+          "Create a simple exhibition routine (showcase, feedback, revise, reflect).",
+          "Make one visible system change based on student input and communicate it clearly."
+        ],
+        convergence: "If you start here, you must align agency to shared outcomes and evidence rules. Engagement becomes sustainable when students can prove learning in meaningful ways that still meet clear expectations."
+      }
+    ];
+
+    const ROLES = [
+      {
+        key:"District Leader",
+        chip:"Role View: District Leader",
+        moves: (ep) => (
+          "Name the districtwide evidence expectations for this entry point, align PD time and leadership routines to evidence quality, and publish a simple reporting prototype that shows what families will see."
+        )
+      },
+      {
+        key:"Principal",
+        chip:"Role View: Principal",
+        moves: (ep) => (
+          "Lead short calibration with real student work, protect time for evidence review in PLCs, and build coherence by using one protocol across teams so evidence quality improves without overwhelm."
+        )
+      },
+      {
+        key:"Teacher Leader",
+        chip:"Role View: Teacher Leader",
+        moves: (ep) => (
+          "Co-design one high-quality common task, use shared success criteria, and run a quick moderation session so scoring and feedback become more consistent and useful for students."
+        )
+      },
+      {
+        key:"Community Partner",
+        chip:"Role View: Community Partner",
+        moves: (ep) => (
+          "Help define what readiness looks like in real settings, participate in exhibitions of learning, and provide authentic audiences and feedback that make student evidence more meaningful."
+        )
+      }
+    ];
+
+    const DEPTH = [
+      { key:"Deep", label:"View: Deep" },
+      { key:"Quick", label:"View: Quick" }
+    ];
+
+    let currentIndex = 0;
+    let currentRoleIndex = 0;
+    let depthIndex = 0;
+
+    const navListEl = document.getElementById("navList");
+
+    const chipEntry = document.getElementById("chipEntry");
+    const chipRole = document.getElementById("chipRole");
+    const chipEvidence = document.getElementById("chipEvidence");
+
+    const entryTitle = document.getElementById("entryTitle");
+    const entryIntro = document.getElementById("entryIntro");
+    const enterHere = document.getElementById("enterHere");
+    const whyLegit = document.getElementById("whyLegit");
+    const evidenceList = document.getElementById("evidenceList");
+    const connects = document.getElementById("connects");
+    const risks = document.getElementById("risks");
+    const firstSteps = document.getElementById("firstSteps");
+    const roleMoves = document.getElementById("roleMoves");
+    const convergence = document.getElementById("convergence");
+    const progressText = document.getElementById("progressText");
+
+    const toggleRoleBtn = document.getElementById("toggleRoleBtn");
+    const toggleDepthBtn = document.getElementById("toggleDepthBtn");
+    const printBtn = document.getElementById("printBtn");
+    const backBtn = document.getElementById("backBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const copyBtn = document.getElementById("copyBtn");
+
+    function badgeClass(style){
+      if(style === "teal") return "badge teal";
+      if(style === "gold") return "badge gold";
+      return "badge";
+    }
+
+    function buildNav(){
+      navListEl.innerHTML = "";
+      ENTRY_POINTS.forEach((ep, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "nav-btn" + (idx === currentIndex ? " active" : "");
+        btn.setAttribute("type","button");
+        btn.addEventListener("click", () => {
+          currentIndex = idx;
+          render();
+        });
+
+        const badge = document.createElement("div");
+        badge.className = badgeClass(ep.badgeStyle);
+        badge.textContent = (idx + 1);
+
+        const meta = document.createElement("div");
+        meta.className = "nav-meta";
+
+        const t = document.createElement("div");
+        t.className = "nav-title";
+        t.textContent = ep.label;
+
+        const d = document.createElement("div");
+        d.className = "nav-desc";
+        d.textContent = ep.short;
+
+        meta.appendChild(t);
+        meta.appendChild(d);
+
+        btn.appendChild(badge);
+        btn.appendChild(meta);
+
+        navListEl.appendChild(btn);
+      });
+    }
+
+    function setList(el, items){
+      el.innerHTML = "";
+      items.forEach(x => {
+        const li = document.createElement("li");
+        li.textContent = x;
+        el.appendChild(li);
+      });
+    }
+
+    function render(){
+      const ep = ENTRY_POINTS[currentIndex];
+      const role = ROLES[currentRoleIndex];
+      const depth = DEPTH[depthIndex];
+
+      // update nav highlight
+      [...navListEl.querySelectorAll(".nav-btn")].forEach((b, i) => {
+        b.classList.toggle("active", i === currentIndex);
+      });
+
+      chipEntry.textContent = `Entry Point ${currentIndex + 1} of ${ENTRY_POINTS.length}`;
+      chipRole.textContent = role.chip;
+      chipEvidence.textContent = `Evidence Focus: ${ep.evidenceFocus}`;
+
+      entryTitle.textContent = ep.label;
+      entryIntro.textContent = ep.intro;
+
+      // depth toggle changes how much text is displayed
+      if(depth.key === "Quick"){
+        enterHere.textContent = ep.enterHere;
+        whyLegit.textContent = ep.whyLegit;
+
+        // Quick view reduces lists
+        setList(evidenceList, ep.evidence.slice(0, 3));
+        connects.textContent = ep.connects;
+        setList(risks, ep.risks.slice(0, 3));
+        setList(firstSteps, ep.firstSteps.slice(0, 3));
+        convergence.textContent = ep.convergence;
+      } else {
+        enterHere.textContent = ep.enterHere;
+        whyLegit.textContent = ep.whyLegit;
+        setList(evidenceList, ep.evidence);
+        connects.textContent = ep.connects;
+        setList(risks, ep.risks);
+        setList(firstSteps, ep.firstSteps);
+        convergence.textContent = ep.convergence;
+      }
+
+      roleMoves.textContent = role.moves(ep);
+
+      progressText.textContent = `${currentIndex + 1} of ${ENTRY_POINTS.length}`;
+
+      // button states
+      backBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === ENTRY_POINTS.length - 1;
+      backBtn.style.opacity = backBtn.disabled ? 0.55 : 1;
+      nextBtn.style.opacity = nextBtn.disabled ? 0.55 : 1;
+
+      // top control labels
+      toggleRoleBtn.textContent = `Role: ${role.key}`;
+      toggleDepthBtn.textContent = `View: ${depth.key}`;
+    }
+
+    function next(){
+      if(currentIndex < ENTRY_POINTS.length - 1){
+        currentIndex++;
+        render();
+      }
+    }
+    function back(){
+      if(currentIndex > 0){
+        currentIndex--;
+        render();
+      }
+    }
+
+    toggleRoleBtn.addEventListener("click", () => {
+      currentRoleIndex = (currentRoleIndex + 1) % ROLES.length;
+      render();
+    });
+
+    toggleDepthBtn.addEventListener("click", () => {
+      depthIndex = (depthIndex + 1) % DEPTH.length;
+      render();
+    });
+
+    printBtn.addEventListener("click", () => window.print());
+    nextBtn.addEventListener("click", next);
+    backBtn.addEventListener("click", back);
+
+    // Keyboard support
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "ArrowRight") next();
+      if(e.key === "ArrowLeft") back();
+    });
+
+    copyBtn.addEventListener("click", async () => {
+      const ep = ENTRY_POINTS[currentIndex];
+      const role = ROLES[currentRoleIndex];
+      const depth = DEPTH[depthIndex];
+
+      const lines = [];
+      lines.push(`${ep.label}`);
+      lines.push(`Evidence focus: ${ep.evidenceFocus}`);
+      lines.push(`Role view: ${role.key}`);
+      lines.push("");
+      lines.push(`Intro: ${ep.intro}`);
+      lines.push("");
+      lines.push(`How districts enter: ${ep.enterHere}`);
+      lines.push("");
+      lines.push(`Why legitimate: ${ep.whyLegit}`);
+      lines.push("");
+
+      const evidenceItems = (depth.key === "Quick") ? ep.evidence.slice(0,3) : ep.evidence;
+      lines.push("Credible evidence examples:");
+      evidenceItems.forEach(x => lines.push(`- ${x}`));
+      lines.push("");
+      lines.push(`Connection to local accountability: ${ep.connects}`);
+      lines.push("");
+
+      const riskItems = (depth.key === "Quick") ? ep.risks.slice(0,3) : ep.risks;
+      lines.push("Common risks:");
+      riskItems.forEach(x => lines.push(`- ${x}`));
+      lines.push("");
+
+      const stepItems = (depth.key === "Quick") ? ep.firstSteps.slice(0,3) : ep.firstSteps;
+      lines.push("First steps (next 30 days):");
+      stepItems.forEach(x => lines.push(`- ${x}`));
+      lines.push("");
+      lines.push(`Role-specific quick moves: ${role.moves(ep)}`);
+      lines.push("");
+      lines.push(`Convergence check: ${ep.convergence}`);
+
+      try{
+        await navigator.clipboard.writeText(lines.join("\n"));
+        copyBtn.textContent = "Copied";
+        setTimeout(() => copyBtn.textContent = "Copy Summary", 1200);
+      }catch(err){
+        copyBtn.textContent = "Copy failed";
+        setTimeout(() => copyBtn.textContent = "Copy Summary", 1400);
+      }
+    });
+
+    // init
+    buildNav();
+    render();
+  </script>
+</body>
+</html>
