@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Phase 1 Local Accountability Cockpit Simulator</title>
+  <title>Phase 1 Local Accountability Simulator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
@@ -16,19 +16,9 @@
       --muted: #70747a;
       --danger: #b74b4b;
       --success: #1e8a4b;
-
-      --role-district: #0a355e;
-      --role-school: #0e8577;
-      --role-teacher: #b05bce;
-      --role-student: #db7b39;
-      --role-parent: #c45574;
-      --role-board: #5064b8;
-      --role-community: #5f8c3a;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -38,24 +28,18 @@
     }
 
     .page {
-      max-width: 1200px;
+      max-width: 960px;
       margin: 16px auto 40px;
       padding: 0 16px 24px;
     }
 
-    .header {
+    header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       gap: 12px;
-      margin-bottom: 12px;
       flex-wrap: wrap;
-    }
-
-    .brand {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+      margin-bottom: 12px;
     }
 
     .brand-title {
@@ -74,7 +58,7 @@
       flex-direction: column;
       gap: 6px;
       align-items: flex-end;
-      min-width: 260px;
+      min-width: 240px;
     }
 
     .selector-row {
@@ -122,27 +106,13 @@
       border-color: transparent;
     }
 
-    .btn-pill:hover {
-      opacity: 0.96;
-    }
+    .btn-pill:hover { opacity: 0.96; }
 
     .tagline {
       font-size: 12px;
       color: var(--muted);
       margin-bottom: 12px;
-      max-width: 720px;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.4fr);
-      gap: 12px;
-    }
-
-    @media (max-width: 900px) {
-      .layout {
-        grid-template-columns: 1fr;
-      }
+      max-width: 700px;
     }
 
     .card {
@@ -193,8 +163,8 @@
     }
 
     .gauge {
-      flex: 1 1 120px;
-      min-width: 120px;
+      flex: 1 1 130px;
+      min-width: 130px;
     }
 
     .gauge-label-row {
@@ -217,7 +187,7 @@
 
     .gauge-bar {
       position: relative;
-      height: 9px;
+      height: 8px;
       border-radius: 999px;
       background: #e5e9f3;
       overflow: hidden;
@@ -259,7 +229,7 @@
     .role-note {
       font-size: 11px;
       color: var(--muted);
-      margin-bottom: 6px;
+      margin: 4px 0 6px;
     }
 
     .scenario-title {
@@ -426,86 +396,14 @@
       border-color: var(--teal);
       background: #ecf8f6;
     }
-
-    /* Right column */
-    .mapping-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 6px;
-      margin-bottom: 8px;
-    }
-
-    .mapping-pill {
-      font-size: 11px;
-      padding: 4px 6px;
-      border-radius: 8px;
-      background: #f7f8fd;
-      border: 1px solid var(--border-soft);
-    }
-
-    .mapping-label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 2px;
-    }
-
-    .mapping-value {
-      font-size: 11px;
-      color: var(--navy);
-      font-weight: 500;
-    }
-
-    .log {
-      font-size: 11px;
-      color: var(--muted);
-      max-height: 160px;
-      overflow-y: auto;
-      border-radius: 8px;
-      border: 1px dashed var(--border-soft);
-      padding: 6px;
-      background: #f9fafc;
-      margin-bottom: 8px;
-    }
-
-    textarea {
-      width: 100%;
-      font-family: inherit;
-      font-size: 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border-soft);
-      padding: 6px;
-      resize: vertical;
-      min-height: 70px;
-      background: #fdfefe;
-    }
-
-    textarea:focus {
-      outline: none;
-      border-color: var(--teal);
-      box-shadow: 0 0 0 1px rgba(14, 133, 119, 0.25);
-    }
-
-    .ai-prompt-box {
-      margin-top: 6px;
-      border-radius: 8px;
-      border: 1px dashed var(--border-soft);
-      padding: 6px;
-      font-size: 11px;
-      background: #f9fafc;
-      max-height: 200px;
-      overflow-y: auto;
-      white-space: pre-wrap;
-    }
   </style>
 </head>
 <body>
 <div class="page">
-  <header class="header">
-    <div class="brand">
-      <div class="brand-title">Phase 1 Cockpit Simulator</div>
-      <div class="brand-subtitle">Local Accountability. Current Conditions and Readiness.</div>
+  <header>
+    <div>
+      <div class="brand-title">Phase 1 Local Accountability Simulator</div>
+      <div class="brand-subtitle">Practice real decisions before you make them live.</div>
     </div>
     <div class="controls">
       <div class="selector-row">
@@ -522,162 +420,105 @@
           </select>
         </div>
         <div>
-          <label for="phaseSelect">Phase</label><br />
-          <select id="phaseSelect">
-            <option value="phase1" selected>Phase 1. Laying the Groundwork</option>
-            <option value="phase2">Phase 2. Designing the Vision</option>
-            <option value="phase3">Phase 3. Building Coherence</option>
-            <option value="phase4">Phase 4. Implementing the Work</option>
-            <option value="phase5">Phase 5. Learning and Refining</option>
-            <option value="phase6">Phase 6. Sustaining and Scaling</option>
-          </select>
+          <label>Phase</label><br />
+          <div class="chip">Phase 1. Laying the Groundwork</div>
         </div>
       </div>
       <div class="selector-row">
         <button class="btn-pill primary" id="startBtn">Start or Resume</button>
-        <button class="btn-pill" id="resetBtn">Reset Simulation</button>
+        <button class="btn-pill" id="resetBtn">Reset</button>
       </div>
     </div>
   </header>
 
   <div class="tagline">
-    Use this cockpit to simulate real Phase 1 decisions from different stakeholder perspectives. Your choices move the gauges
-    and unlock different scenarios, just like real work with the Local Accountability Framework and Implementation Guide.
+    Move through a short sequence of decisions that mirror Phase 1. Your choices shift Trust, Clarity, and Coherence for your chosen stakeholder.
+    One step at a time. No technical knowledge needed.
   </div>
 
-  <main class="layout">
-    <!-- Left: Cockpit and scenario -->
-    <section class="card">
-      <div class="card-header">
-        <div class="card-title">Decision Console</div>
-        <span class="chip" id="roundChip">Phase 1. Round 0</span>
-      </div>
+  <section class="card">
+    <div class="card-header">
+      <div class="card-title">Step by Step Simulation</div>
+      <span class="chip" id="stepChip">Step 0 of 4</span>
+    </div>
 
-      <div class="section-label">System gauges</div>
-      <div class="gauges-row">
-        <div class="gauge">
-          <div class="gauge-label-row">
-            <span class="gauge-name">Trust</span>
-            <span class="gauge-value" id="trustValue">50</span>
-          </div>
-          <div class="gauge-bar">
-            <div class="gauge-fill" id="trustGauge"></div>
-          </div>
+    <div class="section-label">System gauges</div>
+    <div class="gauges-row">
+      <div class="gauge">
+        <div class="gauge-label-row">
+          <span class="gauge-name">Trust</span>
+          <span class="gauge-value" id="trustValue">50</span>
         </div>
-        <div class="gauge">
-          <div class="gauge-label-row">
-            <span class="gauge-name">Clarity</span>
-            <span class="gauge-value" id="clarityValue">50</span>
-          </div>
-          <div class="gauge-bar">
-            <div class="gauge-fill" id="clarityGauge"></div>
-          </div>
-        </div>
-        <div class="gauge">
-          <div class="gauge-label-row">
-            <span class="gauge-name">Coherence</span>
-            <span class="gauge-value" id="coherenceValue">50</span>
-          </div>
-          <div class="gauge-bar">
-            <div class="gauge-fill" id="coherenceGauge"></div>
-          </div>
-        </div>
-        <div class="gauge">
-          <div class="gauge-label-row">
-            <span class="gauge-name">Load</span>
-            <span class="gauge-value" id="loadValue">50</span>
-          </div>
-          <div class="gauge-bar">
-            <div class="gauge-fill" id="loadGauge"></div>
-          </div>
+        <div class="gauge-bar">
+          <div class="gauge-fill" id="trustGauge"></div>
         </div>
       </div>
-
-      <div class="meta-row">
-        <span>Scenario <span id="scenarioIndex">0</span> of <span id="scenarioTotal">0</span></span>
-        <span class="pill-tag" id="roleTag">Perspective: Superintendent / District Leader</span>
-      </div>
-      <div class="role-note" id="roleNote">
-        You are seeing Phase 1 through the district lens. Watch how your early choices shift trust, clarity, and coherence.
-      </div>
-
-      <hr style="border:none;border-top:1px solid var(--border-soft);margin:6px 0 8px;" />
-
-      <div id="scenarioContainer">
-        <!-- Scenario content injected here -->
-        <div class="scenario-title">Welcome to the Cockpit</div>
-        <div class="scenario-meta">Orientation</div>
-        <div class="scenario-text">
-          When you are ready, select Start or Resume to move into Round 1. You will see realistic options for how Phase 1 might
-          launch in your district, along with the ripple effect on trust, clarity, and coherence for each stakeholder.
+      <div class="gauge">
+        <div class="gauge-label-row">
+          <span class="gauge-name">Clarity</span>
+          <span class="gauge-value" id="clarityValue">50</span>
+        </div>
+        <div class="gauge-bar">
+          <div class="gauge-fill" id="clarityGauge"></div>
         </div>
       </div>
-
-      <div id="feedbackBox" class="feedback neutral"></div>
-
-      <div class="scenario-footer">
-        <button class="link-button" id="backBtn">Previous decision</button>
-        <button class="btn-pill" id="continueBtn">Continue</button>
-      </div>
-    </section>
-
-    <!-- Right: Framework mapping, log, AI prompt helpers -->
-    <aside class="card">
-      <div class="card-header">
-        <div class="card-title">Framework Mapping and Debrief</div>
-        <span class="chip" id="frameworkChip">Framework view</span>
-      </div>
-
-      <div class="section-label">Where this lives in the Framework</div>
-      <div class="mapping-grid" id="mappingGrid">
-        <div class="mapping-pill">
-          <div class="mapping-label">Phase section</div>
-          <div class="mapping-value" id="mapPhaseSection">Orientation</div>
+      <div class="gauge">
+        <div class="gauge-label-row">
+          <span class="gauge-name">Coherence</span>
+          <span class="gauge-value" id="coherenceValue">50</span>
         </div>
-        <div class="mapping-pill">
-          <div class="mapping-label">Pillar</div>
-          <div class="mapping-value" id="mapPillar">Not set</div>
-        </div>
-        <div class="mapping-pill">
-          <div class="mapping-label">Continuum</div>
-          <div class="mapping-value" id="mapContinuum">Not set</div>
-        </div>
-        <div class="mapping-pill">
-          <div class="mapping-label">DDIER</div>
-          <div class="mapping-value" id="mapDDIER">Design</div>
+        <div class="gauge-bar">
+          <div class="gauge-fill" id="coherenceGauge"></div>
         </div>
       </div>
+    </div>
 
-      <div class="section-label">Decision log</div>
-      <div class="log" id="logBox">
-        Simulation events and outcomes will appear here as you move through the scenarios.
+    <div class="meta-row">
+      <span id="scenarioMetaLabel">Phase 1 orientation</span>
+      <span class="pill-tag" id="roleTag">Perspective: Superintendent / District Leader</span>
+    </div>
+    <div class="role-note" id="roleNote">
+      You are seeing Phase 1 through the district lens. Watch how the gauges move as you make choices.
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--border-soft);margin:6px 0 8px;" />
+
+    <div id="scenarioContainer">
+      <!-- scenario content will be rendered here -->
+      <div class="scenario-title">Welcome to the simulator</div>
+      <div class="scenario-meta">Orientation</div>
+      <div class="scenario-text">
+        When you are ready, select Start or Resume to move into Step 1. You will see one decision at a time with simple options.
+        There are no right answers. The goal is to notice how early choices shape trust, clarity, and coherence.
       </div>
+    </div>
 
-      <div class="section-label">Reflection</div>
-      <textarea id="reflectionBox" placeholder="As you move through the simulation, capture what this reveals about your real Phase 1 work."></textarea>
+    <div id="feedbackBox" class="feedback neutral"></div>
 
-      <div class="section-label">AI prompt preview</div>
-      <div class="ai-prompt-box" id="aiPromptBox">
-        The current simulation state will appear here as a structured prompt. You can copy and paste this into an AI system
-        to generate new scenarios, stakeholder narratives, or next phase branches.
-      </div>
-    </aside>
-  </main>
+    <div class="scenario-footer">
+      <button class="link-button" id="backBtn">Previous step</button>
+      <button class="btn-pill" id="continueBtn">Continue</button>
+    </div>
+  </section>
+</div>
 
 <script>
-  // 2. CORE SIMULATION VARIABLES (GAUGES AND SWITCHES)
+  // --------------------------------------------------------------------
+  // 1. CORE STATE MODEL (GAUGES, ROLE, HISTORY)
+  // --------------------------------------------------------------------
 
-  const state = {
+  const simState = {
     role: "districtLeader",
-    phase: "phase1",
     currentScenarioId: "intro",
-    history: [],
+    stepIndex: 0,
+    totalSteps: 4,
     gauges: {
       trust: 50,
       clarity: 50,
-      coherence: 50,
-      load: 50
-    }
+      coherence: 50
+    },
+    // history stores what the user chose. This can be sent to AI in the background.
+    history: []
   };
 
   const roleLabels = {
@@ -691,202 +532,153 @@
   };
 
   const roleNotes = {
-    districtLeader: "You are seeing Phase 1 through the district lens. Watch how your early choices shift trust, clarity, and coherence.",
-    schoolLeader: "You are seeing Phase 1 through a school lens. Pay attention to how decisions land in staff meetings, classrooms, and with families.",
-    teacher: "You are seeing Phase 1 through the classroom lens. Notice when the system clears space for deep learning and when it adds noise.",
-    student: "You are seeing Phase 1 as a student. Track when your experience is centered and when adults speak for you.",
-    parent: "You are seeing Phase 1 as a parent or guardian. Follow how communication, respect, and transparency shape your trust.",
-    boardMember: "You are seeing Phase 1 as a board member. Watch when you would feel confident backing this work and when you would need more clarity.",
-    communityMember: "You are seeing Phase 1 as a community member or partner. Notice when the work connects to readiness for life, work, and citizenship."
+    districtLeader: "You are seeing Phase 1 through the district lens. Watch how the gauges move as you make choices.",
+    schoolLeader: "You are seeing Phase 1 through a school lens. Notice how each choice will land with staff and families.",
+    teacher: "You are seeing Phase 1 through the classroom lens. Watch when decisions clear space for good teaching and when they add clutter.",
+    student: "You are seeing Phase 1 as a student. Notice when your experience is centered and when adults talk about you instead of with you.",
+    parent: "You are seeing Phase 1 as a parent or guardian. Notice how communication and respect shape your trust.",
+    boardMember: "You are seeing Phase 1 as a board member. Watch when you would feel confident supporting this work and when you would want more clarity.",
+    communityMember: "You are seeing Phase 1 as a community member or partner. Notice how the work connects to readiness for life, work, and citizenship."
   };
 
-  // SCENARIO DEFINITIONS
-  // Each scenario: type, text per role, options, drag and drop config, framework mapping.
+  // --------------------------------------------------------------------
+  // 2. LOCAL SCENARIO DEFINITIONS (DEFAULT CONTENT)
+  // --------------------------------------------------------------------
+  // These are safe default scenarios. Later, AI can override or extend them.
 
-  const scenarios = {
+  const localScenarios = {
     intro: {
       id: "intro",
-      roundLabel: "Round 0",
-      index: 0,
-      total: 4,
-      phaseSection: "Orientation to Phase 1",
-      pillar: "Purpose and Theory of Action",
-      continuum: "Define Success for Students",
-      ddier: "Design",
-      type: "info",
-      textByRole(role) {
-        return "This cockpit lets you practice Phase 1 decisions before making them live. Each choice will nudge the gauges for Trust, Clarity, Coherence, and Load. At the end, you can export your decisions as talking points or reflection prompts.";
+      step: 0,
+      title: "Welcome to the simulator",
+      metaByRole(role) {
+        return "A simple, four step walkthrough of Phase 1 decisions.";
       },
-      next: "launch"
+      textByRole(role) {
+        return "You will move through a short sequence of decisions that mirror how Phase 1 might feel in your district. There are no points or grades. The goal is to build shared understanding and better decisions.";
+      },
+      type: "info",
+      nextId: "launch"
     },
-
     launch: {
       id: "launch",
-      roundLabel: "Round 1",
-      index: 1,
-      total: 4,
-      phaseSection: "Phase 1. Launch and Framing",
-      pillar: "Governance and Leadership",
-      continuum: "Define Success for the Local School District",
-      ddier: "Design",
-      type: "choice",
-      title: "Launching Phase 1 and Introducing the LAAC",
+      step: 1,
+      title: "Launching Phase 1",
       metaByRole(role) {
         if (role === "teacher") {
-          return "You have heard about new work before. Sometimes it fades. Sometimes it turns into more paperwork. How this is introduced will shape your belief that Phase 1 is worth your time.";
+          return "How this is introduced will shape whether you see Phase 1 as helpful or as one more thing.";
         }
         if (role === "parent") {
-          return "You receive district messages all the time. You want to know if this is one more initiative or something that truly matters for your child.";
+          return "You receive many district messages. You want to know if this one matters for your child.";
         }
-        return "You are about to introduce Phase 1 and the Local Accountability Advisory Council. You have one chance to set the tone on whether this is about compliance or about real learning.";
+        return "You are preparing to introduce Phase 1 to your system. Staff, families, and board members are paying attention.";
       },
       textByRole(role) {
-        if (role === "districtLeader") {
-          return "Staff are stretched. Families are wary of new initiatives. Board members want a clear story. You need to launch Phase 1 in a way that is honest about the work without overwhelming people.";
-        }
-        if (role === "schoolLeader") {
-          return "Your staff are juggling many priorities. How the district frames Phase 1 will either help you lead with confidence or leave you patching gaps in communication.";
-        }
-        return "Your experience of the launch will shape how much you invest in this work. Pay attention to the signals people around you receive.";
+        return "You can choose a quick, light launch. You can slow down to build partners. Or you can wait until everything is perfect. Each path has tradeoffs.";
       },
+      type: "choice",
       options: [
         {
-          id: "launch_quick",
-          label: "Send a brief all district email with a one page overview and ask principals to follow up in their own way.",
-          effects: { trust: -4, clarity: -2, coherence: +2, load: -2 },
-          feedback: "This feels efficient but light. People may see Phase 1 as one more announcement rather than a shift in how the system works.",
-          next: "laac"
+          id: "launch_email",
+          label: "Send a short email and attached overview. Ask principals to follow up in their own way.",
+          effects: { trust: -4, clarity: -2, coherence: +2 },
+          feedback: "People get basic information, but it may feel like one more initiative in the inbox."
         },
         {
           id: "launch_partners",
-          label: "Host a 45 minute launch with principals, teacher leaders, and draft LAAC members, gather questions, then send a refined message to all staff and families.",
-          effects: { trust: +6, clarity: +5, coherence: +4, load: +2 },
-          feedback: "You slow down to build partners. Principals and LAAC members leave with a story they can carry. The system starts with shared language.",
-          next: "laac"
+          label: "Host a short launch with principals, teacher leaders, and LAAC candidates first. Then send a refined message to staff and families.",
+          effects: { trust: +6, clarity: +5, coherence: +4 },
+          feedback: "You slow down enough to build partners. The message feels more shared and less top down."
         },
         {
-          id: "launch_perfect",
-          label: "Wait until every Phase 1 tool is perfected before saying anything. Announce when everything is ready at once.",
-          effects: { trust: -2, clarity: -3, coherence: -2, load: +1 },
-          feedback: "You avoid early questions but create a gap where rumors and confusion can grow. When the launch finally happens, it feels sudden.",
-          next: "laac"
+          id: "launch_wait",
+          label: "Wait until every tool is perfect before saying anything. Announce only when everything is finished.",
+          effects: { trust: -2, clarity: -3, coherence: -2 },
+          feedback: "You avoid early questions, but people may sense that something is happening without them."
         }
-      ]
+      ],
+      nextId: "laac"
     },
-
     laac: {
       id: "laac",
-      roundLabel: "Round 1",
-      index: 2,
-      total: 4,
-      phaseSection: "Phase 1. Local Accountability Advisory Council",
-      pillar: "Community Engagement and Advocacy",
-      continuum: "Design an Interactive Local Accountability System",
-      ddier: "Development",
-      type: "dropdown",
-      title: "Building the First Version of the LAAC",
+      step: 2,
+      title: "Forming the Advisory Council (LAAC)",
       metaByRole(role) {
-        if (role === "student") {
-          return "If there is no student seat at the table, Phase 1 will talk about student experience instead of with students.";
-        }
-        if (role === "boardMember") {
-          return "You want to believe the LAAC speaks for the community, not just a small group of insiders.";
-        }
-        return "Who you invite into the LAAC will quietly define what voices are considered legitimate in the accountability work.";
+        return "Who you invite into the LAAC will quietly define whose voice counts in this work.";
       },
       textByRole(role) {
-        return "You have room for 12 to 18 LAAC members. You want a mix of students, families, teachers, school leaders, district leaders, a board representative, and community partners. Time is short and people are busy.";
+        return "You have room for 12 to 18 members. You want students, families, staff, leaders, a board representative, and community voices. Time is limited, and people are busy.";
       },
+      type: "dropdown",
       choices: [
         {
           id: "laac_existing",
-          label: "Invite members from existing committees and task forces only.",
-          effects: { trust: -3, clarity: 0, coherence: +3, load: -1 },
-          feedback: "You leverage existing structures, but the LAAC may look like the same group of insiders. Students and families may not feel represented.",
-          next: "evidence"
+          label: "Invite people from existing committees and task forces only.",
+          effects: { trust: -3, clarity: 0, coherence: +3 },
+          feedback: "Efficient, but the group may feel like the same insiders who always meet."
         },
         {
           id: "laac_blend",
-          label: "Blend invitations with open calls, reserving specific seats for students, families, staff, and community.",
-          effects: { trust: +7, clarity: +3, coherence: +4, load: +2 },
-          feedback: "This takes more effort but sends a strong signal that Phase 1 is for the whole community, not just the system.",
-          next: "evidence"
+          label: "Blend invitations with open calls, reserving seats for students, families, staff, and community.",
+          effects: { trust: +7, clarity: +3, coherence: +4 },
+          feedback: "More effort, but the LAAC looks and feels like the community it serves."
         },
         {
           id: "laac_principal",
-          label: "Ask principals to pick one representative each without clear criteria.",
-          effects: { trust: -2, clarity: -2, coherence: -3, load: 0 },
-          feedback: "You move quickly but risk uneven representation. Later, people may question whose interests the LAAC really reflects.",
-          next: "evidence"
+          label: "Ask each principal to choose one representative from their school without set criteria.",
+          effects: { trust: -2, clarity: -2, coherence: -3 },
+          feedback: "You move fast, but representation may be uneven and hard to explain."
         }
-      ]
+      ],
+      nextId: "evidence"
     },
-
     evidence: {
       id: "evidence",
-      roundLabel: "Round 2",
-      index: 3,
-      total: 4,
-      phaseSection: "Phase 1. Current Conditions Scan",
-      pillar: "Data Validation and Utilization",
-      continuum: "Demonstrate Student Success",
-      ddier: "Development",
-      type: "choice",
+      step: 3,
       title: "Choosing Evidence of Current Conditions",
       metaByRole(role) {
         if (role === "teacher") {
-          return "You know that test data alone cannot capture the depth of what students can do. You also know your time is limited.";
+          return "You know test scores alone do not show what students can really do.";
         }
-        if (role === "schoolLeader") {
-          return "You are balancing pressure to show strong results with the need to be honest about gaps in practice.";
-        }
-        return "The way you define evidence in Phase 1 will either invite a fuller picture of learning or narrow everything back to test scores.";
+        return "The evidence you choose becomes the story the LAAC and board will see about your system.";
       },
       textByRole(role) {
-        return "You are deciding what each school will submit for the Current Conditions Scan. You can lean on familiar metrics or open the door to more authentic evidence such as student work and voice.";
+        return "You can lean on familiar metrics only. Or you can invite more authentic evidence of teaching and learning.";
       },
+      type: "choice",
       options: [
         {
-          id: "ev_minimal",
-          label: "Ask schools to submit state test scores, attendance, and discipline data only.",
-          effects: { trust: -2, clarity: -3, coherence: +1, load: -3 },
-          feedback: "This feels simple and clean but misses most of the story of teaching and learning. Stakeholders may sense the gaps.",
-          next: "priorities"
+          id: "evidence_minimal",
+          label: "Ask schools for test scores, attendance, and discipline data only.",
+          effects: { trust: -2, clarity: -3, coherence: +1 },
+          feedback: "Simple to collect, but many teachers and families will feel that key parts of learning are missing."
         },
         {
-          id: "ev_balanced",
-          label: "Ask schools for test data, sample units, student work, student and family feedback, and short walkthrough notes.",
-          effects: { trust: +5, clarity: +6, coherence: +4, load: +4 },
-          feedback: "This is a heavier lift, but it produces a more honest, powerful picture of the system.",
-          next: "priorities"
+          id: "evidence_balanced",
+          label: "Ask for test data, sample units, student work, student and family feedback, and short walkthrough notes.",
+          effects: { trust: +5, clarity: +6, coherence: +4 },
+          feedback: "More work, but it gives a fuller, more honest picture of learning in your district."
         },
         {
-          id: "ev_bestlight",
-          label: "Tell schools to send whatever makes them look strongest.",
-          effects: { trust: -3, clarity: -4, coherence: -2, load: -1 },
-          feedback: "You may receive polished snapshots that hide key issues. The LAAC may struggle to see the real system.",
-          next: "priorities"
+          id: "evidence_bestlight",
+          label: "Tell schools to send whatever shows them in the best light.",
+          effects: { trust: -3, clarity: -4, coherence: -2 },
+          feedback: "You may see polished highlights, but gaps and struggles remain invisible."
         }
-      ]
+      ],
+      nextId: "priorities"
     },
-
     priorities: {
       id: "priorities",
-      roundLabel: "Round 3",
-      index: 4,
-      total: 4,
-      phaseSection: "Phase 1. Readiness and Summary Profile",
-      pillar: "Evaluating Progress and Impact",
-      continuum: "Design an Interactive Local Accountability System",
-      ddier: "Evaluation",
-      type: "dragBoard",
-      title: "Prioritizing Phase 1 Follow Through",
+      step: 4,
+      title: "Prioritizing What Happens Next",
       metaByRole(role) {
-        return "You now have emerging evidence and a first picture of readiness. The next step is to decide what happens first.";
+        return "You have early evidence and a first sense of readiness. Now you decide what happens first.";
       },
       textByRole(role) {
-        return "Drag each action card into Do Now, Do Next, or Park for Later. How you prioritize will shape how Phase 1 feels in classrooms, offices, and the community.";
+        return "Drag each card into Do Now, Do Next, or Park for Later. There is no perfect pattern. The goal is to see your instincts.";
       },
+      type: "board",
       board: {
         columns: [
           { id: "do_now", label: "Do Now" },
@@ -894,107 +686,111 @@
           { id: "park", label: "Park for Later" }
         ],
         cards: [
-          {
-            id: "card_rubric",
-            text: "Co_create a simple readiness rubric with the LAAC and principals."
-          },
-          {
-            id: "card_summary",
-            text: "Draft a one page School Summary Profile template for each school."
-          },
-          {
-            id: "card_studentvoice",
-            text: "Set up ways for students to share how current assessments feel to them."
-          },
-          {
-            id: "card_communicate",
-            text: "Plan a short communication to families explaining what Phase 1 is and is not."
-          }
+          { id: "card_rubric", text: "Co design a simple readiness rubric with the LAAC and principals." },
+          { id: "card_summary", text: "Draft a one page School Summary Profile template for each school." },
+          { id: "card_voice", text: "Create a way for students to share how current assessments feel to them." },
+          { id: "card_families", text: "Send a short, clear message to families about what Phase 1 is and is not." }
         ]
       },
-      // We will interpret board layout in code when user clicks continue.
-      next: "ending"
-    },
-
-    ending: {
-      id: "ending",
-      roundLabel: "Round 3",
-      index: 4,
-      total: 4,
-      phaseSection: "Phase 1. Outcome Snapshot",
-      pillar: "Reporting and Transparency",
-      continuum: "Demonstrate Success of the Local School District",
-      ddier: "Revision",
-      type: "reflection",
-      title: "Closing the Loop on Phase 1",
-      metaByRole(role) {
-        return "You have shaped launch, LAAC formation, evidence decisions, and early priorities. The gauges now show how that pattern might feel in your district.";
-      },
-      textByRole(role) {
-        return "Use this moment to name what you would protect in a real Phase 1 and what you would change before launching with your own stakeholders.";
-      },
-      prompt: "In two or three sentences, describe how you want real Phase 1 to feel in your district for your chosen stakeholder perspective.",
-      next: null
+      // gauge effects based on layout will be calculated in code
+      nextId: null
     }
   };
 
-  // DOM references
+  // --------------------------------------------------------------------
+  // 3. AI HOOKS - HIDDEN BACKGROUND PROMPTING (NO UI)
+  // --------------------------------------------------------------------
+  // This is where you would integrate with an AI service.
+  // For now, the simulator uses localScenarios above.
+  // Later, you can flip useAI to true and wire requestNextScenarioFromAI
+  // to your own backend that calls an AI model.
+
+  const useAI = false; // switch to true when you have a backend ready
+
+  function buildAIContext() {
+    // Build a structured payload with role, gauges, and history.
+    // This can be sent to a backend AI service.
+    return {
+      role: simState.role,
+      role_label: roleLabels[simState.role],
+      phase: "phase1",
+      gauges: simState.gauges,
+      history: simState.history
+    };
+  }
+
+  async function requestNextScenarioFromAI(currentScenarioId) {
+    // Example only. Replace this with a real API call in your environment.
+    // const payload = buildAIContext();
+    // const response = await fetch("/api/phase1-next-scenario", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(payload)
+    // });
+    // const data = await response.json();
+    // return data; // data should be a scenario object similar to localScenarios entries
+
+    // For now, just fall back to local scenarios.
+    return localScenarios[currentScenarioId];
+  }
+
+  // --------------------------------------------------------------------
+  // 4. DOM REFERENCES
+  // --------------------------------------------------------------------
+
+  const roleSelectEl = document.getElementById("roleSelect");
+  const stepChipEl = document.getElementById("stepChip");
+
   const trustGaugeEl = document.getElementById("trustGauge");
   const clarityGaugeEl = document.getElementById("clarityGauge");
   const coherenceGaugeEl = document.getElementById("coherenceGauge");
-  const loadGaugeEl = document.getElementById("loadGauge");
+
   const trustValueEl = document.getElementById("trustValue");
   const clarityValueEl = document.getElementById("clarityValue");
   const coherenceValueEl = document.getElementById("coherenceValue");
-  const loadValueEl = document.getElementById("loadValue");
 
-  const roleSelectEl = document.getElementById("roleSelect");
-  const phaseSelectEl = document.getElementById("phaseSelect");
+  const scenarioMetaLabelEl = document.getElementById("scenarioMetaLabel");
   const roleTagEl = document.getElementById("roleTag");
   const roleNoteEl = document.getElementById("roleNote");
-  const roundChipEl = document.getElementById("roundChip");
-
   const scenarioContainerEl = document.getElementById("scenarioContainer");
   const feedbackBoxEl = document.getElementById("feedbackBox");
-  const scenarioIndexEl = document.getElementById("scenarioIndex");
-  const scenarioTotalEl = document.getElementById("scenarioTotal");
-
-  const mapPhaseSectionEl = document.getElementById("mapPhaseSection");
-  const mapPillarEl = document.getElementById("mapPillar");
-  const mapContinuumEl = document.getElementById("mapContinuum");
-  const mapDDIEREl = document.getElementById("mapDDIER");
-  const frameworkChipEl = document.getElementById("frameworkChip");
-
-  const logBoxEl = document.getElementById("logBox");
-  const reflectionBoxEl = document.getElementById("reflectionBox");
-  const aiPromptBoxEl = document.getElementById("aiPromptBox");
 
   const startBtnEl = document.getElementById("startBtn");
   const resetBtnEl = document.getElementById("resetBtn");
   const continueBtnEl = document.getElementById("continueBtn");
   const backBtnEl = document.getElementById("backBtn");
 
+  // --------------------------------------------------------------------
+  // 5. UI HELPERS
+  // --------------------------------------------------------------------
+
   function clamp(value, min, max) {
     return Math.min(Math.max(value, min), max);
   }
 
   function updateGauges() {
-    trustGaugeEl.style.width = state.gauges.trust + "%";
-    clarityGaugeEl.style.width = state.gauges.clarity + "%";
-    coherenceGaugeEl.style.width = state.gauges.coherence + "%";
-    loadGaugeEl.style.width = state.gauges.load + "%";
+    trustGaugeEl.style.width = simState.gauges.trust + "%";
+    clarityGaugeEl.style.width = simState.gauges.clarity + "%";
+    coherenceGaugeEl.style.width = simState.gauges.coherence + "%";
 
-    trustValueEl.textContent = state.gauges.trust;
-    clarityValueEl.textContent = state.gauges.clarity;
-    coherenceValueEl.textContent = state.gauges.coherence;
-    loadValueEl.textContent = state.gauges.load;
+    trustValueEl.textContent = simState.gauges.trust;
+    clarityValueEl.textContent = simState.gauges.clarity;
+    coherenceValueEl.textContent = simState.gauges.coherence;
   }
 
-  function appendLog(text) {
-    const p = document.createElement("p");
-    p.textContent = text;
-    logBoxEl.appendChild(p);
-    logBoxEl.scrollTop = logBoxEl.scrollHeight;
+  function updateRoleUI() {
+    roleTagEl.textContent = "Perspective: " + (roleLabels[simState.role] || "Role");
+    roleNoteEl.textContent = roleNotes[simState.role] || "";
+  }
+
+  function updateStepChip(step) {
+    stepChipEl.textContent = "Step " + step + " of " + simState.totalSteps;
+  }
+
+  function showFeedback(message, tone) {
+    feedbackBoxEl.style.display = "block";
+    feedbackBoxEl.textContent = message;
+    feedbackBoxEl.className = "feedback " + (tone || "neutral");
   }
 
   function clearFeedback() {
@@ -1003,65 +799,8 @@
     feedbackBoxEl.className = "feedback neutral";
   }
 
-  function showFeedback(text, tone) {
-    feedbackBoxEl.style.display = "block";
-    feedbackBoxEl.textContent = text;
-    feedbackBoxEl.className = "feedback " + (tone || "neutral");
-  }
-
-  function updateRoleUI() {
-    const role = state.role;
-    roleTagEl.textContent = "Perspective: " + (roleLabels[role] || "Role");
-    roleNoteEl.textContent = roleNotes[role] || "";
-  }
-
-  function updateFrameworkUI(scenario) {
-    if (!scenario) return;
-    mapPhaseSectionEl.textContent = scenario.phaseSection || "Not set";
-    mapPillarEl.textContent = scenario.pillar || "Not set";
-    mapContinuumEl.textContent = scenario.continuum || "Not set";
-    mapDDIEREl.textContent = scenario.ddier || "Not set";
-    frameworkChipEl.textContent = "Phase 1 mapping";
-  }
-
-  function updateAIPrompt() {
-    const historySummary = state.history.map(h => ({
-      scenarioId: h.scenarioId,
-      scenarioTitle: h.title,
-      choiceLabel: h.choiceLabel,
-      effects: h.effects
-    }));
-
-    const payload = {
-      role: state.role,
-      role_label: roleLabels[state.role],
-      phase: state.phase,
-      current_scenario_id: state.currentScenarioId,
-      gauges: state.gauges,
-      history: historySummary,
-      user_reflection: reflectionBoxEl.value || ""
-    };
-
-    const promptText =
-`SYSTEM:
-You are an assistant helping district and school leaders simulate and refine Local Accountability Phase 1 decisions.
-
-USER CONTEXT (JSON):
-${JSON.stringify(payload, null, 2)}
-
-TASK:
-Using the context above, do one of the following depending on the request:
-1) Generate the next realistic scenario with 3 branching options for this role and phase.
-2) Write a short narrative debrief that explains what this pattern of decisions might feel like for stakeholders.
-3) Suggest concrete next steps the leader could take in real life to improve trust, clarity, and coherence while keeping load manageable.`;
-
-    aiPromptBoxEl.textContent = promptText;
-  }
-
-  // Drag and drop helpers
-  let dragCardId = null;
-
   function enableBoardDragAndDrop() {
+    let dragCardId = null;
     const cards = scenarioContainerEl.querySelectorAll(".card-draggable");
     const columns = scenarioContainerEl.querySelectorAll(".board-column");
 
@@ -1075,21 +814,19 @@ Using the context above, do one of the following depending on the request:
     });
 
     columns.forEach(col => {
-      col.addEventListener("dragover", (e) => {
+      col.addEventListener("dragover", e => {
         e.preventDefault();
         col.classList.add("drop-hover");
       });
       col.addEventListener("dragleave", () => {
         col.classList.remove("drop-hover");
       });
-      col.addEventListener("drop", (e) => {
+      col.addEventListener("drop", e => {
         e.preventDefault();
         col.classList.remove("drop-hover");
         if (!dragCardId) return;
         const card = scenarioContainerEl.querySelector('[data-card-id="' + dragCardId + '"]');
-        if (card) {
-          col.appendChild(card);
-        }
+        if (card) col.appendChild(card);
       });
     });
   }
@@ -1098,292 +835,240 @@ Using the context above, do one of the following depending on the request:
     const layout = {};
     const columns = scenarioContainerEl.querySelectorAll(".board-column");
     columns.forEach(col => {
-      const colId = col.dataset.columnId;
-      const cards = [];
+      const id = col.dataset.columnId;
+      layout[id] = [];
       col.querySelectorAll(".card-draggable").forEach(card => {
-        cards.push(card.dataset.cardId);
+        layout[id].push(card.dataset.cardId);
       });
-      layout[colId] = cards;
     });
     return layout;
   }
 
-  function applyEffects(effects) {
-    if (!effects) return;
-    state.gauges.trust = clamp(state.gauges.trust + (effects.trust || 0), 0, 100);
-    state.gauges.clarity = clamp(state.gauges.clarity + (effects.clarity || 0), 0, 100);
-    state.gauges.coherence = clamp(state.gauges.coherence + (effects.coherence || 0), 0, 100);
-    state.gauges.load = clamp(state.gauges.load + (effects.load || 0), 0, 100);
-    updateGauges();
-  }
+  // --------------------------------------------------------------------
+  // 6. RENDER SCENARIOS
+  // --------------------------------------------------------------------
 
-  function renderScenario(id) {
-    const scenario = scenarios[id];
+  function renderScenario(scenarioId) {
+    const scenario = localScenarios[scenarioId];
     if (!scenario) return;
-    state.currentScenarioId = id;
+
+    simState.currentScenarioId = scenarioId;
+    simState.stepIndex = scenario.step || 0;
+    updateStepChip(simState.stepIndex);
     clearFeedback();
 
-    roundChipEl.textContent = "Phase 1. " + scenario.roundLabel;
-    scenarioIndexEl.textContent = scenario.index;
-    scenarioTotalEl.textContent = scenario.total;
+    const metaText = scenario.metaByRole ? scenario.metaByRole(simState.role) : "Phase 1 decision";
+    const bodyText = scenario.textByRole ? scenario.textByRole(simState.role) : "";
 
-    updateFrameworkUI(scenario);
+    scenarioMetaLabelEl.textContent = metaText;
 
     let html = "";
-    if (scenario.type === "info") {
-      html += `<div class="scenario-title">Welcome to the Cockpit</div>`;
-      html += `<div class="scenario-meta">Orientation</div>`;
-      html += `<div class="scenario-text">${scenario.textByRole(state.role)}</div>`;
-      html += `<div class="helper-text">Click Continue to move into Round 1.</div>`;
-    } else {
-      html += `<div class="scenario-title">${scenario.title}</div>`;
-      html += `<div class="scenario-meta">${scenario.metaByRole(state.role)}</div>`;
-      html += `<div class="scenario-text">${scenario.textByRole(state.role)}</div>`;
+    html += `<div class="scenario-title">${scenario.title}</div>`;
+    html += `<div class="scenario-meta">${metaText}</div>`;
+    html += `<div class="scenario-text">${bodyText}</div>`;
 
-      if (scenario.type === "choice") {
-        html += `<div class="option-group">`;
-        scenario.options.forEach((opt, idx) => {
-          html += `
-            <label class="option">
-              <input type="radio" name="scenarioOption" value="${opt.id}" ${idx === 0 ? "checked" : ""}>
-              <span>${opt.label}</span>
-            </label>
-          `;
-        });
-        html += `<div class="helper-text">Select the option that most closely matches how you would proceed in real life, then click Continue.</div>`;
-        html += `</div>`;
-      } else if (scenario.type === "dropdown") {
-        html += `<div class="dropdown-row">`;
-        html += `<select id="scenarioDropdown">
-                  <option value="">Choose how you will form the LAAC...</option>`;
-        scenario.choices.forEach(c => {
-          html += `<option value="${c.id}">${c.label}</option>`;
-        });
-        html += `</select>`;
-        html += `<div class="helper-text">Your selection will change the gauges and the next scenario.</div>`;
-        html += `</div>`;
-      } else if (scenario.type === "dragBoard") {
-        const board = scenario.board;
+    if (scenario.type === "choice") {
+      html += `<div class="option-group">`;
+      scenario.options.forEach((opt, idx) => {
         html += `
-          <div class="board">
-            <div class="board-header">
-              Drag each card into Do Now, Do Next, or Park for Later. There is no perfect pattern, but your priorities will matter.
-            </div>
-            <div class="board-columns">
+          <label class="option">
+            <input type="radio" name="scenarioOption" value="${opt.id}" ${idx === 0 ? "checked" : ""}>
+            <span>${opt.label}</span>
+          </label>
         `;
-        board.columns.forEach(col => {
-          html += `
-            <div class="board-column" data-column-id="${col.id}">
-              <div class="board-column-title">${col.label}</div>
-          `;
-          // start with cards only in first column
-          if (col.id === "do_now") {
-            board.cards.forEach(card => {
-              html += `<div class="card-draggable" draggable="true" data-card-id="${card.id}">${card.text}</div>`;
-            });
-          }
-          html += `</div>`;
-        });
-        html += `</div></div>`;
-      } else if (scenario.type === "reflection") {
-        html += `
-          <div class="option-group">
-            <label class="helper-text" style="margin-bottom:4px;">${scenario.prompt}</label>
-            <input type="text" id="scenarioReflectionInput" placeholder="Type your reflection here..." />
-            <div class="helper-text">This will show up in the AI prompt preview as part of your Phase 1 story.</div>
+      });
+      html += `<div class="helper-text">Choose the option that is closest to how you would proceed.</div>`;
+      html += `</div>`;
+    }
+
+    if (scenario.type === "dropdown") {
+      html += `<div class="dropdown-row">
+        <select id="scenarioDropdown">
+          <option value="">Choose an approach...</option>
+      `;
+      scenario.choices.forEach(choice => {
+        html += `<option value="${choice.id}">${choice.label}</option>`;
+      });
+      html += `</select>
+        <div class="helper-text">Your choice will shape who feels represented in this work.</div>
+      </div>`;
+    }
+
+    if (scenario.type === "board") {
+      const board = scenario.board;
+      html += `
+        <div class="board">
+          <div class="board-header">
+            Drag each card into Do Now, Do Next, or Park for Later.
           </div>
+          <div class="board-columns">
+      `;
+      board.columns.forEach(col => {
+        html += `<div class="board-column" data-column-id="${col.id}">
+          <div class="board-column-title">${col.label}</div>
         `;
-      }
+        if (col.id === "do_now") {
+          board.cards.forEach(card => {
+            html += `<div class="card-draggable" draggable="true" data-card-id="${card.id}">${card.text}</div>`;
+          });
+        }
+        html += `</div>`;
+      });
+      html += `</div></div>`;
     }
 
     scenarioContainerEl.innerHTML = html;
-
-    if (scenario.type === "dragBoard") {
-      enableBoardDragAndDrop();
-    }
-
-    updateAIPrompt();
+    if (scenario.type === "board") enableBoardDragAndDrop();
   }
 
-  function goNext() {
-    const scenario = scenarios[state.currentScenarioId];
+  // --------------------------------------------------------------------
+  // 7. HANDLE CHOICES AND BRANCHING
+  // --------------------------------------------------------------------
+
+  function applyEffects(effects) {
+    if (!effects) return;
+    simState.gauges.trust = clamp(simState.gauges.trust + (effects.trust || 0), 0, 100);
+    simState.gauges.clarity = clamp(simState.gauges.clarity + (effects.clarity || 0), 0, 100);
+    simState.gauges.coherence = clamp(simState.gauges.coherence + (effects.coherence || 0), 0, 100);
+    updateGauges();
+  }
+
+  function handleContinue() {
+    const scenario = localScenarios[simState.currentScenarioId];
     if (!scenario) return;
 
     if (scenario.type === "info") {
-      state.history.push({
-        scenarioId: scenario.id,
-        title: "Orientation",
-        choiceLabel: null,
-        effects: {}
-      });
-      renderScenario(scenario.next);
-      appendLog("You moved from Orientation into Round 1.");
-      updateAIPrompt();
+      simState.history.push({ scenarioId: "intro", choiceId: null, effects: {} });
+      renderScenario(scenario.nextId);
       return;
     }
 
     if (scenario.type === "choice") {
       const checked = scenarioContainerEl.querySelector("input[name='scenarioOption']:checked");
       if (!checked) {
-        showFeedback("Select an option before continuing.", "warn");
+        showFeedback("Please select an option to continue.", "warn");
         return;
       }
       const optId = checked.value;
       const opt = scenario.options.find(o => o.id === optId);
       if (!opt) {
-        showFeedback("There was an issue reading that choice. Try again.", "warn");
+        showFeedback("There was an issue with that selection. Try again.", "warn");
         return;
       }
-
       applyEffects(opt.effects);
       showFeedback(opt.feedback, (opt.effects.trust + opt.effects.clarity + opt.effects.coherence) >= 0 ? "success" : "warn");
-
-      state.history.push({
+      simState.history.push({
         scenarioId: scenario.id,
-        title: scenario.title,
         choiceId: opt.id,
         choiceLabel: opt.label,
         effects: opt.effects
       });
-      appendLog("Decision in " + scenario.title + ": " + opt.label);
-
-      renderScenario(opt.next);
-      updateAIPrompt();
+      if (scenario.nextId) {
+        renderScenario(scenario.nextId);
+      }
       return;
     }
 
     if (scenario.type === "dropdown") {
       const dropdown = scenarioContainerEl.querySelector("#scenarioDropdown");
       if (!dropdown || !dropdown.value) {
-        showFeedback("Choose a LAAC formation approach before continuing.", "warn");
+        showFeedback("Choose an approach to forming the LAAC before continuing.", "warn");
         return;
       }
       const choiceId = dropdown.value;
       const choice = scenario.choices.find(c => c.id === choiceId);
       if (!choice) {
-        showFeedback("There was an issue reading that choice. Try again.", "warn");
+        showFeedback("There was an issue with that selection. Try again.", "warn");
         return;
       }
       applyEffects(choice.effects);
       showFeedback(choice.feedback, (choice.effects.trust + choice.effects.clarity + choice.effects.coherence) >= 0 ? "success" : "warn");
-
-      state.history.push({
+      simState.history.push({
         scenarioId: scenario.id,
-        title: scenario.title,
         choiceId: choice.id,
         choiceLabel: choice.label,
         effects: choice.effects
       });
-      appendLog("Decision in " + scenario.title + ": " + choice.label);
-
-      renderScenario(choice.next);
-      updateAIPrompt();
+      if (scenario.nextId) {
+        renderScenario(scenario.nextId);
+      }
       return;
     }
 
-    if (scenario.type === "dragBoard") {
+    if (scenario.type === "board") {
       const layout = getBoardLayout();
       const doNowCount = (layout.do_now || []).length;
       const doNextCount = (layout.do_next || []).length;
-      const parkCount = (layout.park || []).length;
-
-      // simple interpretation: more in Do Now for authentic system building raises coherence and load
       const effects = {
         trust: doNowCount >= 2 ? +3 : -1,
         clarity: doNowCount + doNextCount >= 3 ? +4 : -2,
-        coherence: doNowCount >= 2 ? +4 : 0,
-        load: doNowCount >= 3 ? +5 : +1
+        coherence: doNowCount >= 2 ? +4 : 0
       };
-
       applyEffects(effects);
-
-      const choiceLabel = "Board layout. Do Now: " + doNowCount + ", Do Next: " + doNextCount + ", Park: " + parkCount + ".";
-      state.history.push({
+      simState.history.push({
         scenarioId: scenario.id,
-        title: scenario.title,
         choiceId: "board_layout",
-        choiceLabel: choiceLabel,
+        choiceLabel: JSON.stringify(layout),
         effects
       });
-
-      appendLog("You prioritized actions as: " + choiceLabel);
-      showFeedback("Your prioritization will make Phase 1 feel either focused or scattered. The gauges reflect the tradeoffs.", "neutral");
-
-      renderScenario(scenario.next);
-      updateAIPrompt();
-      return;
-    }
-
-    if (scenario.type === "reflection") {
-      const input = scenarioContainerEl.querySelector("#scenarioReflectionInput");
-      const text = input ? input.value.trim() : "";
-      if (!text) {
-        showFeedback("Add at least a short reflection. Your thinking is part of the work.", "warn");
-        return;
-      }
-      appendLog("Phase 1 reflection: " + text);
-
-      state.history.push({
-        scenarioId: scenario.id,
-        title: scenario.title,
-        choiceId: "reflection",
-        choiceLabel: text,
-        effects: {}
-      });
-
-      showFeedback("Simulation complete. Use the AI prompt preview and your log as leadership talking points or LAAC discussion starters.", "success");
-      updateAIPrompt();
+      showFeedback("You have completed this short simulation. Use what you noticed as you plan real Phase 1 work.", "success");
       return;
     }
   }
 
-  function goBack() {
-    if (state.history.length === 0) {
+  function handleBack() {
+    if (simState.history.length === 0) {
       showFeedback("You are at the start of the simulation.", "neutral");
       return;
     }
-    const last = state.history.pop();
-    state.gauges.trust = clamp(state.gauges.trust - (last.effects.trust || 0), 0, 100);
-    state.gauges.clarity = clamp(state.gauges.clarity - (last.effects.clarity || 0), 0, 100);
-    state.gauges.coherence = clamp(state.gauges.coherence - (last.effects.coherence || 0), 0, 100);
-    state.gauges.load = clamp(state.gauges.load - (last.effects.load || 0), 0, 100);
+    const last = simState.history.pop();
+    simState.gauges.trust = clamp(simState.gauges.trust - (last.effects.trust || 0), 0, 100);
+    simState.gauges.clarity = clamp(simState.gauges.clarity - (last.effects.clarity || 0), 0, 100);
+    simState.gauges.coherence = clamp(simState.gauges.coherence - (last.effects.coherence || 0), 0, 100);
     updateGauges();
-
     renderScenario(last.scenarioId);
-    appendLog("You stepped back to: " + last.title);
-    updateAIPrompt();
+    showFeedback("You stepped back one decision. Adjust your choice if needed.", "neutral");
   }
 
   function resetSimulation() {
-    state.currentScenarioId = "intro";
-    state.history = [];
-    state.gauges = { trust: 50, clarity: 50, coherence: 50, load: 50 };
+    simState.currentScenarioId = "intro";
+    simState.stepIndex = 0;
+    simState.history = [];
+    simState.gauges = { trust: 50, clarity: 50, coherence: 50 };
     updateGauges();
-    logBoxEl.textContent = "Simulation events and outcomes will appear here as you move through the scenarios.";
-    reflectionBoxEl.value = "";
     clearFeedback();
-    renderScenario("intro");
-    updateAIPrompt();
+    updateRoleUI();
+    updateStepChip(0);
+    // initial intro text
+    scenarioContainerEl.innerHTML = `
+      <div class="scenario-title">Welcome to the simulator</div>
+      <div class="scenario-meta">Orientation</div>
+      <div class="scenario-text">
+        When you are ready, select Start or Resume to move into Step 1. You will see one decision at a time with simple options.
+        There are no right or wrong answers. The goal is to build a clearer picture of what Phase 1 work can feel like.
+      </div>
+    `;
   }
 
-  // Event listeners
-  roleSelectEl.addEventListener("change", () => {
-    state.role = roleSelectEl.value;
-    updateRoleUI();
-    renderScenario(state.currentScenarioId);
-  });
+  // --------------------------------------------------------------------
+  // 8. INITIALIZE AND EVENT LISTENERS
+  // --------------------------------------------------------------------
 
-  phaseSelectEl.addEventListener("change", () => {
-    state.phase = phaseSelectEl.value;
-    showFeedback("For now, this cockpit is optimized for Phase 1. You can reuse the same structure for Phases 2 to 6.", "neutral");
-    updateAIPrompt();
+  roleSelectEl.addEventListener("change", () => {
+    simState.role = roleSelectEl.value;
+    updateRoleUI();
+    // re render current scenario with new perspective if not intro
+    if (localScenarios[simState.currentScenarioId]) {
+      renderScenario(simState.currentScenarioId);
+    }
   });
 
   startBtnEl.addEventListener("click", () => {
-    if (state.currentScenarioId === "intro") {
+    if (simState.currentScenarioId === "intro") {
       renderScenario("intro");
+      // move straight into first decision after intro continue
     } else {
-      renderScenario(state.currentScenarioId);
+      renderScenario(simState.currentScenarioId);
     }
   });
 
@@ -1392,21 +1077,21 @@ Using the context above, do one of the following depending on the request:
   });
 
   continueBtnEl.addEventListener("click", () => {
-    goNext();
+    if (simState.currentScenarioId === "intro") {
+      renderScenario("launch");
+    } else {
+      handleContinue();
+    }
   });
 
   backBtnEl.addEventListener("click", () => {
-    goBack();
+    handleBack();
   });
 
-  reflectionBoxEl.addEventListener("input", () => {
-    updateAIPrompt();
-  });
-
-  // Initial
+  // Start
   updateGauges();
   updateRoleUI();
-  renderScenario("intro");
+  updateStepChip(0);
 </script>
 </body>
 </html>
