@@ -114,7 +114,7 @@
       padding: 8px 10px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--navy);
       box-shadow: 0 8px 18px rgba(0,0,0,0.06);
       cursor: pointer;
@@ -224,7 +224,7 @@
     }
     .btn.primary .ic{ background: rgba(255,255,255,0.20); }
 
-    /* Quick Map */
+    /* Quick Map (right card) */
     .quick{
       padding: 18px;
       display:flex;
@@ -414,20 +414,6 @@
       color: var(--text);
       font-weight: 650;
     }
-    .body .cite{
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 800;
-    }
-    .cite code{
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 11px;
-      background: rgba(10,53,94,0.08);
-      border: 1px solid rgba(10,53,94,0.12);
-      padding: 2px 6px;
-      border-radius: 10px;
-    }
 
     /* References */
     .refs{
@@ -532,6 +518,202 @@
       text-align:center;
       opacity: 0.95;
     }
+
+    /* ===== Fusion Map ===== */
+    .fusionMap{
+      padding: 14px 18px 0 18px;
+    }
+
+    .fusionCanvas{
+      position: relative;
+      height: 320px;
+      border-radius: 18px;
+      border: 1px solid rgba(0,0,0,0.10);
+      background:
+        radial-gradient(520px 220px at 20% 20%, rgba(14,133,119,0.18), transparent 55%),
+        radial-gradient(520px 220px at 80% 20%, rgba(219,181,80,0.20), transparent 55%),
+        radial-gradient(520px 220px at 20% 85%, rgba(10,53,94,0.18), transparent 55%),
+        rgba(255,255,255,0.70);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .fLines{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      pointer-events:none;
+    }
+
+    .fPath{
+      fill:none;
+      stroke-linecap:round;
+      stroke-width:3.2;
+      opacity:0.9;
+    }
+    .fPath.glow{
+      stroke: rgba(219,181,80,0.35);
+      stroke-width: 10;
+      opacity: 0.65;
+      filter: blur(0.3px);
+    }
+    .fPath.main{
+      stroke: rgba(10,53,94,0.35);
+      stroke-dasharray: 6 10;
+      animation: dash 4.8s linear infinite;
+    }
+    @keyframes dash{
+      to { stroke-dashoffset: -64; }
+    }
+
+    .fRing{
+      fill:none;
+      stroke: rgba(14,133,119,0.22);
+      stroke-width:2;
+      stroke-dasharray: 2 10;
+      opacity:0.9;
+    }
+
+    .fNode{
+      position:absolute;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(0,0,0,0.10);
+      background: rgba(255,255,255,0.86);
+      box-shadow: 0 12px 26px rgba(0,0,0,0.10);
+      cursor:pointer;
+      user-select:none;
+      text-align:left;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .fNode:hover{ transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 34px rgba(0,0,0,0.14); }
+    .fNode:active{ transform: translateY(-3px) scale(1.01); }
+
+    .fIcon{
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      display:grid;
+      place-items:center;
+      font-weight: 1000;
+      background: rgba(10,53,94,0.10);
+      border: 1px solid rgba(10,53,94,0.12);
+    }
+
+    .fText{ min-width:0; }
+    .fTitle{
+      font-weight: 1000;
+      font-size: 13px;
+      letter-spacing: 0.2px;
+      color: var(--text);
+    }
+    .fSub{
+      margin-top: 4px;
+      font-size: 12px;
+      font-weight: 750;
+      color: var(--muted);
+      line-height: 1.2;
+    }
+
+    .fChip{
+      margin-left:auto;
+      font-size: 11px;
+      font-weight: 1000;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.10);
+      white-space: nowrap;
+    }
+    .fChip.cPillars{ background: var(--chipPillars); }
+    .fChip.cContinuum{ background: var(--chipContinuum); }
+    .fChip.cPrinciples{ background: var(--chipPrinciples); }
+    .fChip.cDDIER{ background: var(--chipDDIER); }
+
+    /* Node placement */
+    .fNode.center{
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      background: linear-gradient(135deg, rgba(10,53,94,0.95), rgba(14,133,119,0.95));
+      border: 1px solid rgba(10,53,94,0.18);
+      color:#fff;
+      padding: 14px 14px;
+    }
+    .fNode.center .fTitle, .fNode.center .fSub{ color:#fff; }
+    .fNode.center .fIcon{
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.20);
+    }
+    .fNode.center:hover{ transform: translate(-50%,-50%) translateY(-6px) scale(1.02); }
+    .fNode.center:active{ transform: translate(-50%,-50%) translateY(-3px) scale(1.01); }
+
+    .fNode.n1{ left: 8%;  top: 12%; width: 38%; max-width: 360px; }
+    .fNode.n2{ right: 8%; top: 12%; width: 38%; max-width: 360px; }
+    .fNode.n3{ left: 8%;  bottom: 12%; width: 38%; max-width: 360px; }
+    .fNode.n4{ right: 8%; bottom: 12%; width: 38%; max-width: 360px; }
+
+    @media (max-width: 980px){
+      .fusionCanvas{ height: 380px; }
+      .fNode.n1, .fNode.n2, .fNode.n3, .fNode.n4{
+        width: 44%;
+        max-width: none;
+      }
+    }
+    @media (max-width: 640px){
+      .fusionCanvas{ height: 520px; }
+      .fNode.n1{ left: 8%; right:8%; top: 10%; width:auto; }
+      .fNode.n2{ left: 8%; right:8%; top: 27%; width:auto; }
+      .fNode.center{ top: 55%; }
+      .fNode.n3{ left: 8%; right:8%; bottom: 20%; width:auto; }
+      .fNode.n4{ left: 8%; right:8%; bottom: 6%; width:auto; }
+    }
+
+    /* Tooltip */
+    .fTip{
+      position:absolute;
+      right: 14px;
+      top: 14px;
+      width: min(360px, calc(100% - 28px));
+      background: rgba(255,255,255,0.94);
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 18px;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.18);
+      padding: 12px 12px;
+      display:none;
+    }
+    .fTipHead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(221,227,238,0.9);
+    }
+    .fTipTitle{
+      font-size: 13px;
+      font-weight: 1000;
+      color: var(--navy);
+    }
+    .fTipClose{
+      border: 1px solid rgba(0,0,0,0.10);
+      background: rgba(0,0,0,0.04);
+      border-radius: 12px;
+      padding: 6px 10px;
+      cursor:pointer;
+      font-weight: 1000;
+      font-size: 12px;
+    }
+    .fTipBody{
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.55;
+    }
   </style>
 </head>
 <body>
@@ -567,9 +749,91 @@
           </div>
           <h2 class="title">Fusion is the structural breakthrough.</h2>
           <p class="lede">
-            This page is built to match the clean, modern structure of Phase 1 and Phase 2.
-            Use the quick map on the right to jump to each section, or expand the panels below to read the full narrative.
+            This page mirrors the Phase 1 and Phase 2 structure, colors, and layout.
+            Use the Fusion Map below to make the logic visible, then open the sections to read the full narrative.
           </p>
+        </div>
+
+        <!-- FUSION MAP (inserted into hero white space) -->
+        <div class="fusionMap" aria-label="Fusion Map">
+          <div class="fusionCanvas">
+
+            <!-- Center -->
+            <button class="fNode center" type="button" data-title="Fusion"
+              data-body="A unified system where the Pillars, Continuum, Principles, and DDIER reinforce each other. None can function independently without weakening the whole.">
+              <div class="fIcon">⟲</div>
+              <div class="fText">
+                <div class="fTitle">Fusion</div>
+                <div class="fSub">One living architecture</div>
+              </div>
+            </button>
+
+            <!-- Satellites -->
+            <button class="fNode n1" type="button" data-title="Pillars"
+              data-body="Structural integrity. Defines what must be built and protected. Turns priorities into a coherent system rather than isolated initiatives.">
+              <div class="fIcon">🏛️</div>
+              <div class="fText">
+                <div class="fTitle">Pillars</div>
+                <div class="fSub">Structural integrity</div>
+              </div>
+              <span class="fChip cPillars">Structure</span>
+            </button>
+
+            <button class="fNode n2" type="button" data-title="Continuum"
+              data-body="Developmental truth. Makes stages of practice visible without lowering expectations. Progress is real, observable, and recordable over time.">
+              <div class="fIcon">📈</div>
+              <div class="fText">
+                <div class="fTitle">Continuum</div>
+                <div class="fSub">Growth over time</div>
+              </div>
+              <span class="fChip cContinuum">Trajectory</span>
+            </button>
+
+            <button class="fNode n3" type="button" data-title="Principles"
+              data-body="Decision integrity. The ethical engine that holds the line under pressure. Keeps the system coherent, transparent, and locally owned.">
+              <div class="fIcon">🧭</div>
+              <div class="fText">
+                <div class="fTitle">Principles</div>
+                <div class="fSub">Decision integrity</div>
+              </div>
+              <span class="fChip cPrinciples">Guardrails</span>
+            </button>
+
+            <button class="fNode n4" type="button" data-title="DDIER"
+              data-body="Disciplined movement. Design, Development, Implementation, Evaluation, Revision. A continuous rhythm that makes ambition sustainable.">
+              <div class="fIcon">🔁</div>
+              <div class="fText">
+                <div class="fTitle">DDIER</div>
+                <div class="fSub">Continuous rhythm</div>
+              </div>
+              <span class="fChip cDDIER">Cycle</span>
+            </button>
+
+            <!-- Lines (SVG) -->
+            <svg class="fLines" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
+              <path class="fPath glow" d="M500,260 L210,110" />
+              <path class="fPath glow" d="M500,260 L790,110" />
+              <path class="fPath glow" d="M500,260 L210,410" />
+              <path class="fPath glow" d="M500,260 L790,410" />
+
+              <path class="fPath main" d="M500,260 L210,110" />
+              <path class="fPath main" d="M500,260 L790,110" />
+              <path class="fPath main" d="M500,260 L210,410" />
+              <path class="fPath main" d="M500,260 L790,410" />
+
+              <ellipse class="fRing" cx="500" cy="260" rx="270" ry="165"></ellipse>
+            </svg>
+
+            <!-- Tooltip -->
+            <div class="fTip" id="fTip" role="dialog" aria-live="polite" aria-label="Fusion Map Detail">
+              <div class="fTipHead">
+                <div class="fTipTitle" id="fTipTitle">Fusion</div>
+                <button class="fTipClose" type="button" aria-label="Close" onclick="FusionMap.close()">Close</button>
+              </div>
+              <div class="fTipBody" id="fTipBody"></div>
+            </div>
+
+          </div>
         </div>
 
         <div class="heroActions">
@@ -596,7 +860,7 @@
       <div class="card">
         <div class="quick">
           <div class="mapTitle">
-            <h3>Fusion Map</h3>
+            <h3>Fusion Sections</h3>
             <div class="mini">Click to jump</div>
           </div>
 
@@ -647,7 +911,7 @@
                   <h4>Ethical Engine</h4>
                   <p>Principles hold the line under pressure and keep decisions coherent.</p>
                 </div>
-                <span class="chip cPrinciples">Principles</span>
+                <span class="chip cPrinciples">Guardrails</span>
               </div>
             </div>
 
@@ -957,7 +1221,6 @@
       if(!d) return;
       d.open = true;
       d.scrollIntoView({behavior:"smooth", block:"start"});
-      // subtle emphasis
       d.style.outline = "3px solid rgba(219,181,80,0.35)";
       d.style.outlineOffset = "4px";
       setTimeout(()=>{ d.style.outline = "none"; }, 900);
@@ -968,7 +1231,6 @@
     }
     function collapseAll(){
       document.querySelectorAll("details").forEach(d => d.open = false);
-      // keep first and principles open for usability
       const d1 = document.getElementById("d1");
       const d5 = document.getElementById("d5");
       if(d1) d1.open = true;
@@ -985,13 +1247,13 @@
           <p>2) As a board-facing explanation of why the framework is not a compliance tool.</p>
           <p>3) As a district-wide coherence anchor when new initiatives or metrics appear.</p>
           <div class="divider"></div>
-          <p><strong>Tip:</strong> Open “Expand All,” then print to PDF for a clean, narrative handout.</p>
+          <p><strong>Tip:</strong> Click a Fusion Map node to show the logic in a short, clear explanation.</p>
         `
       },
       print: {
         title: "Print / PDF Tips",
         body: `
-          <p>For the cleanest PDF: click <strong>Expand All</strong>, then use your browser print dialog.</p>
+          <p>For the cleanest PDF: click <strong>Expand All Sections</strong>, then use your browser print dialog.</p>
           <p>In Chrome: Print → Save as PDF → More settings → Background graphics ON.</p>
           <p>If you prefer a shorter handout, collapse all and open only the sections you need.</p>
         `
@@ -999,8 +1261,8 @@
       cite: {
         title: "Citation Note",
         body: `
-          <p>The in-text citations are included exactly as you provided them.</p>
-          <p>If you want this page to match an academic style guide for publication, we can convert the citations to a dedicated footnote panel while keeping the leadership readability.</p>
+          <p>The in-text citations are included exactly as provided in your source text.</p>
+          <p>If you want this page to match a formal academic publication style, we can convert citations into a footnote panel while keeping the leadership readability.</p>
         `
       }
     };
@@ -1023,13 +1285,48 @@
       }
     }
 
-    // Keyboard accessibility: ESC closes modal
-    document.addEventListener("keydown", (e)=>{
-      if(e.key === "Escape"){
-        const mb = document.getElementById("modalBackdrop");
-        if(mb && mb.style.display === "flex") closeModal();
+    // ===== Fusion Map Interactions =====
+    const FusionMap = {
+      init(){
+        const nodes = document.querySelectorAll(".fusionCanvas .fNode");
+        nodes.forEach(n => {
+          n.addEventListener("click", () => {
+            const title = n.getAttribute("data-title") || "Fusion";
+            const body  = n.getAttribute("data-body")  || "";
+            FusionMap.open(title, body);
+          });
+          n.addEventListener("keydown", (e) => {
+            if(e.key === "Enter" || e.key === " "){
+              e.preventDefault();
+              n.click();
+            }
+          });
+        });
+
+        document.addEventListener("keydown", (e)=>{
+          if(e.key === "Escape"){
+            FusionMap.close();
+            const mb = document.getElementById("modalBackdrop");
+            if(mb && mb.style.display === "flex") closeModal();
+          }
+        });
+      },
+      open(title, body){
+        const tip = document.getElementById("fTip");
+        const t = document.getElementById("fTipTitle");
+        const b = document.getElementById("fTipBody");
+        if(!tip || !t || !b) return;
+        t.textContent = title;
+        b.textContent = body;
+        tip.style.display = "block";
+      },
+      close(){
+        const tip = document.getElementById("fTip");
+        if(tip) tip.style.display = "none";
       }
-    });
+    };
+
+    document.addEventListener("DOMContentLoaded", () => FusionMap.init());
   </script>
 </body>
 </html>
