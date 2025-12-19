@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fusion | Local Accountability Framework</title>
+  <title>Fusion | Kentucky's Local Accountability Framework</title>
   <style>
     :root{
       --navy:#0a355e;
@@ -23,10 +23,6 @@
       --chipContinuum:#e8fff4;
       --chipPrinciples:#fff6df;
       --chipDDIER:#f2eaff;
-
-      --ok:#16a34a;
-      --warn:#f59e0b;
-      --risk:#dc2626;
     }
 
     *{ box-sizing:border-box; }
@@ -43,7 +39,98 @@
     a{ color:inherit; text-decoration:none; }
     .wrap{ max-width: 1120px; margin: 0 auto; padding: 22px; }
 
-    /* Top bar */
+    /* ===== Top Header (matches Unicorn Project header content) ===== */
+    .nxgHeader{
+      padding: 20px 22px 10px 22px;
+    }
+    .nxgInner{
+      max-width: 1120px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(221,227,238,0.9);
+      border-radius: 26px;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.10);
+      overflow:hidden;
+    }
+    .nxgTop{
+      padding: 18px 18px 14px 18px;
+      display:flex;
+      gap: 18px;
+      align-items: center;
+    }
+    .nxgImgWrap{
+      width: 92px;
+      height: 92px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(10,53,94,0.10), rgba(14,133,119,0.10));
+      border: 1px solid rgba(10,53,94,0.10);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+      overflow:hidden;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+    }
+    .nxgImg{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display:block;
+      transform: scale(1.06);
+    }
+    .nxgTitleBlock{ min-width: 0; }
+    .nxgKicker{
+      font-size: 12px;
+      font-weight: 1000;
+      letter-spacing: 0.35px;
+      color: var(--navy);
+      text-transform: uppercase;
+      opacity: 0.95;
+    }
+    .nxgH1{
+      margin: 6px 0 6px 0;
+      font-size: 22px;
+      font-weight: 1000;
+      letter-spacing: -0.2px;
+      color: var(--text);
+      line-height: 1.12;
+    }
+    .nxgSub{
+      margin: 0;
+      font-size: 13px;
+      font-weight: 750;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .nxgQuote{
+      padding: 14px 18px 18px 18px;
+      border-top: 1px solid rgba(221,227,238,0.9);
+      background:
+        radial-gradient(820px 260px at 10% 20%, rgba(219,181,80,0.14), transparent 60%),
+        radial-gradient(820px 260px at 90% 40%, rgba(14,133,119,0.12), transparent 60%),
+        rgba(255,255,255,0.62);
+    }
+    .nxgQuote p{
+      margin: 0;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.65;
+    }
+    .nxgAttribution{
+      margin-top: 10px;
+      font-size: 12px;
+      font-weight: 1000;
+      color: var(--navy);
+    }
+
+    @media (max-width: 760px){
+      .nxgTop{ align-items:flex-start; }
+      .nxgImgWrap{ width: 78px; height: 78px; border-radius: 20px; }
+      .nxgH1{ font-size: 20px; }
+    }
+
+    /* ===== Top bar (sticky nav under header) ===== */
     .topbar{
       position: sticky;
       top: 0;
@@ -82,17 +169,17 @@
       background: radial-gradient(circle at 30% 30%, rgba(219,181,80,0.55), transparent 55%);
       transform: rotate(18deg);
     }
-    .brand h1{
+    .brand h2{
       margin:0;
-      font-size: 14px;
-      letter-spacing: 0.3px;
+      font-size: 13px;
+      letter-spacing: 0.2px;
       color: var(--navy);
-      font-weight: 800;
+      font-weight: 1000;
       line-height: 1.15;
     }
     .brand .sub{
       display:block;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--muted);
       font-size: 12px;
       margin-top: 2px;
@@ -114,7 +201,7 @@
       padding: 8px 10px;
       border-radius: 999px;
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
       color: var(--navy);
       box-shadow: 0 8px 18px rgba(0,0,0,0.06);
       cursor: pointer;
@@ -157,7 +244,7 @@
       display:inline-flex;
       align-items:center;
       gap: 10px;
-      font-weight: 900;
+      font-weight: 1000;
       color: var(--navy);
       letter-spacing: 0.4px;
       font-size: 12px;
@@ -165,7 +252,7 @@
     }
     .eyebrow .tag{
       font-size: 12px;
-      font-weight: 900;
+      font-weight: 1000;
       padding: 6px 10px;
       border-radius: 999px;
       background: rgba(10,53,94,0.08);
@@ -176,7 +263,7 @@
       font-size: 28px;
       line-height: 1.12;
       color: var(--text);
-      font-weight: 900;
+      font-weight: 1000;
       letter-spacing: -0.4px;
     }
     .lede{
@@ -184,7 +271,7 @@
       color: var(--muted);
       font-size: 14px;
       line-height: 1.55;
-      font-weight: 600;
+      font-weight: 650;
     }
 
     .heroActions{
@@ -202,7 +289,7 @@
       border-radius: 14px;
       border: 1px solid rgba(0,0,0,0.10);
       background: #ffffff;
-      font-weight: 900;
+      font-weight: 1000;
       font-size: 12px;
       box-shadow: 0 10px 22px rgba(0,0,0,0.08);
       cursor:pointer;
@@ -514,7 +601,7 @@
       margin: 18px 0 6px 0;
       color: var(--muted);
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
       text-align:center;
       opacity: 0.95;
     }
@@ -523,7 +610,6 @@
     .fusionMap{
       padding: 14px 18px 0 18px;
     }
-
     .fusionCanvas{
       position: relative;
       height: 320px;
@@ -537,7 +623,6 @@
       box-shadow: 0 10px 22px rgba(0,0,0,0.08);
       overflow: hidden;
     }
-
     .fLines{
       position:absolute;
       inset:0;
@@ -545,7 +630,6 @@
       height:100%;
       pointer-events:none;
     }
-
     .fPath{
       fill:none;
       stroke-linecap:round;
@@ -566,7 +650,6 @@
     @keyframes dash{
       to { stroke-dashoffset: -64; }
     }
-
     .fRing{
       fill:none;
       stroke: rgba(14,133,119,0.22);
@@ -574,7 +657,6 @@
       stroke-dasharray: 2 10;
       opacity:0.9;
     }
-
     .fNode{
       position:absolute;
       display:flex;
@@ -592,7 +674,6 @@
     }
     .fNode:hover{ transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 34px rgba(0,0,0,0.14); }
     .fNode:active{ transform: translateY(-3px) scale(1.01); }
-
     .fIcon{
       width: 40px;
       height: 40px;
@@ -603,7 +684,6 @@
       background: rgba(10,53,94,0.10);
       border: 1px solid rgba(10,53,94,0.12);
     }
-
     .fText{ min-width:0; }
     .fTitle{
       font-weight: 1000;
@@ -614,11 +694,10 @@
     .fSub{
       margin-top: 4px;
       font-size: 12px;
-      font-weight: 750;
+      font-weight: 800;
       color: var(--muted);
       line-height: 1.2;
     }
-
     .fChip{
       margin-left:auto;
       font-size: 11px;
@@ -633,7 +712,6 @@
     .fChip.cPrinciples{ background: var(--chipPrinciples); }
     .fChip.cDDIER{ background: var(--chipDDIER); }
 
-    /* Node placement */
     .fNode.center{
       left: 50%;
       top: 50%;
@@ -658,10 +736,7 @@
 
     @media (max-width: 980px){
       .fusionCanvas{ height: 380px; }
-      .fNode.n1, .fNode.n2, .fNode.n3, .fNode.n4{
-        width: 44%;
-        max-width: none;
-      }
+      .fNode.n1, .fNode.n2, .fNode.n3, .fNode.n4{ width: 44%; max-width: none; }
     }
     @media (max-width: 640px){
       .fusionCanvas{ height: 520px; }
@@ -672,7 +747,6 @@
       .fNode.n4{ left: 8%; right:8%; bottom: 6%; width:auto; }
     }
 
-    /* Tooltip */
     .fTip{
       position:absolute;
       right: 14px;
@@ -710,7 +784,7 @@
     .fTipBody{
       margin-top: 10px;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 750;
       color: var(--text);
       line-height: 1.55;
     }
@@ -718,18 +792,46 @@
 </head>
 <body>
 
+  <!-- Next-Generation Header (requested) -->
+  <div class="nxgHeader" aria-label="Next-Generation Learning, Assessment, and Accountability Header">
+    <div class="nxgInner">
+      <div class="nxgTop">
+        <div class="nxgImgWrap" aria-hidden="true">
+          <!-- Same image used on TheUnicornProject home header -->
+          <img class="nxgImg"
+               src="https://i.postimg.cc/jSXFZymK/Nx-GLearning-Assessment-Accountability-%282%29.png"
+               alt="Next-Generation Learning, Assessment, and Accountability Header" />
+        </div>
+
+        <div class="nxgTitleBlock">
+          <div class="nxgKicker">Next-Generation Learning, Assessment, and Accountability Header</div>
+          <div class="nxgH1">KENTUCKY'S LOCAL ACCOUNTABILITY FRAMEWORK</div>
+          <p class="nxgSub">Next-Generation Learning, Assessment, and Accountability</p>
+        </div>
+      </div>
+
+      <div class="nxgQuote">
+        <p>
+          "Do not follow where the path may lead, go instead where there is no path and make a trail."
+        </p>
+        <div class="nxgAttribution">- Ralph Waldo Emerson</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Nav -->
   <div class="topbar">
     <div class="inner">
       <div class="brand">
         <div class="mark" aria-hidden="true"></div>
         <div>
-          <h1>Local Accountability Framework</h1>
-          <span class="sub">Fusion. A unified system for learning, growth, mastery, and readiness.</span>
+          <h2>Fusion</h2>
+          <span class="sub">Structural breakthrough. One unified operating system.</span>
         </div>
       </div>
 
       <div class="nav">
-        <div class="pill" onclick="scrollToId('fusion')"><span class="dot"></span>Fusion Text</div>
+        <div class="pill" onclick="scrollToId('fusion')"><span class="dot"></span>Fusion</div>
         <div class="pill" onclick="scrollToId('elements')"><span class="dot"></span>Key Elements</div>
         <div class="pill" onclick="scrollToId('refs')"><span class="dot"></span>References</div>
         <div class="pill" onclick="openModal('about')"><span class="dot"></span>How to Use</div>
@@ -745,20 +847,19 @@
         <div class="head">
           <div class="eyebrow">
             <span class="tag">The Local Accountability Framework</span>
-            <span style="color:var(--muted); font-weight:900;">A Unified System for Learning</span>
+            <span style="color:var(--muted); font-weight:1000;">A Unified System for Learning</span>
           </div>
           <h2 class="title">Fusion is the structural breakthrough.</h2>
           <p class="lede">
-            This page mirrors the Phase 1 and Phase 2 structure, colors, and layout.
-            Use the Fusion Map below to make the logic visible, then open the sections to read the full narrative.
+            Use the Fusion Map to make the logic visible, then open each section to read the narrative as a full system explanation.
+            This is built to mirror your Phase 1 and Phase 2 look and feel, while keeping the story practitioner-first.
           </p>
         </div>
 
-        <!-- FUSION MAP (inserted into hero white space) -->
+        <!-- FUSION MAP -->
         <div class="fusionMap" aria-label="Fusion Map">
           <div class="fusionCanvas">
 
-            <!-- Center -->
             <button class="fNode center" type="button" data-title="Fusion"
               data-body="A unified system where the Pillars, Continuum, Principles, and DDIER reinforce each other. None can function independently without weakening the whole.">
               <div class="fIcon">⟲</div>
@@ -768,7 +869,6 @@
               </div>
             </button>
 
-            <!-- Satellites -->
             <button class="fNode n1" type="button" data-title="Pillars"
               data-body="Structural integrity. Defines what must be built and protected. Turns priorities into a coherent system rather than isolated initiatives.">
               <div class="fIcon">🏛️</div>
@@ -809,7 +909,6 @@
               <span class="fChip cDDIER">Cycle</span>
             </button>
 
-            <!-- Lines (SVG) -->
             <svg class="fLines" viewBox="0 0 1000 520" preserveAspectRatio="none" aria-hidden="true">
               <path class="fPath glow" d="M500,260 L210,110" />
               <path class="fPath glow" d="M500,260 L790,110" />
@@ -824,7 +923,6 @@
               <ellipse class="fRing" cx="500" cy="260" rx="270" ry="165"></ellipse>
             </svg>
 
-            <!-- Tooltip -->
             <div class="fTip" id="fTip" role="dialog" aria-live="polite" aria-label="Fusion Map Detail">
               <div class="fTipHead">
                 <div class="fTipTitle" id="fTipTitle">Fusion</div>
@@ -837,22 +935,10 @@
         </div>
 
         <div class="heroActions">
-          <div class="btn primary" onclick="expandAll()">
-            <span class="ic">+</span>
-            Expand All Sections
-          </div>
-          <div class="btn" onclick="collapseAll()">
-            <span class="ic">-</span>
-            Collapse All Sections
-          </div>
-          <div class="btn" onclick="openModal('print')">
-            <span class="ic">⎙</span>
-            Print / PDF Tips
-          </div>
-          <div class="btn" onclick="openModal('cite')">
-            <span class="ic">"</span>
-            Citation Note
-          </div>
+          <div class="btn primary" onclick="expandAll()"><span class="ic">+</span>Expand All Sections</div>
+          <div class="btn" onclick="collapseAll()"><span class="ic">-</span>Collapse All Sections</div>
+          <div class="btn" onclick="openModal('print')"><span class="ic">⎙</span>Print / PDF Tips</div>
+          <div class="btn" onclick="openModal('cite')"><span class="ic">"</span>Citation Note</div>
         </div>
       </div>
 
@@ -944,8 +1030,8 @@
                 <span class="chip cPillars">Learning</span>
               </div>
             </div>
-
           </div>
+
         </div>
       </div>
     </div>
@@ -953,7 +1039,6 @@
     <!-- CONTENT -->
     <div class="grid" id="elements">
 
-      <!-- LEFT -->
       <div class="card section">
         <div class="sectionHeader">
           <h2>Fusion Narrative</h2>
@@ -1060,7 +1145,6 @@
         </div>
       </div>
 
-      <!-- RIGHT -->
       <div class="card section">
         <div class="sectionHeader">
           <h2>Fusion, Guardrails, and Sustainability</h2>
@@ -1163,7 +1247,6 @@
 
     </div>
 
-    <!-- REFERENCES -->
     <div class="card refs" id="refs">
       <h3>References</h3>
 
@@ -1175,7 +1258,7 @@
 
       <div class="ref">
         Meylani, R. (2024). A comparative analysis of traditional and modern approaches to assessment and evaluation in education.
-        <em>Batı Anadolu Eğitim Bilimleri Dergisi, 15</em>(1), 520–555.
+        <em>Batı Anadolu Eğitim Bilimleri Dergisi, 15</em>(1), 520-555.
         <a href="https://doi.org/10.51460/baebd.1386737" target="_blank" rel="noopener">https://doi.org/10.51460/baebd.1386737</a>
       </div>
 
@@ -1187,18 +1270,17 @@
 
       <div class="ref">
         Tyler, A., &amp; Glasgow, R. E. (2021). Implementing improvements: Opportunities to integrate quality improvement and implementation science.
-        <em>Hospital Pediatrics, 11</em>(5), 536–545.
+        <em>Hospital Pediatrics, 11</em>(5), 536-545.
         <a href="https://doi.org/10.1542/hpeds.2020-002246" target="_blank" rel="noopener">https://doi.org/10.1542/hpeds.2020-002246</a>
       </div>
     </div>
 
     <div class="footer">
-      Built to mirror the Phase 1 and Phase 2 look and feel. Navy, teal, and gold. Clean. Dynamic. Practitioner-first.
+      Kentucky's Local Accountability Framework. Fusion page. Navy, teal, gold. Built for clarity and coherence.
     </div>
 
   </div>
 
-  <!-- MODAL -->
   <div class="modalBackdrop" id="modalBackdrop" onclick="backdropClose(event)">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <div class="modalHeader">
@@ -1254,7 +1336,7 @@
         title: "Print / PDF Tips",
         body: `
           <p>For the cleanest PDF: click <strong>Expand All Sections</strong>, then use your browser print dialog.</p>
-          <p>In Chrome: Print → Save as PDF → More settings → Background graphics ON.</p>
+          <p>In Chrome: Print, Save as PDF, More settings, Background graphics ON.</p>
           <p>If you prefer a shorter handout, collapse all and open only the sections you need.</p>
         `
       },
@@ -1262,7 +1344,7 @@
         title: "Citation Note",
         body: `
           <p>The in-text citations are included exactly as provided in your source text.</p>
-          <p>If you want this page to match a formal academic publication style, we can convert citations into a footnote panel while keeping the leadership readability.</p>
+          <p>If you want this page to match a formal academic publication style, we can convert citations into a footnote panel while keeping leadership readability.</p>
         `
       }
     };
@@ -1285,7 +1367,6 @@
       }
     }
 
-    // ===== Fusion Map Interactions =====
     const FusionMap = {
       init(){
         const nodes = document.querySelectorAll(".fusionCanvas .fNode");
