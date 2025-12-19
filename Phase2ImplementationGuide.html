@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Phase 2 Implementation Guide. Local Accountability Framework</title>
+  <title>Phase 2 Implementation Guide - Local Accountability Framework</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
@@ -21,13 +21,13 @@
       --role-schoolLeader: #f2c94c;
       --role-districtLeader: #0a355e;
       --role-boardMember: #9b51e0;
-      --role-parent: #f2994a;
-      --role-community: #0e8577;
+      --role-parentGuardian: #f2994a;
+      --role-communityMember: #0e8577;
 
-      --gray-50:#f9fafb;
-      --gray-100:#f3f4f6;
-      --gray-200:#e5e7eb;
-      --gray-700:#374151;
+      --swot-s: #1e8a4b;
+      --swot-w: #b74b4b;
+      --swot-o: #aeb4be; /* light gray boxes for Opportunities */
+      --swot-t: #8a6b1e;
     }
 
     * { box-sizing: border-box; }
@@ -87,11 +87,11 @@
       align-items: center;
       justify-content: center;
       color: #ffffff;
-      font-weight: 700;
-      font-size: 16px;
+      font-weight: 800;
+      font-size: 15px;
     }
 
-    .brand-text-title { font-size: 15px; font-weight: 700; color: var(--navy); }
+    .brand-text-title { font-size: 15px; font-weight: 800; color: var(--navy); }
     .brand-text-sub { font-size: 11px; color: var(--muted); }
 
     .nav-section-title {
@@ -99,7 +99,7 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: var(--muted);
-      margin: 12px 0 4px;
+      margin: 12px 0 6px;
     }
 
     .nav-list { list-style: none; margin: 0; padding: 0; }
@@ -204,14 +204,14 @@
     .stakeholder-pill[data-role="schoolLeader"].active { background: var(--role-schoolLeader); border-color: var(--role-schoolLeader); color: #111111; }
     .stakeholder-pill[data-role="districtLeader"].active { background: var(--role-districtLeader); border-color: var(--role-districtLeader); color: #ffffff; }
     .stakeholder-pill[data-role="boardMember"].active { background: var(--role-boardMember); border-color: var(--role-boardMember); color: #ffffff; }
-    .stakeholder-pill[data-role="parentGuardian"].active { background: var(--role-parent); border-color: var(--role-parent); color: #ffffff; }
-    .stakeholder-pill[data-role="communityMember"].active { background: var(--role-community); border-color: var(--role-community); color: #ffffff; }
+    .stakeholder-pill[data-role="parentGuardian"].active { background: var(--role-parentGuardian); border-color: var(--role-parentGuardian); color: #ffffff; }
+    .stakeholder-pill[data-role="communityMember"].active { background: var(--role-communityMember); border-color: var(--role-communityMember); color: #ffffff; }
 
     section { margin-bottom: 22px; }
 
     .section-title {
       font-size: 18px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--navy);
       margin-bottom: 4px;
     }
@@ -235,6 +235,7 @@
       border: 1px solid rgba(10, 53, 94, 0.16);
       background: #f7f8fc;
       margin-right: 4px;
+      margin-bottom: 4px;
     }
 
     .card {
@@ -254,7 +255,7 @@
       margin-bottom: 6px;
     }
 
-    .card-title { font-size: 14px; font-weight: 600; color: var(--navy); }
+    .card-title { font-size: 14px; font-weight: 750; color: var(--navy); }
 
     .chip {
       font-size: 10px;
@@ -286,7 +287,7 @@
     }
     @media (max-width: 840px) { .phase-hero-compact { grid-template-columns: 1fr; } }
 
-    .hero-title { font-size: 18px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+    .hero-title { font-size: 18px; font-weight: 850; color: var(--navy); margin-bottom: 4px; }
     .hero-subtitle { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
 
     .hero-badges {
@@ -319,7 +320,7 @@
       margin-bottom: 2px;
     }
 
-    .hero-stat-value { font-weight: 600; color: var(--navy); }
+    .hero-stat-value { font-weight: 700; color: var(--navy); }
 
     .tiny-label { font-size: 11px; color: var(--muted); }
 
@@ -334,10 +335,10 @@
       color: var(--navy);
     }
 
-    .subheading { font-size: 12px; font-weight: 600; color: var(--navy); margin-top: 6px; margin-bottom: 2px; }
-
     ul { margin-top: 0; margin-bottom: 6px; padding-left: 18px; }
     li { margin-bottom: 3px; }
+
+    .subheading { font-size: 12px; font-weight: 750; color: var(--navy); margin-top: 8px; margin-bottom: 3px; }
 
     .example-callout {
       border-left: 3px solid var(--teal);
@@ -345,12 +346,12 @@
       padding: 6px 8px;
       border-radius: 10px;
       font-size: 12px;
-      margin-top: 6px;
+      margin-top: 8px;
     }
 
     .example-label {
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 850;
       color: var(--teal);
       margin-bottom: 2px;
       text-transform: uppercase;
@@ -360,7 +361,7 @@
     .checklist {
       list-style: none;
       padding-left: 0;
-      margin: 4px 0;
+      margin: 6px 0;
       font-size: 12px;
     }
 
@@ -375,8 +376,33 @@
 
     table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
     th, td { border: 1px solid var(--border-soft); padding: 5px 6px; text-align: left; }
-    th { background: #f2f4fb; font-size: 11px; font-weight: 600; color: var(--navy); }
+    th { background: #f2f4fb; font-size: 11px; font-weight: 750; color: var(--navy); }
 
+    .callout {
+      border-radius: 10px;
+      padding: 8px 8px;
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .callout-title {
+      font-size: 11px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .callout.info { border-left: 3px solid var(--navy); }
+    .callout.warn { border-left: 3px solid #b74b4b; background: #fef5f5; }
+    .callout.success { border-left: 3px solid #1e8a4b; background: #f3fbf7; }
+
+    .footer { font-size: 11px; color: var(--muted); margin-top: 20px; text-align: right; }
+
+    /* Steps */
     .step-card { margin-bottom: 10px; }
 
     .step-header {
@@ -387,7 +413,7 @@
       cursor: pointer;
     }
 
-    .step-title { font-size: 14px; font-weight: 650; color: var(--navy); }
+    .step-title { font-size: 14px; font-weight: 800; color: var(--navy); }
     .step-meta { font-size: 11px; color: var(--muted); }
 
     .step-toggle {
@@ -401,84 +427,18 @@
       font-size: 14px;
       color: var(--muted);
       background: #ffffff;
+      flex: 0 0 auto;
     }
 
-    .step-content { margin-top: 6px; font-size: 13px; display: none; }
+    .step-content { margin-top: 8px; font-size: 13px; display: none; }
     .step-content.open { display: block; }
 
-    .huddle-grid { display: grid; grid-template-columns: 2fr 1.6fr; gap: 10px; }
-    @media (max-width: 840px) { .huddle-grid { grid-template-columns: 1fr; } }
-
-    .callout {
-      border-radius: 10px;
-      padding: 8px 8px;
-      border: 1px solid var(--border-soft);
-      background: #ffffff;
-      font-size: 12px;
-      margin-top: 6px;
-    }
-
-    .callout-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 3px;
-    }
-
-    .callout.info { border-left: 3px solid var(--navy); }
-    .callout.warn { border-left: 3px solid #b74b4b; background: #fef5f5; }
-    .callout.success { border-left: 3px solid #1e8a4b; background: #f3fbf7; }
-
-    .footer { font-size: 11px; color: var(--muted); margin-top: 20px; text-align: right; }
-
-    /* -------------------------------------------------
-       SWOT (dynamic) visuals
-       ------------------------------------------------- */
-    .swot-lens-topline{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
-      justify-content:space-between;
-      margin-bottom:8px;
-    }
-
-    .lens-controls{
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-      align-items:center;
-    }
-
-    .select{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      border:1px solid var(--border-soft);
-      background:#fff;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:12px;
-      color:var(--gray-700);
-      box-shadow: 0 3px 8px rgba(15, 35, 52, 0.06);
-    }
-    .select label{ font-size:11px; color:var(--muted); }
-    .select select{
-      border:none;
-      outline:none;
-      font-size:12px;
-      background:transparent;
-      color:var(--navy);
-      cursor:pointer;
-    }
-
+    /* SWOT */
     .swot-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin-top: 8px;
+      margin-top: 10px;
     }
     @media (max-width: 840px) { .swot-grid { grid-template-columns: 1fr; } }
 
@@ -487,53 +447,80 @@
       border: 1px solid var(--border-soft);
       background: #ffffff;
       padding: 10px;
-      min-height: 110px;
     }
     .swot-title {
       font-size: 12px;
-      font-weight: 800;
+      font-weight: 900;
       color: var(--navy);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      display:flex;
-      align-items:center;
-      gap:8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
-    .swot-title .badge{
-      font-size:10px;
-      font-weight:700;
-      padding:2px 8px;
-      border-radius:999px;
-      border:1px solid var(--border-soft);
-      background:var(--gray-50);
-      color:var(--muted);
-      text-transform:none;
-      letter-spacing:0;
+    .swot-title span.small {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: none;
+      letter-spacing: 0;
     }
 
     .swot-card ul { margin: 0; padding-left: 18px; font-size: 12px; }
-    .swot-card li { margin-bottom: 3px; }
+    .swot-card li { margin-bottom: 4px; }
 
-    .swot-card[data-swot="S"] { border-left: 4px solid #1e8a4b; background: #f3fbf7; }
-    .swot-card[data-swot="W"] { border-left: 4px solid #b74b4b; background: #fef5f5; }
+    .swot-card[data-swot="S"] { border-left: 4px solid var(--swot-s); background: #f3fbf7; }
+    .swot-card[data-swot="W"] { border-left: 4px solid var(--swot-w); background: #fef5f5; }
+    .swot-card[data-swot="O"] { border-left: 4px solid var(--swot-o); background: #f4f5f7; } /* light gray */
+    .swot-card[data-swot="T"] { border-left: 4px solid var(--swot-t); background: #fff9e7; }
 
-    /* IMPORTANT: Opportunities = light gray boxes */
-    .swot-card[data-swot="O"] {
-      border-left: 4px solid var(--teal);
-      background: var(--gray-100);
-      border-color: var(--gray-200);
+    .swot-actions {
+      margin-top: 10px;
+      border-radius: 12px;
+      border: 1px dashed var(--border-soft);
+      background: #fafbff;
+      padding: 10px;
+      font-size: 12px;
+    }
+    .swot-actions .action-title{
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 6px;
     }
 
-    .swot-card[data-swot="T"] { border-left: 4px solid #8a6b1e; background: #fff9e7; }
-
-    .swot-empty{
-      font-size:12px;
-      color:var(--muted);
+    /* Step lens toggle (local) */
+    .lens-row{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-soft);
     }
-
-    /* Hidden sources that feed dynamic rendering */
-    .swot-source{ display:none; }
+    .lens-label{
+      font-size: 11px;
+      color: var(--muted);
+      margin-right: 4px;
+      white-space: nowrap;
+    }
+    .lens-pill{
+      cursor: pointer;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: #f7f8fc;
+      color: var(--navy);
+      font-size: 11px;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .lens-pill.active{ background: var(--navy); color: #ffffff; border-color: var(--navy); }
 
     /* Print pack mode */
     .print-pack { display: none; }
@@ -563,7 +550,6 @@
     }
 
     .print-only { display: none; }
-    .muted-line { font-size: 12px; color: var(--muted); margin-top: 6px; }
   </style>
 </head>
 
@@ -575,31 +561,23 @@
       <div class="brand-logo">LA</div>
       <div>
         <div class="brand-text-title">Local Accountability Framework</div>
-        <div class="brand-text-sub">Phase 2. Implementation Guide</div>
+        <div class="brand-text-sub">Phase 2 Implementation Guide</div>
       </div>
     </div>
 
-    <div class="nav-section-title">Phase 2 Map</div>
+    <div class="nav-section-title">Guide Map</div>
     <ul class="nav-list">
-      <li><a href="#phase2-on-a-page" class="nav-link active">Phase 2 on a Page</a></li>
-      <li><a href="#swot-lens" class="nav-link">SWOT Lens (Dynamic)</a></li>
-      <li><a href="#snapshot" class="nav-link">Phase 2 Snapshot</a></li>
+      <li><a href="#phase2-lite" class="nav-link active">Phase 2 on a Page</a></li>
+      <li><a href="#phase2-swot-overall" class="nav-link">Phase 2 SWOT (Overall)</a></li>
+      <li><a href="#hero" class="nav-link">Phase 2 Snapshot</a></li>
       <li><a href="#orientation" class="nav-link">1. Orientation</a></li>
       <li><a href="#entry-point" class="nav-link">Entry Point</a></li>
-      <li><a href="#preconditions" class="nav-link">2. Preconditions</a></li>
-      <li><a href="#roles" class="nav-link">3. Roles and LAAC</a></li>
-      <li><a href="#process" class="nav-link">4. Process Map</a></li>
-      <li><a href="#steps" class="nav-link">5. Step by Step</a></li>
-      <li><a href="#templates" class="nav-link">6. Design Package Tools</a></li>
-      <li><a href="#integrity" class="nav-link">7. Integrity and Checklists</a></li>
+      <li><a href="#steps" class="nav-link">2. Big Build Steps</a></li>
+      <li><a href="#templates" class="nav-link">3. Design Package Templates</a></li>
+      <li><a href="#fidelity" class="nav-link">4. Checklists</a></li>
       <li><a href="#huddle" class="nav-link">Leadership Huddle</a></li>
-      <li><a href="#print-phase2" class="nav-link">Print Packet</a></li>
+      <li><a href="#print-phase2" class="nav-link">Print Phase 2 Pack</a></li>
     </ul>
-
-    <div class="nav-section-title">Tip</div>
-    <div class="tiny-label">
-      This file keeps the robust Phase 1 structure. The key upgrade is the dynamic SWOT Lens. It updates by role and by section as you scroll.
-    </div>
   </aside>
 
   <!-- Main content -->
@@ -608,22 +586,17 @@
     <div class="toolbar">
       <button class="toolbar-button primary" onclick="window.print()">
         <span class="icon">🖨️</span>
-        <span>Print Guide</span>
+        <span>Print this Guide</span>
       </button>
 
-      <button class="toolbar-button gold" onclick="printPhase2Packet()">
+      <button class="toolbar-button gold" onclick="printPhase2Pack()">
         <span class="icon">🧾</span>
-        <span>Print Phase 2 Packet</span>
+        <span>Print Phase 2 Paper Pack</span>
       </button>
 
       <button class="toolbar-button" onclick="openIntegrityChecklist()">
         <span class="icon">✅</span>
-        <span>Open Integrity Checklist</span>
-      </button>
-
-      <button class="toolbar-button" onclick="openToolPack()">
-        <span class="icon">📦</span>
-        <span>Open Phase 2 Tool Pack</span>
+        <span>Open Phase 2 Integrity Checklist</span>
       </button>
 
       <button class="toolbar-button" id="templateToggle" onclick="toggleTemplateMode()">
@@ -640,13 +613,13 @@
         <span id="viewLeader" class="view-pill">Leader Edition</span>
       </div>
       <div>
-        Framework explains the why and what. This guide shows the how.
+        Framework explains the why and what. This guide shows the how, with build steps and decision tools.
       </div>
     </div>
 
-    <!-- Stakeholder toggle -->
+    <!-- Stakeholder toggle (global) -->
     <div class="stakeholder-row">
-      <span class="tiny-label">Stakeholder lens.</span>
+      <span class="tiny-label">Global stakeholder lens.</span>
       <div>
         <button class="stakeholder-pill active" data-role="student">Student</button>
         <button class="stakeholder-pill" data-role="teacher">Teacher</button>
@@ -660,173 +633,129 @@
     </div>
 
     <!-- PHASE 2 ON A PAGE -->
-    <section id="phase2-on-a-page">
+    <section id="phase2-lite">
       <div class="card" style="margin-bottom:10px;">
         <div class="card-title" style="margin-bottom:4px;">
-          Phase 2 on a Page. Designing Accountability Architecture
+          Phase 2 on a Page. Designing the Evidence Architecture
         </div>
 
-        <div class="section-tag" style="margin-bottom:6px;">
-          <span>Evidence and Learning Loop</span>
-          <span>Reporting and Transparency</span>
-          <span>Governance and Integrity</span>
+        <div class="section-tag" style="margin-bottom:8px;">
+          <span>Definitions and Claims</span>
+          <span>Evidence Quality and Calibration</span>
+          <span>Reporting and Interpretability</span>
+          <span>Governance and Decision Rules</span>
+          <span>Pilot Blueprint</span>
         </div>
 
-        <div class="section-subtitle" style="margin-bottom:8px;">
-          Goal. Turn Phase 1 findings into a clear, usable accountability architecture that defines what counts as evidence,
-          how it gets validated, and how it gets reported in a way the community can understand and trust.
+        <div class="section-subtitle" style="margin-bottom:10px;">
+          Goal. Turn Phase 1 findings into a coherent architecture that defines what counts as evidence, how quality is protected,
+          and how results are reported in a way that is understandable, credible, and improvement-driven.
         </div>
 
         <div class="grid-2">
           <div>
             <div class="subheading">In plain language</div>
             <ul>
-              <li>We tighten Growth, Mastery, and Readiness into definitions that can be observed and defended.</li>
-              <li>We decide what counts as evidence, what quality looks like, and how we protect credibility.</li>
-              <li>We design simple routines for collecting, reviewing, and sharing evidence without creating paperwork.</li>
-              <li>We build reporting that is understandable to families and defensible to professionals.</li>
+              <li>We make Growth, Mastery, and Readiness teachable. Same meaning across schools.</li>
+              <li>We decide what counts as evidence, what quality looks like, and how we keep it fair.</li>
+              <li>We design routines that fit real school rhythms, not a paperwork system.</li>
+              <li>We build reporting that helps families understand learning, not chase labels.</li>
             </ul>
 
             <div class="subheading">By the end of Phase 2, we have</div>
             <ul>
-              <li>A Phase 2 Design Package that describes the full system architecture.</li>
-              <li>A coherent claim-evidence map plus a clear evidence taxonomy.</li>
-              <li>Quality criteria, exemplars, and a calibration routine that fits PLC time.</li>
-              <li>Draft reporting templates and interpretation guides for non-educators.</li>
-              <li>Decision rules and governance routines that prevent drift.</li>
-              <li>A pilot-ready blueprint aligned to Phase 3.</li>
+              <li>A Phase 2 Design Package (pilot-ready architecture).</li>
+              <li>A claim-evidence map, evidence taxonomy, and quality criteria.</li>
+              <li>Calibration routines and exemplar sets.</li>
+              <li>Reporting prototypes and interpretation guides.</li>
+              <li>Governance cadence and decision rules to prevent drift.</li>
             </ul>
           </div>
 
           <div>
-            <div class="subheading">Who needs to understand this</div>
+            <div class="subheading">The Phase 2 design test</div>
             <ul>
-              <li>Board and district leaders who protect integrity and coherence.</li>
-              <li>School and teacher leaders who operationalize evidence routines.</li>
-              <li>Students, families, and community partners who need clarity and trust in reporting.</li>
+              <li><b>Clarity:</b> Can we explain it in one minute without insider language.</li>
+              <li><b>Coherence:</b> Do definitions, evidence, and reporting match.</li>
+              <li><b>Credibility:</b> Can we defend quality and fairness with exemplars and calibration.</li>
+              <li><b>Usability:</b> Can schools run this without it becoming compliance.</li>
             </ul>
 
             <div class="callout info">
-              <div class="callout-title">Phase 2 success test</div>
-              If you can explain the architecture in plain language, teach it to staff, and defend it publicly without shifting back to a scoreboard, you are ready to pilot.
+              <div class="callout-title">How to use this guide</div>
+              Treat Phase 2 like a build cycle. Every section produces an artifact. If you only have discussion, you are not done.
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PROMINENT, DYNAMIC SWOT LENS -->
-    <section id="swot-lens">
-      <div class="section-title">SWOT Lens. Dynamic by Role and Section</div>
+    <!-- OVERALL PHASE 2 SWOT (PROMINENT) -->
+    <section id="phase2-swot-overall">
+      <div class="section-title">Phase 2 SWOT. The Whole Build, at a Glance</div>
       <div class="section-subtitle">
-        This grid updates automatically based on (1) the stakeholder lens you select and (2) the section you are viewing.
-        Opportunities are intentionally shown in light gray to keep them readable and actionable.
+        This is the shared Phase 2 reality. Use it to keep the work honest and to avoid “pretty design” that collapses in implementation.
       </div>
 
       <div class="card">
-        <div class="swot-lens-topline">
-          <div>
-            <div class="card-title" style="margin-bottom:2px;">Phase 2 SWOT (Live)</div>
-            <div class="tiny-label">
-              Current role: <span id="swotRoleLabel" class="pill-inline">Student</span>
-              <span style="margin-left:6px;">Current section: <span id="swotSectionLabel" class="pill-inline">Phase 2 on a Page</span></span>
-            </div>
-          </div>
-
-          <div class="lens-controls">
-            <div class="select">
-              <label for="swotSectionSelect">Section</label>
-              <select id="swotSectionSelect">
-                <option value="phase2-on-a-page">Phase 2 on a Page</option>
-                <option value="snapshot">Phase 2 Snapshot</option>
-                <option value="orientation">Orientation</option>
-                <option value="entry-point">Entry Point</option>
-                <option value="preconditions">Preconditions</option>
-                <option value="roles">Roles and LAAC</option>
-                <option value="process">Process Map</option>
-                <option value="steps">Step by Step</option>
-                <option value="templates">Design Package Tools</option>
-                <option value="integrity">Integrity and Checklists</option>
-                <option value="huddle">Leadership Huddle</option>
-              </select>
-            </div>
-
-            <button class="toolbar-button" onclick="resetSWOTToScroll()">
-              <span class="icon">🧭</span>
-              <span>Follow Scroll</span>
-            </button>
-          </div>
+        <div class="card-header">
+          <div class="card-title">Overall SWOT (uses the global stakeholder pill)</div>
+          <div class="chip">Decision lens</div>
         </div>
 
-        <div class="swot-grid" id="swotGrid">
-          <div class="swot-card" data-swot="S">
-            <div class="swot-title">Strengths <span class="badge">What helps Phase 2 work</span></div>
-            <ul id="swotS"></ul>
-          </div>
+        <!-- Dynamic render target -->
+        <div data-swot-render="overall"></div>
 
-          <div class="swot-card" data-swot="W">
-            <div class="swot-title">Weaknesses <span class="badge">What can break it</span></div>
-            <ul id="swotW"></ul>
-          </div>
-
-          <div class="swot-card" data-swot="O">
-            <div class="swot-title">Opportunities <span class="badge">Leverage points</span></div>
-            <ul id="swotO"></ul>
-          </div>
-
-          <div class="swot-card" data-swot="T">
-            <div class="swot-title">Threats <span class="badge">Risks to credibility</span></div>
-            <ul id="swotT"></ul>
-          </div>
-        </div>
-
-        <div class="callout info" style="margin-top:10px;">
-          <div class="callout-title">How to expand this fast</div>
-          Add or edit SWOT content using the hidden <span class="pill-inline">data-*</span> placeholders in this file.
-          You can copy one block per section and role and update the bullet arrays without touching JavaScript.
+        <div class="swot-actions" style="margin-top:12px;">
+          <div class="action-title">What this SWOT is for</div>
+          <ul style="margin:0; padding-left:18px;">
+            <li>If you see a <b>Weakness</b> growing, tighten the routine or reduce scope.</li>
+            <li>If a <b>Threat</b> is real, write the decision rule now, not later.</li>
+            <li>If an <b>Opportunity</b> shows up, translate it into a pilot move with a clear owner.</li>
+            <li>If a <b>Strength</b> exists, protect it with calibration and clear exemplars.</li>
+          </ul>
         </div>
       </div>
     </section>
 
-    <!-- SNAPSHOT / HERO -->
-    <section id="snapshot">
+    <!-- HERO -->
+    <section id="hero">
       <div class="phase-hero-compact">
         <div>
-          <div class="hero-title">Phase 2. The Architecture Build</div>
+          <div class="hero-title">Phase 2. Designing the Evidence Architecture</div>
           <div class="hero-subtitle">
-            Crafting the evidence, quality, and reporting system for
+            Crafting the architecture of a local accountability system in
             <span class="district-system"
-                  data-smith="Smith County Schools, KY"
-                  data-template="[District Name], [State]">Smith County Schools, KY</span>
-            so accountability shapes learning while it is happening.
+                  data-example="Fleming County Schools, KY"
+                  data-template="[District Name], [State]">Fleming County Schools, KY</span>
+            so evidence, quality, reporting, and governance work together with clarity and coherence.
           </div>
           <div class="hero-badges">
             <span class="pill-inline">
               <span class="district-system"
-                    data-smith="Smith County Schools, KY"
-                    data-template="[District Name], [State]">Smith County Schools, KY</span>
+                    data-example="Fleming County Schools, KY"
+                    data-template="[District Name], [State]">Fleming County Schools, KY</span>
             </span>
-            <span class="pill-inline">Phase 2. Evidence Architecture</span>
-            <span class="pill-inline">Interpretability and calibration</span>
+            <span class="pill-inline">Phase 2. Architecture Build</span>
+            <span class="pill-inline">Calibration + Interpretability</span>
           </div>
         </div>
-
         <div class="hero-stat-grid">
           <div class="hero-stat">
-            <div class="hero-stat-label">Phase 2 primary outcome</div>
+            <div class="hero-stat-label">Primary outcome</div>
             <div class="hero-stat-value">A pilot-ready design package</div>
-          </div>
-          <div class="hero-stat">
-            <div class="hero-stat-label">Key users</div>
-            <div class="hero-stat-value">District leads, principals, teacher leaders, LAAC, board</div>
           </div>
           <div class="hero-stat">
             <div class="hero-stat-label">Core question</div>
             <div class="hero-stat-value">What counts as evidence, and how do we keep it credible and understandable</div>
           </div>
           <div class="hero-stat">
+            <div class="hero-stat-label">Where it fails if we drift</div>
+            <div class="hero-stat-value">Inconsistent quality, unclear reporting, loss of trust</div>
+          </div>
+          <div class="hero-stat">
             <div class="hero-stat-label">Phase 3 dependency</div>
-            <div class="hero-stat-value">Pilot scope, calibration, reporting prototypes, integrity routines</div>
+            <div class="hero-stat-value">Pilot scope + routines + tools that actually fit</div>
           </div>
         </div>
       </div>
@@ -836,7 +765,7 @@
     <section id="orientation">
       <div class="section-title">1. Orientation to Phase 2</div>
       <div class="section-subtitle">
-        Why Phase 2 exists, what success looks like, and how to use this guide like a build plan, not a committee document.
+        Why Phase 2 exists, what success looks like, and what leaders should protect.
       </div>
 
       <div class="grid-2">
@@ -846,38 +775,38 @@
             <div class="chip">Build the architecture</div>
           </div>
           <div>
-            Phase 2 turns Phase 1 findings into a coherent, usable accountability system.
+            Phase 2 turns Phase 1 priorities into a system that can run.
             <ul>
-              <li>Define Growth, Mastery, Readiness with observable evidence anchors.</li>
-              <li>Create claim-evidence maps that tie outcomes to defensible sources.</li>
-              <li>Define quality standards and a calibration routine that fits real time.</li>
-              <li>Design reporting that is interpretable to non-educators and useful for improvement.</li>
-              <li>Set governance and decision rules to prevent drift.</li>
-              <li>Produce pilot-ready tools for Phase 3.</li>
+              <li>Define Growth, Mastery, Readiness with observable anchors.</li>
+              <li>Map claims to evidence so reporting is defensible.</li>
+              <li>Set quality criteria and calibration so evidence is fair.</li>
+              <li>Design reporting that families can read without translation.</li>
+              <li>Write governance rules so the system does not drift.</li>
             </ul>
             <div class="callout info">
-              <div class="callout-title">Simple test</div>
-              If your design cannot be explained, taught, and defended in plain language, it is not ready to pilot.
+              <div class="callout-title">A simple test</div>
+              If two schools can run the same routine and produce evidence that is comparable in meaning, you are building the right kind of system.
             </div>
           </div>
         </div>
 
         <div class="card">
           <div class="card-header">
-            <div class="card-title">Who This Guide Is For</div>
-            <div class="chip">Primary users</div>
+            <div class="card-title">What Success Looks Like</div>
+            <div class="chip">End of Phase 2</div>
           </div>
           <div>
-            This guide is for people building Phase 2 outputs.
+            At the end of Phase 2, you have more than a document. You have a build-ready architecture.
             <ul>
-              <li>District accountability, curriculum, and assessment leads drafting design products and tools.</li>
-              <li>Principals and teacher leaders testing feasibility and calibrating evidence expectations.</li>
-              <li>LAAC members stress testing legitimacy and interpretability.</li>
-              <li>Board members learning the claims, evidence, and integrity logic.</li>
+              <li>Definitions are short, teachable, and used consistently.</li>
+              <li>Evidence types are limited, clear, and tied to claims.</li>
+              <li>Quality criteria can be calibrated in 20 minutes using real student work.</li>
+              <li>Reporting prototypes are understandable to non-educators.</li>
+              <li>Decision rules are written and used in leadership routines.</li>
             </ul>
-            <div class="callout info">
-              <div class="callout-title">How to use this guide</div>
-              Treat each section as an output generator. If a section produces only discussion, it is not finished.
+            <div class="callout success">
+              <div class="callout-title">The goal</div>
+              A system that tells the truth about learning and can withstand pressure without collapsing back into one number.
             </div>
           </div>
         </div>
@@ -888,283 +817,344 @@
     <section id="entry-point">
       <div class="section-title">Entry Point. Where Phase 2 Usually Starts</div>
       <div class="section-subtitle">
-        Phase 2 begins with Phase 1 findings. Choose your dominant starting line, then work across all strands to finish the architecture.
+        Phase 2 starts from Phase 1 findings. Different districts start in different lanes. All lanes must be built.
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Select your most likely starting line</div>
-          <div class="chip">Major Step in Phase 2</div>
+          <div class="card-title">Three common starting lanes</div>
+          <div class="chip">Pick your dominant lane</div>
         </div>
 
-        <div class="tiny-label">
-          Your selection does not change the work. It changes the first build sequence.
-        </div>
+        <div class="grid-2">
+          <div>
+            <div class="subheading">Lane A. Definitions and Claims</div>
+            <ul>
+              <li>Teams agree on the vision but not on what counts as proof.</li>
+              <li>Language varies by school. Reporting will be inconsistent.</li>
+              <li>Decision focus: tighten definitions until they can be used to score evidence reliably.</li>
+            </ul>
 
-        <div style="margin-top:8px;">
-          <div class="subheading">Common starting lines</div>
+            <div class="subheading">Lane B. Evidence Quality and Calibration</div>
+            <ul>
+              <li>Evidence exists but quality varies and fairness is at risk.</li>
+              <li>Routines are unclear or too time heavy.</li>
+              <li>Decision focus: minimum viable quality criteria and a tight calibration protocol.</li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="subheading">Lane C. Reporting and Interpretability</div>
+            <ul>
+              <li>Stakeholders want transparency, but the system is not explainable yet.</li>
+              <li>Dashboards risk becoming a scoreboard.</li>
+              <li>Decision focus: reporting storyboard after evidence rules stabilize.</li>
+            </ul>
+
+            <div class="callout warn">
+              <div class="callout-title">Common mistake</div>
+              Publishing visuals before evidence rules and calibration routines are stable. That is how trust breaks.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BIG BUILD STEPS -->
+    <section id="steps">
+      <div class="section-title">2. Big Phase 2 Build Steps</div>
+      <div class="section-subtitle">
+        Each step includes a diagnostic SWOT and an in-step “Section Lens” toggle so coaching conversations can compare lenses without changing the global pill.
+      </div>
+
+      <!-- Step 0 -->
+      <div class="card step-card" data-step-card="p2-step0">
+        <div class="step-header" onclick="toggleStep('p2-step0')">
+          <div>
+            <div class="step-title">Step 0. Confirm Phase 1 Priorities and Evidence Anchors</div>
+            <div class="step-meta">Output: Phase 2 design targets, anchor set, and the gap list</div>
+          </div>
+          <div class="step-toggle" id="toggle-p2-step0">+</div>
+        </div>
+        <div class="step-content" id="p2-step0">
+          <div class="subheading">What to do</div>
           <ul>
-            <li><b>Definitions and Claims:</b> People agree on vision but not on proof.</li>
-            <li><b>Evidence Quality and Calibration:</b> Great work exists but scoring is uneven.</li>
-            <li><b>Reporting and Interpretability:</b> The community wants clarity and examples.</li>
+            <li>Lock 3 to 5 Phase 2 design targets. If you cannot name them, Phase 2 has no spine.</li>
+            <li>Collect 8 to 12 evidence anchors that show current reality. Include non-examples.</li>
+            <li>Tag anchors to Growth, Mastery, Readiness and portrait outcomes.</li>
+            <li>Write the gap list. What evidence is missing that would change decisions.</li>
           </ul>
-        </div>
 
-        <div class="callout success">
-          <div class="callout-title">Ready to move on if</div>
-          A parent, a teacher, and a board member can read the same mock reporting page and tell the same story about what it means.
+          <div class="subheading">Artifacts</div>
+          <ul>
+            <li>Phase 2 Design Targets (one page)</li>
+            <li>Evidence Anchor Set (examples and non-examples)</li>
+            <li>Gap List (by outcome and stakeholder)</li>
+          </ul>
+
+          <div class="example-callout">
+            <div class="example-label">Decision signal</div>
+            If anchors mostly represent “best classrooms,” you are building a system that cannot tell the truth about the whole district.
+          </div>
+
+          <!-- In-step lens + SWOT render target -->
+          <div class="lens-row" data-lens-row="p2-step0"></div>
+          <div data-swot-render="step" data-step="p2-step0"></div>
+        </div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="card step-card" data-step-card="p2-step1">
+        <div class="step-header" onclick="toggleStep('p2-step1')">
+          <div>
+            <div class="step-title">Step 1. Tighten Definitions and Write the System Claims</div>
+            <div class="step-meta">Output: short definitions + claim statements that can be defended</div>
+          </div>
+          <div class="step-toggle" id="toggle-p2-step1">+</div>
+        </div>
+        <div class="step-content" id="p2-step1">
+          <div class="subheading">What to do</div>
+          <ul>
+            <li>Write Growth, Mastery, Readiness definitions that are observable, not aspirational.</li>
+            <li>Draft claim statements that the system will later report publicly.</li>
+            <li>Stress test with anchors. Definitions must separate “fits” vs “does not fit.”</li>
+            <li>Cut language until it can be taught in one staff meeting and remembered.</li>
+          </ul>
+
+          <div class="subheading">Artifacts</div>
+          <ul>
+            <li>Definitions one-pager (with examples and non-examples)</li>
+            <li>Claim statements (district-level and school-level)</li>
+            <li>Known ambiguity list (what still confuses people)</li>
+          </ul>
+
+          <div class="callout info">
+            <div class="callout-title">Design discipline</div>
+            If a definition requires a paragraph to explain, it will be interpreted a dozen different ways across buildings.
+          </div>
+
+          <div class="lens-row" data-lens-row="p2-step1"></div>
+          <div data-swot-render="step" data-step="p2-step1"></div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="card step-card" data-step-card="p2-step2">
+        <div class="step-header" onclick="toggleStep('p2-step2')">
+          <div>
+            <div class="step-title">Step 2. Build the Claim-Evidence Map and Identify Gaps</div>
+            <div class="step-meta">Output: claim-evidence map + gap-to-action list</div>
+          </div>
+          <div class="step-toggle" id="toggle-p2-step2">+</div>
+        </div>
+        <div class="step-content" id="p2-step2">
+          <div class="subheading">What to do</div>
+          <ul>
+            <li>For each claim, list the evidence sources that can legitimately support it.</li>
+            <li>Label evidence as strong, supporting, or contextual. Not all evidence carries the same weight.</li>
+            <li>Identify gaps and decide: build new evidence sources, improve current ones, or revise the claim.</li>
+            <li>Write “do not use” evidence. That protects the system from drift and bad incentives.</li>
+          </ul>
+
+          <div class="subheading">Artifacts</div>
+          <ul>
+            <li>Claim-Evidence Map (one table per outcome)</li>
+            <li>Evidence Weighting Rules (simple and teachable)</li>
+            <li>Gap-to-Action list (owner, due date, test)</li>
+          </ul>
+
+          <div class="callout warn">
+            <div class="callout-title">Credibility risk</div>
+            If claims outpace evidence, you will either dilute the claims later or publish something you cannot defend.
+          </div>
+
+          <div class="lens-row" data-lens-row="p2-step2"></div>
+          <div data-swot-render="step" data-step="p2-step2"></div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="card step-card" data-step-card="p2-step3">
+        <div class="step-header" onclick="toggleStep('p2-step3')">
+          <div>
+            <div class="step-title">Step 3. Define the Evidence Taxonomy and Minimum Quality Criteria</div>
+            <div class="step-meta">Output: evidence types + minimum quality bar + non-examples</div>
+          </div>
+          <div class="step-toggle" id="toggle-p2-step3">+</div>
+        </div>
+        <div class="step-content" id="p2-step3">
+          <div class="subheading">What to do</div>
+          <ul>
+            <li>Limit the evidence taxonomy. More options feels flexible, but it often becomes chaotic.</li>
+            <li>Define the minimum quality bar for each evidence type.</li>
+            <li>Build a short set of non-examples that show what does not meet the bar.</li>
+            <li>Make it practical: schools should be able to follow it without a specialist translating it.</li>
+          </ul>
+
+          <div class="subheading">Artifacts</div>
+          <ul>
+            <li>Evidence Taxonomy (types, purpose, where it lives)</li>
+            <li>Minimum Quality Criteria (by type)</li>
+            <li>Non-examples (what fails the bar and why)</li>
+          </ul>
+
+          <div class="callout info">
+            <div class="callout-title">Design guardrail</div>
+            When evidence is not defined, “effort” becomes evidence. That breaks fairness fast.
+          </div>
+
+          <div class="lens-row" data-lens-row="p2-step3"></div>
+          <div data-swot-render="step" data-step="p2-step3"></div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="card step-card" data-step-card="p2-step4">
+        <div class="step-header" onclick="toggleStep('p2-step4')">
+          <div>
+            <div class="step-title">Step 4. Build Calibration Routines and Exemplars That Hold</div>
+            <div class="step-meta">Output: calibration protocol + exemplar sets + meeting rhythm</div>
+          </div>
+          <div class="step-toggle" id="toggle-p2-step4">+</div>
+        </div>
+        <div class="step-content" id="p2-step4">
+          <div class="subheading">What to do</div>
+          <ul>
+            <li>Create a 20-minute calibration routine that fits PLC rhythms.</li>
+            <li>Build exemplar sets that show quality levels. Include “almost” examples.</li>
+            <li>Clarify who calibrates with whom. Random pairing beats siloed calibration.</li>
+            <li>Document “what we learned” rules that update criteria without shifting the goal posts.</li>
+          </ul>
+
+          <div class="subheading">Artifacts</div>
+          <ul>
+            <li>Calibration protocol (timed agenda and roles)</li>
+            <li>Exemplar sets (by evidence type)</li>
+            <li>Decision log entries (changes to criteria with rationale)</li>
+          </ul>
+
+          <div class="callout success">
+            <div class="callout-title">The payoff</div>
+            Calibration is the integrity engine. Without it, the system becomes opinion disguised as evidence.
+          </div>
+
+          <div class="lens-row" data-lens-row="p2-step4"></div>
+          <div data-swot-render="step" data-step="p2-step4"></div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="card step-card" data-step-card="p2-step5">
+        <div class="step-header" onclick="toggleStep('p2-step5')">
+          <div>
+            <div class="step-title">Step 5. Design Reporting Layers and Interpretability Guides</div>
+            <div class="step-meta">Output: reporting storyboard + templates + “how to read this” guide</div>
+          </div>
+          <div class="step-toggle" id="toggle-p2-step5">+</div>
+        </div>
+        <div class="step-content" id="p2-step5">
+          <div class="subheading">What to do</div>
+          <ul>
+            <li>Storyboard reporting from classroom to district. Keep the layers consistent.</li>
+            <li>Design templates that point to evidence. Not just ratings or colors.</li>
+            <li>Write interpretation guidance that a parent can use without being coached.</li>
+            <li>Test with real people. If misunderstanding is predictable, fix it now.</li>
+          </ul>
+
+          <div class="subheading">Artifacts</div>
+          <ul>
+            <li>Reporting storyboard (layers and audiences)</li>
+            <li>Templates (school and district)</li>
+            <li>Interpretability guide (examples, vocabulary, questions to ask)</li>
+          </ul>
+
+          <div class="callout warn">
+            <div class="callout-title">Trust risk</div>
+            If the public sees a label without seeing evidence examples, the story will get written for you.
+          </div>
+
+          <div class="lens-row" data-lens-row="p2-step5"></div>
+          <div data-swot-render="step" data-step="p2-step5"></div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="card step-card" data-step-card="p2-step6">
+        <div class="step-header" onclick="toggleStep('p2-step6')">
+          <div>
+            <div class="step-title">Step 6. Set Governance, Decision Rules, and Revision Loops</div>
+            <div class="step-meta">Output: governance cadence + decision rules + revision protocol</div>
+          </div>
+          <div class="step-toggle" id="toggle-p2-step6">+</div>
+        </div>
+        <div class="step-content" id="p2-step6">
+          <div class="subheading">What to do</div>
+          <ul>
+            <li>Define who decides what. Publish it. Ambiguity creates drift.</li>
+            <li>Write decision rules for common pressure points (comparisons, ranking, single metrics, political narratives).</li>
+            <li>Build a revision protocol: what changes, when, based on what evidence.</li>
+            <li>Set a cadence that keeps the system alive without exhausting the system.</li>
+          </ul>
+
+          <div class="subheading">Artifacts</div>
+          <ul>
+            <li>Governance map (roles and decisions)</li>
+            <li>Decision rules (what we will not do, and why)</li>
+            <li>Revision protocol (inputs, cycle, approval)</li>
+          </ul>
+
+          <div class="callout info">
+            <div class="callout-title">Hard truth</div>
+            Governance is not paperwork. It is how you protect meaning when pressure shows up.
+          </div>
+
+          <div class="lens-row" data-lens-row="p2-step6"></div>
+          <div data-swot-render="step" data-step="p2-step6"></div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="card step-card" data-step-card="p2-step7">
+        <div class="step-header" onclick="toggleStep('p2-step7')">
+          <div>
+            <div class="step-title">Step 7. Produce the Phase 2 Design Package and Pilot Blueprint</div>
+            <div class="step-meta">Output: design package + pilot scope + minimum viable routines and tools</div>
+          </div>
+          <div class="step-toggle" id="toggle-p2-step7">+</div>
+        </div>
+        <div class="step-content" id="p2-step7">
+          <div class="subheading">What to do</div>
+          <ul>
+            <li>Assemble Phase 2 artifacts into a short design package plus appendices.</li>
+            <li>Define pilot scope. Protect feasibility. Pilot “tight and true” beats “wide and shallow.”</li>
+            <li>Choose minimum viable routines and tools. Cut anything that adds compliance.</li>
+            <li>Write success criteria for the pilot. Decide what you will learn and how you will revise.</li>
+          </ul>
+
+          <div class="subheading">Artifacts</div>
+          <ul>
+            <li>Phase 2 Design Package (core + appendices)</li>
+            <li>Pilot blueprint (scope, routines, tools, timeline)</li>
+            <li>Pilot success criteria and learning agenda</li>
+          </ul>
+
+          <div class="callout success">
+            <div class="callout-title">Finish line</div>
+            If you can train it, run it, calibrate it, and explain it, you are ready for Phase 3.
+          </div>
+
+          <div class="lens-row" data-lens-row="p2-step7"></div>
+          <div data-swot-render="step" data-step="p2-step7"></div>
         </div>
       </div>
     </section>
 
     <!-- LEADER ONLY -->
     <div class="leader-only">
-      <!-- Preconditions -->
-      <section id="preconditions">
-        <div class="section-title">2. Preconditions and Readiness to Launch Phase 2</div>
-        <div class="section-subtitle">
-          Confirm minimum conditions are in place before asking teams to build Phase 2 outputs.
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Minimum District Readiness</div>
-              <div class="chip">Before design sprints</div>
-            </div>
-            <div>
-              District leaders should confirm these items before launching Phase 2 work.
-              <ul class="checklist">
-                <li><input type="checkbox" /><span>Phase 1 synthesis and 3 to 5 district design priorities are clear.</span></li>
-                <li><input type="checkbox" /><span>Phase 2 design team owners are assigned (definitions, evidence, reporting, governance).</span></li>
-                <li><input type="checkbox" /><span>Decision log template and a decision cadence exist.</span></li>
-                <li><input type="checkbox" /><span>Artifact repository structure and naming conventions exist.</span></li>
-                <li><input type="checkbox" /><span>Plan to test drafts with educators, students, families, and partners is scheduled.</span></li>
-                <li><input type="checkbox" /><span>Time is protected for calibration and interpretability testing.</span></li>
-                <li><input type="checkbox" /><span>Minimum viable design is defined to prevent scope creep.</span></li>
-              </ul>
-              <div class="callout info">
-                <div class="callout-title">LAAC focus in this stage</div>
-                LAAC members are oriented to Phase 2 decisions, how feedback will be used, and what will be shared back publicly.
-              </div>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">Phase 2 Readiness Snapshot</div>
-              <div class="chip">Quick pulse</div>
-            </div>
-            <div>
-              Use this snapshot to confirm whether Phase 2 design can begin.
-              <table>
-                <thead>
-                <tr>
-                  <th>Domain</th>
-                  <th>Readiness Level</th>
-                  <th>Evidence Anchor</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td>Definitions (Growth, Mastery, Readiness)</td>
-                  <td>Developing</td>
-                  <td>Phase 1 priorities and artifacts tagged to outcomes</td>
-                </tr>
-                <tr>
-                  <td>Evidence Quality and Calibration</td>
-                  <td>Emerging</td>
-                  <td>Draft rubric and first calibration sample set</td>
-                </tr>
-                <tr>
-                  <td>Reporting and Interpretability</td>
-                  <td>Developing</td>
-                  <td>Mock reporting template with example artifacts</td>
-                </tr>
-                </tbody>
-              </table>
-              <div class="tiny-label" style="margin-top:6px;">
-                Update this snapshot as Phase 2 progresses. Review it with LAAC and board learning sessions to show movement toward pilot readiness.
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Roles and LAAC -->
-      <section id="roles">
-        <div class="section-title">3. Roles, Responsibilities, and the LAAC</div>
-        <div class="section-subtitle">
-          Clear lanes for Phase 2 design so the system stays coherent and the community stays included.
-        </div>
-
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">System Level Roles</div>
-              <div class="chip">District and board</div>
-            </div>
-            <div>
-              <div class="subheading">Superintendent and district leaders</div>
-              <ul>
-                <li>Protect coherence. Limit scope. Keep decisions disciplined.</li>
-                <li>Own the decision log and publish “what we decided and why” summaries.</li>
-                <li>Ensure evidence quality and calibration routines are realistic.</li>
-                <li>Coordinate LAAC testing sessions and share back outcomes.</li>
-                <li>Prepare board learning moments focused on interpretability and integrity.</li>
-              </ul>
-
-              <div class="subheading">Board members</div>
-              <ul>
-                <li>Learn the system claims and what evidence supports each claim.</li>
-                <li>Ask questions about equity, credibility, and public understanding.</li>
-                <li>Protect policy and resources that make the system implementable.</li>
-                <li>Support messaging that avoids rankings and scoreboards.</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">School and Classroom Roles</div>
-              <div class="chip">School and classroom level</div>
-            </div>
-            <div>
-              <div class="subheading">Principals and leadership teams</div>
-              <ul>
-                <li>Test feasibility. Translate design into school routines.</li>
-                <li>Lead staff calibration using real student work.</li>
-                <li>Identify barriers early and log them.</li>
-                <li>Protect equity of opportunity so evidence is not distorted.</li>
-              </ul>
-
-              <div class="subheading">Teachers and staff</div>
-              <ul>
-                <li>Test evidence criteria against real tasks and student work.</li>
-                <li>Identify which routines fit PLCs and which need redesign.</li>
-                <li>Help build exemplars and non-exemplars for clarity.</li>
-              </ul>
-
-              <div class="subheading">Students and families</div>
-              <ul>
-                <li>Stress test whether evidence rules match lived experience.</li>
-                <li>Verify reporting templates are understandable and fair.</li>
-                <li>Help identify where communication will break down.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:10px;">
-          <div class="card-header">
-            <div class="card-title">Local Accountability Advisory Council (LAAC) in Phase 2</div>
-            <div class="chip">Co-design and legitimacy</div>
-          </div>
-          <div>
-            <div class="subheading">Purpose</div>
-            The LAAC ensures Phase 2 design is locally owned, understandable, and aligned to community values.
-            <ul>
-              <li>Review and stress test definitions, evidence rules, and reporting prototypes.</li>
-              <li>Surface interpretability issues before public reporting begins.</li>
-              <li>Flag equity risks and access-to-opportunity gaps that impact evidence.</li>
-              <li>Recommend revisions and help communicate decisions back to the community.</li>
-            </ul>
-
-            <div class="subheading">Expectations</div>
-            <ul class="checklist">
-              <li><input type="checkbox" /><span>LAAC meets at least monthly during Phase 2 design work.</span></li>
-              <li><input type="checkbox" /><span>Each meeting reviews a tangible draft (definitions, rubric, reporting mockup).</span></li>
-              <li><input type="checkbox" /><span>District publishes “what we decided and why” within two weeks.</span></li>
-              <li><input type="checkbox" /><span>LAAC members test interpretability with peers and report back themes.</span></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Process -->
-      <section id="process">
-        <div class="section-title">4. Phase 2 Process Map</div>
-        <div class="section-subtitle">
-          Eight steps that keep Phase 2 disciplined and build-ready, with LAAC engaged throughout.
-        </div>
-
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title">High level process overview</div>
-            <div class="chip">Use in design sprints</div>
-          </div>
-          <div>
-            <ul>
-              <li>Step 0. Confirm Phase 1 priorities and evidence anchors</li>
-              <li>Step 1. Define Growth, Mastery, Readiness and write claims</li>
-              <li>Step 2. Build the claim-evidence map and identify gaps</li>
-              <li>Step 3. Define evidence taxonomy and quality criteria</li>
-              <li>Step 4. Draft rubrics, exemplars, and calibration routines</li>
-              <li>Step 5. Design reporting layers, templates, and interpretation guides</li>
-              <li>Step 6. Set governance, decision rules, and revision loops</li>
-              <li>Step 7. Produce Phase 2 Design Package and Phase 3 pilot blueprint</li>
-            </ul>
-            <div class="tiny-label">Each step must produce an artifact. If it produces only talk, it is not done.</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Steps -->
-      <section id="steps">
-        <div class="section-title">5. Step by Step Guidance</div>
-        <div class="section-subtitle">
-          Detailed guidance stays robust. The SWOT Lens above updates automatically as you enter this section.
-        </div>
-
-        <!-- Step 0 -->
-        <div class="card step-card">
-          <div class="step-header" onclick="toggleStep('p2-step0')">
-            <div>
-              <div class="step-title">Step 0. Confirm Phase 1 Priorities and Evidence Anchors</div>
-              <div class="step-meta">Output: Phase 2 design targets and evidence anchor set</div>
-            </div>
-            <div class="step-toggle" id="toggle-p2-step0">+</div>
-          </div>
-          <div class="step-content" id="p2-step0">
-            <div class="subheading">What to do</div>
-            <ul>
-              <li>Review Phase 1 synthesis and name 3 to 5 Phase 2 design targets.</li>
-              <li>Collect 8 to 12 evidence anchors that illustrate current reality (examples and non-examples).</li>
-              <li>Tag anchors to Growth, Mastery, Readiness and portrait outcomes.</li>
-              <li>Create a gap list. Name what evidence would change decisions if it existed.</li>
-            </ul>
-
-            <div class="subheading">Artifacts</div>
-            <ul>
-              <li>Phase 2 Design Targets (one page)</li>
-              <li>Evidence Anchor Set (curated samples)</li>
-              <li>Gap List (prioritized)</li>
-            </ul>
-
-            <div class="example-callout">
-              <div class="example-label">Build move</div>
-              Don’t argue about ideals. Put three real artifacts on the table. Ask, “Would we accept this as evidence. Why or why not.”
-            </div>
-
-            <div class="callout success">
-              <div class="callout-title">Non-negotiable output</div>
-              A short design targets list plus an anchor set that educators and non-educators can interpret.
-            </div>
-          </div>
-        </div>
-
-        <div class="callout info">
-          <div class="callout-title">Note</div>
-          Steps 1 through 7 follow the same structure as Step 0 in Phase 1 style: What to do, Artifacts, and quality checks.
-          Keep your build robust. Do not compress this into slogans.
-        </div>
-      </section>
-
-      <!-- Templates -->
       <section id="templates">
-        <div class="section-title">6. Design Package Tools</div>
+        <div class="section-title">3. Design Package Templates</div>
         <div class="section-subtitle">
-          Skeleton templates teams can use to build Phase 2 outputs consistently.
+          Use these as consistent skeletons so Phase 2 outputs do not become inconsistent across teams.
         </div>
 
         <div class="card">
@@ -1172,39 +1162,51 @@
             <div class="card-title">Phase 2 Design Package (Template)</div>
             <div class="chip">Template view</div>
           </div>
-          <div>
-            <div class="grid-2">
-              <div>
-                <div class="subheading">Design target</div>
-                <div class="callout info">Example. Define “Readiness” evidence and reporting for grades 4 to 12.</div>
-              </div>
-              <div>
-                <div class="subheading">Evidence sources</div>
-                <div class="callout info">Example. Portfolios, performance tasks, standards evidence, surveys, artifacts.</div>
-              </div>
+
+          <div class="grid-2">
+            <div>
+              <div class="subheading">A. Claims and Definitions</div>
+              <ul>
+                <li>Growth definition + evidence anchors</li>
+                <li>Mastery definition + evidence anchors</li>
+                <li>Readiness definition + evidence anchors</li>
+                <li>Claim statements and limits (what we will not claim)</li>
+              </ul>
+
+              <div class="subheading">B. Evidence Rules</div>
+              <ul>
+                <li>Claim-evidence map</li>
+                <li>Evidence taxonomy + minimum quality criteria</li>
+                <li>Calibration protocol + exemplar sets</li>
+              </ul>
             </div>
 
-            <div class="grid-2">
-              <div>
-                <div class="subheading">Quality criteria</div>
-                <div class="callout info">Example. Alignment, clarity, calibration, documentation, fairness.</div>
-              </div>
-              <div>
-                <div class="subheading">Reporting layer</div>
-                <div class="callout info">Example. Classroom evidence, school summary, district dashboard, public guide.</div>
-              </div>
-            </div>
+            <div>
+              <div class="subheading">C. Reporting</div>
+              <ul>
+                <li>Reporting storyboard</li>
+                <li>Templates (school + district)</li>
+                <li>Interpretability guide (plain language + examples)</li>
+              </ul>
 
-            <div class="muted-line">
-              Tip. Keep the main package teachable. Put deep detail in appendices.
+              <div class="subheading">D. Governance and Pilot</div>
+              <ul>
+                <li>Governance cadence and roles</li>
+                <li>Decision rules for predictable pressure</li>
+                <li>Pilot blueprint + success criteria</li>
+              </ul>
             </div>
+          </div>
+
+          <div class="callout info">
+            <div class="callout-title">Keep it teachable</div>
+            Core package should be short. Put detail in appendices. If the “core” is not teachable, it will not be used.
           </div>
         </div>
       </section>
 
-      <!-- Integrity -->
-      <section id="integrity">
-        <div class="section-title">7. Integrity and Checklists</div>
+      <section id="fidelity">
+        <div class="section-title">4. Online Checklists and Fidelity Monitoring</div>
         <div class="section-subtitle">
           Use these during Phase 2 to prevent drift and protect coherence.
         </div>
@@ -1215,48 +1217,45 @@
               <div class="card-title">Phase 2 Design Checklist</div>
               <div class="chip">For design teams</div>
             </div>
-            <div>
-              <ul class="checklist">
-                <li><input type="checkbox" /><span>Definitions for Growth, Mastery, Readiness are clear and observable.</span></li>
-                <li><input type="checkbox" /><span>Claim-evidence map is complete and defensible.</span></li>
-                <li><input type="checkbox" /><span>Evidence quality criteria are practical and teachable.</span></li>
-                <li><input type="checkbox" /><span>Calibration routine is designed and tested with real student work.</span></li>
-                <li><input type="checkbox" /><span>Reporting templates include examples and plain-language interpretation.</span></li>
-                <li><input type="checkbox" /><span>Governance routines and decision rules are documented.</span></li>
-                <li><input type="checkbox" /><span>Pilot blueprint is drafted and aligned to capacity.</span></li>
-              </ul>
-            </div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>Definitions are short, observable, and consistent across schools.</span></li>
+              <li><input type="checkbox" /><span>Claims are mapped to defensible evidence sources.</span></li>
+              <li><input type="checkbox" /><span>Evidence taxonomy is limited and teachable.</span></li>
+              <li><input type="checkbox" /><span>Quality criteria can be calibrated in 20 minutes using real work.</span></li>
+              <li><input type="checkbox" /><span>Reporting templates point to evidence, not just labels.</span></li>
+              <li><input type="checkbox" /><span>Decision rules are written for predictable pressure points.</span></li>
+              <li><input type="checkbox" /><span>Pilot blueprint is feasible and defined as minimum viable.</span></li>
+            </ul>
           </div>
 
           <div class="card">
             <div class="card-header">
-              <div class="card-title">LAAC Checkpoints</div>
-              <div class="chip">Legitimacy and interpretability</div>
+              <div class="card-title">Leadership “Drift Watch”</div>
+              <div class="chip">Protect meaning</div>
             </div>
-            <div>
-              <ul class="checklist">
-                <li><input type="checkbox" /><span>LAAC reviewed definitions and flagged confusion points.</span></li>
-                <li><input type="checkbox" /><span>LAAC reviewed evidence examples and identified fairness concerns.</span></li>
-                <li><input type="checkbox" /><span>LAAC tested reporting mockups with non-educators and reported themes.</span></li>
-                <li><input type="checkbox" /><span>District published “what we decided and why.”</span></li>
-              </ul>
-              <div class="callout info">
-                <div class="callout-title">Use the checklist button</div>
-                The Integrity Checklist catches micro-mismatches between design intent and real decisions.
-              </div>
+            <ul class="checklist">
+              <li><input type="checkbox" /><span>We are not adding new evidence types without revisiting taxonomy limits.</span></li>
+              <li><input type="checkbox" /><span>We are not publishing visuals that we cannot defend with exemplars.</span></li>
+              <li><input type="checkbox" /><span>We are not using evidence routines as evaluation of individuals.</span></li>
+              <li><input type="checkbox" /><span>We are protecting time for calibration and interpretability testing.</span></li>
+              <li><input type="checkbox" /><span>We are logging decisions and publishing “what we decided and why.”</span></li>
+            </ul>
+
+            <div class="callout warn">
+              <div class="callout-title">If you see this, stop</div>
+              If meetings turn into updates without artifacts, Phase 2 is drifting back into committee mode.
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Huddle -->
       <section id="huddle">
         <div class="section-title">Leadership Huddle. 20 Minutes to Keep Phase 2 on Track</div>
         <div class="section-subtitle">
-          Tight, artifact-driven, and repeatable. This is how you keep Phase 2 from drifting into vague updates.
+          Tight, clear, grounded in artifacts. Designed for weekly leadership discipline.
         </div>
 
-        <div class="huddle-grid">
+        <div class="grid-2">
           <div class="card">
             <div class="card-header">
               <div class="card-title">Huddle Agenda</div>
@@ -1265,8 +1264,8 @@
 
             <div class="subheading">1) What decision are we making this week</div>
             <ul>
-              <li>Name the design decision in one sentence.</li>
-              <li>Confirm who decides and what input is needed.</li>
+              <li>Name the decision in one sentence.</li>
+              <li>Confirm who decides and what input is required.</li>
             </ul>
 
             <div class="subheading">2) What artifact are we using to decide</div>
@@ -1283,7 +1282,7 @@
 
             <div class="subheading">4) What is the next build action</div>
             <ul>
-              <li>Assign an owner and a due date.</li>
+              <li>Assign an owner and due date.</li>
               <li>Log the decision and rationale.</li>
             </ul>
 
@@ -1301,15 +1300,15 @@
 
             <ul>
               <li>What claim are we making, and what evidence proves it.</li>
-              <li>Where could this design create inequity of opportunity.</li>
-              <li>What part of this would a parent misunderstand and why.</li>
+              <li>Where could this create inequity of opportunity.</li>
+              <li>What would a parent misunderstand and why.</li>
               <li>What is the minimum viable version that still protects integrity.</li>
               <li>What will we stop doing because of this design.</li>
             </ul>
 
-            <div class="callout warn">
-              <div class="callout-title">Watch for drift</div>
-              If huddles turn into updates without artifacts, stop. Phase 2 is a build cycle, not a committee cycle.
+            <div class="callout info">
+              <div class="callout-title">Leadership posture</div>
+              Keep Phase 2 disciplined. Tight scope, tight routines, real evidence.
             </div>
           </div>
         </div>
@@ -1318,38 +1317,36 @@
 
     <!-- PRINT PACK -->
     <section id="print-phase2" class="print-pack">
-      <div class="section-title">Phase 2 Packet</div>
+      <div class="section-title">Phase 2 Paper Pack</div>
       <div class="section-subtitle">
-        Print-friendly essentials for Phase 2. This view hides navigation and toggles and prints as a packet.
+        Print-friendly essentials for Phase 2.
       </div>
 
       <div class="card">
         <div class="card-header">
-          <div class="card-title">1) Phase 2 on a Page</div>
+          <div class="card-title">Phase 2 on a Page</div>
           <div class="chip">Handout</div>
         </div>
-        <div>
-          <ul>
-            <li>Goal. Build a clear evidence and reporting architecture based on Phase 1 findings.</li>
-            <li>Outputs. Definitions, claim-evidence map, evidence quality criteria, reporting templates, governance rules, pilot blueprint.</li>
-            <li>Keep it teachable. Keep it defensible. Keep it usable.</li>
-          </ul>
-        </div>
+        <ul>
+          <li>Goal. Build a clear evidence and reporting architecture based on Phase 1 findings.</li>
+          <li>Outputs. Definitions, claim-evidence map, evidence taxonomy, quality criteria, calibration routines, reporting prototypes, governance rules, pilot blueprint.</li>
+          <li>Success. Teachable, usable, defensible.</li>
+        </ul>
       </div>
 
       <div class="card" style="margin-top:10px;">
         <div class="card-header">
-          <div class="card-title">2) Phase 2 Checklist</div>
+          <div class="card-title">Phase 2 Design Checklist</div>
           <div class="chip">Checkbox sheet</div>
         </div>
         <ul class="checklist">
-          <li><input type="checkbox" /><span>Definitions finalized and teachable.</span></li>
-          <li><input type="checkbox" /><span>Claim-evidence map complete.</span></li>
-          <li><input type="checkbox" /><span>Evidence quality rubric drafted and tested.</span></li>
-          <li><input type="checkbox" /><span>Calibration routine tested.</span></li>
-          <li><input type="checkbox" /><span>Reporting storyboard and template drafted.</span></li>
-          <li><input type="checkbox" /><span>Governance and decision rules documented.</span></li>
-          <li><input type="checkbox" /><span>Pilot blueprint drafted.</span></li>
+          <li><input type="checkbox" /><span>Definitions are short and observable.</span></li>
+          <li><input type="checkbox" /><span>Claims mapped to evidence sources.</span></li>
+          <li><input type="checkbox" /><span>Taxonomy limited and teachable.</span></li>
+          <li><input type="checkbox" /><span>Calibration protocol tested.</span></li>
+          <li><input type="checkbox" /><span>Reporting includes examples and interpretation guidance.</span></li>
+          <li><input type="checkbox" /><span>Decision rules written for predictable pressure.</span></li>
+          <li><input type="checkbox" /><span>Pilot blueprint feasible and defined.</span></li>
         </ul>
       </div>
 
@@ -1360,77 +1357,739 @@
       Local Accountability Framework. Phase 2 Implementation Guide.
     </div>
 
-    <!-- -------------------------------------------------
-         SWOT PLACEHOLDERS (DATA ATTRIBUTES)
-         Add blocks like these for each section + role.
-         You can expand bullets without changing JS.
-         ------------------------------------------------- -->
-
-    <!-- Phase 2 on a Page -->
-    <div class="swot-source"
-         data-section="phase2-on-a-page"
-         data-role="student"
-         data-s='["Student voice makes evidence rules feel fair and real.","Clear expectations reduce confusion about what counts."]'
-         data-w='["If language stays abstract, Phase 2 feels like an adult project.","Uneven access to opportunities can distort readiness signals."]'
-         data-o='["Portfolios can show growth over time, not one-day performance.","Students can co-design what strong evidence looks like."]'
-         data-t='["Over-scoring can kill ownership and creativity.","Adults may reward polish over thinking."]'></div>
-
-    <div class="swot-source"
-         data-section="phase2-on-a-page"
-         data-role="teacher"
-         data-s='["Evidence clarity reduces grading ambiguity.","Calibration improves fairness across classrooms."]'
-         data-w='["Time demands rise if routines are not tight.","Too many evidence types can overwhelm teams."]'
-         data-o='["Design tasks where evidence emerges naturally from instruction.","Connect standards evidence with durable skills evidence."]'
-         data-t='["If reporting becomes compliance, quality drops.","Misaligned rubrics can create false mastery signals."]'></div>
-
-    <div class="swot-source"
-         data-section="phase2-on-a-page"
-         data-role="districtLeader"
-         data-s='["Unified evidence language protects coherence at scale.","Quality criteria strengthen credibility with the public."]'
-         data-w='["Too many measures can dilute focus.","Design can outrun capacity to implement."]'
-         data-o='["Transparent definitions and examples strengthen trust.","Align tools and dashboards to real evidence, not assumptions."]'
-         data-t='["External pressure can pull reporting back to single metrics.","Inconsistent scoring can undermine legitimacy."]'></div>
-
-    <!-- Snapshot -->
-    <div class="swot-source"
-         data-section="snapshot"
-         data-role="parentGuardian"
-         data-s='["Examples can replace guesswork with understanding.","Clear reporting improves trust and communication."]'
-         data-w='["New language can feel unfamiliar at first.","Too much information can overwhelm without guidance."]'
-         data-o='["Stronger home-school conversations about real learning.","More accurate understanding of strengths and next steps."]'
-         data-t='["If reporting is unclear, rumors fill the gap.","Comparisons return if examples are not shared consistently."]'></div>
-
-    <!-- Orientation (generic fallback examples) -->
-    <div class="swot-source"
-         data-section="orientation"
-         data-role="schoolLeader"
-         data-s='["Leaders can protect coherence and keep scope tight.","Clear routines reduce initiative fatigue."]'
-         data-w='["Variation in capacity can create uneven quality.","Too much flexibility can reduce comparability."]'
-         data-o='["Build an evidence review culture using real student work.","Clarify success expectations across classrooms."]'
-         data-t='["Without calibration, trust in evidence erodes.","Staff may interpret Phase 2 as another initiative."]'></div>
-
-    <!-- Universal fallbacks (used if a specific section+role match is missing) -->
-    <div class="swot-source"
-         data-section="__fallback__"
-         data-role="__fallback__"
-         data-s='["Phase 2 creates clarity by forcing evidence definitions.","Architecture reduces fragmentation and drift."]'
-         data-w='["If decisions stay undocumented, the design will wobble.","If routines are too heavy, staff disengage."]'
-         data-o='["Use Phase 2 to simplify, not to add layers.","Use examples and non-examples to teach the system fast."]'
-         data-t='["Scoreboard pressure can re-center single metrics.","Inconsistent evidence quality can damage credibility."]'></div>
-
   </main>
 </div>
 
 <script>
   // ---------------------------
+  // Roles
+  // ---------------------------
+  const ROLES = [
+    { key: "student", label: "Student" },
+    { key: "teacher", label: "Teacher" },
+    { key: "staff", label: "Staff Member" },
+    { key: "schoolLeader", label: "School Leader" },
+    { key: "districtLeader", label: "District Leader" },
+    { key: "boardMember", label: "Board Member" },
+    { key: "parentGuardian", label: "Parent or Guardian" },
+    { key: "communityMember", label: "Community Member" }
+  ];
+
+  // ---------------------------
+  // SWOT DATA
+  // Diagnostic and decision-oriented.
+  // Structure:
+  // SWOT_DATA.overall[role] and SWOT_DATA.steps[stepId][role]
+  // Each has: S/W/O/T arrays + actions array (what to decide/do next)
+  // ---------------------------
+  const SWOT_DATA = {
+    overall: {
+      student: {
+        S: [
+          "When evidence rules are clear, students stop guessing and start showing real learning.",
+          "Portfolios and performance evidence allow strengths, interests, and growth over time to be visible.",
+          "Consistency across schools reduces “my teacher wants X” confusion."
+        ],
+        W: [
+          "If evidence expectations feel like compliance, students will optimize for points, not learning.",
+          "Uneven access to high-quality learning experiences can distort what shows up as “readiness.”",
+          "Students may not understand how evidence will be used unless adults explain it plainly."
+        ],
+        O: [
+          "Students can help stress test definitions by flagging where adults reward formatting over thinking.",
+          "Student voice can improve fairness by identifying hidden barriers and opportunity gaps.",
+          "Student-led examples can make reporting understandable to families."
+        ],
+        T: [
+          "Adults can unintentionally value “nice projects” more than rigorous evidence of understanding.",
+          "Over-scoring can reduce student ownership and creativity.",
+          "If reporting becomes ranking, trust and motivation drop fast."
+        ],
+        actions: [
+          "Publish student-facing ‘What counts as evidence’ with examples and non-examples.",
+          "Use student panels to test interpretability before anything goes public.",
+          "Add an equity check: who is not getting access to the same evidence opportunities."
+        ]
+      },
+      teacher: {
+        S: [
+          "Clear quality criteria reduces ambiguity and strengthens fairness across classrooms.",
+          "Calibration turns opinion into shared expectations using real student work.",
+          "Evidence routines can replace scattered initiatives with one coherent rhythm."
+        ],
+        W: [
+          "If taxonomy is too broad, teachers will drown in choices and inconsistency increases.",
+          "If routines are heavy, teachers will comply superficially instead of improving practice.",
+          "Without exemplars, teachers will interpret criteria differently by content and culture."
+        ],
+        O: [
+          "Design tasks so evidence emerges naturally from strong instruction, not extra work.",
+          "Use PLCs to build exemplar banks quickly and refine rubrics based on real samples.",
+          "Connect standards evidence to durable skills evidence without turning it into double scoring."
+        ],
+        T: [
+          "If leaders use evidence routines as evaluation, psychological safety collapses.",
+          "Pressure for simple numbers can pull the system back into test-style reporting.",
+          "Inconsistent calibration will create credibility risk with the public and professionals."
+        ],
+        actions: [
+          "Keep taxonomy limited. Cut anything not essential for pilot.",
+          "Run short calibration cycles weekly for six weeks, then move to maintenance.",
+          "Protect the message: evidence routines are for learning and improvement, not personnel evaluation."
+        ]
+      },
+      staff: {
+        S: [
+          "Operational staff often see friction early and can prevent implementation failure.",
+          "Clear scripts and pathways reduce confusion when families ask questions.",
+          "Aligned routines can reduce random requests and last-minute chaos."
+        ],
+        W: [
+          "Staff voice is often gathered late, which leads to unrealistic routines.",
+          "Communication can fragment across roles unless leaders unify messaging.",
+          "Evidence routines can fail if scheduling and logistics are ignored."
+        ],
+        O: [
+          "Build simple ‘what to say’ scripts tied to the reporting model.",
+          "Align schedules, tech access, and workflows to support evidence collection.",
+          "Identify predictable bottlenecks and solve them before the pilot begins."
+        ],
+        T: [
+          "Mixed messages can reduce trust quickly, especially during early reporting.",
+          "If routines add work without clarity, support capacity will be strained.",
+          "Technology friction can be misread as resistance."
+        ],
+        actions: [
+          "Map the logistics of evidence collection. Remove friction before asking for more evidence.",
+          "Create a single FAQ and escalation pathway for questions.",
+          "Build a simple naming and storage convention that staff can support."
+        ]
+      },
+      schoolLeader: {
+        S: [
+          "Leaders can protect coherence across teams and prevent initiative drift.",
+          "Common routines make expectations clearer for staff and students.",
+          "Evidence review culture improves instructional alignment without relying on test windows."
+        ],
+        W: [
+          "Variation in capacity across schools can create uneven evidence quality.",
+          "Too much flexibility reduces comparability and invites confusion.",
+          "If leaders do not protect time, calibration becomes optional and then disappears."
+        ],
+        O: [
+          "Leaders can create a strong evidence review rhythm using real student work.",
+          "Use the system to replace scattered walkthrough artifacts with purposeful evidence signals.",
+          "Align staff meetings and PLC time to the build steps to reduce overload."
+        ],
+        T: [
+          "Without calibration, trust in evidence erodes quickly.",
+          "Staff may label Phase 2 as “another initiative” if it adds work without payoff.",
+          "Public misunderstanding can become a political issue if reporting is unclear."
+        ],
+        actions: [
+          "Protect time for calibration and interpretability testing.",
+          "Write ‘minimum viable routines’ and stop doing low-value tasks.",
+          "Use the decision log publicly so the system feels honest, not mysterious."
+        ]
+      },
+      districtLeader: {
+        S: [
+          "A unified evidence language improves coherence district-wide.",
+          "Quality criteria and calibration protect integrity at scale.",
+          "A claim-evidence map increases defensibility with professionals and the public."
+        ],
+        W: [
+          "Too many measures dilute coherence and overwhelm implementation capacity.",
+          "Design can outrun the reality of time, training, and tools.",
+          "If claims are broad, reporting becomes vague and unhelpful."
+        ],
+        O: [
+          "Strengthen trust through transparent definitions and examples.",
+          "Align dashboards to actual evidence rather than assumptions.",
+          "Use pilots strategically to learn and revise before scaling."
+        ],
+        T: [
+          "External pressure can pull reporting back to single metrics.",
+          "Inconsistent scoring threatens credibility.",
+          "If governance is weak, drift will be inevitable."
+        ],
+        actions: [
+          "Limit scope. Make Phase 2 build-ready, not perfect.",
+          "Write decision rules now for predictable pressure points.",
+          "Invest in exemplar banks and calibration routines early."
+        ]
+      },
+      boardMember: {
+        S: [
+          "Board members can protect long-term integrity from short-term pressure.",
+          "Clear system claims reduce reactive decision-making.",
+          "Evidence-based reporting supports responsible governance."
+        ],
+        W: [
+          "Limited time can reduce deep understanding of evidence rules.",
+          "Public pressure can shift focus from learning to optics.",
+          "If the board is not fluent, messaging becomes inconsistent."
+        ],
+        O: [
+          "Board learning sessions can build shared language with the community.",
+          "Policy can be aligned to support multiple measures of success.",
+          "Board can model disciplined questions that keep the system coherent."
+        ],
+        T: [
+          "Misinterpretation of new reporting can create controversy.",
+          "Stakeholders may demand rankings, forcing drift.",
+          "Political narratives can distort intent."
+        ],
+        actions: [
+          "Hold structured board learning sessions tied to exemplars, not slides.",
+          "Adopt messaging principles: evidence first, no ranking, improvement focus.",
+          "Ask the same three questions consistently: credibility, equity, interpretability."
+        ]
+      },
+      parentGuardian: {
+        S: [
+          "Real examples make learning more understandable than grades alone.",
+          "Evidence-based reporting can improve trust and home-school communication.",
+          "Clear definitions help families support next steps."
+        ],
+        W: [
+          "New language can feel unfamiliar at first.",
+          "Too much information without guidance can overwhelm.",
+          "If evidence is not visible, families will default to comparisons."
+        ],
+        O: [
+          "Create stronger conversations about learning, not just performance.",
+          "Use examples to show what growth looks like over time.",
+          "Families can help test whether reporting is actually readable."
+        ],
+        T: [
+          "If reporting is unclear, rumors fill the gap.",
+          "Comparisons and ranking instincts will return if not addressed directly.",
+          "If expectations differ by teacher, trust erodes."
+        ],
+        actions: [
+          "Publish a short parent guide with examples and ‘questions to ask.’",
+          "Run interpretability testing with families before launch.",
+          "Explicitly address what the system will not do (ranking, labels without evidence)."
+        ]
+      },
+      communityMember: {
+        S: [
+          "Community voice increases legitimacy and relevance.",
+          "Partnerships can create authentic evidence opportunities for readiness.",
+          "Transparent reporting can strengthen public confidence."
+        ],
+        W: [
+          "Community understanding varies widely; jargon will break engagement.",
+          "Without examples, readiness can sound abstract.",
+          "Community time and access can be limited."
+        ],
+        O: [
+          "Create internships, mentorships, and authentic audiences tied to evidence.",
+          "Use community exemplars to make readiness concrete and local.",
+          "Build shared ownership by inviting critique and revision, not just applause."
+        ],
+        T: [
+          "Political narratives can distort meaning.",
+          "If the model looks like marketing, credibility drops.",
+          "Incoherence across schools weakens partnership momentum."
+        ],
+        actions: [
+          "Invite community review sessions focused on examples, not claims.",
+          "Build a partnership pipeline connected to evidence types.",
+          "Publish ‘what we decided and why’ so the model is transparent."
+        ]
+      }
+    },
+
+    steps: {
+      "p2-step0": {
+        student: {
+          S: [
+            "Students can surface what evidence feels real versus staged.",
+            "Student-selected anchors reveal growth over time, not just best moments.",
+            "Early involvement increases trust before rules harden."
+          ],
+          W: [
+            "If students are not told why anchors matter, the process feels like adults collecting artifacts.",
+            "Students may avoid sharing non-examples if they feel judged.",
+            "Anchor sets can skew toward high-performing students if selection is not intentional."
+          ],
+          O: [
+            "Students can label anchors with ‘what this shows’ to improve interpretability.",
+            "Students can point out opportunity gaps that will later distort readiness.",
+            "Student feedback can tighten what counts as evidence early."
+          ],
+          T: [
+            "If anchors are treated like evaluation, students will perform instead of reflect.",
+            "A glossy anchor set can hide real system problems.",
+            "Students may disengage if this becomes compliance."
+          ],
+          actions: [
+            "Invite students to select one example and one non-example, with a short explanation.",
+            "Include anchors from multiple contexts and levels, not just honors or showcase classes.",
+            "Set a safety message: anchors are diagnostic, not judgment."
+          ]
+        },
+        teacher: {
+          S: [
+            "Anchors make Phase 2 concrete and reduce abstract debate.",
+            "Non-examples clarify quality more quickly than long rubrics.",
+            "Anchors reveal where tasks produce evidence naturally versus artificially."
+          ],
+          W: [
+            "Curating anchors can become time heavy without clear limits.",
+            "Teachers may fear anchors will be used against them.",
+            "If anchors are inconsistent, the later taxonomy will be unstable."
+          ],
+          O: [
+            "Use anchors to seed exemplar banks immediately.",
+            "Use anchors to identify which tasks should become model evidence generators.",
+            "Use the gap list to simplify priorities before scope expands."
+          ],
+          T: [
+            "If anchors become a showcase, authenticity drops.",
+            "If leaders use anchors for evaluation, trust collapses.",
+            "If you skip non-examples, criteria will stay vague."
+          ],
+          actions: [
+            "Set tight limits: 8-12 anchors with required diversity plus non-examples.",
+            "Normalize non-examples as learning tools, not failures.",
+            "Publish selection rules so the process feels fair."
+          ]
+        },
+        staff: {
+          S: [
+            "Staff can identify logistical constraints early (access, scheduling, storage).",
+            "Staff can help build naming conventions that reduce chaos later.",
+            "Support roles can help ensure anchors are organized and retrievable."
+          ],
+          W: [
+            "Staff input is often overlooked in evidence work.",
+            "If storage/naming is unclear, anchors become unusable.",
+            "Communication can break if staff are not prepared for questions."
+          ],
+          O: [
+            "Create a simple storage and tagging system now, not later.",
+            "Build quick talking points for families about why anchors are being collected.",
+            "Use staff feedback to remove friction before pilots."
+          ],
+          T: [
+            "Technology friction can stall the work and be misread as resistance.",
+            "Misfiled anchors lead to wasted time and frustration.",
+            "If families ask questions and staff cannot answer, trust drops."
+          ],
+          actions: [
+            "Implement one naming convention and one storage location.",
+            "Create a one-paragraph ‘why anchors’ message for front office and support roles.",
+            "Build a simple retrieval checklist."
+          ]
+        },
+        schoolLeader: {
+          S: [
+            "Leaders can ensure anchors represent real classroom variety.",
+            "Anchors can align staff quickly on what counts as evidence.",
+            "Anchors reveal where evidence routines will overload staff."
+          ],
+          W: [
+            "Anchor selection can become political across teams.",
+            "Leaders may unintentionally pressure staff to submit only best examples.",
+            "Uneven capacity creates uneven anchor quality."
+          ],
+          O: [
+            "Use anchors to identify quick wins in task design.",
+            "Use anchors to set a realistic minimum viable evidence set for pilot.",
+            "Use the gap list to prioritize professional learning."
+          ],
+          T: [
+            "If anchors become performance theater, Phase 2 loses truth.",
+            "If leaders rush this step, all later steps will wobble.",
+            "If staff feel exposed, engagement will drop."
+          ],
+          actions: [
+            "Require non-examples and ‘why this matters’ notes.",
+            "Share a safety message: anchors are about system truth, not people judgment.",
+            "Review anchors for diversity and representativeness before finalizing."
+          ]
+        },
+        districtLeader: {
+          S: [
+            "Anchors provide a stable foundation for coherent design decisions.",
+            "A gap list prevents pretending the system has evidence it does not.",
+            "Tagged anchors make later reporting prototypes easier to build."
+          ],
+          W: [
+            "Too many priorities dilute focus.",
+            "If anchors are not tagged consistently, later coherence is compromised.",
+            "If the gap list is ignored, claims will outpace evidence."
+          ],
+          O: [
+            "Use anchors to build a district-wide exemplar library.",
+            "Use gaps to target pilot scope and support resources strategically.",
+            "Use anchor patterns to simplify the taxonomy."
+          ],
+          T: [
+            "External pressure to move fast can cause superficial anchoring.",
+            "A weak anchor set undermines credibility later.",
+            "If anchors are curated as marketing, professionals will see through it."
+          ],
+          actions: [
+            "Lock 3-5 design targets and publish them.",
+            "Require diverse anchors across schools, grades, and contexts.",
+            "Publish the gap list as a learning agenda, not a weakness."
+          ]
+        },
+        boardMember: {
+          S: [
+            "Anchors help board members see the system, not just hear summaries.",
+            "Real examples support clearer governance decisions.",
+            "Anchors can ground public messaging in truth."
+          ],
+          W: [
+            "Without context, artifacts can be misread.",
+            "Time constraints reduce deep engagement.",
+            "If board members only see showcase anchors, understanding will be skewed."
+          ],
+          O: [
+            "Board learning sessions can use anchors to build shared language.",
+            "Anchors can improve public transparency and trust.",
+            "Board can reinforce the norm: evidence is for improvement, not blame."
+          ],
+          T: [
+            "Anchors can be politicized if not framed carefully.",
+            "Misinterpretation can spread quickly.",
+            "Pressure for rankings can hijack meaning."
+          ],
+          actions: [
+            "Host a board learning session with 4 anchors: 2 examples, 2 non-examples.",
+            "Adopt a shared script: ‘What does this show, and what is the next step.’",
+            "Reinforce the system posture publicly: diagnostic, not punitive."
+          ]
+        },
+        parentGuardian: {
+          S: [
+            "Examples make accountability understandable.",
+            "Anchors can clarify what learning looks like beyond grades.",
+            "Families can engage earlier, before reporting is public."
+          ],
+          W: [
+            "Without guidance, artifacts can be confusing.",
+            "Families may assume anchors are used for ranking.",
+            "Families may see only fragments without context."
+          ],
+          O: [
+            "Parents can test interpretability early and prevent communication failure.",
+            "Anchors can spark stronger learning conversations at home.",
+            "Families can help identify what explanations are missing."
+          ],
+          T: [
+            "Rumors can fill gaps if messaging is unclear.",
+            "Comparisons between students can reappear quickly.",
+            "If artifacts feel selective, trust drops."
+          ],
+          actions: [
+            "Add short captions: ‘What this shows’ and ‘How to read this.’",
+            "Use family focus groups before publishing anything.",
+            "Clarify explicitly: anchors are not rankings."
+          ]
+        },
+        communityMember: {
+          S: [
+            "Anchors help community partners understand what readiness actually looks like.",
+            "Community feedback can increase relevance and legitimacy.",
+            "Examples can strengthen partnership alignment."
+          ],
+          W: [
+            "Without translation, artifacts may feel insider-only.",
+            "Community access to artifacts may be limited.",
+            "If community only sees showcase work, readiness becomes unrealistic."
+          ],
+          O: [
+            "Community can propose authentic evidence opportunities.",
+            "Anchors can help align partnerships to evidence types.",
+            "Community audiences can increase authenticity of performance evidence."
+          ],
+          T: [
+            "Narratives can distort meaning if transparency is weak.",
+            "If artifacts feel like marketing, credibility drops.",
+            "If readiness is vague, partnerships scatter."
+          ],
+          actions: [
+            "Invite partners to review a small set of anchors with simple guiding questions.",
+            "Translate readiness into local examples and audiences.",
+            "Publish ‘what we learned’ from partner feedback."
+          ]
+        }
+      },
+
+      "p2-step1": makeStepSWOT(
+        "Definitions and Claims",
+        {
+          studentS: "Clear definitions reduce guessing and make student agency easier to practice.",
+          studentW: "If definitions feel adult-centered, students will disengage or comply superficially.",
+          studentO: "Students can pressure-test whether definitions match real learning experiences.",
+          studentT: "If definitions are vague, adults will score differently across schools."
+        },
+        {
+          teacherS: "Tight definitions anchor fairness and reduce debates in PLCs.",
+          teacherW: "Overly broad definitions invite inconsistent interpretation by content area.",
+          teacherO: "Exemplars can quickly make definitions usable across classrooms.",
+          teacherT: "If definitions are not teachable, drift is guaranteed."
+        },
+        {
+          leaderS: "Claims clarify what the district is willing to stand behind publicly.",
+          leaderW: "Claims without evidence become credibility risk.",
+          leaderO: "Claims can focus the system and simplify reporting.",
+          leaderT: "External pressure will test claims. Weak claims will collapse."
+        }
+      ),
+
+      "p2-step2": makeStepSWOT(
+        "Claim-Evidence Map",
+        {
+          studentS: "Evidence mapping can protect students from being reduced to one score.",
+          studentW: "If evidence sources are unclear, students do not know how to show learning.",
+          studentO: "Students can identify where evidence requirements disadvantage certain groups.",
+          studentT: "If evidence weighting is hidden, trust will erode."
+        },
+        {
+          teacherS: "Mapping prevents over-reliance on weak evidence and makes instruction-targeting clearer.",
+          teacherW: "Too many evidence sources increases workload and inconsistency.",
+          teacherO: "Weighting rules can protect teachers from ‘everything counts equally’ confusion.",
+          teacherT: "If gaps are ignored, reporting becomes narrative without proof."
+        },
+        {
+          leaderS: "A clear map increases defensibility and reduces drift under pressure.",
+          leaderW: "Without a ‘do not use’ list, weak metrics will sneak in later.",
+          leaderO: "Gaps become a purposeful learning agenda, not a hidden problem.",
+          leaderT: "Publishing claims without solid map invites professional criticism."
+        }
+      ),
+
+      "p2-step3": makeStepSWOT(
+        "Evidence Taxonomy + Minimum Quality Bar",
+        {
+          studentS: "A small, clear set of evidence types reduces confusion about what matters.",
+          studentW: "If the bar rewards polish, students with less support get punished.",
+          studentO: "Taxonomy can increase student choice in how they demonstrate learning.",
+          studentT: "Too many types will create inconsistency and unfairness."
+        },
+        {
+          teacherS: "Minimum quality criteria protect rigor and reduce ‘good enough’ ambiguity.",
+          teacherW: "If criteria are too complex, implementation becomes compliance.",
+          teacherO: "Non-examples speed up calibration and improve task design.",
+          teacherT: "If taxonomy expands, workload and variability spike."
+        },
+        {
+          leaderS: "A limited taxonomy increases coherence across schools.",
+          leaderW: "If minimum criteria are weak, reporting becomes unreliable.",
+          leaderO: "Criteria can replace vague walkthrough talk with concrete evidence expectations.",
+          leaderT: "Equity gaps will widen if access to evidence opportunities is uneven."
+        }
+      ),
+
+      "p2-step4": makeStepSWOT(
+        "Calibration + Exemplars",
+        {
+          studentS: "Calibration can protect fairness so evidence means the same thing across classrooms.",
+          studentW: "Over-scoring can reduce creativity and ownership.",
+          studentO: "Students can help define what strong communication and reasoning look like.",
+          studentT: "If calibration is inconsistent, students experience the system as arbitrary."
+        },
+        {
+          teacherS: "Calibration improves consistency and strengthens instructional alignment.",
+          teacherW: "If routines take too long, they will not survive real schedules.",
+          teacherO: "Short weekly calibration builds shared expectations quickly.",
+          teacherT: "If calibration becomes evaluation, safety collapses."
+        },
+        {
+          leaderS: "Calibration is the integrity engine and strongest credibility defense.",
+          leaderW: "Without protected time, calibration becomes optional.",
+          leaderO: "Exemplar banks can become a district learning asset.",
+          leaderT: "Inconsistent calibration creates public and professional credibility risk."
+        }
+      ),
+
+      "p2-step5": makeStepSWOT(
+        "Reporting + Interpretability",
+        {
+          studentS: "Reporting that points to evidence can honor student work and growth over time.",
+          studentW: "If reporting becomes labels, students will chase optics.",
+          studentO: "Students can help make reporting understandable with student-friendly examples.",
+          studentT: "If reporting is misunderstood, students become the story instead of the system."
+        },
+        {
+          teacherS: "Good reporting can reduce pressure to ‘teach to the label’ and keep focus on learning.",
+          teacherW: "If reporting lacks context, teachers will spend time defending instead of improving.",
+          teacherO: "Interpretation guides can reduce confusion and protect trust.",
+          teacherT: "Dashboards can become scoreboards if not governed."
+        },
+        {
+          leaderS: "Interpretability testing prevents predictable public confusion.",
+          leaderW: "If reporting moves faster than evidence rules, credibility breaks.",
+          leaderO: "Reporting can build trust when it shows real examples and next steps.",
+          leaderT: "External comparisons and ranking pressure will show up immediately."
+        }
+      ),
+
+      "p2-step6": makeStepSWOT(
+        "Governance + Decision Rules",
+        {
+          studentS: "Clear rules protect students from shifting expectations.",
+          studentW: "If adults change rules midstream, students lose trust.",
+          studentO: "Governance can include student voice to keep the system honest.",
+          studentT: "Without rules, pressure will force the system back to old habits."
+        },
+        {
+          teacherS: "Decision rules prevent constant reinvention and inconsistent expectations.",
+          teacherW: "If governance is unclear, teachers carry uncertainty and mixed messages.",
+          teacherO: "Clear cadence can reduce initiative fatigue.",
+          teacherT: "Without guardrails, evaluation and ranking instincts return."
+        },
+        {
+          leaderS: "Governance protects meaning under pressure and prevents drift.",
+          leaderW: "Weak governance creates inconsistency and credibility risk.",
+          leaderO: "Decision logs can strengthen transparency and trust.",
+          leaderT: "Political narratives will exploit ambiguity."
+        }
+      ),
+
+      "p2-step7": makeStepSWOT(
+        "Design Package + Pilot Blueprint",
+        {
+          studentS: "Pilots can create better learning experiences if they prioritize authenticity and choice.",
+          studentW: "If pilot adds compliance, students feel it immediately.",
+          studentO: "Pilots can elevate student work as the central evidence story.",
+          studentT: "If pilot is too large, quality and fairness will collapse."
+        },
+        {
+          teacherS: "A tight pilot helps teachers learn and refine routines without overwhelm.",
+          teacherW: "If scope is unclear, pilot becomes a moving target.",
+          teacherO: "Pilot can prove feasibility and build exemplars that scale.",
+          teacherT: "If support is weak, teachers will view pilot as another initiative."
+        },
+        {
+          leaderS: "A disciplined pilot protects integrity and creates credible evidence for scaling.",
+          leaderW: "If package is too long, nobody will use it.",
+          leaderO: "Pilot success criteria can create a strong learning loop for revision.",
+          leaderT: "If pilot is rushed, public confidence can be damaged early."
+        }
+      )
+    }
+  };
+
+  // Utility generator for steps 1-7 so the voice stays consistent and diagnostic.
+  // This avoids writing 8x8x4 entirely by hand but still produces distinct content per step and role.
+  function makeStepSWOT(stepLabel, a, b, c){
+    // Roles not specified in a/b/c get coherent, distinct content generated from the step label.
+    const base = {
+      student: {
+        S: [a.studentS, "This step can make expectations visible and reduce confusion."],
+        W: [a.studentW, "If language is not student-readable, buy-in disappears."],
+        O: [a.studentO, "This step can increase fairness if it reduces hidden rules."],
+        T: [a.studentT, "If adults disagree on meaning, students will experience inconsistency."],
+        actions: [
+          "Ask students to restate the step outcome in their own words. Fix what they cannot explain.",
+          "Use one student example and one student non-example to test the step.",
+          "Check for opportunity gaps that will distort evidence."
+        ]
+      },
+      teacher: {
+        S: [b.teacherS, "This step can reduce rework by clarifying expectations early."],
+        W: [b.teacherW, "If the process adds time without payoff, it will not last."],
+        O: [b.teacherO, "This step can improve task design so evidence emerges naturally."],
+        T: [b.teacherT, "If coherence breaks here, later reporting will be unstable."],
+        actions: [
+          "Keep it teachable. If you need a specialist to explain it, it will not scale.",
+          "Test with real student work, not hypothetical examples.",
+          "Write a short non-example list to prevent drift."
+        ]
+      },
+      staff: {
+        S: ["Operational clarity increases follow-through and reduces confusion.", "This step can align tools, storage, and communication."],
+        W: ["If logistics are not addressed, implementation will stall.", "Staff may be left out of decisions that affect their work."],
+        O: ["Build simple scripts and workflows that support the step outcome.", "Reduce friction by standardizing the basics."],
+        T: ["Technology and scheduling problems can be misread as resistance.", "Mixed messaging can reduce trust quickly."],
+        actions: [
+          "Map the operational impacts. Remove friction before asking for compliance.",
+          "Create a simple pathway for questions and support.",
+          "Standardize naming and storage conventions."
+        ]
+      },
+      schoolLeader: {
+        S: [c.leaderS, "Leaders can protect coherence by keeping the step tight and focused."],
+        W: [c.leaderW, "If leaders do not protect time, quality work will not happen."],
+        O: [c.leaderO, "Leaders can make this step usable by embedding it into PLC rhythms."],
+        T: [c.leaderT, "Pressure will test the system. Weak guardrails will fold."],
+        actions: [
+          "Protect time for the step’s core routine. Do not make it optional.",
+          "Use a decision log and publish ‘what we decided and why.’",
+          "Set minimum viable scope and stop lower-value work."
+        ]
+      },
+      districtLeader: {
+        S: ["This step can unify the system and increase defensibility.", "A coherent output improves district-wide alignment."],
+        W: ["Design can outrun capacity if scope is not controlled.", "If decisions are not logged, the system will drift."],
+        O: ["Use this step to simplify and tighten the model before pilots.", "Align tools and dashboards to real evidence rules."],
+        T: ["External pressure can pull the system back to legacy habits.", "Inconsistency threatens credibility."],
+        actions: [
+          "Limit scope. Build-ready beats perfect.",
+          "Write decision rules for predictable pressure points now.",
+          "Invest in exemplars and calibration to protect credibility."
+        ]
+      },
+      boardMember: {
+        S: ["Clear architecture supports responsible governance.", "Board oversight can protect integrity over time."],
+        W: ["Limited time can reduce fluency and create messaging gaps.", "If the board is not aligned, coherence weakens."],
+        O: ["Board learning sessions can increase community understanding.", "Policy alignment can protect the model’s intent."],
+        T: ["Misinterpretation can become controversy quickly.", "Ranking pressure can hijack meaning."],
+        actions: [
+          "Schedule short board learning moments tied to examples.",
+          "Adopt shared messaging principles: evidence first, no ranking, improvement focus.",
+          "Ask disciplined questions: credibility, equity, interpretability."
+        ]
+      },
+      parentGuardian: {
+        S: ["Examples and plain language can strengthen trust.", "Families can understand growth more clearly with evidence."],
+        W: ["New language can be unfamiliar without guidance.", "Without examples, families will default to comparisons."],
+        O: ["Interpretability testing with families can prevent predictable confusion.", "Guides can improve home-school conversations."],
+        T: ["If reporting feels unclear, rumors fill the gap.", "If expectations vary, trust erodes."],
+        actions: [
+          "Publish a short parent guide with examples and ‘questions to ask.’",
+          "Test readability before publishing anything public.",
+          "Be explicit about what the system will not do (ranking, labels without evidence)."
+        ]
+      },
+      communityMember: {
+        S: ["Community voice increases legitimacy.", "Partnerships can make readiness evidence more authentic."],
+        W: ["Without translation, the model can feel insider-only.", "Readiness can sound abstract without examples."],
+        O: ["Create authentic audiences tied to evidence types.", "Invite feedback on interpretability and relevance."],
+        T: ["Political narratives can distort intent.", "If the model looks like marketing, credibility drops."],
+        actions: [
+          "Invite partners to review examples and propose authentic evidence opportunities.",
+          "Translate readiness into local contexts and audiences.",
+          "Publish decisions and learning transparently."
+        ]
+      }
+    };
+
+    // Add a subtle step-specific hook for district/board/parent/community so the content feels more tailored
+    // without requiring a giant manual dataset.
+    const hook = `Step focus: ${stepLabel}.`;
+    ["districtLeader","boardMember","parentGuardian","communityMember","staff"].forEach(r => {
+      base[r].S = [hook].concat(base[r].S);
+    });
+    return base;
+  }
+
+  // ---------------------------
   // State
   // ---------------------------
   const state = {
-    activeRole: "student",
+    activeRole: "student",     // global pill
     leaderMode: false,
     templateMode: false,
-    followScrollForSWOT: true,
-    activeSectionId: "phase2-on-a-page"
+    stepLens: {}               // per-step local lens role override
   };
 
   // ---------------------------
@@ -1439,61 +2098,26 @@
   function qs(sel, root=document) { return root.querySelector(sel); }
   function qsa(sel, root=document) { return Array.from(root.querySelectorAll(sel)); }
 
-  function prettySectionName(id){
-    const map = {
-      "phase2-on-a-page":"Phase 2 on a Page",
-      "swot-lens":"SWOT Lens",
-      "snapshot":"Phase 2 Snapshot",
-      "orientation":"Orientation",
-      "entry-point":"Entry Point",
-      "preconditions":"Preconditions",
-      "roles":"Roles and LAAC",
-      "process":"Process Map",
-      "steps":"Step by Step",
-      "templates":"Design Package Tools",
-      "integrity":"Integrity and Checklists",
-      "huddle":"Leadership Huddle"
-    };
-    return map[id] || id;
-  }
-
-  function prettyRoleName(role){
-    const map = {
-      student:"Student",
-      teacher:"Teacher",
-      staff:"Staff Member",
-      schoolLeader:"School Leader",
-      districtLeader:"District Leader",
-      boardMember:"Board Member",
-      parentGuardian:"Parent or Guardian",
-      communityMember:"Community Member"
-    };
-    return map[role] || role;
-  }
-
   function setActiveNavByHash() {
-    const hash = window.location.hash || "#phase2-on-a-page";
+    const hash = window.location.hash || "#phase2-lite";
     qsa(".nav-link").forEach(a => a.classList.remove("active"));
     const match = qsa(".nav-link").find(a => a.getAttribute("href") === hash);
     if (match) match.classList.add("active");
   }
 
-  // ---------------------------
-  // Leader mode
-  // ---------------------------
+  function showGlobalRole(role) {
+    state.activeRole = role;
+    qsa(".stakeholder-pill").forEach(btn => btn.classList.toggle("active", btn.dataset.role === role));
+    renderAllSwot();
+  }
+
   function setLeaderMode(on) {
     state.leaderMode = !!on;
     qs("#viewEveryone").classList.toggle("active", !state.leaderMode);
     qs("#viewLeader").classList.toggle("active", state.leaderMode);
-
-    qsa(".leader-only").forEach(el => {
-      el.style.display = state.leaderMode ? "block" : "none";
-    });
+    qsa(".leader-only").forEach(el => { el.style.display = state.leaderMode ? "block" : "none"; });
   }
 
-  // ---------------------------
-  // Template mode
-  // ---------------------------
   function applyTemplateMode(on) {
     state.templateMode = !!on;
     const btn = qs("#templateToggle");
@@ -1503,19 +2127,15 @@
       ? "Switch to Real Example View"
       : "Switch to Template View";
 
-    const modeAttr = state.templateMode ? "data-template" : "data-smith";
+    const modeAttr = state.templateMode ? "data-template" : "data-example";
     qsa(".district-system").forEach(el => {
       const val = el.getAttribute(modeAttr);
       if (val) el.textContent = val;
     });
   }
 
-  function toggleTemplateMode() {
-    applyTemplateMode(!state.templateMode);
-  }
-
   // ---------------------------
-  // Steps UI
+  // Actions
   // ---------------------------
   function toggleStep(id) {
     const content = qs("#" + id);
@@ -1526,10 +2146,9 @@
     toggle.textContent = open ? "−" : "+";
   }
 
-  // ---------------------------
-  // Buttons
-  // ---------------------------
-  function printPhase2Packet() {
+  function toggleTemplateMode() { applyTemplateMode(!state.templateMode); }
+
+  function printPhase2Pack() {
     document.body.classList.add("print-pack-mode");
     const pp = qs("#print-phase2");
     if (pp) pp.classList.add("print-only");
@@ -1545,178 +2164,171 @@
     window.open("https://briankcreasman.github.io/TheUnicornProject/Phase2IntegrityChecklist.html", "_blank");
   }
 
-  function openToolPack() {
-    // Replace with your real tools folder, ZIP, or hub page.
-    window.open("https://briankcreasman.github.io/TheUnicornProject/tools.html", "_blank");
+  // ---------------------------
+  // SWOT Rendering
+  // ---------------------------
+  function getRoleLabel(roleKey){
+    const found = ROLES.find(r => r.key === roleKey);
+    return found ? found.label : roleKey;
   }
 
-  // ---------------------------
-  // Stakeholder pills
-  // ---------------------------
-  function initStakeholderPills() {
-    qsa(".stakeholder-pill").forEach(btn => {
-      btn.addEventListener("click", () => {
-        state.activeRole = btn.dataset.role;
-        qsa(".stakeholder-pill").forEach(x => x.classList.toggle("active", x === btn));
-        renderSWOT();
+  function swotCard(title, key, items, roleLabel){
+    const titleMap = { S:"Strengths", W:"Weaknesses", O:"Opportunities", T:"Threats" };
+    const note = (key === "O") ? "Light gray. Leverage carefully." : "Diagnostic.";
+    const li = (items || []).map(x => `<li>${escapeHtml(x)}</li>`).join("");
+    return `
+      <div class="swot-card" data-swot="${key}">
+        <div class="swot-title">
+          <span>${titleMap[key]}</span>
+          <span class="small">${roleLabel}. ${note}</span>
+        </div>
+        <ul>${li}</ul>
+      </div>
+    `;
+  }
+
+  function renderSwotBlock(data, roleKey){
+    const roleLabel = getRoleLabel(roleKey);
+    const S = swotCard("Strengths","S", data.S || [], roleLabel);
+    const W = swotCard("Weaknesses","W", data.W || [], roleLabel);
+    const O = swotCard("Opportunities","O", data.O || [], roleLabel);
+    const T = swotCard("Threats","T", data.T || [], roleLabel);
+
+    const actions = (data.actions || []).map(x => `<li>${escapeHtml(x)}</li>`).join("");
+    const actionHtml = `
+      <div class="swot-actions">
+        <div class="action-title">Decision Moves. What to do next</div>
+        <ul style="margin:0; padding-left:18px;">${actions}</ul>
+      </div>
+    `;
+
+    return `<div class="swot-grid">${S}${W}${O}${T}</div>${actionHtml}`;
+  }
+
+  function renderOverallSwot(){
+    const target = qs('[data-swot-render="overall"]');
+    if (!target) return;
+    const roleKey = state.activeRole;
+    const data = SWOT_DATA.overall[roleKey] || SWOT_DATA.overall.student;
+    target.innerHTML = renderSwotBlock(data, roleKey);
+  }
+
+  function ensureStepLensRow(stepId){
+    const row = qs(`[data-lens-row="${stepId}"]`);
+    if (!row) return;
+
+    // If already populated, skip
+    if (row.dataset.ready === "1") return;
+
+    const active = state.stepLens[stepId] || state.activeRole;
+
+    const pills = ROLES.map(r => {
+      const on = (r.key === active);
+      return `<span class="lens-pill ${on ? "active":""}" data-step="${stepId}" data-role="${r.key}">${r.label}</span>`;
+    }).join("");
+
+    row.innerHTML = `
+      <span class="lens-label">Section Lens:</span>
+      ${pills}
+      <span class="lens-label" style="margin-left:auto;">(Does not change the global pill)</span>
+    `;
+    row.dataset.ready = "1";
+  }
+
+  function renderStepSwot(stepId){
+    const target = qs(`[data-swot-render="step"][data-step="${stepId}"]`);
+    if (!target) return;
+
+    const roleKey = state.stepLens[stepId] || state.activeRole;
+    const stepData = (SWOT_DATA.steps[stepId] && SWOT_DATA.steps[stepId][roleKey])
+      ? SWOT_DATA.steps[stepId][roleKey]
+      : (SWOT_DATA.steps[stepId] && SWOT_DATA.steps[stepId][state.activeRole])
+        ? SWOT_DATA.steps[stepId][state.activeRole]
+        : (SWOT_DATA.steps[stepId] && SWOT_DATA.steps[stepId].student)
+          ? SWOT_DATA.steps[stepId].student
+          : null;
+
+    if (!stepData){
+      target.innerHTML = `<div class="callout warn"><div class="callout-title">SWOT missing</div>No SWOT data found for this step.</div>`;
+      return;
+    }
+
+    // Repaint local lens pills active state
+    const row = qs(`[data-lens-row="${stepId}"]`);
+    if (row){
+      qsa('.lens-pill', row).forEach(p => {
+        p.classList.toggle("active", p.dataset.role === roleKey);
       });
+    }
+
+    target.innerHTML = renderSwotBlock(stepData, roleKey);
+  }
+
+  function renderAllStepSwot(){
+    const stepTargets = qsa('[data-swot-render="step"][data-step]');
+    stepTargets.forEach(t => {
+      const stepId = t.dataset.step;
+      ensureStepLensRow(stepId);
+      renderStepSwot(stepId);
     });
   }
 
+  function renderAllSwot(){
+    renderOverallSwot();
+    renderAllStepSwot();
+  }
+
   // ---------------------------
-  // View pills
+  // Events
   // ---------------------------
-  function initViewPills() {
+  function initStakeholderPills(){
+    qsa(".stakeholder-pill").forEach(btn => {
+      btn.addEventListener("click", () => showGlobalRole(btn.dataset.role));
+    });
+  }
+
+  function initViewPills(){
     const everyone = qs("#viewEveryone");
     const leader = qs("#viewLeader");
     if (!everyone || !leader) return;
-
     everyone.addEventListener("click", () => setLeaderMode(false));
     leader.addEventListener("click", () => setLeaderMode(true));
   }
 
-  // ---------------------------
-  // Dynamic SWOT
-  // ---------------------------
-  function findSWOTSource(sectionId, role){
-    // Exact match
-    const exact = qsa(".swot-source").find(d =>
-      d.dataset.section === sectionId && d.dataset.role === role
-    );
-    if (exact) return exact;
-
-    // Section fallback for any role (optional pattern you can add later)
-    const sectionAnyRole = qsa(".swot-source").find(d =>
-      d.dataset.section === sectionId && d.dataset.role === "__fallback__"
-    );
-    if (sectionAnyRole) return sectionAnyRole;
-
-    // Role fallback for any section (optional pattern you can add later)
-    const roleAnySection = qsa(".swot-source").find(d =>
-      d.dataset.section === "__fallback__" && d.dataset.role === role
-    );
-    if (roleAnySection) return roleAnySection;
-
-    // Universal fallback
-    return qsa(".swot-source").find(d =>
-      d.dataset.section === "__fallback__" && d.dataset.role === "__fallback__"
-    );
-  }
-
-  function safeParseArray(jsonStr){
-    try{
-      const val = JSON.parse(jsonStr || "[]");
-      return Array.isArray(val) ? val : [];
-    }catch(e){
-      return [];
-    }
-  }
-
-  function fillList(ul, items){
-    ul.innerHTML = "";
-    if (!items || items.length === 0){
-      const li = document.createElement("li");
-      li.className = "swot-empty";
-      li.textContent = "Add bullets using the data-* placeholders for this section and role.";
-      ul.appendChild(li);
-      return;
-    }
-    items.forEach(t => {
-      const li = document.createElement("li");
-      li.textContent = t;
-      ul.appendChild(li);
-    });
-  }
-
-  function renderSWOT(){
-    const sectionId = qs("#swotSectionSelect")?.value || state.activeSectionId;
-    const role = state.activeRole;
-
-    state.activeSectionId = sectionId;
-
-    // Labels
-    const roleLabel = qs("#swotRoleLabel");
-    const sectionLabel = qs("#swotSectionLabel");
-    if (roleLabel) roleLabel.textContent = prettyRoleName(role);
-    if (sectionLabel) sectionLabel.textContent = prettySectionName(sectionId);
-
-    // Select sync (in case scroll changed it)
-    const sel = qs("#swotSectionSelect");
-    if (sel && sel.value !== sectionId) sel.value = sectionId;
-
-    // Source
-    const src = findSWOTSource(sectionId, role);
-    if (!src) return;
-
-    const S = safeParseArray(src.getAttribute("data-s"));
-    const W = safeParseArray(src.getAttribute("data-w"));
-    const O = safeParseArray(src.getAttribute("data-o"));
-    const T = safeParseArray(src.getAttribute("data-t"));
-
-    fillList(qs("#swotS"), S);
-    fillList(qs("#swotW"), W);
-    fillList(qs("#swotO"), O);
-    fillList(qs("#swotT"), T);
-  }
-
-  function initSWOTSectionSelect(){
-    const sel = qs("#swotSectionSelect");
-    if (!sel) return;
-
-    sel.addEventListener("change", () => {
-      state.followScrollForSWOT = false;
-      renderSWOT();
-    });
-  }
-
-  function resetSWOTToScroll(){
-    state.followScrollForSWOT = true;
-    // Re-render based on the most recent active section from scroll spy
-    const sel = qs("#swotSectionSelect");
-    if (sel) sel.value = state.activeSectionId;
-    renderSWOT();
-  }
-
-  // ---------------------------
-  // Scroll spy (nav + SWOT section tracking)
-  // ---------------------------
-  function initScrollSpy() {
+  function initScrollSpy(){
     const links = qsa(".nav-link");
-    const sections = links
-      .map(a => qs(a.getAttribute("href")))
-      .filter(Boolean);
+    const sections = links.map(a => qs(a.getAttribute("href"))).filter(Boolean);
 
     const obs = new IntersectionObserver((entries) => {
       const visible = entries
         .filter(e => e.isIntersecting)
         .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (!visible) return;
-
-      const id = visible.target.id;
-      links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + id));
-
-      // Keep SWOT synced to the section being viewed (unless user turned off follow-scroll)
-      if (state.followScrollForSWOT){
-        // Only track "content" sections that exist in the selector
-        const sel = qs("#swotSectionSelect");
-        if (sel && Array.from(sel.options).some(o => o.value === id)){
-          state.activeSectionId = id;
-          sel.value = id;
-          renderSWOT();
-        }
-      }
-    }, { root: null, threshold: [0.15, 0.25, 0.4, 0.6] });
+      links.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + visible.target.id));
+    }, { threshold: [0.15, 0.25, 0.4, 0.6] });
 
     sections.forEach(s => obs.observe(s));
   }
 
-  // ---------------------------
-  // Init defaults
-  // ---------------------------
-  function initDefaultVisibility() {
+  function initStepLensToggles(){
+    document.addEventListener("click", (e) => {
+      const pill = e.target.closest(".lens-pill");
+      if (!pill) return;
+      const stepId = pill.dataset.step;
+      const roleKey = pill.dataset.role;
+
+      state.stepLens[stepId] = roleKey;
+
+      // Ensure row exists and update swot
+      ensureStepLensRow(stepId);
+      renderStepSwot(stepId);
+    });
+  }
+
+  function initDefaultVisibility(){
     setLeaderMode(false);
     applyTemplateMode(false);
-    renderSWOT();
+    renderAllSwot();
   }
 
   window.addEventListener("afterprint", () => {
@@ -1731,10 +2343,22 @@
     initDefaultVisibility();
     initStakeholderPills();
     initViewPills();
-    initSWOTSectionSelect();
     initScrollSpy();
+    initStepLensToggles();
     setActiveNavByHash();
   });
+
+  // ---------------------------
+  // Utilities
+  // ---------------------------
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
 </script>
 </body>
 </html>
