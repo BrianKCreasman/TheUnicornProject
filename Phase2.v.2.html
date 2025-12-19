@@ -1,541 +1,1108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Local Accountability Design Map - Phase 2 (v.2)</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Accountability Design Map - Phase 2</title>
   <style>
-    :root{
-      --text:#111;
-      --muted:#5f6368;
-      --link:#0b57d0;
-      --bg:#ffffff;
-      --rule:#e6e6e6;
-      --gold:#dbd59b;
-      --max: 980px;
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #111;
+      padding-top: 80px; /* space for fixed navbar */
     }
 
-    *{ box-sizing:border-box; }
-    html{ scroll-behavior:smooth; }
-    body{
-      margin:0;
-      background:var(--bg);
-      color:var(--text);
-      font-family: Arial, Helvetica, sans-serif;
-      line-height:1.45;
-    }
-
-    /* Top nav, Phase1-style: simple, inline, no heavy UI */
-    .top{
-      border-bottom: 1px solid var(--rule);
-      padding: 10px 14px;
-      position: sticky;
+    /* Top navigation bar */
+    .navbar {
+      position: fixed;
       top: 0;
-      background: rgba(255,255,255,0.96);
-      backdrop-filter: blur(8px);
-      z-index: 10;
-    }
-    .top-inner{
-      max-width: var(--max);
-      margin: 0 auto;
-      display:flex;
-      align-items:center;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .nav{
-      display:flex;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 10px 24px;
+      display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      align-items:center;
-      font-size: 13px;
+      justify-content: center;
+      align-items: center;
     }
-    .nav a{
-      color: var(--link);
+
+    .nav-button {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #ffffff;
       text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
     }
-    .nav a:hover{ text-decoration: underline; }
-    .nav .pipe{ color: var(--muted); }
+    .nav-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+      background: #13508c;
+    }
+    .nav-button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      background: #072744;
+    }
 
-    .actions{
-      display:flex;
-      gap: 10px;
+    /* Print button variant */
+    .print-button { background: #d9822b; }
+    .print-button:hover { background: #b86822; }
+    .print-button:active { background: #8b4e18; }
+
+    /* PDF button variant */
+    .pdf-button { background: #4b5563; }
+    .pdf-button:hover { background: #374151; }
+    .pdf-button:active { background: #111827; }
+
+    /* Checklist button variant (teal, matches principles color family) */
+    .checklist-button { background: #0E8577; }
+    .checklist-button:hover { background: #0b6f64; }
+    .checklist-button:active { background: #064c45; }
+
+    .page {
+      width: 100%;
+      padding: 40px;
+      box-sizing: border-box;
+    }
+
+    .header-logo {
+      display: block;
+      max-width: 520px;
+      width: 90%;
+      margin: 0 auto 10px;
+    }
+
+    h1, h2, h3, h4 { text-align: center; margin-bottom: 10px; }
+    h1 { color: #0a355e; }
+    h2 { color: #d9822b; }
+    h3 { color: #1b4965; }
+    h4 { color: #0a355e; margin-top: 0; }
+
+    .section {
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: #f0f4f8;
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 0.2s ease;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .card:hover { transform: translateY(-3px); }
+
+    /* Color scheme for Pillars / Continuum / DDIER */
+    .pillar { border-left: 6px solid #7A4EC4; }      /* Purple */
+    .continuum { border-left: 6px solid #2E7D32; }   /* Green */
+    .ddier { border-left: 6px solid #F4C542; }       /* Yellow-gold */
+
+    .pillartxt { color: #7A4EC4; font-weight: 700; }
+    .continuumtxt { color: #2E7D32; font-weight: 700; }
+    .ddiertxt { color: #B8860B; font-weight: 800; } /* darker gold text for readability */
+
+    /* Local Accountability Principles (teal) */
+    .principle { border-left: 6px solid #0E8577; background: #e9fbf7; }
+    .principletxt { color: #0E8577; font-weight: 800; }
+    .legend-principles { background: #0E8577; }
+
+    /* Best Practice Box (distinct coral) */
+    .bestpractice {
+      border-left: 6px solid #ff6f61;
+      background: #ffecea;
+    }
+    .bestpracticetxt { color: #ff6f61; font-weight: 800; }
+
+    .highlight {
+      background: #d9e6f2;
+      border-left: 5px solid #d9822b;
+      padding: 12px 14px;
+      margin: 12px 0;
+      font-size: 0.95rem;
+    }
+
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .step-list li {
+      counter-increment: step;
+      margin-bottom: 10px;
+      padding-left: 28px;
+      position: relative;
+      font-size: 0.96rem;
+    }
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #fff;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .tag-row {
+      display: flex;
       flex-wrap: wrap;
-      align-items:center;
-      font-size: 13px;
+      gap: 8px;
+      margin-top: 10px;
     }
-    .btnlink{
-      color: var(--link);
-      text-decoration:none;
-      font-weight: 700;
+    .tag {
+      font-size: 0.8rem;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #eef2f7;
+      border: 1px solid #c7d2e3;
+      line-height: 1.1;
     }
-    .btnlink:hover{ text-decoration: underline; }
+    .tag.pillarTag { border-color: rgba(122,78,196,0.45); }
+    .tag.contTag { border-color: rgba(46,125,50,0.45); }
+    .tag.ddierTag { border-color: rgba(244,197,66,0.6); }
+    .tag.principleTag { border-color: rgba(14,133,119,0.55); background: #effdfb; }
 
-    /* Page */
-    .wrap{
-      max-width: var(--max);
-      margin: 18px auto 60px;
-      padding: 0 14px;
-    }
-
-    .hero-img{
-      margin: 6px 0 16px 0;
-    }
-    .hero-img img{
-      width:100%;
-      height:auto;
-      display:block;
-      border: 1px solid var(--rule);
-      border-radius: 6px;
+    .logic-columns {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      font-size: 0.9rem;
     }
 
-    h1{ margin: 10px 0 6px 0; font-size: 28px; }
-    h2{ margin: 10px 0 8px 0; font-size: 22px; }
-    h3{ margin: 12px 0 8px 0; font-size: 18px; }
-    h4{ margin: 12px 0 6px 0; font-size: 15px; }
-
-    .kicker{
-      color: var(--muted);
-      font-weight: 700;
-      margin-top: 2px;
+    .logic-box {
+      background: #f7f7fb;
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid #dde3f0;
     }
-    .tags{
-      margin: 8px 0 10px 0;
-      color: var(--text);
+    .logic-box h4 {
+      text-align: left;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
     }
-    .tags div{
-      margin: 2px 0;
+    .logic-box ul { margin: 0; padding-left: 18px; }
+    .logic-box li { margin-bottom: 4px; }
+
+    /* Tool cards */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+    .tool {
+      background: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #dde3ee;
+      padding: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .tool h4 {
+      text-align: left;
+      margin: 0 0 6px 0;
+      font-size: 0.95rem;
+      color: #0a355e;
+    }
+    .tool p { margin: 0; }
+    .tool a { color: #0a355e; font-weight: 700; text-decoration: none; }
+    .tool a:hover { text-decoration: underline; }
+
+    /* Phase legend */
+    .phase-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 6px 0 14px 0;
+      font-size: 0.82rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+    .legend-pillars { background: #7A4EC4; }
+    .legend-continuum { background: #2E7D32; }
+    .legend-ddier { background: #F4C542; }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .navbar { justify-content: flex-start; overflow-x: auto; }
+      .tool-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+      .logic-columns { grid-template-columns: 1fr 1fr; }
+      .tool-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .logic-columns { grid-template-columns: 1fr; }
+      .mini-grid { grid-template-columns: 1fr; }
+      .tool-grid { grid-template-columns: 1fr; }
     }
 
-    .rule{ border-top: 1px solid var(--rule); margin: 14px 0; }
-
-    ul{ margin: 8px 0 8px 20px; }
-    li{ margin: 6px 0; }
-
-    .callout{
-      border-left: 6px solid var(--gold);
-      padding: 10px 12px;
-      background: #fafafa;
-      margin: 10px 0;
-    }
-
-    .meta-line{
-      color: var(--muted);
-      font-size: 13px;
-      margin-top: 6px;
-    }
-
-    a.ref{
-      color: var(--link);
-      text-decoration: none;
-    }
-    a.ref:hover{ text-decoration: underline; }
-
-    @media print{
-      .top{ display:none; }
-      a{ color:#000; text-decoration:none; }
+    /* Print styling */
+    @page { size: 8.5in 11in; margin: 0.5in; }
+    @media print {
+      body { padding-top: 0; background: #ffffff; }
+      .navbar { display: none; }
+      .page { box-shadow: none; padding: 20px; page-break-after: always; }
+      .page:last-of-type { page-break-after: auto; }
+      a { color: #111 !important; text-decoration: none !important; }
     }
   </style>
 </head>
-
 <body>
 
-  <!-- Phase1-style anchor nav -->
-  <div class="top">
-    <div class="top-inner">
-      <div class="nav">
-        <a href="#p2-overview">Phase 2 Overview</a>
-        <span class="pipe">|</span>
-        <a href="#p2-steps">Phase 2 Steps</a>
-        <span class="pipe">|</span>
-        <a href="#p2-architecture">Architecture</a>
-        <span class="pipe">|</span>
-        <a href="#p2-evidence">Evidence & Practice</a>
-        <span class="pipe">|</span>
-        <a href="#p2-roles">Stakeholder Roles</a>
-        <span class="pipe">|</span>
-        <a href="#p2-outcome">Phase 2 Key Outcome</a>
-        <span class="pipe">|</span>
-        <a href="#p2-practice">Practice in Action</a>
-        <span class="pipe">|</span>
-        <a href="#p2-research">Research Base</a>
-      </div>
+<!-- FLOATING MENU -->
+<div class="navbar">
+  <a href="#phase2-overview" class="nav-button">Phase 2 Overview</a>
+  <a href="#phase2-steps" class="nav-button">Phase 2 Steps</a>
+  <a href="#architecture-blueprint" class="nav-button">Architecture Blueprint</a>
+  <a href="#evidence-rules" class="nav-button">Evidence &amp; Decision Rules</a>
+  <a href="#stakeholder-roles" class="nav-button">Stakeholder Roles</a>
+  <a href="#phase2-key-outcome" class="nav-button">Phase 2 Key Outcome</a>
+  <a href="#practice-field-fcs" class="nav-button">Practice in Action</a>
+  <a href="#research-base" class="nav-button">Research Base</a>
 
-      <div class="actions">
-        <a class="btnlink" href="#" onclick="window.print(); return false;">Print</a>
-        <a class="btnlink" href="#" onclick="window.print(); return false;">Download PDF</a>
-        <a class="btnlink" href="Phase2_Integrity_Checklist.html" target="_blank" rel="noopener">Phase Integrity Checklist</a>
-      </div>
-    </div>
-  </div>
+  <a href="Phase2_Integrity_Checklist.html" target="_blank" rel="noopener" class="nav-button checklist-button">Phase Integrity Checklist</a>
 
-  <div class="wrap">
+  <button type="button" class="nav-button print-button" onclick="triggerPrint()">Print</button>
+  <button type="button" class="nav-button pdf-button" onclick="downloadPDF()">Download PDF</button>
+</div>
 
-    <!-- Optional: use the same header image as Phase 1 -->
-    <!-- Replace src with the same URL used in Phase1 if you want perfect parity -->
-    <div class="hero-img" aria-label="Header image (optional)">
-      <!--
-      <img src="YOUR_PHASE1_IMAGE_URL_HERE" alt="NxG Learning, Assessment, Accountability" />
-      -->
-    </div>
+<!-- CONTENT WRAPPER FOR PDF -->
+<div id="pdf-content">
+
+  <!-- PAGE 1: Big Picture -->
+  <div class="page">
+    <img src="https://i.postimg.cc/jSXFZymK/Nx-GLearning-Assessment-Accountability-(2).png"
+         alt="NxG Learning, Assessment, Accountability"
+         class="header-logo">
 
     <h1>Local Accountability Framework</h1>
+    <h2>Phase 2: Designing the Vision: Crafting the Architecture of a Local Accountability System</h2>
 
-    <h2 id="p2-overview">Phase 2: Designing the Vision: Crafting the Architecture of a Local Accountability System</h2>
-    <h3>Big Idea</h3>
+    <div class="section" id="phase2-overview">
+      <h3>Big Idea</h3>
+      <div class="phase-legend">
+        <div class="legend-item"><span class="legend-swatch legend-pillars"></span><span>Six Pillars</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-continuum"></span><span>Local Accountability Continuum</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-ddier"></span><span>DDIER Cycle</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-principles"></span><span>Local Accountability Principles</span></div>
+      </div>
 
-    <div class="tags">
-      <div>Six Pillars</div>
-      <div>Local Accountability Continuum</div>
-      <div>DDIER Cycle</div>
-      <div>Local Accountability Principles</div>
+      <p>
+        Phase 2 is the architecture phase. Phase 1 defines success and surfaces current conditions. Phase 2 builds the structural system that can
+        <strong>carry that definition</strong> into real decisions, routines, evidence, and reporting without collapsing back into compliance.
+      </p>
+
+      <p>
+        Most redesign efforts fail here because districts jump from vision to tool-building. Phase 2 prevents that failure by forcing the district to do disciplined system design:
+        defining claims, mapping evidence logic, setting decision rules, clarifying governance, and designing how transparency will work for real people.
+      </p>
+
+      <div class="highlight">
+        <strong>Phase 2 outcome in one sentence:</strong>
+        A coherent, defensible accountability architecture that translates local values into usable decision rules, credible evidence expectations, and transparent reporting routines.
+      </div>
+
+      <div class="grid" style="margin-top:14px;">
+        <div class="card ddier">
+          <h4 class="ddiertxt">Design (DDIER) in Phase 2</h4>
+          <p>
+            Phase 2 is still in Design, but the work shifts from readiness scanning to architecture definition.
+            Design here means: writing the system’s claims, defining evidence requirements, setting decision rules, building governance routines,
+            and preventing predictable failure modes like proxy collapse and compliance theater.
+          </p>
+          <div class="tag-row">
+            <span class="tag ddierTag"><span class="ddiertxt">DDIER:</span> Design</span>
+          </div>
+        </div>
+
+        <div class="card pillar">
+          <h4 class="pillartxt">Primary Pillars in Phase 2</h4>
+          <p>
+            Phase 2 activates every pillar, with special emphasis on
+            <span class="pillartxt">Pillar 1 (Purpose and Logic Model)</span>,
+            <span class="pillartxt">Pillar 2 (Governance and Leadership)</span>,
+            <span class="pillartxt">Pillar 4 (Data Validation and Utilization)</span>,
+            and <span class="pillartxt">Pillar 6 (Reporting and Transparency)</span>.
+            If governance, validation, or reporting design is weak here, implementation will drift back to legacy accountability behavior.
+          </p>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 1:</span> Purpose and Logic Model</span>
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 2:</span> Governance and Leadership</span>
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 4:</span> Data Validation and Utilization</span>
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 6:</span> Reporting and Transparency</span>
+          </div>
+        </div>
+
+        <div class="card continuum">
+          <h4 class="continuumtxt">Continuum Focus in Phase 2</h4>
+          <p>
+            Phase 2 bridges the middle of the Continuum. It connects
+            <span class="continuumtxt">Define Success for Students</span> and
+            <span class="continuumtxt">Design Vibrant Learning Experiences for Students</span>
+            to the system’s ability to
+            <span class="continuumtxt">Demonstrate Student Success</span> with evidence people can understand and trust.
+          </p>
+          <div class="tag-row">
+            <span class="tag contTag"><span class="continuumtxt">Continuum:</span> Define Success for Students</span>
+            <span class="tag contTag"><span class="continuumtxt">Continuum:</span> Design Vibrant Learning Experiences for Students</span>
+            <span class="tag contTag"><span class="continuumtxt">Continuum:</span> Demonstrate Student Success</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card principle" style="margin-top:16px;">
+        <h4 class="principletxt">Local Accountability Principles Activated in Phase 2</h4>
+        <p style="margin-top:0;">
+          In Phase 2, principles stop being ideals and become system constraints. The architecture must actively protect them.
+          If the design does not protect the principles, pressure will.
+        </p>
+        <ul class="step-list">
+          <li><span class="principletxt">Systemic Coherence and Outcome Alignment:</span> the architecture keeps outcomes, evidence, and reporting in one coherent story.</li>
+          <li><span class="principletxt">Shared Ownership and Community Co-Creation:</span> design choices are visible, explainable, and shaped by stakeholder feedback loops.</li>
+          <li><span class="principletxt">Multiple Measures and Balanced Evidence:</span> the system prevents a single score from becoming the definition of readiness.</li>
+          <li><span class="principletxt">Evidence Quality and Technical Integrity:</span> evidence must be credible enough for the decisions it will support.</li>
+          <li><span class="principletxt">Equity and Opportunity to Learn:</span> interpretation includes access and supports, not just outcomes.</li>
+          <li><span class="principletxt">Transparency and Interpretability:</span> reporting is designed for understanding and action, not labeling.</li>
+          <li><span class="principletxt">Continuous Improvement and Learning Culture:</span> the system is built for iteration, not verdicts.</li>
+        </ul>
+        <div class="tag-row">
+          <span class="tag principleTag"><span class="principletxt">Principle:</span> Coherence and Alignment</span>
+          <span class="tag principleTag"><span class="principletxt">Principle:</span> Shared Ownership</span>
+          <span class="tag principleTag"><span class="principletxt">Principle:</span> Multiple Measures</span>
+          <span class="tag principleTag"><span class="principletxt">Principle:</span> Evidence Quality</span>
+          <span class="tag principleTag"><span class="principletxt">Principle:</span> Equity and Opportunity</span>
+          <span class="tag principleTag"><span class="principletxt">Principle:</span> Transparency</span>
+          <span class="tag principleTag"><span class="principletxt">Principle:</span> Continuous Improvement</span>
+        </div>
+      </div>
     </div>
 
-    <p>
-      Phase 2 exists because vision without architecture always collapses under pressure. Most accountability redesigns fail at this stage, not because leaders lack commitment or clarity of values, but because they underestimate how powerfully system design shapes adult behavior.
-      When architecture is vague, misaligned, or incomplete, accountability defaults to what it has always been: compliance, comparison, and control, regardless of the language used to describe it.
-    </p>
-    <p>
-      Phase 1 establishes purpose and community ownership. Phase 2 determines whether that purpose can survive contact with reality. This phase is not about adding more measures, dashboards, or processes. It is about intentionally designing how responsibility, evidence, decision-making, and transparency interact so the system reinforces learning rather than distorting it.
-    </p>
+    <div class="section" id="phase2-steps">
+      <h3>Phase 2 Steps. What Leaders Actually Do</h3>
 
-    <p>
-      Phase 2 outcome in one sentence: A coherent, defensible accountability architecture that translates belief into behavior, protects learning under pressure, and earns the right to develop and pilot next-generation evidence in Phase 3.
-    </p>
+      <p>
+        Phase 2 works when it is treated like system engineering. The goal is not to write more narrative.
+        The goal is to make the accountability system operational: clear claims, clear evidence, clear decision rules, clear routines, clear reporting.
+      </p>
 
-    <h4>Design (DDIER) in Phase 2</h4>
-    <p>
-      Phase 2 remains anchored in the Design stage of DDIER, but the work shifts from defining success to designing the system mechanics that will carry that definition. This is design as in system design: making claims explicit, mapping evidence, setting decision rules, and building coherence across pillars, routines, and reporting.
-    </p>
-    <p><strong>DDIER: Design</strong></p>
+      <div class="mini-grid">
+        <div class="card pillar">
+          <h4>Step 1: Translate Success Into System Claims</h4>
+          <ul class="step-list">
+            <li>Convert the Portrait of a Learner and Growth-Mastery-Readiness definitions into explicit claims the system will make about student success.</li>
+            <li>Write claims in plain language so stakeholders can repeat them without jargon.</li>
+            <li>Identify which claims require multiple evidence sources and which can be supported by existing measures.</li>
+            <li>Define what the system will not claim, to prevent overreach and misinterpretation.</li>
+            <li>Align claims to decisions: what will leaders actually do differently when evidence changes.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 1:</span> Purpose and Logic Model</span>
+            <span class="tag ddierTag"><span class="ddiertxt">DDIER:</span> Design</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Transparency and Interpretability</span>
+          </div>
+        </div>
 
-    <h4>Primary Pillars in Phase 2</h4>
-    <p>
-      Phase 2 activates all pillars, with strongest emphasis on Pillar 1 (Purpose and Theory of Action), Pillar 2 (Governance and Leadership), Pillar 4 (Data Validation and Utilization), and Pillar 6 (Reporting and Transparency). If governance, validation, or transparency are weak here, the system drifts into compliance even when the vision is strong.
-    </p>
-    <p>
-      <strong>Pillar 1:</strong> Purpose and Theory of Action
-      <strong>Pillar 2:</strong> Governance and Leadership
-      <strong>Pillar 3:</strong> Community Engagement and Advocacy
-      <strong>Pillar 4:</strong> Data Validation and Utilization
-      <strong>Pillar 5:</strong> Evaluating Progress and Impact
-      <strong>Pillar 6:</strong> Reporting and Transparency
-    </p>
+        <div class="card continuum">
+          <h4>Step 2: Build the Evidence Logic Map (Evidence Map 2.0)</h4>
+          <ul class="step-list">
+            <li>Link each claim to a set of defensible evidence sources (student work, performance tasks, portfolios, assessments, surveys, and academic indicators as appropriate).</li>
+            <li>Flag evidence that is high-stakes but low-quality and cannot support major decisions yet.</li>
+            <li>Define minimum evidence expectations across grade spans to prevent “random acts of evidence.”</li>
+            <li>Design for growth over time so the system can tell a learning story, not just label a moment.</li>
+            <li>Identify evidence gaps that Phase 3 must build (tasks, rubrics, calibration routines, portfolio structures).</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag contTag"><span class="continuumtxt">Continuum:</span> Demonstrate Student Success</span>
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 4:</span> Data Validation and Utilization</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Multiple Measures</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Evidence Quality</span>
+          </div>
+        </div>
+      </div>
 
-    <h4>Continuum Focus in Phase 2</h4>
-    <p>
-      Phase 2 sits in the middle moves of the Continuum. It bridges defining success and designing learning into an operational architecture that can gather, interpret, and use evidence consistently across classrooms, schools, and the district. This is where the system designs how it will demonstrate student success without collapsing the story into a single number.
-    </p>
-    <p>
-      <strong>Continuum:</strong> Define Success for Students
-      <strong>Continuum:</strong> Design Vibrant Learning Experiences for Students
-      <strong>Continuum:</strong> Demonstrate Student Success
-    </p>
+      <div class="mini-grid" style="margin-top:16px;">
+        <div class="card ddier">
+          <h4 class="ddiertxt">Step 3: Write Decision Rules (Use, Weight, and Guardrails)</h4>
+          <ul class="step-list">
+            <li>Define what evidence can be used for which decisions (instructional support, grading, placement, interventions, reporting, accountability).</li>
+            <li>Set “no single measure” rules so one number cannot override the full story of learning.</li>
+            <li>Define what happens when evidence conflicts. The system should trigger inquiry, not blame.</li>
+            <li>Define when evidence is informational versus consequential. High-stakes use requires higher quality.</li>
+            <li>Publish simple guidance so schools are consistent and the community sees predictable logic.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag ddierTag"><span class="ddiertxt">DDIER:</span> Design</span>
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 2:</span> Governance and Leadership</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Evidence Quality</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Transparency</span>
+          </div>
+        </div>
 
-    <h4>Local Accountability Principles Activated in Phase 2</h4>
-    <p>
-      These principles are constraints, not slogans. They prevent predictable failure modes such as compliance theater, proxy collapse, and reporting disconnected from learning. In Phase 2, leaders should name which principles they are protecting, how the architecture protects them, and what the system will do when pressure pushes against them.
-    </p>
-    <ul>
-      <li><strong>Student-Centered by Design:</strong> prevents adult convenience from becoming the hidden objective.</li>
-      <li><strong>Locally Defined, Publicly Transparent:</strong> prevents insider-only accountability and public confusion.</li>
-      <li><strong>Multiple Measures, One Coherent Story:</strong> prevents fragmentation and metric overload.</li>
-      <li><strong>Continuous Improvement Over Episodic Judgment:</strong> prevents retrospective, punitive cycles.</li>
-      <li><strong>Reciprocal Responsibility:</strong> prevents accountability from flowing only downward.</li>
-      <li><strong>Clarity Over Complexity:</strong> prevents sophistication from masking incoherence.</li>
-    </ul>
+        <div class="card pillar">
+          <h4>Step 4: Build Governance and Cadence</h4>
+          <ul class="step-list">
+            <li>Clarify roles: who owns evidence quality, who interprets evidence, who makes which decisions, and who monitors drift.</li>
+            <li>Define a consistent cadence: evidence reviews, calibration cycles, stakeholder feedback loops, and reporting windows.</li>
+            <li>Create a decision log routine: what changed, why it changed, and what evidence informed the change.</li>
+            <li>Design escalation paths: when a school is stuck, what support gets triggered and how quickly.</li>
+            <li>Protect coherence by stopping low-value work that competes with evidence integrity.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 2:</span> Governance and Leadership</span>
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 3:</span> Community Engagement and Advocacy</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Continuous Improvement</span>
+          </div>
+        </div>
+      </div>
 
-    <div class="callout">
-      <strong>Leader reality:</strong> Phase 2 is where districts either design a system that protects learning, or unintentionally design a system that protects compliance.
+      <div class="mini-grid" style="margin-top:16px;">
+        <div class="card continuum">
+          <h4>Step 5: Design the Reporting Story (Transparency by Design)</h4>
+          <ul class="step-list">
+            <li>Design reporting so stakeholders can understand what evidence means and what actions follow.</li>
+            <li>Organize reporting around Growth, Mastery, and Readiness, not around one composite score.</li>
+            <li>Build explainers: what we measure, why it matters, what strong evidence looks like, and how to improve.</li>
+            <li>Separate “public understanding” reports from “internal improvement” reports so each stays usable.</li>
+            <li>Define what will be published, how often, and how questions will be answered without defensiveness.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 6:</span> Reporting and Transparency</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Transparency and Interpretability</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Multiple Measures</span>
+          </div>
+        </div>
+
+        <div class="card ddier">
+          <h4 class="ddiertxt">Step 6: Phase 3 Build List and Pilot Logic</h4>
+          <ul class="step-list">
+            <li>Convert evidence gaps into a prioritized build list (tasks, rubrics, calibration routines, portfolio structures, dashboards).</li>
+            <li>Define the pilot logic: where to start, what to collect, what “good enough” looks like, and how expansion decisions will be made.</li>
+            <li>Define minimum technical requirements: rubrics must be usable, calibratable, and interpretable.</li>
+            <li>Define professional learning priorities tied directly to evidence quality and consistency.</li>
+            <li>Publish a Phase 2 to Phase 3 transition brief so the system feels predictable and coherent.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag ddierTag"><span class="ddiertxt">DDIER:</span> Design</span>
+            <span class="tag contTag"><span class="continuumtxt">Continuum:</span> Design Vibrant Learning Experiences</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Systemic Coherence</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Continuous Improvement</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <strong>Leader reality check:</strong>
+        If Phase 2 does not produce clear decision rules and evidence protections, Phase 3 becomes tool-building that will be misused under pressure.
+      </div>
     </div>
 
-    <div class="rule"></div>
+    <div class="section">
+      <h3>Tools, Resources, and Supports for Phase 2</h3>
+      <p>
+        Phase 2 moves faster with fewer fights when leaders bring practical artifacts to the table.
+        These tools help teams create architecture that is coherent, credible, and usable under real conditions.
+      </p>
 
-    <!-- Steps -->
-    <h3 id="p2-steps">Phase 2 Steps. What Leaders Actually Do</h3>
-    <p>
-      Phase 2 works when it is treated like disciplined system design, not a document-writing project. The goal is not to produce a perfect framework. The goal is to build an architecture that can be explained, defended, and used consistently under real conditions.
-    </p>
+      <div class="tool-grid">
+        <div class="tool">
+          <h4>System Claims and Decision Map</h4>
+          <p>
+            A one-page map: claims the system will make, the decisions those claims support, and the evidence required for each claim.
+          </p>
+        </div>
 
-    <h4>Step 1: Translate Vision into Claims and Decisions</h4>
-    <ul>
-      <li>Convert the Portrait of a Learner and Growth-Mastery-Readiness definitions into explicit claims the system will make about learning.</li>
-      <li>List the decisions those claims must support (instructional adjustments, supports, reporting, governance).</li>
-      <li>Separate decisions appropriate for local evidence from decisions that still require state or federal measures.</li>
-      <li>Write plain-language decision rules so evidence is not misused under pressure.</li>
-    </ul>
-    <p><strong>Pillar 1:</strong> Purpose and Theory of Action <strong>DDIER:</strong> Design <strong>Principle:</strong> Clarity Over Complexity</p>
+        <div class="tool">
+          <h4>Evidence Logic Map (2.0)</h4>
+          <p>
+            A structured link between outcomes and evidence sources with minimum quality requirements and gap flags.
+          </p>
+        </div>
 
-    <h4>Step 2: Design the Evidence Logic (Evidence Map 2.0)</h4>
-    <ul>
-      <li>Define what counts as evidence for each claim, including student work, performance tasks, portfolios, and relevant academic indicators.</li>
-      <li>Specify minimum quality requirements (rubrics, calibration, interpretability, fairness checks).</li>
-      <li>Flag evidence that is high-stakes, low-quality, or likely to be misused (proxy collapse).</li>
-      <li>Design for growth over time, not snapshots.</li>
-    </ul>
-    <p><strong>Pillar 4:</strong> Data Validation and Utilization <strong>Principle:</strong> Multiple Measures <strong>Principle:</strong> Evidence Quality</p>
+        <div class="tool">
+          <h4>Decision Rules Playbook</h4>
+          <p>
+            A plain-language guide that shows how evidence can be used, weighted, and protected from misuse.
+          </p>
+        </div>
 
-    <h4>Step 3: Align the Six Pillars as Load-Bearing Supports</h4>
-    <ul>
-      <li>Assign operational roles to each pillar so the system cannot function with missing pieces.</li>
-      <li>Define pillar dependencies (reporting depends on validation, evaluation depends on theory of action, governance protects integrity).</li>
-      <li>Write “misalignment warnings” that describe what drift looks like when a pillar is weak.</li>
-    </ul>
-    <p><strong>Pillars:</strong> 1-6 <strong>Principle:</strong> Systemic Coherence</p>
+        <div class="tool">
+          <h4>Calibration Design Blueprint</h4>
+          <p>
+            A plan for consistency: anchor examples, norming routines, scoring notes, and a schedule for calibration cycles.
+          </p>
+        </div>
 
-    <h4>Step 4: Build the Continuum Flow</h4>
-    <ul>
-      <li>Design how the system moves from defining success to demonstrating impact publicly.</li>
-      <li>Prevent shortcuts (reporting without meaning, evidence without interpretation, response without coherence).</li>
-      <li>Define cadence and routines for evidence review, interpretation, and improvement action.</li>
-    </ul>
-    <p><strong>Continuum:</strong> Define Success -> Demonstrate Student Success <strong>Principle:</strong> Transparency and Interpretability</p>
+        <div class="tool">
+          <h4>Reporting Storyboard</h4>
+          <p>
+            A reporting mockup that shows what the public will see, how it will be explained, and what actions the system takes next.
+          </p>
+        </div>
 
-    <h4>Step 5: Embed DDIER as Discipline, Not a Checklist</h4>
-    <ul>
-      <li>Clarify what belongs in Design now versus what belongs in Development and Implementation later.</li>
-      <li>Define what Evaluation will study (coherence, validity, workload, interpretability, equity signals).</li>
-      <li>Set a revision rule. Revise based on evidence and learning, not politics or convenience.</li>
-    </ul>
-    <p><strong>DDIER:</strong> Design -> Development readiness <strong>Principle:</strong> Continuous Improvement</p>
+        <div class="tool">
+          <h4>Phase 2 to Phase 3 Transition Brief</h4>
+          <p>
+            A 2 to 3 page summary: what we built, what we protected, what we will pilot next, and how we will measure integrity.
+          </p>
+        </div>
+      </div>
 
-    <h4>Step 6: Roles, Authority, and Non-Delegables</h4>
-    <ul>
-      <li>Clarify what district leaders cannot delegate (coherence, governance rules, evidence protections).</li>
-      <li>Define what school leaders own (interpretation and support cycles) versus what teachers own (task design and evidence curation).</li>
-      <li>Ensure the board and community have stewardship roles that build trust rather than micromanage.</li>
-    </ul>
-    <p><strong>Pillar 2:</strong> Governance and Leadership <strong>Pillar 3:</strong> Community Engagement and Advocacy <strong>Principle:</strong> Reciprocal Responsibility</p>
-
-    <div class="callout">
-      <strong>Leader reality check:</strong> If Phase 2 ends with architecture that cannot be explained, defended, and used, Phase 3 becomes professional learning designed to compensate for design flaws.
+      <div class="tag-row">
+        <span class="tag pillarTag"><span class="pillartxt">Pillars:</span> 1, 2, 3, 4, 6</span>
+        <span class="tag contTag"><span class="continuumtxt">Continuum:</span> Define -> Demonstrate Student Success</span>
+        <span class="tag ddierTag"><span class="ddiertxt">DDIER:</span> Design</span>
+        <span class="tag principleTag"><span class="principletxt">Principles:</span> Coherence, Multiple Measures, Evidence Quality, Transparency</span>
+      </div>
     </div>
-
-    <div class="rule"></div>
-
-    <!-- Architecture -->
-    <h3 id="p2-architecture">Designing the Accountability Architecture</h3>
-    <p>
-      Phase 2 aligns four structural elements that must function together: the Six Pillars, the Local Accountability Continuum, the DDIER Cycle, and the Local Accountability Principles. These are interlocking safeguards that prevent drift into compliance.
-    </p>
-
-    <h4>The Six Pillars as Structural Safeguards</h4>
-    <p>
-      Each pillar prevents a known system failure. When one pillar is weak, pressure transfers to the others. Eventually, the system compensates by reverting to compliance.
-    </p>
-    <ul>
-      <li><strong>Pillar 1: Purpose and Theory of Action</strong> prevents activity without intention and reform without logic.</li>
-      <li><strong>Pillar 2: Governance and Leadership</strong> prevents responsibility drift and decision-making ambiguity.</li>
-      <li><strong>Pillar 3: Community Engagement and Advocacy</strong> prevents accountability from becoming insider-only.</li>
-      <li><strong>Pillar 4: Data Validation and Utilization</strong> prevents low-quality data from driving high-stakes decisions.</li>
-      <li><strong>Pillar 5: Evaluating Progress and Impact</strong> prevents snapshot judgments and reactionary leadership.</li>
-      <li><strong>Pillar 6: Reporting and Transparency</strong> prevents misinterpretation, mistrust, and narrative vacuum.</li>
-    </ul>
-
-    <h4>The Local Accountability Continuum as System Flow</h4>
-    <p>
-      The continuum defines how learning becomes visible. Phase 2 explicitly designs for continuity across stages so the district does not skip meaning and jump straight to reporting.
-    </p>
-    <ul>
-      <li>Define success with the community</li>
-      <li>Design learning aligned to that success</li>
-      <li>Gather meaningful evidence</li>
-      <li>Interpret evidence collaboratively</li>
-      <li>Respond through support and adjustment</li>
-      <li>Demonstrate impact publicly</li>
-    </ul>
-
-    <div class="callout">
-      <strong>What happens when the continuum is broken:</strong>
-      Reporting without shared definition breeds confusion. Evidence without interpretation invites misjudgment. Response without clarity creates initiative churn.
-    </div>
-
-    <h4>The DDIER Cycle as Operating Discipline</h4>
-    <p>
-      Phase 2 embeds DDIER as a learning engine, not a procedural checklist. The district protects design integrity so Implementation does not become compliance.
-    </p>
-    <ul>
-      <li><strong>Design:</strong> clarify claims, evidence requirements, and decision rules.</li>
-      <li><strong>Develop:</strong> build tools and routines that match design (rubrics, calibration, reporting templates).</li>
-      <li><strong>Implement:</strong> pilot with real work and real constraints.</li>
-      <li><strong>Evaluate:</strong> study coherence, validity, workload, interpretability, equity, and unintended consequences.</li>
-      <li><strong>Revise:</strong> adjust based on evidence and learning, not politics or convenience.</li>
-    </ul>
-
-    <div class="rule"></div>
-
-    <!-- Evidence & Practice -->
-    <h3 id="p2-evidence">Designing Evidence With Integrity</h3>
-    <p>
-      Evidence design is not neutral. Phase 2 makes explicit decisions about what counts as evidence, whose learning is made visible, and which questions the system is willing to ask itself. Authentic evidence creates discomfort. Systems often protect adults from that discomfort by narrowing evidence or delaying its use. Phase 2 rejects that avoidance.
-    </p>
-
-    <h4>Evidence Commitments</h4>
-    <ul>
-      <li>Evidence must emerge from meaningful learning experiences.</li>
-      <li>Evidence must show growth over time, not just snapshots.</li>
-      <li>Evidence must include student work and performance, not only scores.</li>
-      <li>Evidence must inform action, not just reporting.</li>
-    </ul>
-
-    <h4>Evidence Misuse Traps to Design Against</h4>
-    <ul>
-      <li><strong>Convenience bias:</strong> choosing what is easiest to collect instead of what is most meaningful.</li>
-      <li><strong>Proxy collapse:</strong> using a single number as a stand-in for readiness.</li>
-      <li><strong>Compliance theater:</strong> collecting artifacts to satisfy a requirement instead of documenting learning.</li>
-      <li><strong>Delayed learning:</strong> waiting until end-of-year results to decide what students needed all along.</li>
-    </ul>
-
-    <div class="callout">
-      <strong>Design protection:</strong>
-      If the system cannot validate evidence quality, it cannot ethically increase the stakes attached to that evidence.
-    </div>
-
-    <div class="rule"></div>
-
-    <!-- Stakeholder Roles -->
-    <h3 id="p2-roles">Stakeholder Roles. Reciprocal Accountability in Phase 2</h3>
-    <p>
-      Phase 2 clarifies what accountability requires of each level. When responsibility is unclear, it defaults downward. Reciprocal accountability prevents that slide.
-    </p>
-
-    <h4>Students</h4>
-    <ul>
-      <li>Demonstrate learning through authentic work and reflection.</li>
-      <li>Curate evidence that shows growth, mastery, and readiness over time.</li>
-    </ul>
-
-    <h4>Teachers</h4>
-    <ul>
-      <li>Design learning that naturally produces meaningful evidence.</li>
-      <li>Use common language and rubrics so evidence is interpretable and improvable.</li>
-    </ul>
-
-    <h4>School Leaders</h4>
-    <ul>
-      <li>Lead evidence interpretation and support cycles, not just compliance checks.</li>
-      <li>Protect coherence by resisting initiative overload and evidence misuse.</li>
-    </ul>
-
-    <h4>District Leaders</h4>
-    <ul>
-      <li>Own system coherence, evidence quality protections, and decision rules.</li>
-      <li>Ensure equity of access to strong learning experiences and credible evidence.</li>
-    </ul>
-
-    <h4>Board and Community</h4>
-    <ul>
-      <li>Provide stewardship. Keep the system honest, understandable, and aligned to local values.</li>
-      <li>Use information to support improvement, not to perform public judgment.</li>
-    </ul>
-
-    <div class="callout">
-      <strong>Why this matters:</strong>
-      If Phase 2 does not make roles and decision rules explicit, accountability becomes something done to schools instead of something built with the community.
-    </div>
-
-    <div class="rule"></div>
-
-    <!-- Key Outcome -->
-    <h3 id="p2-outcome">Phase 2: Key Outcome</h3>
-    <p>
-      By the end of Phase 2, the district should have more than a vision statement. It should have a small set of concrete products that anchor local accountability and create a strong runway into Phase 3. These outcomes make it possible to build coherent tools, instead of bolting accountability onto existing work.
-    </p>
-
-    <h4>1) A Defensible Accountability Architecture</h4>
-    <ul>
-      <li>Clear system claims about student success and what evidence supports each claim.</li>
-      <li>Decision rules that prevent misuse and proxy collapse.</li>
-      <li>Explicit alignment between the Six Pillars, Continuum, DDIER, and Principles.</li>
-    </ul>
-
-    <h4>2) Evidence Requirements and Quality Protections</h4>
-    <ul>
-      <li>Minimum standards for rubrics, calibration, interpretability, and fairness checks.</li>
-      <li>Clear guidance on what evidence can and cannot be used for high-stakes decisions.</li>
-      <li>A plan to improve evidence quality over time instead of blaming people for weak tools.</li>
-    </ul>
-
-    <h4>3) Roles, Authority, and Cadence</h4>
-    <ul>
-      <li>Clear ownership of evidence interpretation and improvement cycles.</li>
-      <li>Explicit governance routines and feedback loops (including how community input changes design).</li>
-      <li>A review cadence that supports learning in real time, not retrospective judgment.</li>
-    </ul>
-
-    <h4>4) Readiness for Phase 3 Development</h4>
-    <ul>
-      <li>A prioritized build list tied directly to architecture needs (not a wishlist).</li>
-      <li>Defined pilot logic: where to start, what to collect, and how expansion decisions will be made.</li>
-      <li>Agreement on what “done” looks like before scaling.</li>
-    </ul>
-
-    <p>
-      <strong>What “ready” really means:</strong>
-      Ready does not mean finished. Ready means the district can explain its architecture, defend its evidence claims, and operate improvement cycles without confusion.
-    </p>
-
-    <div class="rule"></div>
-
-    <!-- Practice in Action -->
-    <h3 id="p2-practice">Practice in Action: Phase 2 in Fleming County Schools</h3>
-    <p>
-      In Fleming County Schools, Phase 2 is where the district protects coherence across Measures of Quality, the Portrait of a Learner, BRIDGE Performance Indicators, Next-Generation Readiness Assessments, and BPI Websites. The goal is not to add another layer. The goal is to design an architecture where evidence and decisions stay aligned to what the community values.
-    </p>
-
-    <h4>Architecture Choices that Protect Learning</h4>
-    <ul>
-      <li>Dashboards and reports come after outcomes and evidence claims are clear, not before.</li>
-      <li>Evidence quality is treated as improvable. Weak evidence triggers better tasks and calibration, not blame.</li>
-      <li>Growth, mastery, and readiness are reported as a balanced story to avoid collapsing success into a single number.</li>
-    </ul>
-
-    <h4>Field insight</h4>
-    <p>
-      When Phase 2 is done well, the system feels lighter because it is clearer. When Phase 2 is rushed, the system feels heavier because people do not trust what it is asking them to do.
-    </p>
-
-    <div class="rule"></div>
-
-    <!-- Research Base -->
-    <h2 id="p2-research">Research Base and References</h2>
-
-    <h3>Accountability Redesign and Multiple Measures</h3>
-    <p>
-      Use this section to support board conversations and community trust building. The goal is not to “prove” the model with citations alone. The goal is to show that designing coherent, multi-measure accountability systems is a defensible approach with a growing research base.
-    </p>
-    <ul>
-      <li>Learning Policy Institute. Using performance assessments and balanced evidence to support student learning and improvement.</li>
-      <li>WestEd / CSAA resources on systems of assessment for deeper learning.</li>
-      <li>NASBE guidance on how policy can advance performance assessment and multiple measures.</li>
-    </ul>
-
-    <h3>Evidence Quality, Validity, and Interpretability</h3>
-    <ul>
-      <li>Resources on rubric quality, calibration, and appropriate use of performance evidence.</li>
-      <li>Guidance on aligning evidence strength to the decisions the system intends to make.</li>
-    </ul>
-
-    <h3>Innovation, Burden, and Right-Sizing Accountability</h3>
-    <ul>
-      <li>Research and field guidance on lowering burden while increasing meaningful information for improvement.</li>
-      <li>Design considerations that prevent metric overload and “initiative pile-up.”</li>
-    </ul>
-
-    <div class="callout">
-      <strong>How to use this section:</strong>
-      Share it with boards and councils to reinforce that Phase 2 is not “extra.” It is the step that prevents the system from drifting back to legacy accountability behavior.
-    </div>
-
   </div>
 
-  <script>
-    // Optional: auto-print via ?print=1
-    (function(){
-      const params = new URLSearchParams(window.location.search);
-      if(params.get("print") === "1"){ window.print(); }
-    })();
-  </script>
+  <!-- PAGE 2: Architecture Blueprint -->
+  <div class="page" id="architecture-blueprint">
+    <h2>Architecture Blueprint: How the System Holds Together</h2>
+
+    <div class="section">
+      <h3>Why Architecture Matters (More Than Vision Statements)</h3>
+      <div class="phase-legend">
+        <div class="legend-item"><span class="legend-swatch legend-pillars"></span><span>Six Pillars</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-continuum"></span><span>Local Accountability Continuum</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-ddier"></span><span>DDIER Cycle</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-principles"></span><span>Local Accountability Principles</span></div>
+      </div>
+
+      <p>
+        Architecture is how the system behaves under pressure. When the architecture is weak, accountability defaults to whatever is easiest to measure,
+        easiest to compare, and easiest to defend. Phase 2 designs the system so it can hold a learning-centered story without collapsing into compliance.
+      </p>
+
+      <div class="mini-grid">
+        <div class="card pillar">
+          <h4>Six Pillars as Load-Bearing Supports</h4>
+          <ul class="step-list">
+            <li><span class="pillartxt">Pillar 1:</span> keeps outcomes and claims explicit so the system knows what it is trying to prove.</li>
+            <li><span class="pillartxt">Pillar 2:</span> prevents responsibility drift by clarifying who owns evidence, decisions, and integrity.</li>
+            <li><span class="pillartxt">Pillar 3:</span> prevents insider-only accountability by building real feedback loops and public understanding.</li>
+            <li><span class="pillartxt">Pillar 4:</span> protects technical credibility so evidence can support the decisions people want to make.</li>
+            <li><span class="pillartxt">Pillar 5:</span> keeps the system learning, studying impact, and correcting itself as it scales.</li>
+            <li><span class="pillartxt">Pillar 6:</span> turns evidence into understandable reporting that supports action, not labeling.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillars:</span> 1-6</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Systemic Coherence</span>
+          </div>
+        </div>
+
+        <div class="card continuum">
+          <h4>Continuum Flow (From Definition to Demonstration)</h4>
+          <ul class="step-list">
+            <li>Define success with the community in observable terms.</li>
+            <li>Design learning experiences that can produce evidence of that success.</li>
+            <li>Collect evidence that is meaningful and improves instruction.</li>
+            <li>Interpret evidence with shared routines and shared language.</li>
+            <li>Respond through supports and improvements, not just labels.</li>
+            <li>Demonstrate student success publicly with clarity and integrity.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag contTag"><span class="continuumtxt">Continuum:</span> Define -> Demonstrate Student Success</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Transparency</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card ddier" style="margin-top:16px;">
+        <h4 class="ddiertxt">DDIER as the Operating Discipline</h4>
+        <ul class="step-list">
+          <li><strong>Design:</strong> clarify claims, evidence requirements, decision rules, and guardrails.</li>
+          <li><strong>Develop:</strong> build tools that match the design (rubrics, templates, calibration, reporting prototypes).</li>
+          <li><strong>Implement:</strong> pilot with real work, real constraints, and clear integrity checks.</li>
+          <li><strong>Evaluate:</strong> study coherence, workload, interpretability, validity, and equity signals.</li>
+          <li><strong>Revise:</strong> adjust based on evidence and learning, not politics or convenience.</li>
+        </ul>
+        <div class="highlight">
+          <strong>Design anchor:</strong>
+          The purpose of DDIER is to keep the system learning. If the system cannot revise, it will calcify.
+        </div>
+        <div class="tag-row">
+          <span class="tag ddierTag"><span class="ddiertxt">DDIER:</span> Design</span>
+          <span class="tag principleTag"><span class="principletxt">Principle:</span> Continuous Improvement</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>From Portrait to Accountability Architecture (Logic Model 2.0)</h3>
+      <div class="phase-legend">
+        <div class="legend-item"><span class="legend-swatch legend-pillars"></span><span>Six Pillars</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-continuum"></span><span>Local Accountability Continuum</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-ddier"></span><span>DDIER Cycle</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-principles"></span><span>Local Accountability Principles</span></div>
+      </div>
+
+      <p>
+        Phase 1 produced the Portrait, definitions, and an initial logic model. Phase 2 builds the operational logic that connects daily learning to system-level decisions and reporting.
+        This forces clarity: what we claim, what we can prove, how we prove it, and what we do when evidence is weak.
+      </p>
+
+      <div class="logic-columns">
+        <div class="logic-box">
+          <h4>Inputs</h4>
+          <ul>
+            <li>Portrait of a Learner + Growth/Mastery/Readiness definitions.</li>
+            <li>Priority standards and curriculum resources.</li>
+            <li>Evidence map with gaps and quality risks.</li>
+            <li>Leadership cadence, collaboration time, and calibration capacity.</li>
+          </ul>
+        </div>
+
+        <div class="logic-box">
+          <h4>Key Activities</h4>
+          <ul>
+            <li>Write system claims and evidence requirements.</li>
+            <li>Design decision rules and guardrails.</li>
+            <li>Prototype reporting and interpretation routines.</li>
+            <li>Design calibration and validation structures.</li>
+          </ul>
+        </div>
+
+        <div class="logic-box">
+          <h4>Outputs</h4>
+          <ul>
+            <li>Evidence logic map and minimum expectations.</li>
+            <li>Decision rule playbook for consistent use.</li>
+            <li>Reporting storyboard and public explainers.</li>
+            <li>Integrity checks that prevent drift.</li>
+          </ul>
+        </div>
+
+        <div class="logic-box">
+          <h4>Outcomes</h4>
+          <ul>
+            <li>Evidence supports action, not just reporting.</li>
+            <li>Stakeholders understand what counts and why.</li>
+            <li>System reduces clutter and protects coherence.</li>
+            <li>Phase 3 has a clear build list tied to real gaps.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tag-row">
+        <span class="tag pillarTag"><span class="pillartxt">Pillar 1:</span> Purpose and Logic Model</span>
+        <span class="tag pillarTag"><span class="pillartxt">Pillar 6:</span> Reporting and Transparency</span>
+        <span class="tag ddierTag"><span class="ddiertxt">DDIER:</span> Design</span>
+        <span class="tag principleTag"><span class="principletxt">Principle:</span> Evidence Quality</span>
+      </div>
+
+      <div class="highlight">
+        <strong>Psychometric note (plain language):</strong>
+        If the system’s evidence cannot support the decisions attached to it, the design is not ready for higher-stakes use.
+        Phase 2 makes that mismatch visible on purpose.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: Evidence, Decision Rules, Roles, Outcomes, Practice -->
+  <div class="page" id="evidence-rules">
+    <h2>Designing Evidence, Decision Rules, and Integrity Protections</h2>
+
+    <div class="section">
+      <h3>Evidence and Decision Rules That Prevent Drift</h3>
+      <div class="phase-legend">
+        <div class="legend-item"><span class="legend-swatch legend-pillars"></span><span>Six Pillars</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-continuum"></span><span>Local Accountability Continuum</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-ddier"></span><span>DDIER Cycle</span></div>
+        <div class="legend-item"><span class="legend-swatch legend-principles"></span><span>Local Accountability Principles</span></div>
+      </div>
+
+      <p>
+        Evidence design is not neutral. It determines what becomes visible, what stays hidden, and what people believe is “real.”
+        Phase 2 protects against predictable failure modes by designing evidence expectations and decision rules that are both meaningful and defensible.
+      </p>
+
+      <div class="mini-grid">
+        <div class="card pillar">
+          <h4>Evidence Quality Requirements</h4>
+          <ul class="step-list">
+            <li>Evidence must be tied to a clear claim and a clear definition of success.</li>
+            <li>Evidence must be interpretable by humans, not just stored in systems.</li>
+            <li>Rubrics must be usable and capable of being calibrated across classrooms and schools.</li>
+            <li>Portfolio evidence must show growth over time, not just “best work.”</li>
+            <li>When evidence is weak, the response is better tasks and better routines, not blame.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 4:</span> Data Validation and Utilization</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Evidence Quality</span>
+          </div>
+        </div>
+
+        <div class="card continuum">
+          <h4>Decision Rule Guardrails</h4>
+          <ul class="step-list">
+            <li>No single measure can define readiness. Balanced evidence is required for high-stakes conclusions.</li>
+            <li>Conflicting evidence triggers inquiry and support, not labeling.</li>
+            <li>Evidence use matches evidence strength. Higher stakes require higher technical integrity.</li>
+            <li>Public reporting must be designed for understanding and action, not sorting and ranking.</li>
+            <li>Stakeholders have access to clear explanations of what evidence means and how improvement happens.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 6:</span> Reporting and Transparency</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Transparency</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Multiple Measures</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card bestpractice" style="margin-top:16px;">
+        <h4 class="bestpracticetxt">Best Practices That Protect Integrity</h4>
+        <ul class="step-list">
+          <li>Build calibration into the calendar. Consistency is not an optional add-on.</li>
+          <li>Publish “how to interpret this” guides alongside any report shared publicly.</li>
+          <li>Use decision logs so stakeholders can see what changed and why.</li>
+          <li>Design reporting to drive support and improvement, not public judgment.</li>
+          <li>Keep the system small enough to run well. Coherence beats clutter every time.</li>
+        </ul>
+      </div>
+
+      <div class="highlight">
+        <strong>Design check:</strong>
+        If you cannot explain what evidence supports a claim and what decisions follow, the system is not ready to be used as accountability.
+      </div>
+    </div>
+
+    <div class="section" id="stakeholder-roles">
+      <h3>Stakeholder Engagement, Empowerment, and Reciprocity in Phase 2</h3>
+
+      <p>
+        In Phase 2, stakeholder roles become operational. People do not just give input. They help build a system they can understand,
+        they can trust, and they can use. Reciprocity means each group has responsibility and benefit, not just participation.
+      </p>
+
+      <div class="grid">
+        <div class="card pillar">
+          <h4>School and District Leaders</h4>
+          <ul class="step-list">
+            <li>Own coherence. Prevent tool-building from outrunning clarity.</li>
+            <li>Define decision rules and protect evidence integrity under pressure.</li>
+            <li>Build cadence: evidence reviews, calibration cycles, and decision logs.</li>
+            <li>Stop low-value requirements that create noise and compliance theater.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 2:</span> Governance and Leadership</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Systemic Coherence</span>
+          </div>
+        </div>
+
+        <div class="card continuum">
+          <h4>Teachers and School Staff</h4>
+          <ul class="step-list">
+            <li>Test evidence expectations against real tasks and real student work.</li>
+            <li>Help define what “good evidence” looks like using exemplars and anchor work.</li>
+            <li>Participate in calibration so interpretation is consistent and fair.</li>
+            <li>Identify what support is needed so quality is realistic, not aspirational.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 4:</span> Data Validation and Utilization</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Evidence Quality</span>
+          </div>
+        </div>
+
+        <div class="card ddier">
+          <h4 class="ddiertxt">Parents and Guardians</h4>
+          <ul class="step-list">
+            <li>Stress-test interpretability: can families understand what reports mean and what to do next.</li>
+            <li>Help refine public language so transparency is real, not performative.</li>
+            <li>Provide feedback on what would build trust in evidence beyond test scores.</li>
+            <li>Help identify where reporting could unintentionally confuse or mislead.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 6:</span> Reporting and Transparency</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Transparency</span>
+          </div>
+        </div>
+
+        <div class="card pillar">
+          <h4>Students</h4>
+          <ul class="step-list">
+            <li>Help define what strong evidence looks like in real work, not just adult language.</li>
+            <li>Test reflection prompts and portfolio structures for authenticity.</li>
+            <li>Identify where the system still misses strengths, interests, and readiness evidence.</li>
+            <li>Help make the reporting story human, not clinical.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Shared Ownership</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Multiple Measures</span>
+          </div>
+        </div>
+
+        <div class="card continuum">
+          <h4>Community and Partners</h4>
+          <ul class="step-list">
+            <li>Validate readiness definitions against local workforce, civic, and community expectations.</li>
+            <li>Offer real contexts that can become performance tasks and evidence opportunities.</li>
+            <li>Help review whether reporting supports understanding and improvement.</li>
+            <li>Act as integrity partners by asking whether design choices protect equity and opportunity.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 3:</span> Community Engagement and Advocacy</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Equity and Opportunity</span>
+          </div>
+        </div>
+
+        <div class="card bestpractice">
+          <h4 class="bestpracticetxt">Best Practices Across Stakeholders</h4>
+          <ul class="step-list">
+            <li>Publish decision logs and “you said, we did” summaries so influence is visible.</li>
+            <li>Review real student work together so evidence drives design, not preferences.</li>
+            <li>Use plain language and examples. If people cannot interpret it, it will not sustain.</li>
+            <li>Design supports and improvement actions alongside any evidence conversation.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <strong>Why this matters:</strong>
+        If Phase 2 is not co-built and interpretable, it will be seen as another central office initiative.
+        When Phase 2 is done well, the system feels clearer, lighter, and more trustworthy.
+      </div>
+    </div>
+
+    <div class="section" id="phase2-key-outcome">
+      <h3>Phase 2: Key Outcome</h3>
+
+      <p>
+        By the end of Phase 2, the district should have more than a plan. It should have a coherent architecture that can be explained,
+        defended, and used consistently across schools without confusion.
+      </p>
+
+      <div class="mini-grid">
+        <div class="card principle">
+          <h4 class="principletxt">1) Defensible Accountability Architecture</h4>
+          <ul class="step-list">
+            <li>Clear system claims about student success and what evidence supports each claim.</li>
+            <li>A coherent evidence logic map that links outcomes to evidence sources and quality requirements.</li>
+            <li>Integrity protections that prevent proxy collapse and compliance theater.</li>
+            <li>Plain-language explanations stakeholders can understand and repeat.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Systemic Coherence</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Transparency</span>
+          </div>
+        </div>
+
+        <div class="card ddier">
+          <h4 class="ddiertxt">2) Decision Rules and Guardrails</h4>
+          <ul class="step-list">
+            <li>A decision rule playbook for how evidence is used and weighted.</li>
+            <li>Clear boundaries on what evidence can support high-stakes decisions.</li>
+            <li>Protocols for conflicting evidence that trigger inquiry and support.</li>
+            <li>A system commitment that no single measure defines readiness.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag ddierTag"><span class="ddiertxt">DDIER:</span> Design</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Evidence Quality</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Multiple Measures</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mini-grid" style="margin-top:16px;">
+        <div class="card pillar">
+          <h4>3) Governance, Cadence, and Feedback Loops</h4>
+          <ul class="step-list">
+            <li>Defined roles and routines for evidence interpretation and system integrity monitoring.</li>
+            <li>A calibration and validation plan that matches evidence expectations.</li>
+            <li>Stakeholder feedback loops that show visible influence and learning.</li>
+            <li>A reporting cadence designed for understanding and action.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 2:</span> Governance and Leadership</span>
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 6:</span> Reporting and Transparency</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Shared Ownership</span>
+          </div>
+        </div>
+
+        <div class="card continuum">
+          <h4>4) Readiness for Phase 3 Development</h4>
+          <ul class="step-list">
+            <li>A prioritized build list tied directly to evidence gaps and integrity needs.</li>
+            <li>Pilot logic: where to start, what evidence will be collected, and how scaling decisions will be made.</li>
+            <li>Professional learning priorities aligned to evidence quality and interpretability.</li>
+            <li>A transition brief that keeps the community oriented to what comes next.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag contTag"><span class="continuumtxt">Continuum:</span> Design Vibrant Learning Experiences</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Continuous Improvement</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <strong>What “ready” really means:</strong>
+        Ready does not mean finished. Ready means the district can explain its architecture, defend its evidence logic, and run consistent routines without confusion.
+      </div>
+    </div>
+
+    <div class="section" id="practice-field-fcs">
+      <h3>Practice in Action: Phase 2 in Fleming County Schools</h3>
+
+      <p>
+        In Fleming County Schools, Phase 2 is where the district protects coherence across the Portrait of a Learner, BRIDGE Performance Indicators,
+        Next-Generation Readiness Assessments, Measures of Quality, and BPI Websites. The goal is not to add layers. The goal is to design how these pieces function together as one system.
+      </p>
+
+      <div class="mini-grid">
+        <div class="card pillar">
+          <h4>Architecture Choices that Protect Learning</h4>
+          <ul class="step-list">
+            <li>Evidence expectations are defined before dashboards are finalized, so reporting reflects learning instead of driving it.</li>
+            <li>Decision rules prevent “score takeover” by requiring balanced evidence for readiness claims.</li>
+            <li>Evidence quality is treated as improvable through better tasks, better rubrics, and calibration cycles.</li>
+            <li>Leadership cadence focuses on evidence interpretation and support actions, not compliance checks.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag pillarTag"><span class="pillartxt">Pillar 2:</span> Governance and Leadership</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Systemic Coherence</span>
+          </div>
+        </div>
+
+        <div class="card continuum">
+          <h4>What Phase 2 Looks Like to Stakeholders</h4>
+          <ul class="step-list">
+            <li>Students see clearer expectations for what counts as evidence and have structures to curate it over time.</li>
+            <li>Teachers have clearer guidance on how to design tasks that produce meaningful evidence.</li>
+            <li>Families see reporting that explains learning, not just results.</li>
+            <li>Board members receive information that supports governance focused on learning and improvement.</li>
+          </ul>
+          <div class="tag-row">
+            <span class="tag contTag"><span class="continuumtxt">Continuum:</span> Demonstrate Student Success</span>
+            <span class="tag principleTag"><span class="principletxt">Principle:</span> Transparency</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="highlight">
+        <strong>Field insight:</strong>
+        When Phase 2 is done well, the system feels lighter because it is clearer.
+        When Phase 2 is rushed, the system feels heavier because people do not trust what it is asking them to do.
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: Research Base and References -->
+  <div class="page" id="research-base">
+    <h2>Research Base and References</h2>
+
+    <div class="section">
+      <h3>Multiple Measures, Balanced Evidence, and Accountability Design</h3>
+      <p>
+        Phase 2 is where design integrity is either protected or lost. The references below support the idea that multi-measure, performance-based,
+        and portfolio-informed accountability requires explicit evidence logic, careful interpretation, and disciplined use.
+      </p>
+      <ul class="step-list">
+        <li><strong>Learning Policy Institute.</strong> Using performance assessments to support student learning and improvement.</li>
+        <li><strong>WestEd / CSAA.</strong> Systems of assessment for deeper learning and balanced evidence.</li>
+        <li><strong>NASBE.</strong> Policy guidance on advancing performance assessment and multiple measures.</li>
+        <li><strong>Assessment validity and appropriate use literature.</strong> Aligning evidence strength to decision stakes.</li>
+        <li><strong>Continuous improvement and implementation science.</strong> Designing systems that learn and revise over time.</li>
+      </ul>
+
+      <div class="highlight">
+        <strong>How to use this section:</strong>
+        Share it with boards and councils to reinforce that Phase 2 is not “extra.” It is the step that prevents drift back to legacy accountability.
+      </div>
+
+      <div class="tag-row">
+        <span class="tag principleTag"><span class="principletxt">Principle:</span> Evidence Quality and Technical Integrity</span>
+        <span class="tag principleTag"><span class="principletxt">Principle:</span> Multiple Measures</span>
+        <span class="tag principleTag"><span class="principletxt">Principle:</span> Transparency</span>
+      </div>
+    </div>
+  </div>
+
+</div> <!-- end pdf-content -->
+
+<!-- Libraries for PDF generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+  function triggerPrint() {
+    window.print();
+  }
+
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF('p', 'pt', 'letter'); // 612 x 792 pts
+
+    const content = document.getElementById('pdf-content');
+    const canvas = await html2canvas(content, {
+      scale: 2,
+      useCORS: true,
+      scrollY: -window.scrollY
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = pageWidth;
+    const imgHeight = canvas.height * imgWidth / canvas.width;
+
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    pdf.save('Phase2_Designing_the_Vision.pdf');
+  }
+</script>
+
 </body>
 </html>
