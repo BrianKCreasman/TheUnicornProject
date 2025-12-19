@@ -39,7 +39,7 @@
     a{ color:inherit; text-decoration:none; }
     .wrap{ max-width: 1120px; margin: 0 auto; padding: 22px; }
 
-    /* ===== Top Header (matches Unicorn Project header content) ===== */
+    /* ===== Next-Generation Header (UPDATED: centered + new image) ===== */
     .nxgHeader{
       padding: 20px 22px 10px 22px;
     }
@@ -52,21 +52,25 @@
       box-shadow: 0 18px 44px rgba(0,0,0,0.10);
       overflow:hidden;
     }
+
     .nxgTop{
-      padding: 18px 18px 14px 18px;
+      padding: 20px 18px 16px 18px;
       display:flex;
-      gap: 18px;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      gap: 14px;
+      text-align:center;
     }
+
     .nxgImgWrap{
-      width: 92px;
-      height: 92px;
-      border-radius: 22px;
+      width: 96px;
+      height: 96px;
+      border-radius: 22px; /* rounded square */
       background: linear-gradient(135deg, rgba(10,53,94,0.10), rgba(14,133,119,0.10));
       border: 1px solid rgba(10,53,94,0.10);
       display:grid;
       place-items:center;
-      flex: 0 0 auto;
       overflow:hidden;
       box-shadow: 0 12px 30px rgba(0,0,0,0.10);
     }
@@ -75,9 +79,9 @@
       height: 100%;
       object-fit: cover;
       display:block;
-      transform: scale(1.06);
+      transform: scale(1.04);
     }
-    .nxgTitleBlock{ min-width: 0; }
+
     .nxgKicker{
       font-size: 12px;
       font-weight: 1000;
@@ -87,35 +91,37 @@
       opacity: 0.95;
     }
     .nxgH1{
-      margin: 6px 0 6px 0;
+      margin: 0;
       font-size: 22px;
       font-weight: 1000;
       letter-spacing: -0.2px;
       color: var(--text);
       line-height: 1.12;
+      text-transform: uppercase;
     }
     .nxgSub{
       margin: 0;
       font-size: 13px;
-      font-weight: 750;
+      font-weight: 800;
       color: var(--muted);
       line-height: 1.45;
     }
 
     .nxgQuote{
-      padding: 14px 18px 18px 18px;
+      padding: 16px 18px 18px 18px;
       border-top: 1px solid rgba(221,227,238,0.9);
       background:
         radial-gradient(820px 260px at 10% 20%, rgba(219,181,80,0.14), transparent 60%),
         radial-gradient(820px 260px at 90% 40%, rgba(14,133,119,0.12), transparent 60%),
         rgba(255,255,255,0.62);
+      text-align:center;
     }
     .nxgQuote p{
       margin: 0;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 750;
       color: var(--text);
-      line-height: 1.65;
+      line-height: 1.7;
     }
     .nxgAttribution{
       margin-top: 10px;
@@ -125,12 +131,11 @@
     }
 
     @media (max-width: 760px){
-      .nxgTop{ align-items:flex-start; }
-      .nxgImgWrap{ width: 78px; height: 78px; border-radius: 20px; }
+      .nxgImgWrap{ width: 84px; height: 84px; border-radius: 20px; }
       .nxgH1{ font-size: 20px; }
     }
 
-    /* ===== Top bar (sticky nav under header) ===== */
+    /* ===== Sticky Nav ===== */
     .topbar{
       position: sticky;
       top: 0;
@@ -792,28 +797,23 @@
 </head>
 <body>
 
-  <!-- Next-Generation Header (requested) -->
+  <!-- Next-Generation Header (centered, updated logo + text) -->
   <div class="nxgHeader" aria-label="Next-Generation Learning, Assessment, and Accountability Header">
     <div class="nxgInner">
       <div class="nxgTop">
         <div class="nxgImgWrap" aria-hidden="true">
-          <!-- Same image used on TheUnicornProject home header -->
           <img class="nxgImg"
-               src="https://i.postimg.cc/jSXFZymK/Nx-GLearning-Assessment-Accountability-%282%29.png"
-               alt="Next-Generation Learning, Assessment, and Accountability Header" />
+               src="https://i.postimg.cc/Kzt062yn/FCSUnicorn-Project-Logo.png"
+               alt="FCS Unicorn Project Logo" />
         </div>
 
-        <div class="nxgTitleBlock">
-          <div class="nxgKicker">Next-Generation Learning, Assessment, and Accountability Header</div>
-          <div class="nxgH1">KENTUCKY'S LOCAL ACCOUNTABILITY FRAMEWORK</div>
-          <p class="nxgSub">Next-Generation Learning, Assessment, and Accountability</p>
-        </div>
+        <div class="nxgKicker">NEXT-GENERATION LEARNING, ASSESSMENT, AND ACCOUNTABILITY HEADER</div>
+        <div class="nxgH1">KENTUCKY'S LOCAL ACCOUNTABILITY FRAMEWORK</div>
+        <p class="nxgSub">Next-Generation Learning, Assessment, and Accountability</p>
       </div>
 
       <div class="nxgQuote">
-        <p>
-          "Do not follow where the path may lead, go instead where there is no path and make a trail."
-        </p>
+        <p>"Do not follow where the path may lead, go instead where there is no path and make a trail."</p>
         <div class="nxgAttribution">- Ralph Waldo Emerson</div>
       </div>
     </div>
