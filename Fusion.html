@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fusion | Local Accountability Framework</title>
+  <style>
+    :root{
+      --navy:#0a355e;
+      --teal:#0e8577;
+      --gold:#dbb550;
+      --bg:#f5f7fb;
+      --text:#111111;
+      --muted:#6b7280;
+      --card:#ffffff;
+      --border:#dde3ee;
+      --shadow: 0 14px 36px rgba(0,0,0,0.12);
+      --shadowSoft: 0 10px 22px rgba(0,0,0,0.10);
+      --radius: 22px;
+      --radiusSm: 16px;
+
+      --chipPillars:#e8f1ff;
+      --chipContinuum:#e8fff4;
+      --chipPrinciples:#fff6df;
+      --chipDDIER:#f2eaff;
+
+      --ok:#16a34a;
+      --warn:#f59e0b;
+      --risk:#dc2626;
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 700px at 20% -10%, rgba(14,133,119,0.18), transparent 55%),
+                  radial-gradient(1200px 700px at 80% -10%, rgba(219,181,80,0.18), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width: 1120px; margin: 0 auto; padding: 22px; }
+
+    /* Top bar */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(245,247,251,0.72);
+      border-bottom: 1px solid rgba(221,227,238,0.75);
+    }
+    .topbar .inner{
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 12px 22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 240px;
+    }
+    .mark{
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      box-shadow: 0 10px 24px rgba(10,53,94,0.25);
+      position:relative;
+      overflow:hidden;
+    }
+    .mark:after{
+      content:"";
+      position:absolute;
+      inset:-20px;
+      background: radial-gradient(circle at 30% 30%, rgba(219,181,80,0.55), transparent 55%);
+      transform: rotate(18deg);
+    }
+    .brand h1{
+      margin:0;
+      font-size: 14px;
+      letter-spacing: 0.3px;
+      color: var(--navy);
+      font-weight: 800;
+      line-height: 1.15;
+    }
+    .brand .sub{
+      display:block;
+      font-weight: 600;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid rgba(0,0,0,0.10);
+      background: rgba(255,255,255,0.70);
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--navy);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .pill:hover{ transform: translateY(-2px) scale(1.02); box-shadow: 0 14px 26px rgba(0,0,0,0.12); }
+    .pill:active{ transform: translateY(-1px) scale(1.01); }
+    .pill .dot{
+      width:10px; height:10px; border-radius: 99px;
+      background: var(--gold);
+      box-shadow: 0 0 0 3px rgba(219,181,80,0.25);
+    }
+
+    /* Hero */
+    .hero{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    @media (max-width: 980px){
+      .hero{ grid-template-columns: 1fr; }
+      .brand{ min-width: auto; }
+    }
+
+    .card{
+      background: var(--card);
+      border: 1px solid rgba(221,227,238,0.95);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card .head{
+      padding: 18px 18px 0 18px;
+    }
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      font-weight: 900;
+      color: var(--navy);
+      letter-spacing: 0.4px;
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+    .eyebrow .tag{
+      font-size: 12px;
+      font-weight: 900;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(10,53,94,0.08);
+      border: 1px solid rgba(10,53,94,0.12);
+    }
+    .title{
+      margin: 10px 0 8px 0;
+      font-size: 28px;
+      line-height: 1.12;
+      color: var(--text);
+      font-weight: 900;
+      letter-spacing: -0.4px;
+    }
+    .lede{
+      margin: 0 0 14px 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      font-weight: 600;
+    }
+
+    .heroActions{
+      padding: 0 18px 18px 18px;
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items:center;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.10);
+      background: #ffffff;
+      font-weight: 900;
+      font-size: 12px;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+      cursor:pointer;
+      transition: transform .18s ease, box-shadow .18s ease;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-2px); box-shadow: 0 14px 28px rgba(0,0,0,0.12); }
+    .btn:active{ transform: translateY(-1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      color: #fff;
+      border: 1px solid rgba(10,53,94,0.12);
+    }
+    .btn .ic{
+      width: 28px; height: 28px;
+      border-radius: 12px;
+      display:grid; place-items:center;
+      background: rgba(10,53,94,0.10);
+    }
+    .btn.primary .ic{ background: rgba(255,255,255,0.20); }
+
+    /* Quick Map */
+    .quick{
+      padding: 18px;
+      display:flex;
+      flex-direction: column;
+      gap: 12px;
+      height: 100%;
+    }
+    .mapTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .mapTitle h3{
+      margin:0;
+      font-size: 14px;
+      font-weight: 1000;
+      color: var(--navy);
+      letter-spacing: 0.2px;
+    }
+    .mapTitle .mini{
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+    }
+    .stack{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .node{
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: var(--radiusSm);
+      background: rgba(255,255,255,0.85);
+      padding: 12px;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.07);
+      transition: transform .18s ease, box-shadow .18s ease;
+      cursor:pointer;
+    }
+    .node:hover{ transform: translateY(-3px) scale(1.01); box-shadow: 0 14px 30px rgba(0,0,0,0.12); }
+    .node .row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .node h4{
+      margin:0;
+      font-size: 13px;
+      font-weight: 1000;
+      color: var(--text);
+      letter-spacing: 0.2px;
+    }
+    .node p{
+      margin: 6px 0 0 0;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-weight: 650;
+    }
+    .chip{
+      font-size: 11px;
+      font-weight: 1000;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,0.10);
+      white-space: nowrap;
+    }
+    .cPillars{ background: var(--chipPillars); }
+    .cContinuum{ background: var(--chipContinuum); }
+    .cPrinciples{ background: var(--chipPrinciples); }
+    .cDDIER{ background: var(--chipDDIER); }
+
+    /* Content grid */
+    .grid{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    .section{
+      padding: 18px;
+    }
+    .sectionHeader{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sectionHeader h2{
+      margin:0;
+      font-size: 16px;
+      font-weight: 1000;
+      color: var(--navy);
+      letter-spacing: 0.2px;
+      line-height: 1.25;
+    }
+    .sectionHeader .hint{
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+      text-align:right;
+      max-width: 280px;
+      line-height: 1.35;
+    }
+
+    .accordion{
+      display:flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    details{
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: var(--radiusSm);
+      background: rgba(255,255,255,0.86);
+      box-shadow: var(--shadowSoft);
+      overflow:hidden;
+    }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding: 14px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      user-select:none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+
+    .sumLeft{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .badge{
+      width: 36px; height: 36px;
+      border-radius: 14px;
+      display:grid; place-items:center;
+      font-weight: 1000;
+      color: #fff;
+      background: linear-gradient(135deg, var(--navy), var(--teal));
+      box-shadow: 0 12px 24px rgba(10,53,94,0.22);
+      flex: 0 0 auto;
+    }
+    .sumText{ min-width:0; }
+    .sumText .kicker{
+      font-size: 12px;
+      font-weight: 1000;
+      color: var(--text);
+      letter-spacing: 0.2px;
+      margin:0;
+    }
+    .sumText .mini{
+      margin: 4px 0 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .chev{
+      width: 34px; height: 34px;
+      border-radius: 12px;
+      display:grid; place-items:center;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.08);
+      flex: 0 0 auto;
+      transition: transform .18s ease;
+    }
+    details[open] .chev{ transform: rotate(180deg); }
+
+    .body{
+      padding: 0 14px 14px 14px;
+      border-top: 1px solid rgba(221,227,238,0.9);
+    }
+    .body p{
+      margin: 12px 0 0 0;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text);
+      font-weight: 650;
+    }
+    .body .cite{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+    .cite code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      background: rgba(10,53,94,0.08);
+      border: 1px solid rgba(10,53,94,0.12);
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    /* References */
+    .refs{
+      margin-top: 18px;
+      padding: 18px;
+    }
+    .refs h3{
+      margin: 0 0 10px 0;
+      color: var(--navy);
+      font-size: 14px;
+      font-weight: 1000;
+    }
+    .refs .ref{
+      padding: 10px 12px;
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.86);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+      margin-bottom: 10px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--text);
+      font-weight: 650;
+    }
+    .refs .ref a{
+      color: var(--navy);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      font-weight: 900;
+    }
+
+    /* Modal */
+    .modalBackdrop{
+      position: fixed;
+      inset:0;
+      background: rgba(17,17,17,0.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding: 18px;
+      z-index: 50;
+    }
+    .modal{
+      width:min(920px, 100%);
+      max-height: min(86vh, 860px);
+      overflow:auto;
+      background: #fff;
+      border-radius: 24px;
+      border: 1px solid rgba(0,0,0,0.12);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+    .modalHeader{
+      padding: 14px 16px;
+      position: sticky;
+      top:0;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(221,227,238,0.9);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+    }
+    .modalHeader .mTitle{
+      margin:0;
+      font-size: 14px;
+      font-weight: 1000;
+      color: var(--navy);
+    }
+    .x{
+      border: 1px solid rgba(0,0,0,0.10);
+      background: rgba(0,0,0,0.04);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-weight: 1000;
+      color: var(--text);
+      transition: transform .18s ease;
+      user-select:none;
+    }
+    .x:hover{ transform: translateY(-1px); }
+    .modalBody{ padding: 14px 16px 18px 16px; }
+    .modalBody p{
+      margin: 0 0 10px 0;
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text);
+      font-weight: 650;
+    }
+    .divider{
+      height:1px;
+      background: rgba(221,227,238,0.9);
+      margin: 12px 0;
+    }
+
+    /* Footer */
+    .footer{
+      margin: 18px 0 6px 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-align:center;
+      opacity: 0.95;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="inner">
+      <div class="brand">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <h1>Local Accountability Framework</h1>
+          <span class="sub">Fusion. A unified system for learning, growth, mastery, and readiness.</span>
+        </div>
+      </div>
+
+      <div class="nav">
+        <div class="pill" onclick="scrollToId('fusion')"><span class="dot"></span>Fusion Text</div>
+        <div class="pill" onclick="scrollToId('elements')"><span class="dot"></span>Key Elements</div>
+        <div class="pill" onclick="scrollToId('refs')"><span class="dot"></span>References</div>
+        <div class="pill" onclick="openModal('about')"><span class="dot"></span>How to Use</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- HERO -->
+    <div class="hero" id="fusion">
+      <div class="card">
+        <div class="head">
+          <div class="eyebrow">
+            <span class="tag">The Local Accountability Framework</span>
+            <span style="color:var(--muted); font-weight:900;">A Unified System for Learning</span>
+          </div>
+          <h2 class="title">Fusion is the structural breakthrough.</h2>
+          <p class="lede">
+            This page is built to match the clean, modern structure of Phase 1 and Phase 2.
+            Use the quick map on the right to jump to each section, or expand the panels below to read the full narrative.
+          </p>
+        </div>
+
+        <div class="heroActions">
+          <div class="btn primary" onclick="expandAll()">
+            <span class="ic">+</span>
+            Expand All Sections
+          </div>
+          <div class="btn" onclick="collapseAll()">
+            <span class="ic">-</span>
+            Collapse All Sections
+          </div>
+          <div class="btn" onclick="openModal('print')">
+            <span class="ic">⎙</span>
+            Print / PDF Tips
+          </div>
+          <div class="btn" onclick="openModal('cite')">
+            <span class="ic">"</span>
+            Citation Note
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK MAP -->
+      <div class="card">
+        <div class="quick">
+          <div class="mapTitle">
+            <h3>Fusion Map</h3>
+            <div class="mini">Click to jump</div>
+          </div>
+
+          <div class="stack">
+            <div class="node" onclick="jumpAndOpen('d1')">
+              <div class="row">
+                <div>
+                  <h4>The Unified System</h4>
+                  <p>Fusion integrates the Pillars, Continuum, Principles, and DDIER into one living architecture.</p>
+                </div>
+                <span class="chip cPrinciples">Fusion</span>
+              </div>
+            </div>
+
+            <div class="node" onclick="jumpAndOpen('d2')">
+              <div class="row">
+                <div>
+                  <h4>Operating System</h4>
+                  <p>Accountability shapes learning in real time, not after the fact.</p>
+                </div>
+                <span class="chip cContinuum">Practice</span>
+              </div>
+            </div>
+
+            <div class="node" onclick="jumpAndOpen('d3')">
+              <div class="row">
+                <div>
+                  <h4>Dynamic Pillars</h4>
+                  <p>Pillars become active forces, tested against evidence, not static headings.</p>
+                </div>
+                <span class="chip cPillars">Pillars</span>
+              </div>
+            </div>
+
+            <div class="node" onclick="jumpAndOpen('d4')">
+              <div class="row">
+                <div>
+                  <h4>Developmental Truth</h4>
+                  <p>The Continuum makes stages visible without lowering expectations.</p>
+                </div>
+                <span class="chip cContinuum">Continuum</span>
+              </div>
+            </div>
+
+            <div class="node" onclick="jumpAndOpen('d5')">
+              <div class="row">
+                <div>
+                  <h4>Ethical Engine</h4>
+                  <p>Principles hold the line under pressure and keep decisions coherent.</p>
+                </div>
+                <span class="chip cPrinciples">Principles</span>
+              </div>
+            </div>
+
+            <div class="node" onclick="jumpAndOpen('d6')">
+              <div class="row">
+                <div>
+                  <h4>DDIER Rhythm</h4>
+                  <p>Implementation science makes ambition sustainable through disciplined cycles.</p>
+                </div>
+                <span class="chip cDDIER">DDIER</span>
+              </div>
+            </div>
+
+            <div class="node" onclick="jumpAndOpen('d7')">
+              <div class="row">
+                <div>
+                  <h4>Resolving the Tension</h4>
+                  <p>Accountability fuels improvement, instead of ending improvement conversations.</p>
+                </div>
+                <span class="chip cDDIER">Improvement</span>
+              </div>
+            </div>
+
+            <div class="node" onclick="jumpAndOpen('d8')">
+              <div class="row">
+                <div>
+                  <h4>Reclaiming Responsibility</h4>
+                  <p>Evidence becomes the currency of learning, not an extra task.</p>
+                </div>
+                <span class="chip cPillars">Learning</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="grid" id="elements">
+
+      <!-- LEFT -->
+      <div class="card section">
+        <div class="sectionHeader">
+          <h2>Fusion Narrative</h2>
+          <div class="hint">Click a section to expand. Use Expand All to read as a full essay.</div>
+        </div>
+
+        <div class="accordion">
+
+          <details id="d1" open>
+            <summary>
+              <div class="sumLeft">
+                <div class="badge">1</div>
+                <div class="sumText">
+                  <p class="kicker">The Local Accountability Framework: A Unified System for Learning</p>
+                  <p class="mini">Fusion is not an add-on. It is the structural breakthrough that makes this framework different.</p>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+            <div class="body">
+              <p>
+                Fusion is not an add-on. It is the structural breakthrough that makes this Local Accountability Framework fundamentally different from anything that has existed before.
+                For decades, education has borrowed pieces of accountability from disconnected traditions. We borrowed pillars from governance models, metrics from testing systems,
+                principles from reform language, and improvement cycles from implementation science. Each piece had value on its own, but none were designed to work together.
+                What resulted was fragmentation, compliance, and fatigue. This framework rejects that fragmentation by design. Fusion is the intentional integration of the Pillars,
+                the Continuum, the Local Accountability Principles, and Implementation Science into a single, living system. Each element reinforces the others.
+                None can function independently without weakening the whole.
+              </p>
+            </div>
+          </details>
+
+          <details id="d2">
+            <summary>
+              <div class="sumLeft">
+                <div class="badge">2</div>
+                <div class="sumText">
+                  <p class="kicker">Accountability as an Operating System</p>
+                  <p class="mini">Accountability shapes learning while it is happening, not after the fact.</p>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+            <div class="body">
+              <p>
+                At the center of this fusion is a simple but disruptive shift: accountability is no longer something imposed after learning occurs.
+                It is something that shapes learning while it is happening. Modern assessment frameworks now prioritize systems characterized by continuous feedback
+                and process monitoring, positioning assessment as a tool for instructional enhancement rather than just a final score (Meylani, 2024).
+                Practitioners experience this immediately. Instead of waiting for external judgments, educators work inside a system that clarifies purpose,
+                aligns effort, and makes progress visible in real time. School leaders are no longer translating disconnected initiatives; they are stewarding coherence
+                by articulating a shared vision and fostering a collaborative culture (Ralebese et al., 2025). District leaders are no longer defending outcomes.
+                They are cultivating conditions. This fusion transforms accountability from a scoreboard into an operating system. It changes not only what is measured,
+                but how daily decisions are made.
+              </p>
+            </div>
+          </details>
+
+          <details id="d3">
+            <summary>
+              <div class="sumLeft">
+                <div class="badge">3</div>
+                <div class="sumText">
+                  <p class="kicker">Dynamic Pillars and Structural Integrity</p>
+                  <p class="mini">Pillars become active forces that interact with every other element of the framework.</p>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+            <div class="body">
+              <p>
+                The Pillars provide the structural integrity of the system, but fusion prevents them from becoming static architecture.
+                In traditional models, pillars often exist as policy statements or strategic plan headings. Here, they are active forces that interact
+                with every other element of the framework. Purpose and Theory of Action are not aspirational language; they are continuously tested against evidence.
+                Effective leadership in such systems is increasingly defined by the ability to navigate complex policy landscapes and use data-informed decision-making
+                to achieve sustainable goals (Ralebese et al., 2025). Governance and leadership are not positional; they are relational and operational.
+                Reporting and transparency are not endpoints; they are feedback loops. Through fusion, the Pillars become dynamic rather than decorative.
+                They are lived, not laminated.
+              </p>
+            </div>
+          </details>
+
+          <details id="d4">
+            <summary>
+              <div class="sumLeft">
+                <div class="badge">4</div>
+                <div class="sumText">
+                  <p class="kicker">The Continuum and Developmental Truth</p>
+                  <p class="mini">Stages of practice are visible, anchored to shared definitions of quality.</p>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+            <div class="body">
+              <p>
+                The Continuum introduces developmental truth into accountability, and fusion ensures that truth is neither soft nor subjective.
+                Educators know intuitively that growth does not happen in a straight line. Traditional accountability systems often ignore this reality
+                by focusing on singular quantitative metrics that overlook practical application and holistic competencies (Meylani, 2024).
+                This framework embraces it without lowering expectations. The Continuum makes stages of practice visible, naming where schools and classrooms truly are.
+                Fusion ensures that those stages are anchored to shared definitions of quality, not personal opinion. Progress is recognized without pretending mastery
+                has already been achieved. Movement matters, but direction matters more.
+              </p>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="card section">
+        <div class="sectionHeader">
+          <h2>Fusion, Guardrails, and Sustainability</h2>
+          <div class="hint">This side emphasizes the principles and DDIER rhythm that keep the system durable.</div>
+        </div>
+
+        <div class="accordion">
+
+          <details id="d5" open>
+            <summary>
+              <div class="sumLeft">
+                <div class="badge">5</div>
+                <div class="sumText">
+                  <p class="kicker">Principles as the Ethical Engine</p>
+                  <p class="mini">Principles guide action, not just intention, and keep decisions coherent under pressure.</p>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+            <div class="body">
+              <p>
+                The Local Accountability Principles are the ethical engine of the system, and fusion ensures they guide action, not just intention.
+                Principles like locally defined success, multiple measures, transparency, and trust are easy to say and hard to operationalize.
+                Modern educational assessment systems are increasingly recommended to integrate multiple methodologies to create a more effective and inclusive environment
+                (Meylani, 2024). Every decision, from assessment design to reporting, is filtered through these principles. When pressure mounts, the principles hold the line.
+                For practitioners, this creates clarity. For leaders, it creates consistency. For communities, it creates confidence.
+              </p>
+            </div>
+          </details>
+
+          <details id="d6">
+            <summary>
+              <div class="sumLeft">
+                <div class="badge">6</div>
+                <div class="sumText">
+                  <p class="kicker">Implementation Science: The DDIER Cycle</p>
+                  <p class="mini">DDIER is embedded. It makes ambition sustainable through disciplined cycles.</p>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+            <div class="body">
+              <p>
+                Implementation Science, specifically the DDIER cycle (Design, Development, Implementation, Evaluation, and Revision), is what allows this fusion to move without breaking.
+                These are not treated as phases to complete once; they are treated as a continuous rhythm of improvement. Fusion ensures that DDIER is not layered on top of the framework;
+                it is embedded within it. Research highlights that integrating implementation science tools and frameworks ensures that key contextual determinants for success are not missed,
+                increasing the reliability of improvement efforts (Tyler & Glasgow, 2021). Every pillar is developed through DDIER. Every continuum movement is evaluated through DDIER.
+                This is how ambition becomes sustainable.
+              </p>
+            </div>
+          </details>
+
+          <details id="d7">
+            <summary>
+              <div class="sumLeft">
+                <div class="badge">7</div>
+                <div class="sumText">
+                  <p class="kicker">Resolving the Tension: Accountability and Improvement</p>
+                  <p class="mini">Accountability fuels improvement. Evidence is used to learn and adjust.</p>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+            <div class="body">
+              <p>
+                What makes this fusion truly groundbreaking is that it resolves the historic tension between accountability and improvement.
+                In legacy systems, accountability ends improvement conversations. In this framework, accountability fuels them.
+                Evidence is not used to sort or shame; it is used to learn and adjust. This reflects a shift toward "learning organizations" where organizational culture
+                and leadership styles mediate the path toward personal commitment and continuous growth (Kareem et al., 2024).
+                Transparency is not weaponized; it is normalized. Practitioners are not performing for compliance; they are documenting reality.
+                Leaders are not managing optics; they are managing conditions. The system becomes self-correcting rather than defensive.
+              </p>
+            </div>
+          </details>
+
+          <details id="d8">
+            <summary>
+              <div class="sumLeft">
+                <div class="badge">8</div>
+                <div class="sumText">
+                  <p class="kicker">Reclaiming Responsibility for Learning</p>
+                  <p class="mini">Evidence becomes the currency of learning, not an extra task.</p>
+                </div>
+              </div>
+              <div class="chev">▾</div>
+            </summary>
+            <div class="body">
+              <p>
+                For educators, this fusion changes the daily experience of teaching and learning. Instruction is no longer disconnected from accountability.
+                Evidence is no longer an extra task. Student work, reflection, and performance artifacts become the currency of the system.
+                This alignment allows teachers to see how their instructional choices connect directly to shared definitions of growth and mastery (Meylani, 2024).
+                Accountability stops feeling external and starts feeling instructional. For district leaders, accountability becomes a reflection of values, not a reaction to mandates.
+                This fusion creates something that has not existed until now: a locally owned accountability framework that is simultaneously rigorous, human, transparent, and adaptive.
+              </p>
+            </div>
+          </details>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- REFERENCES -->
+    <div class="card refs" id="refs">
+      <h3>References</h3>
+
+      <div class="ref">
+        Kareem, J., Patrick, H. A., &amp; Prabakaran, N. (2024). Exploring the factors of learning organization in school education: The role of leadership styles, personal commitment,
+        and organizational culture. <em>Central European Management Journal</em>.
+        <a href="https://doi.org/10.1108/cemj-12-2023-0457" target="_blank" rel="noopener">https://doi.org/10.1108/cemj-12-2023-0457</a>
+      </div>
+
+      <div class="ref">
+        Meylani, R. (2024). A comparative analysis of traditional and modern approaches to assessment and evaluation in education.
+        <em>Batı Anadolu Eğitim Bilimleri Dergisi, 15</em>(1), 520–555.
+        <a href="https://doi.org/10.51460/baebd.1386737" target="_blank" rel="noopener">https://doi.org/10.51460/baebd.1386737</a>
+      </div>
+
+      <div class="ref">
+        Ralebese, M. D., Jita, L., &amp; Badmus, O. T. (2025). Examining primary school principals’ instructional leadership practices: A case study on curriculum reform and implementation.
+        <em>Education Sciences, 15</em>(1), 70.
+        <a href="https://doi.org/10.3390/educsci15010070" target="_blank" rel="noopener">https://doi.org/10.3390/educsci15010070</a>
+      </div>
+
+      <div class="ref">
+        Tyler, A., &amp; Glasgow, R. E. (2021). Implementing improvements: Opportunities to integrate quality improvement and implementation science.
+        <em>Hospital Pediatrics, 11</em>(5), 536–545.
+        <a href="https://doi.org/10.1542/hpeds.2020-002246" target="_blank" rel="noopener">https://doi.org/10.1542/hpeds.2020-002246</a>
+      </div>
+    </div>
+
+    <div class="footer">
+      Built to mirror the Phase 1 and Phase 2 look and feel. Navy, teal, and gold. Clean. Dynamic. Practitioner-first.
+    </div>
+
+  </div>
+
+  <!-- MODAL -->
+  <div class="modalBackdrop" id="modalBackdrop" onclick="backdropClose(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modalHeader">
+        <p class="mTitle" id="modalTitle">Modal</p>
+        <div class="x" onclick="closeModal()">Close</div>
+      </div>
+      <div class="modalBody" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    function scrollToId(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    function jumpAndOpen(detailsId){
+      const d = document.getElementById(detailsId);
+      if(!d) return;
+      d.open = true;
+      d.scrollIntoView({behavior:"smooth", block:"start"});
+      // subtle emphasis
+      d.style.outline = "3px solid rgba(219,181,80,0.35)";
+      d.style.outlineOffset = "4px";
+      setTimeout(()=>{ d.style.outline = "none"; }, 900);
+    }
+
+    function expandAll(){
+      document.querySelectorAll("details").forEach(d => d.open = true);
+    }
+    function collapseAll(){
+      document.querySelectorAll("details").forEach(d => d.open = false);
+      // keep first and principles open for usability
+      const d1 = document.getElementById("d1");
+      const d5 = document.getElementById("d5");
+      if(d1) d1.open = true;
+      if(d5) d5.open = true;
+    }
+
+    const MODAL_CONTENT = {
+      about: {
+        title: "How to Use This Page",
+        body: `
+          <p>This page is designed for the same leadership rhythm as Phase 1 and Phase 2.</p>
+          <p><strong>Use it three ways:</strong></p>
+          <p>1) As a shared read with principals and directors before an executive review.</p>
+          <p>2) As a board-facing explanation of why the framework is not a compliance tool.</p>
+          <p>3) As a district-wide coherence anchor when new initiatives or metrics appear.</p>
+          <div class="divider"></div>
+          <p><strong>Tip:</strong> Open “Expand All,” then print to PDF for a clean, narrative handout.</p>
+        `
+      },
+      print: {
+        title: "Print / PDF Tips",
+        body: `
+          <p>For the cleanest PDF: click <strong>Expand All</strong>, then use your browser print dialog.</p>
+          <p>In Chrome: Print → Save as PDF → More settings → Background graphics ON.</p>
+          <p>If you prefer a shorter handout, collapse all and open only the sections you need.</p>
+        `
+      },
+      cite: {
+        title: "Citation Note",
+        body: `
+          <p>The in-text citations are included exactly as you provided them.</p>
+          <p>If you want this page to match an academic style guide for publication, we can convert the citations to a dedicated footnote panel while keeping the leadership readability.</p>
+        `
+      }
+    };
+
+    function openModal(key){
+      const m = MODAL_CONTENT[key];
+      if(!m) return;
+      document.getElementById("modalTitle").textContent = m.title;
+      document.getElementById("modalBody").innerHTML = m.body;
+      document.getElementById("modalBackdrop").style.display = "flex";
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal(){
+      document.getElementById("modalBackdrop").style.display = "none";
+      document.body.style.overflow = "";
+    }
+    function backdropClose(e){
+      if(e.target && e.target.id === "modalBackdrop"){
+        closeModal();
+      }
+    }
+
+    // Keyboard accessibility: ESC closes modal
+    document.addEventListener("keydown", (e)=>{
+      if(e.key === "Escape"){
+        const mb = document.getElementById("modalBackdrop");
+        if(mb && mb.style.display === "flex") closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
