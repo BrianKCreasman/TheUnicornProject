@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phase 2 Integrity Checklist</title>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #111;
+      padding-top: 80px;
+    }
+
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      padding: 10px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .nav-button {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: #0a355e;
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+    .nav-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.25);
+      background: #13508c;
+    }
+    .nav-button:active {
+      transform: translateY(1px) scale(0.98);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      background: #072744;
+    }
+
+    .print-button { background: #d9822b; }
+    .print-button:hover { background: #b86822; }
+    .print-button:active { background: #8b4e18; }
+
+    .page { width: 100%; padding: 40px; box-sizing: border-box; }
+
+    h1, h2, h3 { text-align: center; margin-bottom: 10px; }
+    h1 { color: #0a355e; }
+    h2 { color: #d9822b; }
+    h3 { color: #1b4965; }
+
+    .section {
+      background: #fff;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 18px;
+    }
+
+    .check {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin: 12px 0;
+      font-size: 0.96rem;
+      line-height: 1.45;
+    }
+    .box {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #111;
+      border-radius: 4px;
+      flex: 0 0 auto;
+      margin-top: 2px;
+      background: #fff;
+    }
+    .note {
+      background: #e9fbf7;
+      border-left: 6px solid #0E8577;
+      padding: 12px 14px;
+      margin-top: 14px;
+      font-size: 0.95rem;
+    }
+
+    @page { size: 8.5in 11in; margin: 0.5in; }
+    @media print {
+      body { padding-top: 0; background: #ffffff; }
+      .navbar { display: none; }
+      .page { padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="navbar">
+  <a href="#checklist" class="nav-button">Checklist</a>
+  <button type="button" class="nav-button print-button" onclick="window.print()">Print</button>
+  <a href="Phase2.v.2.html" class="nav-button">Back to Phase 2</a>
+</div>
+
+<div class="page" id="checklist">
+  <h1>Phase 2 Integrity Checklist</h1>
+  <h2>Designing the Vision: Architecture That Holds Under Pressure</h2>
+
+  <div class="section">
+    <h3>1) Claims and Definitions</h3>
+    <div class="check"><div class="box"></div><div>We translated the Portrait of a Learner and Growth/Mastery/Readiness into explicit system claims.</div></div>
+    <div class="check"><div class="box"></div><div>Each claim is written in plain language that a student, family member, and board member can paraphrase.</div></div>
+    <div class="check"><div class="box"></div><div>We defined what the system will not claim (to prevent overreach and misuse).</div></div>
+  </div>
+
+  <div class="section">
+    <h3>2) Evidence Logic</h3>
+    <div class="check"><div class="box"></div><div>Every claim has identified evidence sources (student work, performance evidence, portfolios, academic measures as appropriate).</div></div>
+    <div class="check"><div class="box"></div><div>We flagged evidence that is high-stakes but low-quality (not ready for consequential use).</div></div>
+    <div class="check"><div class="box"></div><div>We defined minimum evidence expectations across grade spans to prevent “random acts of evidence.”</div></div>
+  </div>
+
+  <div class="section">
+    <h3>3) Decision Rules and Guardrails</h3>
+    <div class="check"><div class="box"></div><div>We wrote decision rules for how evidence is used (instruction, support, grading, reporting, accountability).</div></div>
+    <div class="check"><div class="box"></div><div>We have a clear “no single measure defines readiness” guardrail.</div></div>
+    <div class="check"><div class="box"></div><div>Conflicting evidence triggers inquiry and support, not labeling.</div></div>
+  </div>
+
+  <div class="section">
+    <h3>4) Governance and Cadence</h3>
+    <div class="check"><div class="box"></div><div>Roles are clear: who validates evidence, who interprets it, who decides, who monitors drift.</div></div>
+    <div class="check"><div class="box"></div><div>We defined a cadence for evidence review, calibration, stakeholder loops, and reporting.</div></div>
+    <div class="check"><div class="box"></div><div>We built a decision-log routine (what changed, why, and what evidence informed it).</div></div>
+  </div>
+
+  <div class="section">
+    <h3>5) Reporting by Design</h3>
+    <div class="check"><div class="box"></div><div>Reporting is organized around Growth, Mastery, and Readiness, not a single composite score.</div></div>
+    <div class="check"><div class="box"></div><div>We created public explainers: what we measure, why it matters, what strong evidence looks like, and how to improve.</div></div>
+    <div class="check"><div class="box"></div><div>We separated internal improvement reporting from public understanding reporting so each remains usable.</div></div>
+  </div>
+
+  <div class="section">
+    <h3>6) Phase 3 Readiness</h3>
+    <div class="check"><div class="box"></div><div>We converted evidence gaps into a prioritized build list (tasks, rubrics, calibration, portfolios, dashboards).</div></div>
+    <div class="check"><div class="box"></div><div>We defined pilot logic: where to start, what to collect, and how scaling decisions will be made.</div></div>
+    <div class="check"><div class="box"></div><div>We defined integrity checks that indicate drift early, before scaling.</div></div>
+
+    <div class="note">
+      <strong>Non-negotiable reality:</strong>
+      If you cannot confidently check most items, do not move to Phase 3 yet.
+      Phase 3 will not fix design ambiguity. It will amplify it.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
