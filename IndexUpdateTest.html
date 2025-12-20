@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Kentucky's Local Accountability Framework - Home</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <style>
     :root {
@@ -287,6 +287,18 @@
       transform: translateY(-1px);
     }
 
+    /* NEW: Gold pill button (Phase 1 Google Doc) */
+    .pill-link-gold {
+      background-color: var(--gold);
+      color: #111111;
+      border: 1px solid rgba(0, 0, 0, 0.18);
+    }
+
+    .pill-link-gold:hover {
+      background-color: var(--gold-soft);
+      transform: translateY(-1px);
+    }
+
     .card-intro {
       background: linear-gradient(135deg, var(--navy-soft), var(--teal-soft));
     }
@@ -457,6 +469,14 @@
                  class="pill-link"
                  target="_blank">
                 Phase Guide
+              </a>
+
+              <!-- NEW: Gold pill-shaped hyperlink button (Google Doc) -->
+              <a href="https://docs.google.com/document/d/1RHKlNT9DWbC-NYlxkWe-jzbrwC-zDCXfB15psxjTUI4/edit?usp=sharing"
+                 class="pill-link pill-link-gold"
+                 target="_blank"
+                 rel="noopener">
+                Phase 1 Google Doc
               </a>
 
             </div>
