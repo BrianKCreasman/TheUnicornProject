@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phase 1 Info-Card | Journey to Vibrant Local Accountability</title>
+
+  <style>
+    :root{
+      /* Borrowed from your Unicorn Project palette (consistent with your other pages/snippets) */
+      --navy:#0a355e;
+      --navy-2:#05203c;
+      --teal:#118a9a;
+      --teal-2:#0f6f7b;
+      --gold:#dbd59b;
+      --gold-2:#c8bf88;
+
+      --bg:#f5f5f7;
+      --card:#ffffff;
+      --text:#111111;
+      --muted:#5c6168;
+
+      --border:#e4e7ec;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
+      --shadow-2: 0 16px 50px rgba(0,0,0,.12);
+      --radius:18px;
+      --radius2:22px;
+
+      --focus: rgba(17,138,154,.25);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      background: radial-gradient(1200px 700px at 18% 8%, rgba(17,138,154,.10), transparent 55%),
+                  radial-gradient(1100px 600px at 85% 20%, rgba(219,213,155,.16), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.35;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+
+    .wrap{
+      max-width:1100px;
+      margin:0 auto;
+      padding:22px 18px 44px;
+    }
+
+    /* Top header bar */
+    .top{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      padding:16px 16px;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, #fff, rgba(255,255,255,.85));
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      position:sticky;
+      top:10px;
+      z-index:5;
+      backdrop-filter: blur(10px);
+    }
+
+    .mark{
+      width:54px;
+      height:54px;
+      border-radius:16px;
+      background: linear-gradient(135deg, rgba(10,53,94,.12), rgba(17,138,154,.12));
+      border:1px solid rgba(10,53,94,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 10px 24px rgba(10,53,94,.12);
+      flex: 0 0 auto;
+      position:relative;
+      overflow:hidden;
+    }
+    .mark::after{
+      content:"";
+      position:absolute;
+      inset:-20px;
+      background: radial-gradient(circle at 30% 20%, rgba(219,213,155,.55), transparent 55%),
+                  radial-gradient(circle at 70% 70%, rgba(17,138,154,.35), transparent 55%);
+      transform: rotate(10deg);
+      opacity:.9;
+    }
+    .mark span{
+      position:relative;
+      font-weight:900;
+      color:var(--navy);
+      letter-spacing:.5px;
+    }
+
+    .top h1{
+      font-size:14px;
+      margin:0;
+      letter-spacing:.12em;
+      color:var(--navy);
+      text-transform:uppercase;
+    }
+    .top .sub{
+      margin:2px 0 0 0;
+      color:var(--muted);
+      font-size:12.5px;
+    }
+
+    .spacer{ flex:1; }
+
+    /* Controls */
+    .controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:flex-end;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      box-shadow: 0 8px 18px rgba(0,0,0,.06);
+      user-select:none;
+    }
+    .pill label{
+      font-size:12px;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    select, button, .btn{
+      font: inherit;
+      border:1px solid var(--border);
+      background:#fff;
+      border-radius:999px;
+      padding:9px 12px;
+      cursor:pointer;
+      color:var(--text);
+      outline:none;
+    }
+    select:focus, button:focus, .btn:focus{
+      box-shadow: 0 0 0 4px var(--focus);
+    }
+    button.primary, .btn.primary{
+      border-color: rgba(10,53,94,.25);
+      background: linear-gradient(180deg, rgba(10,53,94,.08), rgba(10,53,94,.03));
+    }
+    button.teal, .btn.teal{
+      border-color: rgba(17,138,154,.30);
+      background: linear-gradient(180deg, rgba(17,138,154,.10), rgba(17,138,154,.04));
+    }
+    button.gold, .btn.gold{
+      border-color: rgba(219,213,155,.55);
+      background: linear-gradient(180deg, rgba(219,213,155,.35), rgba(219,213,155,.12));
+    }
+
+    /* Layout grid */
+    .grid{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:14px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .top{ position:relative; top:auto; }
+      .controls{ justify-content:flex-start; }
+    }
+
+    /* Card */
+    .card{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, #fff, rgba(255,255,255,.92));
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .card:hover{ box-shadow: var(--shadow-2); transform: translateY(-1px); transition: .15s ease; }
+    .card .hd{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(228,231,236,.8);
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .phase-badge{
+      width:52px; height:52px;
+      border-radius:18px;
+      background: linear-gradient(135deg, rgba(10,53,94,.12), rgba(17,138,154,.16));
+      border:1px solid rgba(10,53,94,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--navy);
+      font-weight:900;
+      letter-spacing:.4px;
+      box-shadow: 0 10px 26px rgba(10,53,94,.12);
+      flex: 0 0 auto;
+    }
+    .hd h2{
+      margin:0;
+      font-size:18px;
+      color:var(--navy);
+    }
+    .hd .kicker{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+    .bd{
+      padding:14px 16px 16px;
+    }
+
+    /* Section blocks */
+    .section{
+      border:1px solid var(--border);
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+      box-shadow: 0 10px 24px rgba(0,0,0,.06);
+      margin-top:12px;
+    }
+
+    /* Accordion (details/summary) */
+    details{
+      border-top:1px solid rgba(228,231,236,.8);
+    }
+    details:first-of-type{ border-top:none; }
+    summary{
+      list-style:none;
+      cursor:pointer;
+      padding:14px 14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+    }
+    summary::-webkit-details-marker{ display:none; }
+    .sum-title{
+      font-weight:800;
+      color:var(--navy);
+      font-size:13.5px;
+      letter-spacing:.02em;
+    }
+    .sum-meta{
+      margin-left:auto;
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .chev{
+      width:28px; height:28px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      display:flex; align-items:center; justify-content:center;
+      color:var(--navy);
+      background: linear-gradient(180deg, rgba(10,53,94,.06), rgba(10,53,94,.02));
+      flex:0 0 auto;
+    }
+    details[open] .chev{ transform: rotate(90deg); transition: .15s ease; }
+    .content{
+      padding:0 14px 14px;
+      color:var(--text);
+    }
+
+    /* Lists */
+    ul{ margin:10px 0 0 18px; padding:0; }
+    li{ margin:6px 0; color:var(--text); }
+    .muted{ color:var(--muted); }
+    .small{ font-size:12.5px; }
+
+    /* Highlight callout */
+    .callout{
+      border:1px solid rgba(17,138,154,.25);
+      background: linear-gradient(180deg, rgba(17,138,154,.10), rgba(17,138,154,.04));
+      border-radius:18px;
+      padding:12px 12px;
+      color:var(--text);
+      margin-top:12px;
+    }
+    .callout strong{ color:var(--navy); }
+
+    /* Chips */
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:10px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--border);
+      background:#fff;
+      padding:8px 10px;
+      border-radius:999px;
+      font-size:12px;
+      box-shadow: 0 8px 18px rgba(0,0,0,.05);
+    }
+    .dot{
+      width:10px; height:10px;
+      border-radius:999px;
+      background: var(--navy);
+    }
+    .dot.teal{ background: var(--teal); }
+    .dot.gold{ background: var(--gold-2); }
+
+    /* Right side panels */
+    .side .card{ position:sticky; top:92px; }
+    @media (max-width:980px){
+      .side .card{ position:relative; top:auto; }
+    }
+
+    .mini-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    .mini{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:12px 12px;
+      background:#fff;
+      box-shadow: 0 10px 22px rgba(0,0,0,.06);
+    }
+    .mini h3{
+      margin:0;
+      font-size:13px;
+      color:var(--navy);
+      letter-spacing:.02em;
+    }
+    .mini p{ margin:8px 0 0; color:var(--muted); font-size:12.5px; }
+
+    /* Alignment selection */
+    .align-block{
+      border:1px dashed rgba(10,53,94,.25);
+      background: linear-gradient(180deg, rgba(10,53,94,.06), rgba(10,53,94,.02));
+      border-radius:18px;
+      padding:12px 12px;
+      margin-top:12px;
+    }
+    .align-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .align-title strong{
+      color:var(--navy);
+      font-size:13px;
+      letter-spacing:.02em;
+    }
+    .align-kv{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    .kv{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#fff;
+      padding:10px 10px;
+      box-shadow: 0 10px 22px rgba(0,0,0,.06);
+    }
+    .kv .k{
+      font-size:11.5px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin:0;
+    }
+    .kv .v{
+      margin:6px 0 0;
+      font-weight:800;
+      color:var(--navy);
+      font-size:13px;
+    }
+
+    /* Print */
+    @media print{
+      .top{ position:relative; box-shadow:none; }
+      .controls{ display:none; }
+      .card, .section, .mini, .kv{ box-shadow:none !important; }
+      body{ background:#fff; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="top" role="banner">
+      <div class="mark" aria-hidden="true"><span>LA</span></div>
+      <div>
+        <h1>Phase 1 Info-Card</h1>
+        <div class="sub">Journey to Vibrant Local Accountability Models</div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="controls">
+        <div class="pill">
+          <label for="viewMode">View</label>
+          <select id="viewMode" aria-label="View Mode">
+            <option value="expand">Expand all</option>
+            <option value="collapse">Collapse all</option>
+            <option value="focus">Focus (Definition only)</option>
+          </select>
+        </div>
+
+        <button class="btn teal" id="toggleSide">Toggle Alignment Panel</button>
+        <button class="btn primary" onclick="window.print()">Print</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- MAIN -->
+      <div class="main">
+        <div class="card" id="phaseCard">
+          <div class="hd">
+            <div class="phase-badge">1</div>
+            <div>
+              <h2>Phase 1: Laying the Groundwork</h2>
+              <div class="kicker">Understanding Current Conditions and Readiness</div>
+            </div>
+          </div>
+
+          <div class="bd">
+            <div class="callout">
+              <strong>Purpose:</strong> Phase 1 is the truth-telling phase. It prevents the most common failure pattern in accountability redesign:
+              building tools before there is shared clarity on purpose, evidence, and definitions of success.
+            </div>
+
+            <div class="section" id="accordion">
+              <details open data-section="definition">
+                <summary>
+                  <div class="chev" aria-hidden="true">▶</div>
+                  <div class="sum-title">Clear Definition and Description</div>
+                  <div class="sum-meta"><span class="muted">Why this phase matters</span></div>
+                </summary>
+                <div class="content">
+                  <p class="small">
+                    Phase 1 requires disciplined clarity, not speed. Before a district designs new assessments, dashboards, or reporting routines,
+                    it must confront three foundational realities:
+                  </p>
+                  <ul class="small">
+                    <li><strong>How success is defined locally</strong></li>
+                    <li><strong>What the current system is actually producing</strong></li>
+                    <li><strong>How ready the community is to shift from a test-centered narrative to a learning-centered one</strong></li>
+                  </ul>
+
+                  <p class="small">
+                    In this phase, the district conducts a readiness scan across learning experiences, existing measures, evidence quality,
+                    stakeholder trust, and implementation capacity. The work highlights misalignments between vision and practice,
+                    identifies which forms of evidence are credible and actionable, and clarifies where trust and understanding need to be strengthened.
+                  </p>
+
+                  <p class="small">
+                    The outcome is not consensus for its own sake. The outcome is <strong>informed decisions</strong> and
+                    <strong>clear guardrails</strong> that will shape every design choice in the phases that follow.
+                  </p>
+                </div>
+              </details>
+
+              <details open data-section="indicators">
+                <summary>
+                  <div class="chev" aria-hidden="true">▶</div>
+                  <div class="sum-title">Indicators of Readiness</div>
+                  <div class="sum-meta"><span class="muted">Signals you can see</span></div>
+                </summary>
+                <div class="content">
+                  <ul class="small">
+                    <li>The district has a clear, concise, stakeholder-friendly, and locally defined description of student success that is understood and consistently referenced across stakeholder groups.</li>
+                    <li>The district has an honest, evidence-informed picture of what students are actually experiencing day to day.</li>
+                    <li>The district understands what its current measures do well, what they distort, and what they fail to capture.</li>
+                    <li>The district has begun distinguishing between compliance artifacts and meaningful evidence of learning.</li>
+                    <li>Educators share a baseline understanding of assessment purposes and how different assessments serve different roles.</li>
+                    <li>Stakeholders believe that accountability will be used to improve learning, not punish individuals.</li>
+                    <li>Leaders demonstrate the ability to hold purpose, resist premature solutions, and protect the integrity of the process.</li>
+                    <li>The district understands the current accountability narrative and how ready the community is to evolve it.</li>
+                  </ul>
+
+                  <div class="chips" aria-label="Indicator Tags">
+                    <span class="chip"><span class="dot teal"></span>Evidence quality</span>
+                    <span class="chip"><span class="dot"></span>Leadership discipline</span>
+                    <span class="chip"><span class="dot gold"></span>Stakeholder trust</span>
+                    <span class="chip"><span class="dot teal"></span>Readiness scan</span>
+                  </div>
+                </div>
+              </details>
+
+              <details open data-section="questions">
+                <summary>
+                  <div class="chev" aria-hidden="true">▶</div>
+                  <div class="sum-title">Reflective Questions</div>
+                  <div class="sum-meta"><span class="muted">Diagnostic and decision-guiding</span></div>
+                </summary>
+                <div class="content">
+                  <div class="mini-grid">
+                    <div class="mini">
+                      <h3>Purpose and Definition of Success</h3>
+                      <ul class="small">
+                        <li>Can students, educators, board members, and families explain what “success” means here without state jargon?</li>
+                        <li>Is our definition of success observable in classrooms and student work?</li>
+                      </ul>
+                    </div>
+
+                    <div class="mini">
+                      <h3>Evidence and Measures</h3>
+                      <ul class="small">
+                        <li>Which current measures help us understand learning, and which mainly serve compliance?</li>
+                        <li>Where do we confuse activity, completion, or scores with evidence of learning?</li>
+                      </ul>
+                    </div>
+
+                    <div class="mini">
+                      <h3>Student Experience</h3>
+                      <ul class="small">
+                        <li>What would a student say learning feels like here on an average day?</li>
+                        <li>How often do students have opportunities to demonstrate learning in authentic ways?</li>
+                      </ul>
+                    </div>
+
+                    <div class="mini">
+                      <h3>Trust and Narrative</h3>
+                      <ul class="small">
+                        <li>Do stakeholders believe accountability exists to support improvement or to assign blame?</li>
+                        <li>Where does skepticism come from, and what evidence would help rebuild trust?</li>
+                      </ul>
+                    </div>
+
+                    <div class="mini">
+                      <h3>Leadership Readiness</h3>
+                      <ul class="small">
+                        <li>Are leaders willing to pause design work until clarity is achieved?</li>
+                        <li>What pressures are pushing us toward solutions before we are ready?</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="callout">
+                    <strong>Anchor question:</strong> If an external reviewer asked, “What does success mean here, and how do you know?”, could the district answer clearly without pointing to a test score?
+                  </div>
+                </div>
+              </details>
+
+              <details open data-section="why">
+                <summary>
+                  <div class="chev" aria-hidden="true">▶</div>
+                  <div class="sum-title">Why This Phase Cannot Be Rushed</div>
+                  <div class="sum-meta"><span class="muted">Risk reduction</span></div>
+                </summary>
+                <div class="content">
+                  <p class="small">
+                    Phase 1 is where credibility is earned. It is where the district proves it is serious about learning, not just reporting.
+                    Skipping or compressing this phase does not save time. It creates fragility.
+                    When Phase 1 is done well, later phases move faster, encounter less resistance, and produce evidence the community trusts.
+                  </p>
+                  <p class="small"><strong>If Phase 1 feels uncomfortable, it is probably working.</strong></p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDE -->
+      <div class="side" id="sidePanel">
+        <div class="card">
+          <div class="hd">
+            <div class="phase-badge" style="background:linear-gradient(135deg, rgba(219,213,155,.35), rgba(10,53,94,.10)); border-color: rgba(219,213,155,.45); color: var(--navy);">≡</div>
+            <div>
+              <h2 style="font-size:16px;">Alignment Map</h2>
+              <div class="kicker">Pillars, Continuum, DDIER, Principles</div>
+            </div>
+          </div>
+
+          <div class="bd">
+            <div class="align-block">
+              <div class="align-title">
+                <strong>Phase 1 alignment snapshot</strong>
+                <span class="muted small">Editable view</span>
+              </div>
+
+              <div class="align-kv" id="alignmentKVs">
+                <div class="kv">
+                  <p class="k">Local Accountability Pillars</p>
+                  <div class="v" id="pillarsV">Purpose and Theory of Action, Governance and Leadership, Community Engagement and Advocacy</div>
+                </div>
+                <div class="kv">
+                  <p class="k">Local Accountability Continuum</p>
+                  <div class="v" id="continuumV">Define Success for Students, Clarify What Counts as Evidence</div>
+                </div>
+                <div class="kv">
+                  <p class="k">DDIER step</p>
+                  <div class="v" id="ddierV">Design</div>
+                </div>
+                <div class="kv">
+                  <p class="k">Principles most activated</p>
+                  <div class="v" id="principlesV">Locally defined success, Multiple measures over single scores, Transparency with purpose, Improvement over punishment, Evidence before action</div>
+                </div>
+              </div>
+
+              <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn teal" id="copyAlignment">Copy alignment text</button>
+                <a class="btn gold" href="https://briankcreasman.github.io/TheUnicornProject/IndexUpdateTest.html" target="_blank" rel="noopener">Open framework home</a>
+              </div>
+            </div>
+
+            <div class="section" style="margin-top:12px;">
+              <details open>
+                <summary>
+                  <div class="chev" aria-hidden="true">▶</div>
+                  <div class="sum-title">Quick Use Notes</div>
+                  <div class="sum-meta"><span class="muted">How to use this card</span></div>
+                </summary>
+                <div class="content">
+                  <ul class="small">
+                    <li>Use <strong>Indicators</strong> as readiness signals, not as compliance boxes.</li>
+                    <li>Use <strong>Reflective Questions</strong> to drive leadership conversations, not to produce “right answers.”</li>
+                    <li>Use <strong>Alignment</strong> to keep design work from starting before purpose is stable.</li>
+                  </ul>
+                </div>
+              </details>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const viewMode = document.getElementById('viewMode');
+    const sidePanel = document.getElementById('sidePanel');
+    const toggleSide = document.getElementById('toggleSide');
+    const accordion = document.getElementById('accordion');
+    const copyAlignment = document.getElementById('copyAlignment');
+
+    const allDetails = () => Array.from(accordion.querySelectorAll('details[data-section], details'));
+
+    function setAll(open){
+      allDetails().forEach(d => d.open = open);
+    }
+
+    function focusDefinitionOnly(){
+      allDetails().forEach(d => {
+        const key = d.getAttribute('data-section');
+        if (key === 'definition') d.open = true;
+        else if (key) d.open = false;
+      });
+      // also collapse any non-tagged details in side panel if you want later
+    }
+
+    viewMode.addEventListener('change', (e) => {
+      const v = e.target.value;
+      if (v === 'expand') setAll(true);
+      if (v === 'collapse') setAll(false);
+      if (v === 'focus') focusDefinitionOnly();
+    });
+
+    toggleSide.addEventListener('click', () => {
+      const hidden = sidePanel.style.display === 'none';
+      sidePanel.style.display = hidden ? '' : 'none';
+    });
+
+    copyAlignment.addEventListener('click', async () => {
+      const text =
+`Phase 1 Alignment
+- Pillars: ${document.getElementById('pillarsV').innerText}
+- Continuum: ${document.getElementById('continuumV').innerText}
+- DDIER: ${document.getElementById('ddierV').innerText}
+- Principles: ${document.getElementById('principlesV').innerText}`;
+      try{
+        await navigator.clipboard.writeText(text);
+        copyAlignment.textContent = 'Copied';
+        setTimeout(() => copyAlignment.textContent = 'Copy alignment text', 1200);
+      }catch(err){
+        alert('Copy failed. You can manually select and copy the alignment text.');
+      }
+    });
+  </script>
+</body>
+</html>
